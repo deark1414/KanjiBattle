@@ -50,6 +50,14 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 現在のゴールドを返す
+    /// </summary>
+    public int GetGold()
+    {
+        return gold;
+    }
+
+    /// <summary>
     /// ゴールドを直接設定（デバッグやリセット用）
     /// </summary>
     public void SetGold(int amount)
