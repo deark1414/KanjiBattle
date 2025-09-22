@@ -55,7 +55,7 @@ public class BattleManager : MonoBehaviour
         ResetBattle();
         GenerateField(stage);
 
-        currentReward = stage.rewardGold;
+        currentReward = stage.rewardStagePoints;
 
         // Initialize reinforcement fields
         reinforcementIndex = 0;
@@ -633,8 +633,8 @@ public class BattleManager : MonoBehaviour
 
         if (isWin)
         {
-            GameManager.Instance.AddGold(currentReward);
-            AddLog($"報酬 {currentReward}G を獲得！", Color.yellow);
+            GameManager.Instance.AddStagePoints(currentReward);
+            AddLog($"報酬 {currentReward}ステージポイント を獲得！", Color.yellow);
         }
     }
 

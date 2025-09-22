@@ -10,7 +10,7 @@ public class StageData : ScriptableObject
     public List<CharacterData> enemyPool = new();
 
     [Header("報酬")]
-    public int rewardGold = 10;
+    public int rewardStagePoints = 1; // ←追加
 
     [Header("フォーメーション設定")]
     public int slotCount = 3;   // このステージで使えるスロット数
