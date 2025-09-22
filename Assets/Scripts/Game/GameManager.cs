@@ -10,10 +10,46 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int goldPerSecond = 1;
     public int Gold => gold; // 外部から参照可能
 
+    // Stage Points
+    private int stagePoints = 0;
+    public int StagePoints => stagePoints; // 外部から参照可能
+
     private StageData selectedStage;
+
+        // 最もクリアしたステージIDを保持
+    private int highestClearedStageId = 0;
 
     // ゴールド変更イベント
     public event Action<int> OnGoldChanged;
+    // ステージポイント変更イベント
+    public event Action<int> OnStagePointsChanged;
+    /// <summary>
+    /// ステージポイントを追加
+    /// </summary>
+    public void AddStagePoints(int amount)
+    {
+        stagePoints += amount;
+        OnStagePointsChanged?.Invoke(stagePoints);
+    }
+
+    /// <summary>
+    /// ステージポイントを消費（足りない場合は false）
+    /// </summary>
+    public bool SpendStagePoints(int amount)
+    {
+        if (stagePoints < amount) return false;
+        stagePoints -= amount;
+        OnStagePointsChanged?.Invoke(stagePoints);
+        return true;
+    }
+
+    /// <summary>
+    /// 現在のステージポイントを返す
+    /// </summary>
+    public int GetStagePoints()
+    {
+        return stagePoints;
+    }
 
     private void Awake()
     {
@@ -116,6 +152,25 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.LogError("BattleManager not found in the scene.");
+        }
+    }
+
+    /// <summary>
+    /// 最もクリアしたステージIDを返す
+    /// </summary>
+    public int GetClearedStageId()
+    {
+        return highestClearedStageId;
+    }
+
+    /// <summary>
+    /// ステージクリア時に呼び出して最も高いクリア済みIDを更新
+    /// </summary>
+    public void RegisterClearedStage(int stageId)
+    {
+        if (stageId > highestClearedStageId)
+        {
+            highestClearedStageId = stageId;
         }
     }
 }

@@ -33,8 +33,9 @@ public class FacilityData : ScriptableObject
 
     [Header("レベル制限")]
     public int maxLevel = 10;
-    public int levelCapUnlockStageId = -1; // 上限解放に必要なステージ
-    public int levelCapStagePointCost = 0; // 上限解放コスト（ステージポイント）
+    public int levelCapIncrease = 5;               // 上限解放で増える量
+    public int levelCapUnlockStageId = -1;          // 上限解放が可能になるステージ
+    public int levelCapStagePointCost = 5;         // 上限解放に必要なステージポイント
 
     [Header("コスト成長")]
     public int baseCost = 100;

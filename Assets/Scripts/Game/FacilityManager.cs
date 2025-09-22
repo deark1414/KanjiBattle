@@ -65,13 +65,14 @@ public class FacilityManager : MonoBehaviour
         return true;
     }
 
-    public bool Unlock(FacilityData facility, int clearedStageId, int stagePoints)
+    public bool Unlock(FacilityData facility)
     {
+        int clearedStageId = GameManager.Instance.GetClearedStageId();
         if (unlockedFacilities.Contains(facility))
             return false;
         if (clearedStageId < facility.requiredStageId)
             return false;
-        if (stagePoints < facility.unlockStagePointCost)
+        if (!GameManager.Instance.SpendStagePoints(facility.unlockStagePointCost))
             return false;
 
         unlockedFacilities.Add(facility);
@@ -79,25 +80,39 @@ public class FacilityManager : MonoBehaviour
         return true;
     }
 
-    public bool CanUnlock(FacilityData facility, int clearedStageId, int stagePoints)
+    public bool CanUnlock(FacilityData facility)
     {
+        int clearedStageId = GameManager.Instance.GetClearedStageId();
         if (unlockedFacilities.Contains(facility))
             return false;
         if (clearedStageId < facility.requiredStageId)
             return false;
-        if (stagePoints < facility.unlockStagePointCost)
+        if (GameManager.Instance.GetStagePoints() < facility.unlockStagePointCost)
             return false;
         return true;
     }
 
-    public bool CanUpgradeLevelCap(FacilityData facility, int clearedStageId, int stagePoints)
+    public bool CanUpgradeLevelCap(FacilityData facility)
     {
+        int clearedStageId = GameManager.Instance.GetClearedStageId();
         if (!unlockedFacilities.Contains(facility))
             return false;
         if (clearedStageId < facility.levelCapUnlockStageId)
             return false;
-        if (stagePoints < facility.levelCapStagePointCost)
+        if (!GameManager.Instance.SpendStagePoints(facility.levelCapStagePointCost))
             return false;
+        return true;
+    }
+
+    public bool UpgradeLevelCap(FacilityData facility)
+    {
+        if (!unlockedFacilities.Contains(facility))
+            return false;
+        if (!GameManager.Instance.SpendStagePoints(facility.levelCapStagePointCost))
+            return false;
+
+        facility.maxLevel += facility.levelCapIncrease;
+        Debug.Log($"{facility.facilityName} のレベル上限を {facility.levelCapIncrease} 増加させました！");
         return true;
     }
 
@@ -105,4 +120,19 @@ public class FacilityManager : MonoBehaviour
     {
         return facilities;
     }
+
+
+    // Helper methods for FacilityUI and others:
+
+    public bool IsUnlocked(FacilityData facility) => unlockedFacilities.Contains(facility);
+
+    public bool IsMaxLevel(FacilityData facility)
+    {
+        if (!unlockedFacilities.Contains(facility)) return false;
+        return GetLevel(facility) >= facility.maxLevel;
+    }
+
+    public int GetUnlockCost(FacilityData facility) => facility.unlockStagePointCost;
+
+    public int GetLevelCapUnlockCost(FacilityData facility) => facility.levelCapStagePointCost;
 }
