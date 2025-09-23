@@ -8,6 +8,7 @@ public class StageSelectUI : MonoBehaviour
 
     private void OnEnable()
     {
+        stageDatabase.AssignStageIds();
         DisplayStages();
     }
     
@@ -21,6 +22,12 @@ public class StageSelectUI : MonoBehaviour
             var btn = Instantiate(stageButtonPrefab, content);
             var ui = btn.GetComponent<StageButtonUI>();
             ui.SetStage(stage);
+            if (stage.stageId > GameManager.Instance.GetHighestClearedStageId() + 1)
+                btn.GetComponent<UnityEngine.UI.Button>().interactable = false;
+            if (!GameManager.Instance.IsChapterUnlocked(stage.chapterId))
+            {
+                btn.gameObject.SetActive(false);
+            }
         }
     }
 }

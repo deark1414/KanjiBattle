@@ -66,4 +66,11 @@ public class CharacterData : ScriptableObject
     {
         return baseAttack + attackGrowth * (level - 1);
     }
+
+    public int GetUpgradeCost(int currentLevel)
+    {
+        int baseCost = 100;
+        float growthRate = 1.2f;
+        return Mathf.RoundToInt(baseCost * Mathf.Pow(growthRate, currentLevel));
+    }
 }

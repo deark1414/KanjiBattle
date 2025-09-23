@@ -24,7 +24,7 @@ public class CharacterEntryUI : MonoBehaviour
 
         int baseCost = 100;
         float growthRate = 1.2f;
-        int nextLevelCost = Mathf.RoundToInt(baseCost * Mathf.Pow(growthRate, level - 1));
+        int nextLevelCost = data.GetUpgradeCost(level);
         costText.text = $"Cost: {nextLevelCost}";
 
         selfButton.onClick.RemoveAllListeners();

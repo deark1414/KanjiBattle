@@ -16,13 +16,17 @@ public class GameManager : MonoBehaviour
 
     private StageData selectedStage;
 
-        // 最もクリアしたステージIDを保持
+    // 最もクリアしたステージIDを保持
     private int highestClearedStageId = 0;
 
     // ゴールド変更イベント
     public event Action<int> OnGoldChanged;
     // ステージポイント変更イベント
     public event Action<int> OnStagePointsChanged;
+
+    [SerializeField] private int unlockedChapter = 1; // 初期状態で第1章は解放済み
+    public int UnlockedChapter => unlockedChapter;
+
     /// <summary>
     /// ステージポイントを追加
     /// </summary>
@@ -172,5 +176,52 @@ public class GameManager : MonoBehaviour
         {
             highestClearedStageId = stageId;
         }
+    }
+
+    /// <summary>
+    /// 指定ステージがクリア済みか判定
+    /// </summary>
+    public bool IsStageCleared(int stageId)
+    {
+        return stageId <= highestClearedStageId;
+    }
+
+    /// <summary>
+    /// 指定ステージが解放されているか（前のステージがクリア済みか）判定
+    /// </summary>
+    public bool IsStageUnlocked(int stageId)
+    {
+        // ステージIDが1の場合は常に解放
+        if (stageId <= 1) return true;
+        // 1つ前のステージがクリア済みか
+        return IsStageCleared(stageId - 1);
+    }
+
+    /// <summary>
+    /// ステージクリア登録（StageData版）
+    /// </summary>
+    public void ClearStage(StageData stage)
+    {
+        if (stage == null) return;
+        RegisterClearedStage(stage.stageId);
+    }
+
+    public int GetHighestClearedStageId()
+    {
+        return highestClearedStageId;
+    }
+
+    public void UnlockChapter(int chapterId)
+    {
+        if (chapterId > unlockedChapter)
+        {
+            unlockedChapter = chapterId;
+            Debug.Log($"Chapter {chapterId} が解放されました！");
+        }
+    }
+
+    public bool IsChapterUnlocked(int chapterId)
+    {
+        return chapterId <= unlockedChapter;
     }
 }
