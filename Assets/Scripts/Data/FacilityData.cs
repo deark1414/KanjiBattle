@@ -9,6 +9,7 @@ public enum FacilityEffectType
     FormationSlot,        // 編成枠解放
     LevelCap,             // キャラのレベル上限解放
     CharacterUnlock,      // 新キャラ解放
+    ChapterUnlock  // 章解放
 }
 
 public enum FacilityUnlockType
@@ -40,6 +41,9 @@ public class FacilityData : ScriptableObject
     [Header("コスト成長")]
     public int baseCost = 100;
     public float growthFactor = 1.2f;
+
+    [Header("章解放用")]
+    public int unlockChapterId = -1; // FacilityType = ChapterUnlock のときのみ使用
 
     public int GetUpgradeCost(int currentLevel)
     {

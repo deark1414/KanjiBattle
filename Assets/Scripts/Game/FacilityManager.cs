@@ -51,16 +51,14 @@ public class FacilityManager : MonoBehaviour
 
     public bool Upgrade(FacilityData facility)
     {
-        if (!unlockedFacilities.Contains(facility))
-            return false;
         int currentLevel = GetLevel(facility);
         if (currentLevel >= facility.maxLevel) return false;
 
         int cost = facility.GetUpgradeCost(currentLevel);
-        if (GameManager.Instance.GetGold() < cost) return false;
+        if (!GameManager.Instance.SpendGold(cost)) return false;
 
-        GameManager.Instance.SpendGold(cost);
         facilityLevels[facility] = currentLevel + 1;
+
         Debug.Log($"{facility.facilityName} を Lv.{currentLevel + 1} に強化しました！");
         return true;
     }
@@ -76,7 +74,19 @@ public class FacilityManager : MonoBehaviour
             return false;
 
         unlockedFacilities.Add(facility);
-        Debug.Log($"{facility.facilityName} を解放しました！");
+        
+        // 章解放タイプなら特殊処理
+        if (facility.effectType == FacilityEffectType.ChapterUnlock && facility.unlockChapterId > 0)
+        {
+            facilityLevels[facility] = 1; // Lv.1 固定
+            GameManager.Instance.UnlockChapter(facility.unlockChapterId);
+            Debug.Log($"{facility.facilityName} を解放（章 {facility.unlockChapterId} 解放）しました！");
+        }
+        else
+        {
+            facilityLevels[facility] = 0; // 通常施設は Lv.0 スタート
+            Debug.Log($"{facility.facilityName} を解放しました！");
+        }
         return true;
     }
 

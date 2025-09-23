@@ -63,10 +63,19 @@ public class FacilityUI : MonoBehaviour
 
         if (!isUnlocked)
         {
+            // 未解放
             levelText.text = "Locked";
             costText.text = $"{FacilityManager.Instance.GetUnlockCost(facility)} pt";
             costText.color = new Color(0.2f, 0.6f, 0.8f);
             buttonText.text = "Unlock";
+        }
+        else if (facility.effectType == FacilityEffectType.ChapterUnlock)
+        {
+            // 章解放施設 → Lv.1 固定で以降触れない
+            levelText.text = "Lv.1";
+            costText.text = "解放済み";
+            costText.color = Color.gray;
+            buttonText.text = "Done";
         }
         else if (FacilityManager.Instance.IsMaxLevel(facility))
         {
@@ -87,10 +96,10 @@ public class FacilityUI : MonoBehaviour
         }
         else
         {
+            // 通常施設
             levelText.text = $"Lv.{level}";
-            costText.text = $"{FacilityManager.Instance.GetUpgradeCost(facility)} G";
-            // 暗めの黄色に変更
-            costText.color = new Color(0.8f, 0.7f, 0.0f);
+            costText.text = $"{FacilityManager.Instance.GetUpgradeCost(facility)} pt";
+            costText.color = new Color(0.8f, 0.7f, 0.0f); // 暗めの黄色
             buttonText.text = "Upgrade";
         }
     }

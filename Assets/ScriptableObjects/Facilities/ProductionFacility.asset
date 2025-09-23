@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
   m_Name: ProductionFacility
   m_EditorClassIdentifier: 
-  facilityName: 
+  facilityName: "\u5DE5\u5834"
   effectType: 0
   unlockType: 0
-  unlockStageId: -1
-  unlockChapter: -1
+  requiredStageId: 2
+  unlockStagePointCost: 1
+  maxLevel: 10
+  levelCapIncrease: 5
+  levelCapUnlockStageId: 5
+  levelCapStagePointCost: 0
   baseCost: 100
   growthFactor: 1.2
-  maxLevel: 10
