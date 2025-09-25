@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Stage_4_1
   m_EditorClassIdentifier: 
   stageName: 4-1
+  stageId: 10
+  chapterId: 4
   enemyPool:
   - {fileID: 11400000, guid: b91030a4105e24210a202a0bd1427d0d, type: 2}
-  rewardGold: 10
+  rewardStagePoints: 1
   slotCount: 3
   trapDamage: 10
   trapCount: 3
@@ -27,3 +29,6 @@ MonoBehaviour:
   reinforcementCount: 3
   reinforcementLimit: 3
   isBossStage: 1
+  enemyLevel: 1
+  prerequisite: {fileID: 0}
+  isCleared: 0

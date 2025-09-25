@@ -10,16 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
-  m_Name: UnlockChapter2Facility
+  m_Name: LevelCapFacility
   m_EditorClassIdentifier: 
-  facilityName: "\u5DE5\u5834"
+  facilityName: 
   effectType: 0
   unlockType: 0
-  requiredStageId: 2
-  unlockStagePointCost: 1
-  maxLevel: 10
-  levelCapIncrease: 5
-  levelCapUnlockStageId: 5
-  levelCapStagePointCost: 0
+  requiredStageId: -1
+  unlockStagePointCost: 0
+  initialMaxLevel: 1
+  finalMaxLevel: 10
+  levelCapIncreasePerUnlock: 5
+  facilityLevelCapUnlocks: []
   baseCost: 100
   growthFactor: 1.2
+  unlockChapterId: -1
+  goldBoostMultiplier: 1
+  summonCostReduction: 0
+  upgradeCostReduction: 0
+  stagePointMultiplier: 1
+  formationSlotIncrease: 0
+  isSummonRateFacility: 0
+  summonCategory: 
+  summonRatePerLevel: 0.01

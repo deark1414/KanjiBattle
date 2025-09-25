@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public enum FacilityState
 {
@@ -13,19 +14,54 @@ public class FacilityManager : MonoBehaviour
     public static FacilityManager Instance;
 
     [SerializeField] private List<FacilityData> facilities = new List<FacilityData>();
+    [SerializeField] private CharacterDatabase characterDatabase; // ★Inspectorで設定
+
     private Dictionary<FacilityData, int> facilityLevels = new Dictionary<FacilityData, int>();
     private HashSet<FacilityData> unlockedFacilities = new HashSet<FacilityData>();
+    private Dictionary<FacilityData, int> facilityCapUnlockCount = new Dictionary<FacilityData, int>();
+
+    private Queue<CharacterData> characterUnlockQueue = new Queue<CharacterData>();
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
 
+        unlockedFacilities = new HashSet<FacilityData>();
         foreach (var f in facilities)
         {
             if (!facilityLevels.ContainsKey(f))
                 facilityLevels[f] = 0; // Lv0
+            if (!facilityCapUnlockCount.ContainsKey(f))
+                facilityCapUnlockCount[f] = 0;
+
+            // Auto-unlock Free facilities at startup
+            if (f.unlockType == FacilityUnlockType.Free)
+            {
+                if (!unlockedFacilities.Contains(f))
+                {
+                    unlockedFacilities.Add(f);
+                    if (!facilityLevels.ContainsKey(f))
+                        facilityLevels[f] = 0;
+                    Debug.Log($"[FacilityManager] {f.facilityName} was auto-unlocked as a Free facility at startup.");
+                }
+            }
         }
-        unlockedFacilities = new HashSet<FacilityData>();
+
+        // 初期化処理の後に
+        if (characterDatabase != null && characterDatabase.characters != null)
+        {
+            foreach (var c in characterDatabase.characters
+                                                .Where(x => x != null && !x.isBoss && x.characterId != 1)
+                                                .OrderBy(x => x.characterId))
+            {
+                characterUnlockQueue.Enqueue(c);
+            }
+            Debug.Log($"[FacilityManager] キャラ解放キュー初期化: {characterUnlockQueue.Count} 件");
+        }
+        else
+        {
+            Debug.LogError("[FacilityManager] CharacterDatabase が設定されていない、または characters が空です");
+        }
     }
 
     public int GetLevel(FacilityData facility)
@@ -35,12 +71,21 @@ public class FacilityManager : MonoBehaviour
         return facilityLevels.TryGetValue(facility, out var lvl) ? lvl : 0;
     }
 
+    public int GetCurrentFacilityMaxLevel(FacilityData facility)
+    {
+        int baseMax = facility.initialMaxLevel;
+        int capCount = facilityCapUnlockCount.ContainsKey(facility) ? facilityCapUnlockCount[facility] : 0;
+        int increasedMax = baseMax + capCount * facility.levelCapIncreasePerUnlock;
+        return Mathf.Min(increasedMax, facility.finalMaxLevel);
+    }
+
     public FacilityState GetState(FacilityData facility)
     {
         if (!unlockedFacilities.Contains(facility))
             return FacilityState.Locked;
         int level = GetLevel(facility);
-        if (level >= facility.maxLevel) return FacilityState.Maxed;
+        int maxLevel = GetCurrentFacilityMaxLevel(facility);
+        if (level >= maxLevel) return FacilityState.Maxed;
         return FacilityState.Available;
     }
 
@@ -52,12 +97,15 @@ public class FacilityManager : MonoBehaviour
     public bool Upgrade(FacilityData facility)
     {
         int currentLevel = GetLevel(facility);
-        if (currentLevel >= facility.maxLevel) return false;
+        int maxLevel = GetCurrentFacilityMaxLevel(facility);
+        if (currentLevel >= maxLevel) return false;
 
         int cost = facility.GetUpgradeCost(currentLevel);
         if (!GameManager.Instance.SpendGold(cost)) return false;
 
         facilityLevels[facility] = currentLevel + 1;
+
+        ApplyEffect(facility);
 
         Debug.Log($"{facility.facilityName} を Lv.{currentLevel + 1} に強化しました！");
         return true;
@@ -75,18 +123,9 @@ public class FacilityManager : MonoBehaviour
 
         unlockedFacilities.Add(facility);
         
-        // 章解放タイプなら特殊処理
-        if (facility.effectType == FacilityEffectType.ChapterUnlock && facility.unlockChapterId > 0)
-        {
-            facilityLevels[facility] = 1; // Lv.1 固定
-            GameManager.Instance.UnlockChapter(facility.unlockChapterId);
-            Debug.Log($"{facility.facilityName} を解放（章 {facility.unlockChapterId} 解放）しました！");
-        }
-        else
-        {
-            facilityLevels[facility] = 0; // 通常施設は Lv.0 スタート
-            Debug.Log($"{facility.facilityName} を解放しました！");
-        }
+        facilityLevels[facility] = 0;
+        ApplyEffect(facility);
+        Debug.Log($"{facility.facilityName} を解放しました！");
         return true;
     }
 
@@ -107,23 +146,37 @@ public class FacilityManager : MonoBehaviour
         int clearedStageId = GameManager.Instance.GetClearedStageId();
         if (!unlockedFacilities.Contains(facility))
             return false;
-        if (clearedStageId < facility.levelCapUnlockStageId)
+
+        int currentCapCount = facilityCapUnlockCount.ContainsKey(facility) ? facilityCapUnlockCount[facility] : 0;
+        if (currentCapCount >= facility.facilityLevelCapUnlocks.Count)
             return false;
-        if (!GameManager.Instance.SpendStagePoints(facility.levelCapStagePointCost))
-            return false;
-        return true;
+
+        var nextUnlock = facility.facilityLevelCapUnlocks[currentCapCount];
+        if (clearedStageId >= nextUnlock.stageId && GameManager.Instance.GetStagePoints() >= nextUnlock.requiredStagePoints)
+            return true;
+
+        return false;
     }
 
     public bool UpgradeLevelCap(FacilityData facility)
     {
         if (!unlockedFacilities.Contains(facility))
             return false;
-        if (!GameManager.Instance.SpendStagePoints(facility.levelCapStagePointCost))
+
+        int clearedStageId = GameManager.Instance.GetClearedStageId();
+        int currentCapCount = facilityCapUnlockCount.ContainsKey(facility) ? facilityCapUnlockCount[facility] : 0;
+        if (currentCapCount >= facility.facilityLevelCapUnlocks.Count)
             return false;
 
-        facility.maxLevel += facility.levelCapIncrease;
-        Debug.Log($"{facility.facilityName} のレベル上限を {facility.levelCapIncrease} 増加させました！");
-        return true;
+        var nextUnlock = facility.facilityLevelCapUnlocks[currentCapCount];
+        if (clearedStageId >= nextUnlock.stageId && GameManager.Instance.SpendStagePoints(nextUnlock.requiredStagePoints))
+        {
+            facilityCapUnlockCount[facility] = currentCapCount + 1;
+            Debug.Log($"{facility.facilityName} のレベル上限を {facility.levelCapIncreasePerUnlock} 増加させました！");
+            return true;
+        }
+
+        return false;
     }
 
     public List<FacilityData> GetFacilities()
@@ -131,6 +184,21 @@ public class FacilityManager : MonoBehaviour
         return facilities;
     }
 
+    public FacilityLevelCapRequirement GetNextFacilityLevelCapRequirement(FacilityData facility)
+    {
+        int currentCapCount = facilityCapUnlockCount.ContainsKey(facility) ? facilityCapUnlockCount[facility] : 0;
+        if (currentCapCount >= facility.facilityLevelCapUnlocks.Count)
+            return null; // No more upgrades
+        return facility.facilityLevelCapUnlocks[currentCapCount];
+    }
+
+    public int GetLevelCapUnlockCost(FacilityData facility)
+    {
+        int currentCapCount = facilityCapUnlockCount.ContainsKey(facility) ? facilityCapUnlockCount[facility] : 0;
+        if (currentCapCount >= facility.facilityLevelCapUnlocks.Count)
+            return -1; // No more upgrades
+        return facility.facilityLevelCapUnlocks[currentCapCount].requiredStagePoints;
+    }
 
     // Helper methods for FacilityUI and others:
 
@@ -139,10 +207,71 @@ public class FacilityManager : MonoBehaviour
     public bool IsMaxLevel(FacilityData facility)
     {
         if (!unlockedFacilities.Contains(facility)) return false;
-        return GetLevel(facility) >= facility.maxLevel;
+        int maxLevel = GetCurrentFacilityMaxLevel(facility);
+        return GetLevel(facility) >= maxLevel;
     }
 
     public int GetUnlockCost(FacilityData facility) => facility.unlockStagePointCost;
 
-    public int GetLevelCapUnlockCost(FacilityData facility) => facility.levelCapStagePointCost;
+    // public int GetLevelCapUnlockCost(FacilityData facility) => facility.levelCapStagePointCost; // Removed as per instructions
+
+    private void ApplyEffect(FacilityData facility)
+    {
+        int level = GetLevel(facility);
+        switch (facility.effectType)
+        {
+            case FacilityEffectType.GoldProduction:
+                GameManager.Instance.ApplyGoldProductionBoost(facility.GetEffectValue(level));
+                break;
+            case FacilityEffectType.SummonCostDown:
+                GameManager.Instance.ApplySummonCostReduction(facility.GetEffectValue(level));
+                break;
+            case FacilityEffectType.UpgradeCostDown:
+                GameManager.Instance.ApplyUpgradeCostReduction(facility.GetEffectValue(level));
+                break;
+            case FacilityEffectType.StagePointBoost:
+                GameManager.Instance.ApplyStagePointBoost(facility.GetEffectValue(level));
+                break;
+            case FacilityEffectType.SummonRateUp:
+                if (facility.summonCategory != CharacterCategory.None)
+                {
+                    float bonus = facility.summonRatePerLevel; // レベルアップごとに差分だけ加算
+                    GameManager.Instance.AddSummonRateMultiplier(facility.summonCategory, bonus);
+                    Debug.Log($"[FacilityManager] {facility.summonCategory} の召喚率を +{bonus * 100f}% (Lv.{level})");
+                }
+                break;
+            case FacilityEffectType.FormationSlot:
+                GameManager.Instance.ApplyFormationSlotIncrease(1);
+                break;
+            case FacilityEffectType.LevelCap:
+                PlayerInventory.Instance.AddLevelCapBonus(facility.levelCapIncreasePerUnlock);
+                break;
+            case FacilityEffectType.CharacterUnlock:
+                if (characterUnlockQueue.Count > 0)
+                {
+                    var nextChar = characterUnlockQueue.Dequeue();
+                    PlayerInventory.Instance.UnlockCharacterForSummon(nextChar);
+                    Debug.Log($"[FacilityManager] {nextChar.characterName} を解放しました。");
+                }
+                else
+                {
+                    Debug.LogWarning("[FacilityManager] キャラクター解放キューが空です。");
+                }
+                break;
+            case FacilityEffectType.ChapterUnlock:
+                if (level > 0)
+                {
+                    int chapterToUnlock = level + 1;
+                    GameManager.Instance.UnlockChapter(chapterToUnlock);
+                }
+                break;
+            case FacilityEffectType.BossUnlock:
+                GameManager.Instance.UnlockBoss("龍");
+                Debug.Log("[FacilityManager] ボスキャラ 龍 を解放しました（召喚不可）");
+                break;
+            default:
+                Debug.LogWarning($"Unhandled FacilityEffectType: {facility.effectType}");
+                break;
+        }
+    }
 }

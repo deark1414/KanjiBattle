@@ -8,11 +8,15 @@ public class CharacterListUI : MonoBehaviour
 
     private void Start()
     {
+        RefreshList(); // 初回描画
         if (PlayerInventory.Instance != null)
         {
             PlayerInventory.Instance.onInventoryChanged += RefreshList;
         }
-        RefreshList(); // 初回描画
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnCostModifiersChanged += RefreshList;
+        }
     }
 
     private void OnDestroy()
@@ -20,6 +24,10 @@ public class CharacterListUI : MonoBehaviour
         if (PlayerInventory.Instance != null)
         {
             PlayerInventory.Instance.onInventoryChanged -= RefreshList;
+        }
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnCostModifiersChanged -= RefreshList;
         }
     }
 

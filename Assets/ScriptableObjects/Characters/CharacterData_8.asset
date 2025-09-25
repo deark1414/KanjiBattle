@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 845372d9678234641a9d0cb0cb42a35c, type: 3}
-  m_Name: CharacterData_Spear
+  m_Name: CharacterData_8
   m_EditorClassIdentifier: 
-  characterName: "\u69CD"
+  characterName: "\u516D"
   icon: {fileID: 0}
-  category: 0
+  category: 1
   baseHP: 100
   baseAttack: 20
   production: 3
-  skillType: 10
-  skillChance: 100
+  skillType: 7
+  skillChance: 0
   skillPower: 1
   level: 1
   maxLevel: 50

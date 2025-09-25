@@ -9,7 +9,7 @@ public enum SkillType
     AreaCounter,
     Armor,
     Heal,
-    NumberPassive,
+    NumberPassive,  // 対象: Number1, Number2, Number3
     Arrow,
     Gun,
     Spear,
@@ -28,18 +28,28 @@ public enum SkillType
 
 public enum CharacterCategory
 {
-    Other,
-    Number
+    None, 
+    Number1,   // 1,2,3
+    Number2,   // 4,5,6
+    Number3,   // 7,8,9
+    Weapon,    // 剣, 槌 など
+    Defense,   // 盾, 城
+    Ranged,    // 石, 矢, 弓, 銃
+    Nature,    // 火, 水, 木, 山
+    Animal,    // 馬, 鳥, 虎
+    Boss       // ボス専用（龍含む）
 }
 
 [CreateAssetMenu(fileName = "CharacterData_", menuName = "Game/Character Data")]
 public class CharacterData : ScriptableObject
 {
     public string characterName;
+    public int characterId;
+    public bool isBoss;
     public Sprite icon;
 
     [Header("カテゴリ")]
-    public CharacterCategory category = CharacterCategory.Other;
+    public CharacterCategory category = CharacterCategory.None;
 
     [Header("ステータス")]
     [SerializeField] private int baseHP = 100;

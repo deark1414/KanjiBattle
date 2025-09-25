@@ -19,10 +19,13 @@ public class FormationUI : MonoBehaviour
 
     private void OnEnable()
     {
-        // スロットを現在のステージ仕様に合わせて初期化
+        // 基本は施設の編成枠だが、ステージが制限を持っている場合は小さい方を採用
         if (GameManager.Instance != null && GameManager.Instance.GetSelectedStage() != null)
         {
-            SetupSlots(GameManager.Instance.GetSelectedStage().slotCount);
+            int stageSlots = GameManager.Instance.GetSelectedStage().slotCount;
+            int facilitySlots = GameManager.Instance.GetFacilityFormationSlots();
+            int totalSlots = Mathf.Min(stageSlots, facilitySlots);
+            SetupSlots(totalSlots);
         }
 
         // キャラクターリストを表示更新

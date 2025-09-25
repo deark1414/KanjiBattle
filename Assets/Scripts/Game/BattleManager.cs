@@ -634,8 +634,9 @@ public class BattleManager : MonoBehaviour
         if (isWin)
         {
             GameManager.Instance.RegisterClearedStage(currentStage.stageId);
-            GameManager.Instance.AddStagePoints(currentReward);
-            AddLog($"報酬 {currentReward}ステージポイント を獲得！", Color.yellow);
+            int effectiveReward = GameManager.Instance.GetEffectiveStagePointReward(currentReward);
+            GameManager.Instance.AddStagePoints(effectiveReward);
+            AddLog($"報酬 {effectiveReward} ステージポイント を獲得！", Color.yellow);
         }
     }
 
