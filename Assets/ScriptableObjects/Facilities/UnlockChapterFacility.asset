@@ -12,15 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
   m_Name: UnlockChapterFacility
   m_EditorClassIdentifier: 
-  facilityName: "2\u7AE0\u89E3\u653E"
+  facilityName: "\u57CE\u9580\uFF08\u7AE0\u89E3\u653E\uFF09"
   effectType: 7
   unlockType: 1
   requiredStageId: 3
   unlockStagePointCost: 1
-  maxLevel: 1
-  levelCapIncrease: 5
-  levelCapUnlockStageId: 5
-  levelCapStagePointCost: 0
+  initialMaxLevel: 1
+  finalMaxLevel: 1
+  levelCapIncreasePerUnlock: 5
+  facilityLevelCapUnlocks: []
   baseCost: 100
   growthFactor: 1.2
-  unlockChapterId: 2
+  chapterUnlockRequirements: []
+  effectPerLevel: 0.1
+  summonCategory: 0
+  summonRatePerLevel: 0.01

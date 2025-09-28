@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
-  m_Name: FormationSlotFacility
+  m_Name: RangedSummonRateUpFacility
   m_EditorClassIdentifier: 
-  facilityName: "\u8A13\u7DF4\u5834\uFF08\u7DE8\u6210\u67A0\uFF09"
-  effectType: 4
+  facilityName: "\u6B66\u5668\u53EC\u559A"
+  effectType: 9
   unlockType: 0
   requiredStageId: -1
   unlockStagePointCost: 0
@@ -21,13 +21,11 @@ MonoBehaviour:
   finalMaxLevel: 5
   levelCapIncreasePerUnlock: 1
   facilityLevelCapUnlocks:
-  - stageId: 2
-    requiredStagePoints: 1
-  - stageId: 4
+  - stageId: 1
     requiredStagePoints: 1
   baseCost: 100
   growthFactor: 1.2
   chapterUnlockRequirements: []
   effectPerLevel: 0.1
-  summonCategory: 0
-  summonRatePerLevel: 0.01
+  summonCategory: 6
+  summonRatePerLevel: 0.1

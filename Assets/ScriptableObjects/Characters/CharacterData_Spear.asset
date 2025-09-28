@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: CharacterData_Spear
   m_EditorClassIdentifier: 
   characterName: "\u69CD"
+  characterId: 5
+  isBoss: 0
   icon: {fileID: 0}
-  category: 0
+  category: 4
   baseHP: 100
   baseAttack: 20
   production: 3

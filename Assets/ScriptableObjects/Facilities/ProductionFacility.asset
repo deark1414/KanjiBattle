@@ -12,14 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
   m_Name: ProductionFacility
   m_EditorClassIdentifier: 
-  facilityName: "\u5DE5\u5834"
+  facilityName: "\u91D1\u8CA8\u5DE5\u623F\uFF08\u30B4\u30FC\u30EB\u30C9\uFF09"
   effectType: 0
   unlockType: 0
-  requiredStageId: 2
-  unlockStagePointCost: 1
-  maxLevel: 10
-  levelCapIncrease: 5
-  levelCapUnlockStageId: 5
-  levelCapStagePointCost: 0
+  requiredStageId: -1
+  unlockStagePointCost: 0
+  initialMaxLevel: 5
+  finalMaxLevel: 10
+  levelCapIncreasePerUnlock: 2
+  facilityLevelCapUnlocks:
+  - stageId: 2
+    requiredStagePoints: 1
+  - stageId: 3
+    requiredStagePoints: 2
   baseCost: 100
   growthFactor: 1.2
+  chapterUnlockRequirements: []
+  effectPerLevel: 0.1
+  summonCategory: 0
+  summonRatePerLevel: 0.01

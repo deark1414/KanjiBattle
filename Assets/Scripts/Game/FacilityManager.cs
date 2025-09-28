@@ -13,6 +13,8 @@ public class FacilityManager : MonoBehaviour
 {
     public static FacilityManager Instance;
 
+    public event System.Action<CharacterCategory> OnSummonCategoryUnlocked;
+
     [SerializeField] private List<FacilityData> facilities = new List<FacilityData>();
     [SerializeField] private CharacterDatabase characterDatabase; // ★Inspectorで設定
 
@@ -126,6 +128,12 @@ public class FacilityManager : MonoBehaviour
         facilityLevels[facility] = 0;
         ApplyEffect(facility);
         Debug.Log($"{facility.facilityName} を解放しました！");
+
+        if (facility.effectType == FacilityEffectType.SummonRateUp && facility.summonCategory != CharacterCategory.None)
+        {
+            OnSummonCategoryUnlocked?.Invoke(facility.summonCategory);
+        }
+
         return true;
     }
 
@@ -273,5 +281,22 @@ public class FacilityManager : MonoBehaviour
                 Debug.LogWarning($"Unhandled FacilityEffectType: {facility.effectType}");
                 break;
         }
+    }
+
+
+    public bool IsCategoryUnlocked(CharacterCategory category)
+    {
+        // FacilityData に「対象カテゴリ」を持たせておき、
+        // そのカテゴリを解放する FacilityEffectType.SummonRateUp の施設が解放されているかチェック
+        foreach (var facility in facilities)
+        {
+            if (facility.effectType == FacilityEffectType.SummonRateUp &&
+                facility.summonCategory == category &&
+                IsUnlocked(facility))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

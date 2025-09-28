@@ -35,7 +35,31 @@ public class GameManager : MonoBehaviour
 
     private System.Collections.Generic.Dictionary<CharacterCategory, float> summonRateMultipliers = new();
 
-    private CharacterCategory? activeSummonCategory = null;
+    private CharacterCategory activeSummonCategory = CharacterCategory.None;
+
+    /// <summary>
+    /// アクティブな召喚カテゴリを取得または設定します。
+    /// CharacterCategory.Noneの場合は全カテゴリが等しく有効（倍率1.0）となります。
+    /// </summary>
+    public CharacterCategory ActiveSummonCategory
+    {
+        get => activeSummonCategory;
+        set
+        {
+            if (activeSummonCategory != value)
+            {
+                activeSummonCategory = value;
+                if (activeSummonCategory == CharacterCategory.None)
+                {
+                    Debug.Log("[GameManager] Active summon category cleared (all categories enabled)");
+                }
+                else
+                {
+                    Debug.Log($"[GameManager] Active summon category set to: {activeSummonCategory}");
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// ステージポイントを追加
@@ -296,37 +320,15 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 現在アクティブな召喚カテゴリを設定（null = なし）
-    /// </summary>
-    public void SetActiveSummonCategory(CharacterCategory? category)
-    {
-        activeSummonCategory = category;
-    }
-
-    /// <summary>
-    /// キャラ強化コストに施設効果を適用した値を取得
-    /// </summary>
-    public int GetEffectiveUpgradeCost(int baseCost)
-    {
-        return Mathf.Max(1, Mathf.FloorToInt(baseCost * characterUpgradeCostMultiplier));
-    }
-
-    /// <summary>
-    /// 召喚コストに施設効果を適用した値を取得
-    /// </summary>
-    public int GetEffectiveSummonCost(int baseCost)
-    {
-        // exponent-based reduction: baseCost already includes 2^(count-1), we compress its exponent
-        return Mathf.Max(1, Mathf.FloorToInt(Mathf.Pow(baseCost / (float)baseCost, summonCostMultiplier) * baseCost * summonCostMultiplier));
-    }
-
-    /// <summary>
     /// 指定カテゴリの召喚確率に施設効果を適用した値を取得
+    /// アクティブカテゴリがCharacterCategory.Noneの場合は全カテゴリが等分（=1.0）になる。
+    /// アクティブカテゴリが設定されている場合は、そのカテゴリのみ倍率を返し、それ以外は1.0を返す。
     /// </summary>
     public float GetEffectiveSummonRate(CharacterCategory category)
     {
-        if (activeSummonCategory == null)
+        if (activeSummonCategory == CharacterCategory.None)
         {
+            // 全カテゴリが等しく有効（倍率1.0）
             return 1f;
         }
         else if (activeSummonCategory == category)
@@ -362,5 +364,29 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log($"[GameManager] Boss '{bossName}' unlocked (召喚不可扱い)");
         // 必要ならフラグ管理などをここに
+    }
+
+    /// <summary>
+    /// 指定した基本強化コストに施設効果を適用した実際の強化コストを取得
+    /// </summary>
+    public int GetEffectiveUpgradeCost(int baseCost)
+    {
+        return Mathf.CeilToInt(baseCost * characterUpgradeCostMultiplier);
+    }
+
+    /// <summary>
+    /// 指定した基本召喚コストに施設効果を適用した実際の召喚コストを取得
+    /// </summary>
+    public int GetEffectiveSummonCost(int baseCost)
+    {
+        return Mathf.CeilToInt(baseCost * summonCostMultiplier);
+    }
+
+    /// <summary>
+    /// 現在アクティブな召喚カテゴリを取得
+    /// </summary>
+    public CharacterCategory GetActiveSummonCategory()
+    {
+        return activeSummonCategory;
     }
 }
