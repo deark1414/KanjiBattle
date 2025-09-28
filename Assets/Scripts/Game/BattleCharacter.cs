@@ -337,81 +337,18 @@ public class BattleCharacter : MonoBehaviour
     public int GetEffectiveAttack(BattleManager bm)
     {
         float buff = 1f;
+        int uniqueCount = 0;
 
         if (data.skillType == SkillType.NumberPassive)
         {
-            HashSet<string> uniqueNumbers = new HashSet<string>();
-            int countOtherOnes = 0;
-
-            foreach (var kvp in bm.gridMap)
-            {
-                var character = kvp.Value;
-                if (character == null || character.isDead) continue;
-                if (!character.isAlly) continue;
-                if (character == this) continue;
-                if (character.data.category != CharacterCategory.Number) continue;
-
-                if (character.data.characterName == "一")
-                {
-                    countOtherOnes++;
-                }
-                else
-                {
-                    uniqueNumbers.Add(character.data.characterName);
-                }
-            }
-
-            int types = uniqueNumbers.Count;
-
-            // If this character is "一"
-            if (data.characterName == "一")
-            {
-                if (countOtherOnes > 0)
-                {
-                    types += 1; // Count "一" as one unique type if others exist
-                }
-                float oneMatsuriBonus = Mathf.Min(0.05f * countOtherOnes, 0.25f);
-                buff += oneMatsuriBonus;
-            }
-
-            if (types == 1) buff += 0.05f;
-            else if (types == 2) buff += 0.10f;
-            else if (types >= 3) buff += 0.15f;
+            var result = CalculateNumberPassiveBuff(bm);
+            uniqueCount = result.uniqueCount;
+            buff = result.buff;
         }
 
         if (buff > 1f && bm != null)
         {
             int percent = Mathf.RoundToInt((buff - 1f) * 100);
-            int uniqueCount = 0;
-            if (data.skillType == SkillType.NumberPassive)
-            {
-                HashSet<string> uniqueNumbers = new HashSet<string>();
-                int countOtherOnes = 0;
-
-                foreach (var kvp in bm.gridMap)
-                {
-                    var character = kvp.Value;
-                    if (character == null || character.isDead) continue;
-                    if (!character.isAlly) continue;
-                    if (character == this) continue;
-                    if (character.data.category != CharacterCategory.Number) continue;
-
-                    if (character.data.characterName == "一")
-                    {
-                        countOtherOnes++;
-                    }
-                    else
-                    {
-                        uniqueNumbers.Add(character.data.characterName);
-                    }
-                }
-
-                uniqueCount = uniqueNumbers.Count;
-                if (data.characterName == "一" && countOtherOnes > 0)
-                {
-                    uniqueCount += 1;
-                }
-            }
             bm.AddLog($"{DisplayName} の攻撃力バフ: ユニークタイプ数 {uniqueCount}, バフ倍率 {percent}%");
         }
 
@@ -445,5 +382,53 @@ public class BattleCharacter : MonoBehaviour
         }
         target.TakeDamage(dmg, bm, this);
         UpdateDirection(target.gridPos - this.gridPos);
+    }
+
+    // Helper method to calculate NumberPassive buff and unique count
+    private (int uniqueCount, int countOtherOnes, float buff) CalculateNumberPassiveBuff(BattleManager bm)
+    {
+        HashSet<string> uniqueNumbers = new HashSet<string>();
+        int countOtherOnes = 0;
+
+        foreach (var kvp in bm.gridMap)
+        {
+            var character = kvp.Value;
+            if (character == null || character.isDead) continue;
+            if (!character.isAlly) continue;
+            if (character == this) continue;
+            if (character.data.category != CharacterCategory.Number1 &&
+                character.data.category != CharacterCategory.Number2 &&
+                character.data.category != CharacterCategory.Number3)
+                continue;
+
+            if (character.data.characterName == "一")
+            {
+                countOtherOnes++;
+            }
+            else
+            {
+                uniqueNumbers.Add(character.data.characterName);
+            }
+        }
+
+        int types = uniqueNumbers.Count;
+        float buff = 1f;
+
+        if (data.characterName == "一")
+        {
+            if (countOtherOnes > 0)
+            {
+                types += 1;
+            }
+            float oneMatsuriBonus = Mathf.Min(0.05f * countOtherOnes, 0.25f);
+            buff += oneMatsuriBonus;
+        }
+
+        if (types == 1) buff += 0.05f;
+        else if (types == 2) buff += 0.10f;
+        else if (types >= 3) buff += 0.15f;
+
+        int uniqueCount = uniqueNumbers.Count + ((data.characterName == "一" && countOtherOnes > 0) ? 1 : 0);
+        return (uniqueCount, countOtherOnes, buff);
     }
 }

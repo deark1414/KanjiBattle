@@ -13,11 +13,17 @@ MonoBehaviour:
   m_Name: CharacterData_Dragon
   m_EditorClassIdentifier: 
   characterName: "\u7ADC"
+  characterId: 26
+  isBoss: 1
   icon: {fileID: 0}
-  category: 0
-  maxHP: 100
-  attack: 10
+  category: 9
+  baseHP: 100
+  baseAttack: 20
   production: 3
   skillType: 21
   skillChance: 0
   skillPower: 1
+  level: 1
+  maxLevel: 50
+  attackGrowth: 2
+  hpGrowth: 10

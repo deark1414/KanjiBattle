@@ -22,10 +22,9 @@ public class CharacterEntryUI : MonoBehaviour
         levelText.text = $"Lv.{level}";
         countText.text = $"x{count}";
 
-        int baseCost = 100;
-        float growthRate = 1.2f;
-        int nextLevelCost = data.GetUpgradeCost(level);
-        costText.text = $"Cost: {nextLevelCost}";
+        int baseCost = data.GetUpgradeCost(level);
+        int effectiveCost = GameManager.Instance.GetEffectiveUpgradeCost(baseCost);
+        costText.text = $"Cost: {effectiveCost}";
 
         selfButton.onClick.RemoveAllListeners();
         selfButton.onClick.AddListener(OnClickUpgrade);

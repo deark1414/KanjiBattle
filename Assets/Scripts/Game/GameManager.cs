@@ -5,9 +5,9 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField] private int baseGoldPerSecond = 1;
+    [SerializeField] private int baseGoldPerSecond = 100;
     [SerializeField] private int gold = 0;
-    [SerializeField] private int goldPerSecond = 1;
+    [SerializeField] private int goldPerSecond = 100;
     public int Gold => gold; // 外部から参照可能
 
     // Stage Points
@@ -23,9 +23,43 @@ public class GameManager : MonoBehaviour
     public event Action<int> OnGoldChanged;
     // ステージポイント変更イベント
     public event Action<int> OnStagePointsChanged;
+    public event Action OnCostModifiersChanged;
 
     [SerializeField] private int unlockedChapter = 1; // 初期状態で第1章は解放済み
     public int UnlockedChapter => unlockedChapter;
+
+    // 施設効果用の乗数
+    private float productionMultiplier = 1f;
+    private float characterUpgradeCostMultiplier = 1f;
+    private float summonCostMultiplier = 1f;
+
+    private System.Collections.Generic.Dictionary<CharacterCategory, float> summonRateMultipliers = new();
+
+    private CharacterCategory activeSummonCategory = CharacterCategory.None;
+
+    /// <summary>
+    /// アクティブな召喚カテゴリを取得または設定します。
+    /// CharacterCategory.Noneの場合は全カテゴリが等しく有効（倍率1.0）となります。
+    /// </summary>
+    public CharacterCategory ActiveSummonCategory
+    {
+        get => activeSummonCategory;
+        set
+        {
+            if (activeSummonCategory != value)
+            {
+                activeSummonCategory = value;
+                if (activeSummonCategory == CharacterCategory.None)
+                {
+                    Debug.Log("[GameManager] Active summon category cleared (all categories enabled)");
+                }
+                else
+                {
+                    Debug.Log($"[GameManager] Active summon category set to: {activeSummonCategory}");
+                }
+            }
+        }
+    }
 
     /// <summary>
     /// ステージポイントを追加
@@ -61,6 +95,9 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            foreach (CharacterCategory category in Enum.GetValues(typeof(CharacterCategory))) {
+                summonRateMultipliers[category] = 1f;
+            }
         }
         else
         {
@@ -132,7 +169,7 @@ public class GameManager : MonoBehaviour
 
     public void UpdateProduction()
     {
-        goldPerSecond = baseGoldPerSecond + PlayerInventory.Instance.GetTotalProduction();
+        goldPerSecond = Mathf.FloorToInt((baseGoldPerSecond + PlayerInventory.Instance.GetTotalProduction()) * productionMultiplier);
     }
 
     public void SetSelectedStage(StageData stage)
@@ -223,5 +260,133 @@ public class GameManager : MonoBehaviour
     public bool IsChapterUnlocked(int chapterId)
     {
         return chapterId <= unlockedChapter;
+    }
+
+    // ========================
+    // Facility Effect Helpers
+    // ========================
+
+    // Gold 生産力増加
+    public void ApplyGoldProductionBoost(float effectValue)
+    {
+        productionMultiplier = 1f + effectValue; // effectValue directly added
+        UpdateProduction();
+    }
+
+    // キャラ強化コスト減算
+    public void ApplyUpgradeCostReduction(float effectValue)
+    {
+        characterUpgradeCostMultiplier = Mathf.Clamp01(1f - effectValue);
+        OnCostModifiersChanged?.Invoke();
+    }
+
+    // 召喚コスト減算
+    public void ApplySummonCostReduction(float effectValue)
+    {
+        // 指数的に効く召喚コスト軽減（キャラ数増加の指数を圧縮）
+        summonCostMultiplier = Mathf.Clamp01(1f - effectValue);
+        OnCostModifiersChanged?.Invoke();
+    }
+
+    // ステージポイント獲得倍率
+    private float stagePointMultiplier = 1f;
+    public void ApplyStagePointBoost(float effectValue)
+    {
+        stagePointMultiplier = 1f + effectValue;
+    }
+    public int GetEffectiveStagePointReward(int baseReward)
+    {
+        return Mathf.FloorToInt(baseReward * stagePointMultiplier);
+    }
+
+    // 編成枠追加
+    private int facilityFormationSlots = 1;
+    public void ApplyFormationSlotIncrease(int slots)
+    {
+        facilityFormationSlots += slots;
+    }
+    public int GetFacilityFormationSlots()
+    {
+        return facilityFormationSlots;
+    }
+
+    // 召喚率 (カテゴリ別)
+    public void AddSummonRateMultiplier(CharacterCategory category, float value)
+    {
+        if (summonRateMultipliers.ContainsKey(category))
+        {
+            summonRateMultipliers[category] += value;
+        }
+    }
+
+    /// <summary>
+    /// 指定カテゴリの召喚確率に施設効果を適用した値を取得
+    /// アクティブカテゴリがCharacterCategory.Noneの場合は全カテゴリが等分（=1.0）になる。
+    /// アクティブカテゴリが設定されている場合は、そのカテゴリのみ倍率を返し、それ以外は1.0を返す。
+    /// </summary>
+    public float GetEffectiveSummonRate(CharacterCategory category)
+    {
+        if (activeSummonCategory == CharacterCategory.None)
+        {
+            // 全カテゴリが等しく有効（倍率1.0）
+            return 1f;
+        }
+        else if (activeSummonCategory == category)
+        {
+            if (summonRateMultipliers.TryGetValue(category, out float multiplier))
+                return multiplier;
+            return 1f;
+        }
+        else
+        {
+            return 1f;
+        }
+    }
+
+    /// <summary>
+    /// 現在の生産力乗数を取得
+    /// </summary>
+    public float GetProductionMultiplier()
+    {
+        return productionMultiplier;
+    }
+
+    // 新規追加: キャラクターアンロック施設効果
+    public void AddCharacterUnlock(int characterId)
+    {
+        if (PlayerInventory.Instance != null)
+        {
+            PlayerInventory.Instance.UnlockCharacterForSummon(characterId);
+        }
+    }
+
+    public void UnlockBoss(string bossName)
+    {
+        Debug.Log($"[GameManager] Boss '{bossName}' unlocked (召喚不可扱い)");
+        // 必要ならフラグ管理などをここに
+    }
+
+    /// <summary>
+    /// 指定した基本強化コストに施設効果を適用した実際の強化コストを取得
+    /// </summary>
+    public int GetEffectiveUpgradeCost(int baseCost)
+    {
+        return Mathf.CeilToInt(baseCost * characterUpgradeCostMultiplier);
+    }
+
+    /// <summary>
+    /// 指定した基本召喚コストに施設効果を適用した実際の召喚コストを取得
+    /// </summary>
+    public int GetEffectiveSummonCost(int baseCost)
+    {
+        return Mathf.CeilToInt(baseCost * summonCostMultiplier);
+    }
+
+    /// <summary>
+    /// 現在アクティブな召喚カテゴリを取得
+    /// </summary>
+    public CharacterCategory GetActiveSummonCategory()
+    {
+        return activeSummonCategory;
     }
 }

@@ -63,34 +63,54 @@ public class FacilityUI : MonoBehaviour
 
         if (!isUnlocked)
         {
-            // 未解放
             levelText.text = "Locked";
-            costText.text = $"{FacilityManager.Instance.GetUnlockCost(facility)} pt";
+
+            StageData stage = StageDatabase.Instance.GetStageById(facility.requiredStageId);
+            string stageName = stage != null ? stage.stageName : $"Stage {facility.requiredStageId}";
+            int cost = FacilityManager.Instance.GetUnlockCost(facility);
+
+            costText.text = $"{stageName} + {cost} pt";
             costText.color = new Color(0.2f, 0.6f, 0.8f);
             buttonText.text = "Unlock";
-        }
-        else if (facility.effectType == FacilityEffectType.ChapterUnlock)
-        {
-            // 章解放施設 → Lv.1 固定で以降触れない
-            levelText.text = "Lv.1";
-            costText.text = "解放済み";
-            costText.color = Color.gray;
-            buttonText.text = "Done";
         }
         else if (FacilityManager.Instance.IsMaxLevel(facility))
         {
             if (FacilityManager.Instance.CanUpgradeLevelCap(facility))
             {
                 levelText.text = $"Lv.{level} (Max)";
-                costText.text = $"{FacilityManager.Instance.GetLevelCapUnlockCost(facility)} pt";
+                var req = FacilityManager.Instance.GetNextFacilityLevelCapRequirement(facility);
+                if (req != null)
+                {
+                    StageData stage = StageDatabase.Instance.GetStageById(req.stageId);
+                    string stageName = stage != null ? stage.stageName : $"Stage {req.stageId}";
+                    int nextCost = req.requiredStagePoints;
+                    costText.text = $"{stageName} + {nextCost}pt";
+                }
+                else
+                {
+                    int nextCost = FacilityManager.Instance.GetLevelCapUnlockCost(facility);
+                    costText.text = $"{nextCost} pt";
+                }
                 costText.color = new Color(0.2f, 0.6f, 0.8f);
                 buttonText.text = "Unlock Level Cap";
             }
             else
             {
                 levelText.text = $"Lv.{level} (Max)";
-                costText.text = "MAX";
-                costText.color = Color.gray;
+                var req = FacilityManager.Instance.GetNextFacilityLevelCapRequirement(facility);
+                if (req != null)
+                {
+                    StageData stage = StageDatabase.Instance.GetStageById(req.stageId);
+                    string stageName = stage != null ? stage.stageName : $"Stage {req.stageId}";
+                    int nextCost = req.requiredStagePoints;
+                    costText.text = $"Need {stageName} + {nextCost}pt";
+                    costText.color = new Color(0.2f, 0.6f, 0.8f);
+                }
+                else
+                {
+                    costText.text = "MAX";
+                    costText.color = Color.gray;
+                }
                 buttonText.text = "Maxed";
             }
         }
