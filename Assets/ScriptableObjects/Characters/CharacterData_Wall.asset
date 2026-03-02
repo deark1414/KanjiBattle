@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: CharacterData_Wall
   m_EditorClassIdentifier: 
   characterName: "\u58C1"
-  characterId: 8
+  characterId: 15
   isBoss: 0
   icon: {fileID: 0}
   category: 5
-  baseHP: 100
-  baseAttack: 20
+  baseHP: 220
+  baseAttack: 10
+  baseDefense: 20
   production: 3
-  skillType: 4
-  skillChance: 100
+  skillType: 13
+  skillChance: 0
   skillPower: 1
   level: 1
   maxLevel: 50
-  attackGrowth: 2
+  attackGrowth: 1
   hpGrowth: 10
+  defenseGrowth: 2

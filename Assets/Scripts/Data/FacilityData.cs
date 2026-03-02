@@ -44,6 +44,7 @@ public class FacilityLevelCapRequirement
 [CreateAssetMenu(fileName = "FacilityData_", menuName = "Game/Facility Data")]
 public class FacilityData : ScriptableObject
 {
+    public int facilityId;
     public string facilityName;
 
     [Header("効果設定")]

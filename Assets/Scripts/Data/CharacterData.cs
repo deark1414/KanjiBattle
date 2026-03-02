@@ -54,6 +54,7 @@ public class CharacterData : ScriptableObject
     [Header("ステータス")]
     [SerializeField] private int baseHP = 100;
     [SerializeField] private int baseAttack = 20;
+    [SerializeField] private int baseDefense = 0;
     public int production = 0;
 
     [Header("スキル")]
@@ -66,6 +67,7 @@ public class CharacterData : ScriptableObject
     public int maxLevel = 50;             // 上限
     public int attackGrowth = 2;          // レベルごとの攻撃力増加量
     public int hpGrowth = 10;             // レベルごとのHP増加量
+    public int defenseGrowth = 1; // レベルごとの防御力増加量
 
     public int GetMaxHP(int level)
     {
@@ -75,6 +77,11 @@ public class CharacterData : ScriptableObject
     public int GetAttack(int level)
     {
         return baseAttack + attackGrowth * (level - 1);
+    }
+
+    public int GetDefense(int level)
+    {
+        return baseDefense + defenseGrowth * (level - 1);
     }
 
     public int GetUpgradeCost(int currentLevel)
