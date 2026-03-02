@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: CharacterData_6
   m_EditorClassIdentifier: 
   characterName: "\u516D"
-  characterId: 12
+  characterId: 6
   isBoss: 0
   icon: {fileID: 0}
   category: 2
-  baseHP: 100
-  baseAttack: 20
+  baseHP: 180
+  baseAttack: 18
+  baseDefense: 12
   production: 3
-  skillType: 7
-  skillChance: 0
-  skillPower: 1
+  skillType: 6
+  skillChance: 20
+  skillPower: 1.5
   level: 1
   maxLevel: 50
   attackGrowth: 2
   hpGrowth: 10
+  defenseGrowth: 1

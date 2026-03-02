@@ -15,7 +15,7 @@ public class FacilityManager : MonoBehaviour
 
     public event System.Action<CharacterCategory> OnSummonCategoryUnlocked;
 
-    [SerializeField] private List<FacilityData> facilities = new List<FacilityData>();
+    [SerializeField] private FacilityDatabase facilityDatabase;
     [SerializeField] private CharacterDatabase characterDatabase; // ★Inspectorで設定
 
     private Dictionary<FacilityData, int> facilityLevels = new Dictionary<FacilityData, int>();
@@ -28,7 +28,14 @@ public class FacilityManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
 
+        var facilities = facilityDatabase != null ? facilityDatabase.facilities : null;
         unlockedFacilities = new HashSet<FacilityData>();
+        if (facilities == null)
+        {
+            Debug.LogError("[FacilityManager] FacilityDatabase が設定されていない、または facilities が空です");
+            facilities = new List<FacilityData>();
+        }
+
         foreach (var f in facilities)
         {
             if (!facilityLevels.ContainsKey(f))
@@ -189,7 +196,7 @@ public class FacilityManager : MonoBehaviour
 
     public List<FacilityData> GetFacilities()
     {
-        return facilities;
+        return facilityDatabase != null ? facilityDatabase.facilities : new List<FacilityData>();
     }
 
     public FacilityLevelCapRequirement GetNextFacilityLevelCapRequirement(FacilityData facility)
@@ -288,6 +295,12 @@ public class FacilityManager : MonoBehaviour
     {
         // FacilityData に「対象カテゴリ」を持たせておき、
         // そのカテゴリを解放する FacilityEffectType.SummonRateUp の施設が解放されているかチェック
+        var facilities = facilityDatabase != null ? facilityDatabase.facilities : null;
+        if (facilities == null)
+        {
+            return false;
+        }
+
         foreach (var facility in facilities)
         {
             if (facility.effectType == FacilityEffectType.SummonRateUp &&

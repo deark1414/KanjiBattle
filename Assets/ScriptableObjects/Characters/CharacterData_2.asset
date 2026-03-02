@@ -18,12 +18,14 @@ MonoBehaviour:
   icon: {fileID: 0}
   category: 1
   baseHP: 100
-  baseAttack: 20
+  baseAttack: 25
+  baseDefense: 8
   production: 3
-  skillType: 7
-  skillChance: 0
+  skillType: 1
+  skillChance: 10
   skillPower: 1
   level: 1
   maxLevel: 50
-  attackGrowth: 2
-  hpGrowth: 10
+  attackGrowth: 4
+  hpGrowth: 5
+  defenseGrowth: 1

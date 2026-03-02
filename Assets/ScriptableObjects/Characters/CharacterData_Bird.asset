@@ -13,17 +13,19 @@ MonoBehaviour:
   m_Name: CharacterData_Bird
   m_EditorClassIdentifier: 
   characterName: "\u9CE5"
-  characterId: 23
+  characterId: 24
   isBoss: 0
   icon: {fileID: 0}
   category: 8
-  baseHP: 100
-  baseAttack: 20
+  baseHP: 130
+  baseAttack: 33
+  baseDefense: 6
   production: 3
   skillType: 19
-  skillChance: 100
-  skillPower: 1
+  skillChance: 15
+  skillPower: 1.3
   level: 1
   maxLevel: 50
-  attackGrowth: 2
-  hpGrowth: 10
+  attackGrowth: 3
+  hpGrowth: 5
+  defenseGrowth: 1

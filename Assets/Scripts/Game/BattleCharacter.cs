@@ -13,6 +13,7 @@ public class BattleCharacter : MonoBehaviour
 
     public int currentHP;
     public int attack;
+    public int defense;
     public bool isDead = false;
 
     [Header("UI")]
@@ -36,6 +37,7 @@ public class BattleCharacter : MonoBehaviour
 
         currentHP = data.GetMaxHP(level);
         attack    = data.GetAttack(level);
+        defense   = data.GetDefense(level);
 
         if (background != null)
             background.color = ally ? new Color(0.6f, 0.9f, 1f) : new Color(1f, 0.7f, 0.7f);
@@ -69,18 +71,27 @@ public class BattleCharacter : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int dmg, BattleManager bm, BattleCharacter attacker = null)
+    public void TakeDamage(int dmg, BattleManager bm, BattleCharacter attacker = null, bool ignoreDefense = false)
     {
         if (isDead) return;
 
         int originalDmg = dmg;
-        // Handle Armor skill: reduce incoming damage by 5, minimum 0
+        // Defense-based reduction (unless Armor skill or ignoreDefense is true)
+        if (!ignoreDefense && (data == null || data.skillType != SkillType.Armor)) {
+            float effectiveDefense = Mathf.Max(0, defense / 4f);
+            int reducedByDefense = Mathf.FloorToInt(dmg * 100f / (100f + effectiveDefense));
+            dmg = Mathf.Max(1, reducedByDefense);
+        }
+        // Handle Armor skill: after defense/ignoreDefense check, reduce incoming damage by (level * 2), minimum 1
         if (data != null && data.skillType == SkillType.Armor)
         {
-            int reduced = Mathf.Max(0, dmg - 5);
-            bm.AddLog($"{DisplayName} のアーマーでダメージが {dmg} → {reduced} に軽減！");
+            int reduction = level * 2;
+            int reduced = Mathf.Max(1, dmg - reduction);
+            bm.AddLog($"{DisplayName} のアーマーでダメージが {dmg} → {reduced} に軽減！（Lv{level}×2={reduction} 減少）");
             dmg = reduced;
         }
+
+        bm.AddLog($"{DisplayName} が {originalDmg} → {dmg} ダメージ (DEF {defense})");
 
         currentHP -= dmg;
         UpdateHPBar();
@@ -257,7 +268,9 @@ public class BattleCharacter : MonoBehaviour
             case SkillType.Fireball:
                 if (target != null)
                 {
-                    PerformAttack(target, bm, data.skillPower, $"{DisplayName} がファイアボールを放った！ {{0}} ダメージ");
+                    int dmg = Mathf.RoundToInt(GetEffectiveAttack(bm) * data.skillPower);
+                    bm.AddLog($"{DisplayName} がファイアボールを放った！ {dmg} ダメージ (防御無視)");
+                    target.TakeDamage(dmg, bm, this, ignoreDefense: true);
                     return true;
                 }
                 break;
@@ -282,6 +295,7 @@ public class BattleCharacter : MonoBehaviour
                 break;
             case SkillType.NumberPassive:
                 // NumberPassive is a passive skill, no active use here
+                // Note: When fully triggered, passive buff includes defense ignore (handled elsewhere if needed)
                 return false;
             case SkillType.HorseCharge:
                 if (target != null)
@@ -318,6 +332,7 @@ public class BattleCharacter : MonoBehaviour
                     // 発動判定
                     if (roll < data.skillChance) // ブレス優先
                     {
+                        // Dragon breath should ignore defense (handled in PerformDragonBreath)
                         bool success = bm.PerformDragonBreath(this, 3);
                         if (success) return true; // 敵に当たった時だけ true
                     }
@@ -380,7 +395,7 @@ public class BattleCharacter : MonoBehaviour
         {
             bm.AddLog(string.Format(logMessage, dmg));
         }
-        target.TakeDamage(dmg, bm, this);
+        target.TakeDamage(dmg, bm, this, false);
         UpdateDirection(target.gridPos - this.gridPos);
     }
 
