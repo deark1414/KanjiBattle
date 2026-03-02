@@ -100,3 +100,5 @@ InitTestScene*.unity*
 
 # NotoSansJP の重いSDFアセットは管理対象外にする
 Assets/Fonts/*.asset
+
+tmp
