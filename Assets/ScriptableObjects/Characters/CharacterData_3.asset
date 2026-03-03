@@ -21,7 +21,7 @@ MonoBehaviour:
   baseAttack: 15
   baseDefense: 12
   production: 3
-  skillType: 6
+  skillType: 7
   skillChance: 15
   skillPower: 1.2
   level: 1

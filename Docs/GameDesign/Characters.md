@@ -4,21 +4,21 @@
 
 Id | FileName | Name | Category | SkillType | Description | Boss
 ---|---|---|---|---|---
-1 | CharacterData_1 | 一 | Number1 | NumberPassive | 数字系の基本ユニット | 
-2 | CharacterData_2 | 二 | Number1 | Slash | 数字系の近接アタッカー | 
-3 | CharacterData_3 | 三 | Number1 | Heal | 数字系の回復役 | 
-4 | CharacterData_4 | 四 | Number2 | StunBlow | 数字系のスタン攻撃 | 
-5 | CharacterData_5 | 五 | Number2 | Counter | 数字系のカウンター | 
-6 | CharacterData_6 | 六 | Number2 | Heal | 数字系の回復寄り | 
-7 | CharacterData_7 | 七 | Number3 | Slash | 数字系の近接アタッカー | 
-8 | CharacterData_8 | 八 | Number3 | Arrow | 数字系の遠隔 | 
-9 | CharacterData_9 | 九 | Number3 | AreaCounter | 数字系の範囲反撃 | 
+1 | CharacterData_1 | 一 | Number1 | NumberPassive | 数字系のパッシブ | 
+2 | CharacterData_2 | 二 | Number1 | NumberPassive | 数字系のパッシブ | 
+3 | CharacterData_3 | 三 | Number1 | NumberPassive | 数字系のパッシブ | 
+4 | CharacterData_4 | 四 | Number2 | NumberPassive | 数字系のパッシブ | 
+5 | CharacterData_5 | 五 | Number2 | NumberPassive | 数字系のパッシブ | 
+6 | CharacterData_6 | 六 | Number2 | NumberPassive | 数字系のパッシブ | 
+7 | CharacterData_7 | 七 | Number3 | NumberPassive | 数字系のパッシブ | 
+8 | CharacterData_8 | 八 | Number3 | NumberPassive | 数字系のパッシブ | 
+9 | CharacterData_9 | 九 | Number3 | NumberPassive | 数字系のパッシブ | 
 10 | CharacterData_Sword | 剣 | Weapon | Slash | 武器系の近接アタッカー | 
 11 | CharacterData_Spear | 槍 | Weapon | Spear | 武器系の突き攻撃 | 
 12 | CharacterData_Hammer | 槌 | Weapon | StunBlow | 武器系のスタン攻撃 | 
-13 | CharacterData_Shield | 盾 | Defense | Shield | 防御系のダメージ軽減 | 
+13 | CharacterData_Shield | 盾 | Defense | Counter | 防御系のカウンター | 
 14 | CharacterData_Armor | 鎧 | Defense | Armor | 防御系の耐久ユニット | 
-15 | CharacterData_Wall | 壁 | Defense | Wall | 防御系の高耐久 | 
+15 | CharacterData_Wall | 壁 | Defense | AreaCounter | 防御系の範囲反撃 | 
 16 | CharacterData_Stone | 石 | Ranged | Stone | 遠隔系の投射 | 
 17 | CharacterData_Arrow | 矢 | Ranged | Arrow | 遠隔系の射撃 | 
 18 | CharacterData_Gun | 銃 | Ranged | Gun | 遠隔系の高威力 | 

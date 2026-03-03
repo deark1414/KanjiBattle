@@ -15,15 +15,19 @@ MonoBehaviour:
   stageName: Stage_1_10
   stageId: 10
   chapterId: 1
-  enemyPool: []
+  enemyPool:
+  - {fileID: 11400000, guid: b91030a4105e24210a202a0bd1427d0d, type: 2}
   rewardStagePoints: 5
   slotCount: 6
   trapDamage: 15
   trapCount: 5
-  reinforcementEnemy: []
-  reinforcementInterval: 0
-  reinforcementCount: 0
-  reinforcementLimit: 0
+  reinforcementEnemy:
+  - {fileID: 11400000, guid: b78b90014b2f3477b9c3178b6f091bb8, type: 2}
+  - {fileID: 11400000, guid: ac1fac6eefc69432e8ab46c3f0827b2f, type: 2}
+  - {fileID: 11400000, guid: db82ac29718264256aa4b5d49d4cc7d1, type: 2}
+  reinforcementInterval: 2
+  reinforcementCount: 1
+  reinforcementLimit: 3
   isBossStage: 1
   enemyLevel: 25
   prerequisite: {fileID: 11400000, guid: 9677b37ce96fa48aeb5d598b6ddb5ffa, type: 2}

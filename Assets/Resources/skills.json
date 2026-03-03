@@ -1,0 +1,172 @@
+[
+  {
+    "skillTypeName": "Slash",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "{0} ダメージを与えた！",
+    "effects": [
+      { "effectTypeName": "Damage", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "StunBlow",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "{0} ダメージを与えた！",
+    "effects": [
+      { "effectTypeName": "Damage", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false },
+      { "effectTypeName": "Stun", "powerMultiplier": 1.0, "value": 1, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "WaterHeal",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "",
+    "effects": [
+      { "effectTypeName": "Heal", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "Fireball",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "{0} ダメージを与えた！(防御無視)",
+    "effects": [
+      { "effectTypeName": "Damage", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": true }
+    ]
+  },
+  {
+    "skillTypeName": "Arrow",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "{0} ダメージを与えた！",
+    "effects": [
+      { "effectTypeName": "Damage", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "Spear",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "{0} ダメージを与えた！",
+    "effects": [
+      { "effectTypeName": "Damage", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "Gun",
+    "powerMultiplier": 0.7,
+    "chanceOverride": -1,
+    "logMessage": "{0} ダメージを与えた！",
+    "effects": [
+      { "effectTypeName": "Damage", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "Stone",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "{0} ダメージを与えた！",
+    "effects": [
+      { "effectTypeName": "Damage", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "WoodPush",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "{0} ダメージを与えた！",
+    "effects": [
+      { "effectTypeName": "Damage", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false },
+      { "effectTypeName": "PushBack", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "Soil",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "",
+    "effects": [
+      { "effectTypeName": "SoilTrap", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "BirdRetreat",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "{0} ダメージを与えた！",
+    "effects": [
+      { "effectTypeName": "Damage", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false },
+      { "effectTypeName": "Retreat", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "TigerTwinClaw",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "{0} ダメージを与えた！",
+    "effects": [
+      { "effectTypeName": "MultiHit", "powerMultiplier": 1.0, "value": 2, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "HorseCharge",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "",
+    "effects": [
+      { "effectTypeName": "Charge", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "Counter",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "",
+    "effects": [
+      { "effectTypeName": "Counter", "powerMultiplier": 1.0, "value": 30, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "AreaCounter",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "",
+    "effects": [
+      { "effectTypeName": "AreaCounter", "powerMultiplier": 1.0, "value": 20, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "Armor",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "",
+    "effects": [
+      { "effectTypeName": "DamageReduction", "powerMultiplier": 1.0, "value": 2, "ignoreDefense": false }
+    ]
+  },
+  {
+    "skillTypeName": "NumberPassive",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "logMessage": "",
+    "effects": [],
+    "numberPassiveBonus1": 5,
+    "numberPassiveBonus2": 10,
+    "numberPassiveBonus3": 15,
+    "numberPassiveOneBonusPer": 5,
+    "numberPassiveOneBonusCap": 25
+  },
+  {
+    "skillTypeName": "Dragon",
+    "powerMultiplier": 1.0,
+    "chanceOverride": -1,
+    "dragonRoarChance": 30,
+    "logMessage": "",
+    "effects": [
+      { "effectTypeName": "DragonBreath", "powerMultiplier": 1.0, "value": 3, "ignoreDefense": false },
+      { "effectTypeName": "DragonRoar", "powerMultiplier": 1.0, "value": 0, "ignoreDefense": false }
+    ]
+  }
+]
