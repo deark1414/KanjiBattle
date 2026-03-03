@@ -44,6 +44,7 @@ public class BattleManager : MonoBehaviour
     private int reinforcementIndex = 0;
     private int reinforcementTotalSpawned = 0;
     private StageData currentStage = null;
+    public StageData CurrentStage => currentStage;
 
     private void Start()
     {
@@ -252,7 +253,7 @@ public class BattleManager : MonoBehaviour
                 if (bc != null && soilTrapCells.Contains(bc.gridPos) && bc.data.skillType != SkillType.Soil)
                 {
                     AddLog($"{bc.data.characterName} は土の罠でダメージを受けた！", Color.yellow);
-                    bc.TakeDamage(trapDamage, this);
+                    bc.TakeDamage(trapDamage, this, isBasicAttack: false);
                 }
             }
             foreach (var bc in new List<BattleCharacter>(enemies))
@@ -260,7 +261,7 @@ public class BattleManager : MonoBehaviour
                 if (bc != null && soilTrapCells.Contains(bc.gridPos) && bc.data.skillType != SkillType.Soil)
                 {
                     AddLog($"{bc.data.characterName} は土の罠でダメージを受けた！", Color.yellow);
-                    bc.TakeDamage(trapDamage, this);
+                    bc.TakeDamage(trapDamage, this, isBasicAttack: false);
                 }
             }
 
@@ -383,22 +384,22 @@ public class BattleManager : MonoBehaviour
         switch (character.data.skillType)
         {
             case SkillType.Slash:
-                skillTarget = BattleTargetFinder.FindAdjacentEnemy(this, character);
+                skillTarget = TargetingService.FindSwordTarget(this, character);
                 break;
             case SkillType.Arrow:
-                skillTarget = BattleTargetFinder.FindNearestEnemy(this, character, character.isAlly ? enemies : allies);
+                skillTarget = TargetingService.FindArrowTarget(this, character);
                 break;
             case SkillType.Spear:
-                skillTarget = BattleTargetFinder.FindNearestEnemy(this, character, character.isAlly ? enemies : allies);
+                skillTarget = TargetingService.FindSpearTarget(this, character);
                 break;
             case SkillType.StunBlow:
-                skillTarget = BattleTargetFinder.FindAdjacentEnemy(this, character);
+                skillTarget = TargetingService.FindAdjacentEnemy(this, character);
                 break;
             case SkillType.Stone:
-                skillTarget = BattleTargetFinder.FindAdjacentEnemy(this, character);
+                skillTarget = TargetingService.FindStoneTarget(this, character);
                 break;
             case SkillType.Gun:
-                skillTarget = BattleTargetFinder.FindNearestEnemy(this, character, character.isAlly ? enemies : allies);
+                skillTarget = TargetingService.FindNearestEnemy(this, character, character.isAlly ? enemies : allies);
                 break;
             case SkillType.Soil:
                 skillTarget = character; // 自分自身を対象にスキル発動扱い
@@ -413,20 +414,20 @@ public class BattleManager : MonoBehaviour
                 }
                 break;
             case SkillType.WoodPush:
-                skillTarget = BattleTargetFinder.FindAdjacentEnemy(this, character);
+                skillTarget = TargetingService.FindAdjacentEnemy(this, character);
                 break;
             case SkillType.WaterHeal:
-                skillTarget = BattleTargetFinder.FindAdjacentAlly(this, character);
+                skillTarget = TargetingService.FindAdjacentAlly(this, character);
                 break;
             case SkillType.HorseCharge:
                 // 2マス以内に敵がいる場合のみターゲット選択
-                skillTarget = BattleTargetFinder.FindHorseChargeTarget(this, character, character.isAlly ? enemies : allies);
+                skillTarget = TargetingService.FindHorseChargeTarget(this, character, character.isAlly ? enemies : allies);
                 break;
             case SkillType.BirdRetreat:
-                skillTarget = BattleTargetFinder.FindAdjacentEnemy(this, character);
+                skillTarget = TargetingService.FindAdjacentEnemy(this, character);
                 break;
             case SkillType.TigerTwinClaw:
-                skillTarget = BattleTargetFinder.FindAdjacentEnemy(this, character);
+                skillTarget = TargetingService.FindAdjacentEnemy(this, character);
                 break;
             case SkillType.Dragon:
                 skillTarget = character; // 自分をダミー対象にする
@@ -451,7 +452,7 @@ public class BattleManager : MonoBehaviour
         }
 
         // 通常攻撃
-        BattleCharacter target = BattleTargetFinder.FindAdjacentEnemy(this, character);
+        BattleCharacter target = TargetingService.FindAdjacentEnemy(this, character);
         if (target != null)
         {
             character.PerformAttack(target, this);
@@ -459,7 +460,7 @@ public class BattleManager : MonoBehaviour
         }
 
         // 移動処理
-        BattleCharacter nearest = BattleTargetFinder.FindNearestEnemy(this, character, character.isAlly ? enemies : allies);
+        BattleCharacter nearest = TargetingService.FindNearestEnemy(this, character, character.isAlly ? enemies : allies);
         if (nearest != null)
         {
             var blocked = new HashSet<Vector2Int>(gridMap.Keys);
@@ -550,7 +551,7 @@ public class BattleManager : MonoBehaviour
         if (trapCells.Contains(newPos))
         {
             AddLog($"{side} {character.data.characterName} は罠にかかった！", Color.magenta);
-            character.TakeDamage(trapDamage, this);
+            character.TakeDamage(trapDamage, this, isBasicAttack: false);
             trapCells.Remove(newPos);
         }
 
@@ -688,7 +689,7 @@ public class BattleManager : MonoBehaviour
             int dmg = Mathf.RoundToInt(self.GetEffectiveAttack(this) * self.data.skillPower);
             string type = (bc.isAlly == self.isAlly) ? "味方" : "敵";
             AddLog($"{self.data.characterName} の銃が{type} {bc.data.characterName} を撃った！({dmg}ダメージ)", bc.isAlly == self.isAlly ? Color.cyan : Color.red);
-            bc.TakeDamage(dmg, this);
+            bc.TakeDamage(dmg, this, isBasicAttack: false);
         }
         // 最後に方向更新
         if (affected.Count > 0)
@@ -785,7 +786,7 @@ public class BattleManager : MonoBehaviour
         if (pos1HasEnemy)
         {
             self.PerformAttack(gridMap[pos1], this, self.data.skillPower, $"{self.data.characterName} の突進攻撃！ {{0}} ダメージ");
-            if (pos2Free) MoveCharacterNoTrap(self, pos2);
+            if (!pos2HasEnemy && pos2Free) MoveCharacterNoTrap(self, pos2);
             return;
         }
         if (pos2HasEnemy && pos1Free)
@@ -794,14 +795,16 @@ public class BattleManager : MonoBehaviour
             self.PerformAttack(gridMap[pos2], this, self.data.skillPower, $"{self.data.characterName} の突進攻撃！ {{0}} ダメージ");
             return;
         }
-        if (pos2Free)
+
+        // 移動できない場合でも、突進方向に敵がいれば攻撃だけ行う
+        if (pos1HasEnemy)
         {
-            MoveCharacterNoTrap(self, pos2);
+            self.PerformAttack(gridMap[pos1], this, self.data.skillPower, $"{self.data.characterName} の突進攻撃！ {{0}} ダメージ");
             return;
         }
-        if (pos1Free)
+        if (pos2HasEnemy)
         {
-            MoveCharacterNoTrap(self, pos1);
+            self.PerformAttack(gridMap[pos2], this, self.data.skillPower, $"{self.data.characterName} の突進攻撃！ {{0}} ダメージ");
             return;
         }
 
@@ -865,7 +868,7 @@ public class BattleManager : MonoBehaviour
         tiger.PerformAttack(firstTarget, this, tiger.data.skillPower, $"{tiger.data.characterName} のツインクロー1撃目！ {{0}} ダメージ");
 
         // 2回目
-        var secondTarget = BattleTargetFinder.FindAdjacentEnemy(this, tiger);
+        var secondTarget = TargetingService.FindAdjacentEnemy(this, tiger);
         if (secondTarget != null && secondTarget != firstTarget)
         {
             tiger.PerformAttack(secondTarget, this, tiger.data.skillPower, $"{tiger.data.characterName} のツインクロー2撃目！ {{0}} ダメージ");
@@ -944,7 +947,7 @@ public class BattleManager : MonoBehaviour
                     {
                         int dmg = Mathf.RoundToInt(dragon.GetEffectiveAttack(this) * dragon.data.skillPower);
                         AddLog($"{dragon.data.characterName} のブレスが {bc.data.characterName} に命中！ {dmg} ダメージ", Color.red);
-                        bc.TakeDamage(dmg, this, dragon);
+                        bc.TakeDamage(dmg, this, dragon, isBasicAttack: false);
                     }
                 }
             }
@@ -982,7 +985,7 @@ public class BattleManager : MonoBehaviour
                 if (t == null || t.isDead) continue;
                 // 小ダメージ
                 int dmg = Mathf.RoundToInt(dragon.GetEffectiveAttack(this) * 0.5f);
-                t.TakeDamage(dmg, this, dragon);
+                t.TakeDamage(dmg, this, dragon, isBasicAttack: false);
 
                 AddLog($"{t.data.characterName} は咆哮で {dmg} ダメージを受けた！", Color.red);
 

@@ -26,7 +26,7 @@
       "attackGrowth": 4,
       "baseDefense": 8,
       "defenseGrowth": 1,
-      "skillType": "Slash",
+      "skillType": "NumberPassive",
       "skillPower": 1.0,
       "skillChance": 10,
       "isBoss": false
@@ -42,7 +42,7 @@
       "attackGrowth": 2,
       "baseDefense": 12,
       "defenseGrowth": 1,
-      "skillType": "Heal",
+      "skillType": "NumberPassive",
       "skillPower": 1.2,
       "skillChance": 15,
       "isBoss": false
@@ -58,7 +58,7 @@
       "attackGrowth": 3,
       "baseDefense": 10,
       "defenseGrowth": 1,
-      "skillType": "StunBlow",
+      "skillType": "NumberPassive",
       "skillPower": 1.2,
       "skillChance": 10,
       "isBoss": false
@@ -74,7 +74,7 @@
       "attackGrowth": 5,
       "baseDefense": 10,
       "defenseGrowth": 1,
-      "skillType": "Counter",
+      "skillType": "NumberPassive",
       "skillPower": 1.0,
       "skillChance": 15,
       "isBoss": false
@@ -90,7 +90,7 @@
       "attackGrowth": 2,
       "baseDefense": 12,
       "defenseGrowth": 1,
-      "skillType": "Heal",
+      "skillType": "NumberPassive",
       "skillPower": 1.5,
       "skillChance": 20,
       "isBoss": false
@@ -106,7 +106,7 @@
       "attackGrowth": 5,
       "baseDefense": 12,
       "defenseGrowth": 1,
-      "skillType": "Slash",
+      "skillType": "NumberPassive",
       "skillPower": 1.3,
       "skillChance": 10,
       "isBoss": false
@@ -122,7 +122,7 @@
       "attackGrowth": 5,
       "baseDefense": 10,
       "defenseGrowth": 1,
-      "skillType": "Arrow",
+      "skillType": "NumberPassive",
       "skillPower": 1.2,
       "skillChance": 15,
       "isBoss": false
@@ -138,7 +138,7 @@
       "attackGrowth": 3,
       "baseDefense": 14,
       "defenseGrowth": 1,
-      "skillType": "AreaCounter",
+      "skillType": "NumberPassive",
       "skillPower": 1.2,
       "skillChance": 10,
       "isBoss": false
@@ -202,7 +202,7 @@
       "attackGrowth": 2,
       "baseDefense": 10,
       "defenseGrowth": 2,
-      "skillType": "Shield",
+      "skillType": "Counter",
       "skillPower": 1.0,
       "skillChance": 15,
       "isBoss": false
@@ -234,7 +234,7 @@
       "attackGrowth": 1,
       "baseDefense": 20,
       "defenseGrowth": 2,
-      "skillType": "Wall",
+      "skillType": "AreaCounter",
       "skillPower": 1.0,
       "skillChance": 0,
       "isBoss": false

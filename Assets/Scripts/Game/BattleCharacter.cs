@@ -28,6 +28,8 @@ public class BattleCharacter : MonoBehaviour
     private int instanceId;
     private int stunCounter = 0;
 
+    public int InstanceId => instanceId;
+
     public void Init(CharacterData data, Vector2Int pos, bool ally, int level = 1)
     {
         this.data = data;
@@ -71,7 +73,7 @@ public class BattleCharacter : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int dmg, BattleManager bm, BattleCharacter attacker = null, bool ignoreDefense = false)
+    public void TakeDamage(int dmg, BattleManager bm, BattleCharacter attacker = null, bool ignoreDefense = false, bool isBasicAttack = false)
     {
         if (isDead) return;
 
@@ -82,12 +84,26 @@ public class BattleCharacter : MonoBehaviour
             int reducedByDefense = Mathf.FloorToInt(dmg * 100f / (100f + effectiveDefense));
             dmg = Mathf.Max(1, reducedByDefense);
         }
-        // Handle Armor skill: after defense/ignoreDefense check, reduce incoming damage by (level * 2), minimum 1
+        // Handle Armor skill: after defense/ignoreDefense check, reduce incoming damage
         if (data != null && data.skillType == SkillType.Armor)
         {
-            int reduction = level * 2;
+            int reductionPerLevel = 2;
+            SkillData skillData = SkillCatalog.Get(SkillType.Armor);
+            if (skillData?.effects != null)
+            {
+                foreach (var effect in skillData.effects)
+                {
+                    if (effect.effectType == SkillEffectType.DamageReduction)
+                    {
+                        reductionPerLevel = effect.value;
+                        break;
+                    }
+                }
+            }
+
+            int reduction = level * Mathf.Max(0, reductionPerLevel);
             int reduced = Mathf.Max(1, dmg - reduction);
-            bm.AddLog($"{DisplayName} のアーマーでダメージが {dmg} → {reduced} に軽減！（Lv{level}×2={reduction} 減少）");
+            bm.AddLog($"{DisplayName} のアーマーでダメージが {dmg} → {reduced} に軽減！（Lv{level}×{reductionPerLevel}={reduction} 減少）");
             dmg = reduced;
         }
 
@@ -102,19 +118,20 @@ public class BattleCharacter : MonoBehaviour
         }
 
         // Counter logic after taking damage
-        if (data != null)
+        if (data != null && isBasicAttack)
         {
             // Counter: 30% chance to reflect 30% of taken damage to attacker
             if (data.skillType == SkillType.Counter && attacker != null && !attacker.isDead)
             {
+                GetCounterSettings(SkillType.Counter, 30, 0.3f, out int chance, out float reflectPercent);
                 float roll = Random.value;
-                if (roll < 0.3f && dmg > 0)
+                if (roll < chance / 100f && dmg > 0)
                 {
-                    int reflect = Mathf.RoundToInt(dmg * 0.3f);
+                    int reflect = Mathf.RoundToInt(dmg * reflectPercent);
                     if (reflect > 0)
                     {
                         bm.AddLog($"{DisplayName} のカウンター発動！{attacker.DisplayName} に {reflect} ダメージを反射！");
-                        attacker.TakeDamage(reflect, bm, this);
+                        attacker.TakeDamage(reflect, bm, this, ignoreDefense: false, isBasicAttack: false);
                         attacker.UpdateHPBar();
                     }
                 }
@@ -122,10 +139,11 @@ public class BattleCharacter : MonoBehaviour
             // AreaCounter: 20% chance to reflect 20% of taken damage to all adjacent enemies
             else if (data.skillType == SkillType.AreaCounter && dmg > 0)
             {
+                GetCounterSettings(SkillType.AreaCounter, 20, 0.2f, out int chance, out float reflectPercent);
                 float roll = Random.value;
-                if (roll < 0.2f)
+                if (roll < chance / 100f)
                 {
-                    int reflect = Mathf.RoundToInt(dmg * 0.2f);
+                    int reflect = Mathf.RoundToInt(dmg * reflectPercent);
                     if (reflect > 0)
                     {
                         List<BattleCharacter> targets = new List<BattleCharacter>();
@@ -150,11 +168,43 @@ public class BattleCharacter : MonoBehaviour
                             bm.AddLog($"{DisplayName} の範囲カウンター発動！周囲の敵に {reflect} ダメージを反射！");
                             foreach (var target in targets)
                             {
-                                target.TakeDamage(reflect, bm, this);
+                                target.TakeDamage(reflect, bm, this, ignoreDefense: false, isBasicAttack: false);
                                 target.UpdateHPBar();
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+
+    private void GetCounterSettings(SkillType skillType, int defaultChance, float defaultReflect, out int chance, out float reflectPercent)
+    {
+        chance = defaultChance;
+        reflectPercent = defaultReflect;
+
+        SkillData skillData = SkillCatalog.Get(skillType);
+        if (skillData == null)
+        {
+            return;
+        }
+
+        if (skillData.chanceOverride >= 0)
+        {
+            chance = skillData.chanceOverride;
+        }
+
+        if (skillData.effects != null)
+        {
+            foreach (var effect in skillData.effects)
+            {
+                if (effect.effectType == SkillEffectType.Counter || effect.effectType == SkillEffectType.AreaCounter)
+                {
+                    if (effect.value > 0)
+                    {
+                        reflectPercent = effect.value / 100f;
+                    }
+                    return;
                 }
             }
         }
@@ -200,153 +250,7 @@ public class BattleCharacter : MonoBehaviour
 
     public bool TryUseSkill(BattleCharacter target, BattleManager bm)
     {
-        if (data == null || data.skillType == SkillType.None)
-            return false;
-
-        // Counter and AreaCounter are handled in TakeDamage, not here
-        if (data.skillType == SkillType.Counter || data.skillType == SkillType.AreaCounter)
-            return false;
-
-        float roll = Random.value;
-        // Dragonは個別に確率分岐するのでスキップ
-        if (data.skillType != SkillType.Dragon)
-        {
-            if (roll > data.skillChance / 100f)
-                return false;
-        }
-
-        switch (data.skillType)
-        {
-            case SkillType.Slash:
-                if (target != null)
-                {
-                    PerformAttack(target, bm, data.skillPower, $"{DisplayName} が斬撃を放った！ {{0}} ダメージ");
-                    return true;
-                }
-                break;
-            case SkillType.StunBlow:
-                if (target != null)
-                {
-                    PerformAttack(target, bm, data.skillPower, $"{DisplayName} がスタンブローを放った！ {{0}} ダメージ");
-                    target.ApplyStun(1);
-                    bm.AddLog($"{target.DisplayName} はスタンした！");
-                    return true;
-                }
-                break;
-            case SkillType.Spear:
-                if (target != null)
-                {
-                    PerformAttack(target, bm, data.skillPower, $"{DisplayName} が槍を突き出した！ {{0}} ダメージ");
-                    return true;
-                }
-                break;
-            case SkillType.Stone:
-                if (target != null)
-                {
-                    PerformAttack(target, bm, data.skillPower, $"{DisplayName} が石を投げた！ {{0}} ダメージ");
-                    return true;
-                }
-                break;
-            case SkillType.Gun:
-                if (target != null)
-                {
-                    PerformAttack(target, bm, data.skillPower, $"{DisplayName} が銃を放った！ {{0}} ダメージ");
-                    return true;
-                }
-                break;
-            case SkillType.Arrow:
-                if (target != null)
-                {
-                    PerformAttack(target, bm, data.skillPower, $"{DisplayName} が矢を放った！ {{0}} ダメージ");
-                    return true;
-                }
-                break;
-            case SkillType.Soil:
-                bm.GenerateSoilTraps(this.gridPos);
-                bm.AddLog($"{DisplayName} が土のスキルを発動！周囲に罠を設置した！");
-                return true;
-            case SkillType.Fireball:
-                if (target != null)
-                {
-                    int dmg = Mathf.RoundToInt(GetEffectiveAttack(bm) * data.skillPower);
-                    bm.AddLog($"{DisplayName} がファイアボールを放った！ {dmg} ダメージ (防御無視)");
-                    target.TakeDamage(dmg, bm, this, ignoreDefense: true);
-                    return true;
-                }
-                break;
-            case SkillType.WoodPush:
-                if (target != null)
-                {
-                    PerformAttack(target, bm, data.skillPower, $"{DisplayName} が木の力で押し出した！ {{0}} ダメージ");
-                    bm.PushBackCharacter(this, target); // Manager側で補助メソッドを実装
-                    return true;
-                }
-                break;
-            case SkillType.WaterHeal:
-                if (target != null && !target.isDead)
-                {
-                    int heal = Mathf.RoundToInt(target.data.GetMaxHP(target.level) * data.skillPower);
-                    int beforeHP = target.currentHP;
-                    target.currentHP = Mathf.Min(target.currentHP + heal, target.data.GetMaxHP(target.level));
-                    target.UpdateHPBar();
-                    bm.AddLog($"{DisplayName} が {target.DisplayName} を {target.currentHP - beforeHP} 回復！");
-                    return true;
-                }
-                break;
-            case SkillType.NumberPassive:
-                // NumberPassive is a passive skill, no active use here
-                // Note: When fully triggered, passive buff includes defense ignore (handled elsewhere if needed)
-                return false;
-            case SkillType.HorseCharge:
-                if (target != null)
-                {
-                    bm.PerformHorseCharge(this, target);
-                    return true;
-                }
-                break;
-            case SkillType.BirdRetreat:
-                if (target != null)
-                {
-                    PerformAttack(target, bm, data.skillPower, $"{DisplayName} がバードリトリートを放った！ {{0}} ダメージ");
-                    bm.PerformBirdRetreat(this);
-                    return true;
-                }
-                break;
-            case SkillType.TigerTwinClaw:
-                if (target != null)
-                {
-                    // 1撃目：指定ターゲットに攻撃
-                    PerformAttack(target, bm, data.skillPower, $"{DisplayName} のツインクロー1撃目！ {{0}} ダメージ");
-
-                    // 2撃目：周囲1マスの敵を Manager の関数で取得
-                    BattleCharacter secondTarget = BattleTargetFinder.FindAdjacentEnemy(bm, this);
-                    if (secondTarget != null && !secondTarget.isDead)
-                    {
-                        PerformAttack(secondTarget, bm, data.skillPower, $"{DisplayName} のツインクロー2撃目！ {{0}} ダメージ");
-                    }
-                    return true;
-                }
-                break;
-            case SkillType.Dragon:
-                {
-                    // 発動判定
-                    if (roll < data.skillChance) // ブレス優先
-                    {
-                        // Dragon breath should ignore defense (handled in PerformDragonBreath)
-                        bool success = bm.PerformDragonBreath(this, 3);
-                        if (success) return true; // 敵に当たった時だけ true
-                    }
-                    else if (!isAlly) // 敵ドラゴンのみ咆哮
-                    {
-                        bool success = bm.PerformDragonRoar(this);
-                        if (success) return true; // 対象がいた時だけ true
-                    }
-                    return false; // 範囲に誰もいないなら失敗→通常攻撃/移動へ
-                }
-            default:
-                return false;
-        }
-        return false;
+        return SkillExecutor.TryExecute(this, target, bm);
     }
 
     public int GetEffectiveAttack(BattleManager bm)
@@ -395,8 +299,19 @@ public class BattleCharacter : MonoBehaviour
         {
             bm.AddLog(string.Format(logMessage, dmg));
         }
-        target.TakeDamage(dmg, bm, this, false);
+        target.TakeDamage(dmg, bm, this, false, isBasicAttack: true);
         UpdateDirection(target.gridPos - this.gridPos);
+    }
+
+    public void SetLevelForDebug(int newLevel)
+    {
+        level = Mathf.Max(1, newLevel);
+        currentHP = data.GetMaxHP(level);
+        attack = data.GetAttack(level);
+        defense = data.GetDefense(level);
+        if (levelText != null)
+            levelText.text = $"Lv.{level} #{instanceId}";
+        UpdateHPBar();
     }
 
     // Helper method to calculate NumberPassive buff and unique count
@@ -435,13 +350,21 @@ public class BattleCharacter : MonoBehaviour
             {
                 types += 1;
             }
-            float oneMatsuriBonus = Mathf.Min(0.05f * countOtherOnes, 0.25f);
+            SkillData passiveData = SkillCatalog.Get(SkillType.NumberPassive);
+            int oneBonusPer = passiveData != null ? passiveData.numberPassiveOneBonusPer : 5;
+            int oneBonusCap = passiveData != null ? passiveData.numberPassiveOneBonusCap : 25;
+            float oneMatsuriBonus = Mathf.Min(oneBonusPer / 100f * countOtherOnes, oneBonusCap / 100f);
             buff += oneMatsuriBonus;
         }
 
-        if (types == 1) buff += 0.05f;
-        else if (types == 2) buff += 0.10f;
-        else if (types >= 3) buff += 0.15f;
+        SkillData passiveDataForTypes = SkillCatalog.Get(SkillType.NumberPassive);
+        int bonus1 = passiveDataForTypes != null ? passiveDataForTypes.numberPassiveBonus1 : 5;
+        int bonus2 = passiveDataForTypes != null ? passiveDataForTypes.numberPassiveBonus2 : 10;
+        int bonus3 = passiveDataForTypes != null ? passiveDataForTypes.numberPassiveBonus3 : 15;
+
+        if (types == 1) buff += bonus1 / 100f;
+        else if (types == 2) buff += bonus2 / 100f;
+        else if (types >= 3) buff += bonus3 / 100f;
 
         int uniqueCount = uniqueNumbers.Count + ((data.characterName == "一" && countOtherOnes > 0) ? 1 : 0);
         return (uniqueCount, countOtherOnes, buff);
