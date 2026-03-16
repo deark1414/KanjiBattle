@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: CharacterData_Soil
   m_EditorClassIdentifier: 
   characterName: "\u571F"
-  characterId: 22
+  characterId: 19
   isBoss: 0
   icon: {fileID: 0}
   category: 7
-  baseHP: 180
-  baseAttack: 18
-  baseDefense: 12
+  baseHP: 175
+  baseAttack: 42
+  baseDefense: 15
   production: 3
   skillType: 14
   skillChance: 0
   skillPower: 1
   level: 1
   maxLevel: 50
-  attackGrowth: 2
-  hpGrowth: 10
-  defenseGrowth: 1
+  attackGrowth: 3
+  hpGrowth: 8
+  defenseGrowth: 2

@@ -12,16 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
   m_Name: FacilityData_CastleGate
   m_EditorClassIdentifier: 
-  facilityId: 8
-  facilityName: "\u57CE\u9580"
+  facilityId: 3
+  facilityName: "\u7AE0\u89E3\u653E\u65BD\u8A2D"
   effectType: 7
   unlockType: 1
-  requiredStageId: 10
+  requiredStageId: 1
   unlockStagePointCost: 5
   initialMaxLevel: 1
   finalMaxLevel: 1
   levelCapIncreasePerUnlock: 0
-  facilityLevelCapUnlocks: []
+  facilityLevelCapUnlocks:
+  - stageId: 6
+    requiredStagePoints: 5
+  - stageId: 10
+    requiredStagePoints: 25
+  - stageId: 14
+    requiredStagePoints: 125
+  - stageId: 18
+    requiredStagePoints: 625
+  - stageId: 22
+    requiredStagePoints: 3125
+  - stageId: 26
+    requiredStagePoints: 15625
+  - stageId: 31
+    requiredStagePoints: 78125
   baseCost: 100
   growthFactor: 1.2
   chapterUnlockRequirements: []

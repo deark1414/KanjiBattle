@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageName: Stage_1_6
   stageId: 6
-  chapterId: 1
+  chapterId: 3
   enemyPool:
   - {fileID: 11400000, guid: 1e8376bc251e144439579c16721a02dd, type: 2}
   - {fileID: 11400000, guid: 2a2c1d2944fb44cbc86f2b832147d0e1, type: 2}

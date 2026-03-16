@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: CharacterData_Gun
   m_EditorClassIdentifier: 
   characterName: "\u9283"
-  characterId: 18
+  characterId: 15
   isBoss: 0
   icon: {fileID: 0}
   category: 6
-  baseHP: 110
-  baseAttack: 45
-  baseDefense: 5
+  baseHP: 131
+  baseAttack: 39
+  baseDefense: 9
   production: 3
   skillType: 9
   skillChance: 10
@@ -27,5 +27,5 @@ MonoBehaviour:
   level: 1
   maxLevel: 50
   attackGrowth: 5
-  hpGrowth: 5
+  hpGrowth: 7
   defenseGrowth: 1

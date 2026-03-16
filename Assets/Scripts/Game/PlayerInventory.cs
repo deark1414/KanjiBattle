@@ -12,7 +12,7 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField]
     private List<CharacterData> summonableCharacters = new List<CharacterData>();
 
-    [SerializeField] private int baseLevelCap = 5;
+    [SerializeField] private int baseLevelCap = 10;
     private int globalLevelCapBonus = 0;
 
     // --- Facility effect fields removed ---
@@ -117,9 +117,9 @@ public class PlayerInventory : MonoBehaviour
         return baseLevelCap + globalLevelCapBonus;
     }
 
-    public void AddLevelCapBonus(int value)
+    public void SetLevelCapBonus(int value)
     {
-        globalLevelCapBonus += value;
+        globalLevelCapBonus = value;
         Debug.Log($"新しいレベル上限: {GetEffectiveLevelCap()}");
     }
 

@@ -12,20 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
   m_Name: FacilityData_Smithy
   m_EditorClassIdentifier: 
-  facilityId: 4
-  facilityName: "\u935B\u51B6\u5C4B"
+  facilityId: 8
+  facilityName: "\u5F37\u5316\u30B3\u30B9\u30C8\u8EFD\u6E1B\u65BD\u8A2D"
   effectType: 2
   unlockType: 1
   requiredStageId: 2
-  unlockStagePointCost: 1
-  initialMaxLevel: 2
-  finalMaxLevel: 10
-  levelCapIncreasePerUnlock: 2
+  unlockStagePointCost: 10
+  initialMaxLevel: 5
+  finalMaxLevel: 40
+  levelCapIncreasePerUnlock: 5
   facilityLevelCapUnlocks:
-  - stageId: 2
-    requiredStagePoints: 1
-  - stageId: 5
-    requiredStagePoints: 2
+  - stageId: 6
+    requiredStagePoints: 5
+  - stageId: 10
+    requiredStagePoints: 25
+  - stageId: 14
+    requiredStagePoints: 125
+  - stageId: 18
+    requiredStagePoints: 625
+  - stageId: 22
+    requiredStagePoints: 3125
+  - stageId: 26
+    requiredStagePoints: 15625
+  - stageId: 31
+    requiredStagePoints: 78125
   baseCost: 100
   growthFactor: 1.2
   chapterUnlockRequirements: []

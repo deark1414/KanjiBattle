@@ -13,15 +13,25 @@ MonoBehaviour:
   m_Name: FacilityData_SummonRateUp_Number1
   m_EditorClassIdentifier: 
   facilityId: 9
-  facilityName: "\u53EC\u559A\u52A0\u8B77\u30FB\u6570\u5B571"
+  facilityName: "\u53EC\u559A\u7387\u5F37\u5316\u30FB\u6570\u5B571"
   effectType: 9
   unlockType: 1
-  requiredStageId: 1
-  unlockStagePointCost: 1
-  initialMaxLevel: 3
+  requiredStageId: 3
+  unlockStagePointCost: 5
+  initialMaxLevel: 5
   finalMaxLevel: 10
-  levelCapIncreasePerUnlock: 2
-  facilityLevelCapUnlocks: []
+  levelCapIncreasePerUnlock: 1
+  facilityLevelCapUnlocks:
+  - stageId: 6
+    requiredStagePoints: 5
+  - stageId: 10
+    requiredStagePoints: 25
+  - stageId: 14
+    requiredStagePoints: 125
+  - stageId: 18
+    requiredStagePoints: 625
+  - stageId: 22
+    requiredStagePoints: 3125
   baseCost: 100
   growthFactor: 1.2
   chapterUnlockRequirements: []

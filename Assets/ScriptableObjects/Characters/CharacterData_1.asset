@@ -17,15 +17,15 @@ MonoBehaviour:
   isBoss: 0
   icon: {fileID: 0}
   category: 1
-  baseHP: 120
-  baseAttack: 20
-  baseDefense: 10
+  baseHP: 75
+  baseAttack: 15
+  baseDefense: 1
   production: 50
   skillType: 7
   skillChance: 0
   skillPower: 1
   level: 1
   maxLevel: 50
-  attackGrowth: 2
-  hpGrowth: 8
-  defenseGrowth: 1
+  attackGrowth: 6
+  hpGrowth: 12
+  defenseGrowth: 3

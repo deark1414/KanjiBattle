@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: CharacterData_Shield
   m_EditorClassIdentifier: 
   characterName: "\u76FE"
-  characterId: 13
+  characterId: 7
   isBoss: 0
   icon: {fileID: 0}
   category: 5
-  baseHP: 180
-  baseAttack: 20
-  baseDefense: 10
+  baseHP: 130
+  baseAttack: 19
+  baseDefense: 9
   production: 3
   skillType: 3
   skillChance: 15
   skillPower: 1
   level: 1
   maxLevel: 50
-  attackGrowth: 2
-  hpGrowth: 9
-  defenseGrowth: 2
+  attackGrowth: 4
+  hpGrowth: 11
+  defenseGrowth: 3

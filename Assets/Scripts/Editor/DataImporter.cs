@@ -329,16 +329,20 @@ public class DataImporter : EditorWindow
         }
 
         string[] guids = AssetDatabase.FindAssets("t:FacilityData", new[] { "Assets/ScriptableObjects/Facilities" });
-        db.facilities.Clear();
+        var facilityList = new List<FacilityData>();
         foreach (string guid in guids)
         {
             string path = AssetDatabase.GUIDToAssetPath(guid);
             FacilityData data = AssetDatabase.LoadAssetAtPath<FacilityData>(path);
             if (data != null)
             {
-                db.facilities.Add(data);
+                facilityList.Add(data);
             }
         }
+
+        facilityList.Sort((a, b) => a.facilityId.CompareTo(b.facilityId));
+        db.facilities.Clear();
+        db.facilities.AddRange(facilityList);
 
         EditorUtility.SetDirty(db);
         AssetDatabase.SaveAssets();

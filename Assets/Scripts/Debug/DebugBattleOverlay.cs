@@ -283,8 +283,8 @@ public class DebugBattleOverlay : MonoBehaviour
 
         if (allyEntries.Count == 0 && sortedCharacters.Count > 0)
         {
-            AddDefaultEntryById(allyEntries, 18); // Gun
-            AddDefaultEntryById(allyEntries, 16); // Stone
+            AddDefaultEntryById(allyEntries, 15); // Gun
+            AddDefaultEntryById(allyEntries, 13); // Stone
         }
     }
 

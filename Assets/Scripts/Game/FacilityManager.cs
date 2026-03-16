@@ -259,9 +259,13 @@ public class FacilityManager : MonoBehaviour
                 GameManager.Instance.ApplyFormationSlotIncrease(1);
                 break;
             case FacilityEffectType.LevelCap:
-                PlayerInventory.Instance.AddLevelCapBonus(facility.levelCapIncreasePerUnlock);
+                PlayerInventory.Instance.SetLevelCapBonus(level * 5);
                 break;
             case FacilityEffectType.CharacterUnlock:
+                if (level <= 0)
+                {
+                    break;
+                }
                 if (characterUnlockQueue.Count > 0)
                 {
                     var nextChar = characterUnlockQueue.Dequeue();

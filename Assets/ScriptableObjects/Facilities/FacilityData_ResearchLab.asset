@@ -12,20 +12,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
   m_Name: FacilityData_ResearchLab
   m_EditorClassIdentifier: 
-  facilityId: 1
-  facilityName: "\u7814\u7A76\u6240"
+  facilityId: 6
+  facilityName: "\u30AD\u30E3\u30E9\u89E3\u653E\u65BD\u8A2D"
   effectType: 6
   unlockType: 1
-  requiredStageId: 1
+  requiredStageId: 2
   unlockStagePointCost: 1
   initialMaxLevel: 1
-  finalMaxLevel: 10
-  levelCapIncreasePerUnlock: 5
+  finalMaxLevel: 26
+  levelCapIncreasePerUnlock: 1
   facilityLevelCapUnlocks:
-  - stageId: 1
-    requiredStagePoints: 1
   - stageId: 2
-    requiredStagePoints: 2
+    requiredStagePoints: 5
+  - stageId: 3
+    requiredStagePoints: 5
+  - stageId: 4
+    requiredStagePoints: 5
+  - stageId: 5
+    requiredStagePoints: 5
+  - stageId: 6
+    requiredStagePoints: 25
+  - stageId: 7
+    requiredStagePoints: 25
+  - stageId: 8
+    requiredStagePoints: 25
+  - stageId: 9
+    requiredStagePoints: 125
+  - stageId: 11
+    requiredStagePoints: 125
+  - stageId: 12
+    requiredStagePoints: 125
+  - stageId: 13
+    requiredStagePoints: 625
+  - stageId: 15
+    requiredStagePoints: 625
+  - stageId: 16
+    requiredStagePoints: 625
+  - stageId: 17
+    requiredStagePoints: 3125
+  - stageId: 19
+    requiredStagePoints: 3125
+  - stageId: 20
+    requiredStagePoints: 3125
+  - stageId: 21
+    requiredStagePoints: 3125
+  - stageId: 22
+    requiredStagePoints: 15625
+  - stageId: 23
+    requiredStagePoints: 15625
+  - stageId: 24
+    requiredStagePoints: 15625
+  - stageId: 25
+    requiredStagePoints: 78125
+  - stageId: 27
+    requiredStagePoints: 78125
+  - stageId: 27
+    requiredStagePoints: 78125
+  - stageId: 27
+    requiredStagePoints: 390625
   baseCost: 100
   growthFactor: 1.2
   chapterUnlockRequirements: []

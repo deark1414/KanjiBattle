@@ -12,20 +12,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
   m_Name: FacilityData_SummonAltar
   m_EditorClassIdentifier: 
-  facilityId: 3
-  facilityName: "\u53EC\u559A\u796D\u58C7"
+  facilityId: 1
+  facilityName: "\u53EC\u559A\u30B3\u30B9\u30C8\u8EFD\u6E1B\u65BD\u8A2D"
   effectType: 1
   unlockType: 1
   requiredStageId: 1
   unlockStagePointCost: 1
-  initialMaxLevel: 3
-  finalMaxLevel: 10
-  levelCapIncreasePerUnlock: 2
+  initialMaxLevel: 5
+  finalMaxLevel: 45
+  levelCapIncreasePerUnlock: 5
   facilityLevelCapUnlocks:
-  - stageId: 1
-    requiredStagePoints: 1
-  - stageId: 4
-    requiredStagePoints: 2
+  - stageId: 3
+    requiredStagePoints: 5
+  - stageId: 6
+    requiredStagePoints: 5
+  - stageId: 10
+    requiredStagePoints: 25
+  - stageId: 14
+    requiredStagePoints: 125
+  - stageId: 18
+    requiredStagePoints: 625
+  - stageId: 22
+    requiredStagePoints: 3125
+  - stageId: 26
+    requiredStagePoints: 15625
+  - stageId: 31
+    requiredStagePoints: 78125
   baseCost: 100
   growthFactor: 1.2
   chapterUnlockRequirements: []

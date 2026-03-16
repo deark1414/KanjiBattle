@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: CharacterData_Water
   m_EditorClassIdentifier: 
   characterName: "\u6C34"
-  characterId: 20
+  characterId: 17
   isBoss: 0
   icon: {fileID: 0}
   category: 7
-  baseHP: 150
-  baseAttack: 25
-  baseDefense: 10
+  baseHP: 165
+  baseAttack: 39
+  baseDefense: 14
   production: 3
   skillType: 17
   skillChance: 15
@@ -27,5 +27,5 @@ MonoBehaviour:
   level: 1
   maxLevel: 50
   attackGrowth: 3
-  hpGrowth: 8
-  defenseGrowth: 1
+  hpGrowth: 9
+  defenseGrowth: 2

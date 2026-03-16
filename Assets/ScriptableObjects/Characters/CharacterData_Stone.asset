@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: CharacterData_Stone
   m_EditorClassIdentifier: 
   characterName: "\u77F3"
-  characterId: 16
+  characterId: 13
   isBoss: 0
   icon: {fileID: 0}
   category: 6
-  baseHP: 130
-  baseAttack: 28
-  baseDefense: 6
+  baseHP: 133
+  baseAttack: 36
+  baseDefense: 8
   production: 3
   skillType: 11
   skillChance: 10
   skillPower: 1.1
   level: 1
   maxLevel: 50
-  attackGrowth: 3
-  hpGrowth: 6
+  attackGrowth: 5
+  hpGrowth: 8
   defenseGrowth: 1

@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: CharacterData_Spear
   m_EditorClassIdentifier: 
   characterName: "\u69CD"
-  characterId: 11
+  characterId: 5
   isBoss: 0
   icon: {fileID: 0}
   category: 4
-  baseHP: 130
-  baseAttack: 35
-  baseDefense: 9
+  baseHP: 100
+  baseAttack: 24
+  baseDefense: 3
   production: 3
   skillType: 10
   skillChance: 15
   skillPower: 1.4
   level: 1
   maxLevel: 50
-  attackGrowth: 5
-  hpGrowth: 6
-  defenseGrowth: 1
+  attackGrowth: 6
+  hpGrowth: 11
+  defenseGrowth: 3

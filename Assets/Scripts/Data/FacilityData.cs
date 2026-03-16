@@ -119,7 +119,7 @@ public class FacilityData : ScriptableObject
             case FacilityEffectType.FormationSlot:
                 return Mathf.RoundToInt(effectPerLevel * level);
             case FacilityEffectType.LevelCap:
-                return levelCapIncreasePerUnlock * level;
+                return level * 5;
             case FacilityEffectType.CharacterUnlock:
             case FacilityEffectType.ChapterUnlock:
                 return -1f;

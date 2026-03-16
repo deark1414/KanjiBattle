@@ -1,311 +1,674 @@
 [
-    {
-      "id": 1,
-      "fileName": "FacilityData_ResearchLab",
-      "facilityName": "研究所",
-      "effectType": "CharacterUnlock",
-      "unlockType": "StagePoint",
-      "requiredStageId": 1,
-      "unlockStagePointCost": 1,
-      "initialMaxLevel": 1,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 5,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 0,
-      "summonCategory": "None",
-      "summonRatePerLevel": 0,
-      "facilityLevelCapUnlocks": [
-        { "stageId": 1, "requiredStagePoints": 1 },
-        { "stageId": 2, "requiredStagePoints": 2 }
-      ]
-    },
-    {
-      "id": 2,
-      "fileName": "FacilityData_GoldWorkshop",
-      "facilityName": "金貨工房",
-      "effectType": "GoldProduction",
-      "unlockType": "StagePoint",
-      "requiredStageId": 2,
-      "unlockStagePointCost": 1,
-      "initialMaxLevel": 5,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 2,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 0.1,
-      "summonCategory": "None",
-      "summonRatePerLevel": 0,
-      "facilityLevelCapUnlocks": [
-        { "stageId": 2, "requiredStagePoints": 1 },
-        { "stageId": 3, "requiredStagePoints": 2 }
-      ]
-    },
-    {
-      "id": 3,
-      "fileName": "FacilityData_SummonAltar",
-      "facilityName": "召喚祭壇",
-      "effectType": "SummonCostDown",
-      "unlockType": "StagePoint",
-      "requiredStageId": 1,
-      "unlockStagePointCost": 1,
-      "initialMaxLevel": 3,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 2,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": -0.05,
-      "summonCategory": "None",
-      "summonRatePerLevel": 0,
-      "facilityLevelCapUnlocks": [
-        { "stageId": 1, "requiredStagePoints": 1 },
-        { "stageId": 4, "requiredStagePoints": 2 }
-      ]
-    },
-    {
-      "id": 4,
-      "fileName": "FacilityData_Smithy",
-      "facilityName": "鍛冶屋",
-      "effectType": "UpgradeCostDown",
-      "unlockType": "StagePoint",
-      "requiredStageId": 2,
-      "unlockStagePointCost": 1,
-      "initialMaxLevel": 2,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 2,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": -0.05,
-      "summonCategory": "None",
-      "summonRatePerLevel": 0,
-      "facilityLevelCapUnlocks": [
-        { "stageId": 2, "requiredStagePoints": 1 },
-        { "stageId": 5, "requiredStagePoints": 2 }
-      ]
-    },
-    {
-      "id": 5,
-      "fileName": "FacilityData_VictoryMonument",
-      "facilityName": "勝利の碑",
-      "effectType": "StagePointBoost",
-      "unlockType": "StagePoint",
-      "requiredStageId": 1,
-      "unlockStagePointCost": 1,
-      "initialMaxLevel": 3,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 2,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 0.2,
-      "summonCategory": "None",
-      "summonRatePerLevel": 0,
-      "facilityLevelCapUnlocks": [
-        { "stageId": 1, "requiredStagePoints": 1 },
-        { "stageId": 3, "requiredStagePoints": 2 }
-      ]
-    },
-    {
-      "id": 6,
-      "fileName": "FacilityData_TrainingGround",
-      "facilityName": "訓練場",
-      "effectType": "FormationSlot",
-      "unlockType": "StagePoint",
-      "requiredStageId": 2,
-      "unlockStagePointCost": 1,
-      "initialMaxLevel": 1,
-      "finalMaxLevel": 5,
-      "levelCapIncreasePerUnlock": 1,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 1,
-      "summonCategory": "None",
-      "summonRatePerLevel": 0,
-      "facilityLevelCapUnlocks": [
-        { "stageId": 2, "requiredStagePoints": 1 },
-        { "stageId": 4, "requiredStagePoints": 2 }
-      ]
-    },
-    {
-      "id": 7,
-      "fileName": "FacilityData_MagicArchive",
-      "facilityName": "魔導書庫",
-      "effectType": "LevelCap",
-      "unlockType": "StagePoint",
-      "requiredStageId": 3,
-      "unlockStagePointCost": 1,
-      "initialMaxLevel": 1,
-      "finalMaxLevel": 5,
-      "levelCapIncreasePerUnlock": 1,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 5,
-      "summonCategory": "None",
-      "summonRatePerLevel": 0,
-      "facilityLevelCapUnlocks": [
-        { "stageId": 3, "requiredStagePoints": 1 },
-        { "stageId": 6, "requiredStagePoints": 2 }
-      ]
-    },
-    {
-      "id": 8,
-      "fileName": "FacilityData_CastleGate",
-      "facilityName": "城門",
-      "effectType": "ChapterUnlock",
-      "unlockType": "StagePoint",
-      "requiredStageId": 10,
-      "unlockStagePointCost": 5,
-      "initialMaxLevel": 1,
-      "finalMaxLevel": 1,
-      "levelCapIncreasePerUnlock": 0,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 0,
-      "summonCategory": "None",
-      "summonRatePerLevel": 0,
-      "facilityLevelCapUnlocks": []
-    }
-    ,{
-      "id": 9,
-      "fileName": "FacilityData_SummonRateUp_Number1",
-      "facilityName": "召喚加護・数字1",
-      "effectType": "SummonRateUp",
-      "unlockType": "StagePoint",
-      "requiredStageId": 1,
-      "unlockStagePointCost": 1,
-      "initialMaxLevel": 3,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 2,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 0,
-      "summonCategory": "Number1",
-      "summonRatePerLevel": 0.02,
-      "facilityLevelCapUnlocks": []
-    },
-    {
-      "id": 10,
-      "fileName": "FacilityData_SummonRateUp_Number2",
-      "facilityName": "召喚加護・数字2",
-      "effectType": "SummonRateUp",
-      "unlockType": "StagePoint",
-      "requiredStageId": 2,
-      "unlockStagePointCost": 2,
-      "initialMaxLevel": 3,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 2,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 0,
-      "summonCategory": "Number2",
-      "summonRatePerLevel": 0.02,
-      "facilityLevelCapUnlocks": []
-    },
-    {
-      "id": 11,
-      "fileName": "FacilityData_SummonRateUp_Number3",
-      "facilityName": "召喚加護・数字3",
-      "effectType": "SummonRateUp",
-      "unlockType": "StagePoint",
-      "requiredStageId": 3,
-      "unlockStagePointCost": 2,
-      "initialMaxLevel": 3,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 2,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 0,
-      "summonCategory": "Number3",
-      "summonRatePerLevel": 0.02,
-      "facilityLevelCapUnlocks": []
-    },
-    {
-      "id": 12,
-      "fileName": "FacilityData_SummonRateUp_Weapon",
-      "facilityName": "召喚加護・武器",
-      "effectType": "SummonRateUp",
-      "unlockType": "StagePoint",
-      "requiredStageId": 4,
-      "unlockStagePointCost": 2,
-      "initialMaxLevel": 3,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 2,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 0,
-      "summonCategory": "Weapon",
-      "summonRatePerLevel": 0.02,
-      "facilityLevelCapUnlocks": []
-    },
-    {
-      "id": 13,
-      "fileName": "FacilityData_SummonRateUp_Defense",
-      "facilityName": "召喚加護・防御",
-      "effectType": "SummonRateUp",
-      "unlockType": "StagePoint",
-      "requiredStageId": 5,
-      "unlockStagePointCost": 2,
-      "initialMaxLevel": 3,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 2,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 0,
-      "summonCategory": "Defense",
-      "summonRatePerLevel": 0.02,
-      "facilityLevelCapUnlocks": []
-    },
-    {
-      "id": 14,
-      "fileName": "FacilityData_SummonRateUp_Ranged",
-      "facilityName": "召喚加護・遠隔",
-      "effectType": "SummonRateUp",
-      "unlockType": "StagePoint",
-      "requiredStageId": 6,
-      "unlockStagePointCost": 2,
-      "initialMaxLevel": 3,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 2,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 0,
-      "summonCategory": "Ranged",
-      "summonRatePerLevel": 0.02,
-      "facilityLevelCapUnlocks": []
-    },
-    {
-      "id": 15,
-      "fileName": "FacilityData_SummonRateUp_Nature",
-      "facilityName": "召喚加護・自然",
-      "effectType": "SummonRateUp",
-      "unlockType": "StagePoint",
-      "requiredStageId": 7,
-      "unlockStagePointCost": 2,
-      "initialMaxLevel": 3,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 2,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 0,
-      "summonCategory": "Nature",
-      "summonRatePerLevel": 0.02,
-      "facilityLevelCapUnlocks": []
-    },
-    {
-      "id": 16,
-      "fileName": "FacilityData_SummonRateUp_Animal",
-      "facilityName": "召喚加護・動物",
-      "effectType": "SummonRateUp",
-      "unlockType": "StagePoint",
-      "requiredStageId": 8,
-      "unlockStagePointCost": 2,
-      "initialMaxLevel": 3,
-      "finalMaxLevel": 10,
-      "levelCapIncreasePerUnlock": 2,
-      "baseCost": 100,
-      "growthFactor": 1.2,
-      "effectPerLevel": 0,
-      "summonCategory": "Animal",
-      "summonRatePerLevel": 0.02,
-      "facilityLevelCapUnlocks": []
-    }
-  ]
+  {
+    "id": 1,
+    "fileName": "FacilityData_SummonAltar",
+    "facilityName": "召喚コスト軽減施設",
+    "effectType": "SummonCostDown",
+    "unlockType": "StagePoint",
+    "requiredStageId": 1,
+    "unlockStagePointCost": 1,
+    "initialMaxLevel": 5,
+    "finalMaxLevel": 45,
+    "levelCapIncreasePerUnlock": 5,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": -0.05,
+    "summonCategory": "None",
+    "summonRatePerLevel": 0,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 3,
+        "requiredStagePoints": 5
+      },
+      {
+        "stageId": 6,
+        "requiredStagePoints": 5
+      },
+      {
+        "stageId": 10,
+        "requiredStagePoints": 25
+      },
+      {
+        "stageId": 14,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 18,
+        "requiredStagePoints": 625
+      },
+      {
+        "stageId": 22,
+        "requiredStagePoints": 3125
+      },
+      {
+        "stageId": 26,
+        "requiredStagePoints": 15625
+      },
+      {
+        "stageId": 31,
+        "requiredStagePoints": 78125
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "fileName": "FacilityData_VictoryMonument",
+    "facilityName": "ステージポイント増加施設",
+    "effectType": "StagePointBoost",
+    "unlockType": "StagePoint",
+    "requiredStageId": 1,
+    "unlockStagePointCost": 1,
+    "initialMaxLevel": 5,
+    "finalMaxLevel": 45,
+    "levelCapIncreasePerUnlock": 5,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 0.2,
+    "summonCategory": "None",
+    "summonRatePerLevel": 0,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 3,
+        "requiredStagePoints": 5
+      },
+      {
+        "stageId": 6,
+        "requiredStagePoints": 5
+      },
+      {
+        "stageId": 10,
+        "requiredStagePoints": 25
+      },
+      {
+        "stageId": 14,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 18,
+        "requiredStagePoints": 625
+      },
+      {
+        "stageId": 22,
+        "requiredStagePoints": 3125
+      },
+      {
+        "stageId": 26,
+        "requiredStagePoints": 15625
+      },
+      {
+        "stageId": 31,
+        "requiredStagePoints": 78125
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "fileName": "FacilityData_CastleGate",
+    "facilityName": "章解放施設",
+    "effectType": "ChapterUnlock",
+    "unlockType": "StagePoint",
+    "requiredStageId": 1,
+    "unlockStagePointCost": 5,
+    "initialMaxLevel": 1,
+    "finalMaxLevel": 1,
+    "levelCapIncreasePerUnlock": 0,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 0,
+    "summonCategory": "None",
+    "summonRatePerLevel": 0,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 6,
+        "requiredStagePoints": 5
+      },
+      {
+        "stageId": 10,
+        "requiredStagePoints": 25
+      },
+      {
+        "stageId": 14,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 18,
+        "requiredStagePoints": 625
+      },
+      {
+        "stageId": 22,
+        "requiredStagePoints": 3125
+      },
+      {
+        "stageId": 26,
+        "requiredStagePoints": 15625
+      },
+      {
+        "stageId": 31,
+        "requiredStagePoints": 78125
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "fileName": "FacilityData_MagicArchive",
+    "facilityName": "レベル上限解放施設",
+    "effectType": "LevelCap",
+    "unlockType": "StagePoint",
+    "requiredStageId": 1,
+    "unlockStagePointCost": 5,
+    "initialMaxLevel": 1,
+    "finalMaxLevel": 18,
+    "levelCapIncreasePerUnlock": 3,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 5,
+    "summonCategory": "None",
+    "summonRatePerLevel": 0,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 6,
+        "requiredStagePoints": 25
+      },
+      {
+        "stageId": 10,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 14,
+        "requiredStagePoints": 625
+      },
+      {
+        "stageId": 18,
+        "requiredStagePoints": 3125
+      },
+      {
+        "stageId": 22,
+        "requiredStagePoints": 15625
+      },
+      {
+        "stageId": 26,
+        "requiredStagePoints": 78125
+      },
+      {
+        "stageId": 31,
+        "requiredStagePoints": 156250
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "fileName": "FacilityData_TrainingGround",
+    "facilityName": "編成枠拡張施設",
+    "effectType": "FormationSlot",
+    "unlockType": "StagePoint",
+    "requiredStageId": 1,
+    "unlockStagePointCost": 15,
+    "initialMaxLevel": 1,
+    "finalMaxLevel": 4,
+    "levelCapIncreasePerUnlock": 1,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 1,
+    "summonCategory": "None",
+    "summonRatePerLevel": 0,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 3,
+        "requiredStagePoints": 50
+      },
+      {
+        "stageId": 14,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 22,
+        "requiredStagePoints": 3125
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "fileName": "FacilityData_ResearchLab",
+    "facilityName": "キャラ解放施設",
+    "effectType": "CharacterUnlock",
+    "unlockType": "StagePoint",
+    "requiredStageId": 2,
+    "unlockStagePointCost": 1,
+    "initialMaxLevel": 1,
+    "finalMaxLevel": 26,
+    "levelCapIncreasePerUnlock": 1,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 0,
+    "summonCategory": "None",
+    "summonRatePerLevel": 0,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 2,
+        "requiredStagePoints": 5
+      },
+      {
+        "stageId": 3,
+        "requiredStagePoints": 5
+      },
+      {
+        "stageId": 4,
+        "requiredStagePoints": 5
+      },
+      {
+        "stageId": 5,
+        "requiredStagePoints": 5
+      },
+      {
+        "stageId": 6,
+        "requiredStagePoints": 25
+      },
+      {
+        "stageId": 7,
+        "requiredStagePoints": 25
+      },
+      {
+        "stageId": 8,
+        "requiredStagePoints": 25
+      },
+      {
+        "stageId": 9,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 11,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 12,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 13,
+        "requiredStagePoints": 625
+      },
+      {
+        "stageId": 15,
+        "requiredStagePoints": 625
+      },
+      {
+        "stageId": 16,
+        "requiredStagePoints": 625
+      },
+      {
+        "stageId": 17,
+        "requiredStagePoints": 3125
+      },
+      {
+        "stageId": 19,
+        "requiredStagePoints": 3125
+      },
+      {
+        "stageId": 20,
+        "requiredStagePoints": 3125
+      },
+      {
+        "stageId": 21,
+        "requiredStagePoints": 3125
+      },
+      {
+        "stageId": 22,
+        "requiredStagePoints": 15625
+      },
+      {
+        "stageId": 23,
+        "requiredStagePoints": 15625
+      },
+      {
+        "stageId": 24,
+        "requiredStagePoints": 15625
+      },
+      {
+        "stageId": 25,
+        "requiredStagePoints": 78125
+      },
+      {
+        "stageId": 27,
+        "requiredStagePoints": 78125
+      },
+      {
+        "stageId": 27,
+        "requiredStagePoints": 78125
+      },
+      {
+        "stageId": 27,
+        "requiredStagePoints": 390625
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "fileName": "FacilityData_GoldWorkshop",
+    "facilityName": "金貨生産施設",
+    "effectType": "GoldProduction",
+    "unlockType": "StagePoint",
+    "requiredStageId": 2,
+    "unlockStagePointCost": 10,
+    "initialMaxLevel": 5,
+    "finalMaxLevel": 40,
+    "levelCapIncreasePerUnlock": 5,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 0.1,
+    "summonCategory": "None",
+    "summonRatePerLevel": 0,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 6,
+        "requiredStagePoints": 5
+      },
+      {
+        "stageId": 10,
+        "requiredStagePoints": 25
+      },
+      {
+        "stageId": 14,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 18,
+        "requiredStagePoints": 625
+      },
+      {
+        "stageId": 22,
+        "requiredStagePoints": 3125
+      },
+      {
+        "stageId": 26,
+        "requiredStagePoints": 15625
+      },
+      {
+        "stageId": 31,
+        "requiredStagePoints": 78125
+      },
+      {
+        "stageId": 32,
+        "requiredStagePoints": 156250
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "fileName": "FacilityData_Smithy",
+    "facilityName": "強化コスト軽減施設",
+    "effectType": "UpgradeCostDown",
+    "unlockType": "StagePoint",
+    "requiredStageId": 2,
+    "unlockStagePointCost": 10,
+    "initialMaxLevel": 5,
+    "finalMaxLevel": 40,
+    "levelCapIncreasePerUnlock": 5,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": -0.05,
+    "summonCategory": "None",
+    "summonRatePerLevel": 0,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 6,
+        "requiredStagePoints": 5
+      },
+      {
+        "stageId": 10,
+        "requiredStagePoints": 25
+      },
+      {
+        "stageId": 14,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 18,
+        "requiredStagePoints": 625
+      },
+      {
+        "stageId": 22,
+        "requiredStagePoints": 3125
+      },
+      {
+        "stageId": 26,
+        "requiredStagePoints": 15625
+      },
+      {
+        "stageId": 31,
+        "requiredStagePoints": 78125
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "fileName": "FacilityData_SummonRateUp_Number1",
+    "facilityName": "召喚率強化・数字1",
+    "effectType": "SummonRateUp",
+    "unlockType": "StagePoint",
+    "requiredStageId": 3,
+    "unlockStagePointCost": 5,
+    "initialMaxLevel": 5,
+    "finalMaxLevel": 10,
+    "levelCapIncreasePerUnlock": 1,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 0,
+    "summonCategory": "Number1",
+    "summonRatePerLevel": 0.02,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 6,
+        "requiredStagePoints": 5
+      },
+      {
+        "stageId": 10,
+        "requiredStagePoints": 25
+      },
+      {
+        "stageId": 14,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 18,
+        "requiredStagePoints": 625
+      },
+      {
+        "stageId": 22,
+        "requiredStagePoints": 3125
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "fileName": "FacilityData_SummonRateUp_Weapon",
+    "facilityName": "召喚率強化・武器",
+    "effectType": "SummonRateUp",
+    "unlockType": "StagePoint",
+    "requiredStageId": 6,
+    "unlockStagePointCost": 25,
+    "initialMaxLevel": 5,
+    "finalMaxLevel": 10,
+    "levelCapIncreasePerUnlock": 1,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 0,
+    "summonCategory": "Weapon",
+    "summonRatePerLevel": 0.02,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 10,
+        "requiredStagePoints": 25
+      },
+      {
+        "stageId": 14,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 18,
+        "requiredStagePoints": 625
+      },
+      {
+        "stageId": 22,
+        "requiredStagePoints": 3125
+      },
+      {
+        "stageId": 26,
+        "requiredStagePoints": 15625
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "fileName": "FacilityData_SummonRateUp_Defense",
+    "facilityName": "召喚率強化・防御",
+    "effectType": "SummonRateUp",
+    "unlockType": "StagePoint",
+    "requiredStageId": 10,
+    "unlockStagePointCost": 125,
+    "initialMaxLevel": 5,
+    "finalMaxLevel": 10,
+    "levelCapIncreasePerUnlock": 1,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 0,
+    "summonCategory": "Defense",
+    "summonRatePerLevel": 0.02,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 14,
+        "requiredStagePoints": 125
+      },
+      {
+        "stageId": 18,
+        "requiredStagePoints": 625
+      },
+      {
+        "stageId": 22,
+        "requiredStagePoints": 3125
+      },
+      {
+        "stageId": 26,
+        "requiredStagePoints": 15625
+      },
+      {
+        "stageId": 31,
+        "requiredStagePoints": 78125
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "fileName": "FacilityData_SummonRateUp_Number2",
+    "facilityName": "召喚率強化・数字2",
+    "effectType": "SummonRateUp",
+    "unlockType": "StagePoint",
+    "requiredStageId": 14,
+    "unlockStagePointCost": 625,
+    "initialMaxLevel": 5,
+    "finalMaxLevel": 10,
+    "levelCapIncreasePerUnlock": 5,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 0,
+    "summonCategory": "Number2",
+    "summonRatePerLevel": 0.02,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 18,
+        "requiredStagePoints": 625
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "fileName": "FacilityData_SummonRateUp_Ranged",
+    "facilityName": "召喚率強化・遠隔",
+    "effectType": "SummonRateUp",
+    "unlockType": "StagePoint",
+    "requiredStageId": 18,
+    "unlockStagePointCost": 3125,
+    "initialMaxLevel": 5,
+    "finalMaxLevel": 10,
+    "levelCapIncreasePerUnlock": 5,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 0,
+    "summonCategory": "Ranged",
+    "summonRatePerLevel": 0.02,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 22,
+        "requiredStagePoints": 3125
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "fileName": "FacilityData_SummonRateUp_Nature",
+    "facilityName": "召喚率強化・自然",
+    "effectType": "SummonRateUp",
+    "unlockType": "StagePoint",
+    "requiredStageId": 22,
+    "unlockStagePointCost": 15625,
+    "initialMaxLevel": 5,
+    "finalMaxLevel": 10,
+    "levelCapIncreasePerUnlock": 5,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 0,
+    "summonCategory": "Nature",
+    "summonRatePerLevel": 0.02,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 26,
+        "requiredStagePoints": 15625
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "fileName": "FacilityData_SummonRateUp_Animal",
+    "facilityName": "召喚率強化・動物",
+    "effectType": "SummonRateUp",
+    "unlockType": "StagePoint",
+    "requiredStageId": 26,
+    "unlockStagePointCost": 78125,
+    "initialMaxLevel": 5,
+    "finalMaxLevel": 10,
+    "levelCapIncreasePerUnlock": 5,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 0,
+    "summonCategory": "Animal",
+    "summonRatePerLevel": 0.02,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 31,
+        "requiredStagePoints": 78125
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "fileName": "FacilityData_SummonRateUp_Number3",
+    "facilityName": "召喚率強化・数字3",
+    "effectType": "SummonRateUp",
+    "unlockType": "StagePoint",
+    "requiredStageId": 31,
+    "unlockStagePointCost": 390625,
+    "initialMaxLevel": 5,
+    "finalMaxLevel": 10,
+    "levelCapIncreasePerUnlock": 5,
+    "baseCost": 100,
+    "growthFactor": 1.2,
+    "effectPerLevel": 0,
+    "summonCategory": "Number3",
+    "summonRatePerLevel": 0.02,
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 32,
+        "requiredStagePoints": 390625
+      }
+    ]
+  }
+]

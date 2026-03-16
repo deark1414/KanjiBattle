@@ -12,20 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
   m_Name: FacilityData_MagicArchive
   m_EditorClassIdentifier: 
-  facilityId: 7
-  facilityName: "\u9B54\u5C0E\u66F8\u5EAB"
+  facilityId: 4
+  facilityName: "\u30EC\u30D9\u30EB\u4E0A\u9650\u89E3\u653E\u65BD\u8A2D"
   effectType: 5
   unlockType: 1
-  requiredStageId: 3
-  unlockStagePointCost: 1
+  requiredStageId: 1
+  unlockStagePointCost: 5
   initialMaxLevel: 1
-  finalMaxLevel: 5
-  levelCapIncreasePerUnlock: 1
+  finalMaxLevel: 18
+  levelCapIncreasePerUnlock: 3
   facilityLevelCapUnlocks:
-  - stageId: 3
-    requiredStagePoints: 1
   - stageId: 6
-    requiredStagePoints: 2
+    requiredStagePoints: 25
+  - stageId: 10
+    requiredStagePoints: 125
+  - stageId: 14
+    requiredStagePoints: 625
+  - stageId: 18
+    requiredStagePoints: 3125
+  - stageId: 22
+    requiredStagePoints: 15625
+  - stageId: 26
+    requiredStagePoints: 78125
+  - stageId: 31
+    requiredStagePoints: 156250
   baseCost: 100
   growthFactor: 1.2
   chapterUnlockRequirements: []

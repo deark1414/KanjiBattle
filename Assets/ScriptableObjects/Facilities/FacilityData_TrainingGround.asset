@@ -12,20 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
   m_Name: FacilityData_TrainingGround
   m_EditorClassIdentifier: 
-  facilityId: 6
-  facilityName: "\u8A13\u7DF4\u5834"
+  facilityId: 5
+  facilityName: "\u7DE8\u6210\u67A0\u62E1\u5F35\u65BD\u8A2D"
   effectType: 4
   unlockType: 1
-  requiredStageId: 2
-  unlockStagePointCost: 1
+  requiredStageId: 1
+  unlockStagePointCost: 15
   initialMaxLevel: 1
-  finalMaxLevel: 5
+  finalMaxLevel: 4
   levelCapIncreasePerUnlock: 1
   facilityLevelCapUnlocks:
-  - stageId: 2
-    requiredStagePoints: 1
-  - stageId: 4
-    requiredStagePoints: 2
+  - stageId: 3
+    requiredStagePoints: 50
+  - stageId: 14
+    requiredStagePoints: 125
+  - stageId: 22
+    requiredStagePoints: 3125
   baseCost: 100
   growthFactor: 1.2
   chapterUnlockRequirements: []

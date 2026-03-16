@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: CharacterData_4
   m_EditorClassIdentifier: 
   characterName: "\u56DB"
-  characterId: 4
+  characterId: 10
   isBoss: 0
   icon: {fileID: 0}
   category: 2
-  baseHP: 130
+  baseHP: 138
   baseAttack: 28
-  baseDefense: 10
+  baseDefense: 8
   production: 3
   skillType: 7
   skillChance: 10
   skillPower: 1.2
   level: 1
   maxLevel: 50
-  attackGrowth: 3
-  hpGrowth: 7
-  defenseGrowth: 1
+  attackGrowth: 4
+  hpGrowth: 10
+  defenseGrowth: 2

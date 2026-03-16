@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: CharacterData_Horse
   m_EditorClassIdentifier: 
   characterName: "\u99AC"
-  characterId: 23
+  characterId: 20
   isBoss: 0
   icon: {fileID: 0}
   category: 8
-  baseHP: 140
-  baseAttack: 38
-  baseDefense: 8
+  baseHP: 175
+  baseAttack: 44
+  baseDefense: 15
   production: 3
   skillType: 18
   skillChance: 15
@@ -27,5 +27,5 @@ MonoBehaviour:
   level: 1
   maxLevel: 50
   attackGrowth: 4
-  hpGrowth: 6
-  defenseGrowth: 1
+  hpGrowth: 7
+  defenseGrowth: 2

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageName: Stage_1_10
   stageId: 10
-  chapterId: 1
+  chapterId: 5
   enemyPool:
   - {fileID: 11400000, guid: b91030a4105e24210a202a0bd1427d0d, type: 2}
   rewardStagePoints: 5

@@ -12,16 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
   m_Name: FacilityData_SummonRateUp_Defense
   m_EditorClassIdentifier: 
-  facilityId: 13
-  facilityName: "\u53EC\u559A\u52A0\u8B77\u30FB\u9632\u5FA1"
+  facilityId: 11
+  facilityName: "\u53EC\u559A\u7387\u5F37\u5316\u30FB\u9632\u5FA1"
   effectType: 9
   unlockType: 1
-  requiredStageId: 5
-  unlockStagePointCost: 2
-  initialMaxLevel: 3
+  requiredStageId: 10
+  unlockStagePointCost: 125
+  initialMaxLevel: 5
   finalMaxLevel: 10
-  levelCapIncreasePerUnlock: 2
-  facilityLevelCapUnlocks: []
+  levelCapIncreasePerUnlock: 1
+  facilityLevelCapUnlocks:
+  - stageId: 14
+    requiredStagePoints: 125
+  - stageId: 18
+    requiredStagePoints: 625
+  - stageId: 22
+    requiredStagePoints: 3125
+  - stageId: 26
+    requiredStagePoints: 15625
+  - stageId: 31
+    requiredStagePoints: 78125
   baseCost: 100
   growthFactor: 1.2
   chapterUnlockRequirements: []
