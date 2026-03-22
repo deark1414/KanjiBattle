@@ -1971,23 +1971,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68b40d633868540ef97d0212d0e26f72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  facilities:
-  - {fileID: 11400000, guid: 8e80fa94c8f9440818b969923fcde1b9, type: 2}
-  - {fileID: 11400000, guid: c031d131fba2c4c2caf9af48f9245ac8, type: 2}
-  - {fileID: 11400000, guid: 9686faef30ec742f293db4a63b6c9d1b, type: 2}
-  - {fileID: 11400000, guid: 64f92e59f882a4d30b3187e291e07267, type: 2}
-  - {fileID: 11400000, guid: d691f35567cb14c0096815627637ea26, type: 2}
-  - {fileID: 11400000, guid: 92a664fb46a3948d8b523e4e1dae109e, type: 2}
-  - {fileID: 11400000, guid: 32ddcc34abbde4a2a8c0e41263079144, type: 2}
-  - {fileID: 11400000, guid: eee964fe851c2487b877e03117c372f6, type: 2}
-  - {fileID: 11400000, guid: 778b4f58a52f7423baf11aa3c9ac6002, type: 2}
-  - {fileID: 11400000, guid: 720182ca583cb4538a9030e075f378c4, type: 2}
-  - {fileID: 11400000, guid: 19830454a5503456b8cae22815332a8f, type: 2}
-  - {fileID: 11400000, guid: f85caf48a5c51439084707c536dc7f75, type: 2}
-  - {fileID: 11400000, guid: e3d1ef8fa168941c2b989cc5af2767fe, type: 2}
-  - {fileID: 11400000, guid: 7bcb6e86d8091485481176cd3987837c, type: 2}
-  - {fileID: 11400000, guid: c6a4b2dcd55ee4e238f582d7e2d74b80, type: 2}
-  - {fileID: 11400000, guid: 9bef6a550201d4924918d2105b380ebb, type: 2}
+  facilityDatabase: {fileID: 11400000, guid: b8dc23cc80ea34c62b551e1dfd0713a9, type: 2}
   characterDatabase: {fileID: 11400000, guid: b6179f9f0755a4c7ab0cec764b9824aa, type: 2}
 --- !u!4 &385423196
 Transform:
@@ -2904,7 +2888,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
+  m_SizeDelta: {x: 0, y: 5}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &582815524
 MonoBehaviour:
@@ -5934,7 +5918,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 150}
+  m_AnchoredPosition: {x: 0, y: 120}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1271159582
@@ -6351,8 +6335,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1508014984}
   m_HandleRect: {fileID: 1508014983}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.9433333
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7239,7 +7223,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1697358154}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.056666672}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
