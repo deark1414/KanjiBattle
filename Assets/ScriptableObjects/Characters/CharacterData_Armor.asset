@@ -15,7 +15,8 @@ MonoBehaviour:
   characterName: "\u93A7"
   characterId: 14
   isBoss: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 358c2495d37d948a68874b6c54c5fe02, type: 3}
+  enemyIcon: {fileID: 21300000, guid: 80049c71459654f1aa3c4b046449d07d, type: 3}
   category: 5
   baseHP: 150
   baseAttack: 25

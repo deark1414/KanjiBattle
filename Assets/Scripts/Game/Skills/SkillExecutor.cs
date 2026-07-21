@@ -121,7 +121,9 @@ public static class SkillExecutor
                     int beforeHP = ctx.Target.currentHP;
                     ctx.Target.currentHP = Mathf.Min(ctx.Target.currentHP + heal, maxHP);
                     ctx.Target.UpdateHPBar();
-                    ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} が {ctx.Target.DisplayName} を {ctx.Target.currentHP - beforeHP} 回復！");
+                    int actualHeal = ctx.Target.currentHP - beforeHP;
+                    ctx.BattleManager.PlayDamageVfx(ctx.Target, actualHeal, isHealing: true);
+                    ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} が {ctx.Target.DisplayName} を {actualHeal} 回復！");
                     break;
                 case SkillEffectType.Stun:
                     if (ctx.Target == null)

@@ -50,7 +50,16 @@ public class FormationUI : MonoBehaviour
 
             // ボタンテキストに「空」を表示
             var text = slot.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            if (text != null) text.text = "空";
+            if (text != null)
+            {
+                text.text = "空";
+                text.enableAutoSizing = true;
+                text.fontSizeMin = 12f;
+                text.fontSizeMax = 22f;
+                text.alignment = TMPro.TextAlignmentOptions.Center;
+                text.color = new Color(1f, 0.95f, 0.82f);
+                text.raycastTarget = false;
+            }
 
             int index = i;
             slot.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
@@ -69,7 +78,17 @@ public class FormationUI : MonoBehaviour
 
         var slot = slotParent.GetChild(index);
         var text = slot.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-        if (text != null) text.text = character.characterName; // 名前を表示
+        if (text != null)
+        {
+            text.text = character.characterName;
+            text.enableAutoSizing = true;
+            text.fontSizeMin = 12f;
+            text.fontSizeMax = 22f;
+            text.alignment = TMPro.TextAlignmentOptions.Center;
+            text.color = new Color(1f, 0.95f, 0.82f);
+            text.raycastTarget = false;
+            text.transform.SetAsLastSibling();
+        }
     }
 
     public void ClearSlot(int index)
@@ -81,7 +100,7 @@ public class FormationUI : MonoBehaviour
 
         var slot = slotParent.GetChild(index);
         var text = slot.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-        if (text != null) text.text = "空"; // 空に戻す
+        if (text != null) text.text = "空";
 
         if (removedCharacter != null)
         {

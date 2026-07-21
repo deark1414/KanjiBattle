@@ -1,182 +1,1011 @@
 [
-    {
-      "stageId": 1,
-      "fileName": "Stage_1_1",
-      "stageName": "Stage_1_1",
-      "chapterId": 1,
-      "enemyIds": [1, 2],
-      "rewardStagePoints": 1,
-      "slotCount": 2,
-      "trapDamage": 5,
-      "trapCount": 2,
-      "reinforcementEnemyIds": [],
-      "reinforcementInterval": 0,
-      "reinforcementCount": 0,
-      "reinforcementLimit": 0,
-      "isBossStage": false,
-      "enemyLevel": 1,
-      "prerequisiteStageId": 0
-    },
-    {
-      "stageId": 2,
-      "fileName": "Stage_1_2",
-      "stageName": "Stage_1_2",
-      "chapterId": 1,
-      "enemyIds": [10, 12],
-      "rewardStagePoints": 1,
-      "slotCount": 2,
-      "trapDamage": 5,
-      "trapCount": 3,
-      "reinforcementEnemyIds": [],
-      "reinforcementInterval": 0,
-      "reinforcementCount": 0,
-      "reinforcementLimit": 0,
-      "isBossStage": false,
-      "enemyLevel": 3,
-      "prerequisiteStageId": 1
-    },
-    {
-      "stageId": 3,
-      "fileName": "Stage_1_3",
-      "stageName": "Stage_1_3",
-      "chapterId": 1,
-      "enemyIds": [13, 15],
-      "rewardStagePoints": 1,
-      "slotCount": 3,
-      "trapDamage": 10,
-      "trapCount": 3,
-      "reinforcementEnemyIds": [],
-      "reinforcementInterval": 0,
-      "reinforcementCount": 0,
-      "reinforcementLimit": 0,
-      "isBossStage": false,
-      "enemyLevel": 5,
-      "prerequisiteStageId": 2
-    },
-    {
-      "stageId": 4,
-      "fileName": "Stage_1_4",
-      "stageName": "Stage_1_4",
-      "chapterId": 1,
-      "enemyIds": [16, 17],
-      "rewardStagePoints": 2,
-      "slotCount": 3,
-      "trapDamage": 8,
-      "trapCount": 2,
-      "reinforcementEnemyIds": [],
-      "reinforcementInterval": 0,
-      "reinforcementCount": 0,
-      "reinforcementLimit": 0,
-      "isBossStage": false,
-      "enemyLevel": 7,
-      "prerequisiteStageId": 3
-    },
-    {
-      "stageId": 5,
-      "fileName": "Stage_1_5",
-      "stageName": "Stage_1_5",
-      "chapterId": 1,
-      "enemyIds": [18, 19],
-      "rewardStagePoints": 2,
-      "slotCount": 3,
-      "trapDamage": 8,
-      "trapCount": 3,
-      "reinforcementEnemyIds": [],
-      "reinforcementInterval": 0,
-      "reinforcementCount": 0,
-      "reinforcementLimit": 0,
-      "isBossStage": false,
-      "enemyLevel": 9,
-      "prerequisiteStageId": 4
-    },
-    {
-      "stageId": 6,
-      "fileName": "Stage_1_6",
-      "stageName": "Stage_1_6",
-      "chapterId": 1,
-      "enemyIds": [20, 21, 22],
-      "rewardStagePoints": 2,
-      "slotCount": 4,
-      "trapDamage": 10,
-      "trapCount": 3,
-      "reinforcementEnemyIds": [],
-      "reinforcementInterval": 0,
-      "reinforcementCount": 0,
-      "reinforcementLimit": 0,
-      "isBossStage": false,
-      "enemyLevel": 12,
-      "prerequisiteStageId": 5
-    },
-    {
-      "stageId": 7,
-      "fileName": "Stage_1_7",
-      "stageName": "Stage_1_7",
-      "chapterId": 1,
-      "enemyIds": [23],
-      "rewardStagePoints": 3,
-      "slotCount": 4,
-      "trapDamage": 10,
-      "trapCount": 4,
-      "reinforcementEnemyIds": [],
-      "reinforcementInterval": 0,
-      "reinforcementCount": 0,
-      "reinforcementLimit": 0,
-      "isBossStage": false,
-      "enemyLevel": 15,
-      "prerequisiteStageId": 6
-    },
-    {
-      "stageId": 8,
-      "fileName": "Stage_1_8",
-      "stageName": "Stage_1_8",
-      "chapterId": 1,
-      "enemyIds": [24, 25],
-      "rewardStagePoints": 3,
-      "slotCount": 5,
-      "trapDamage": 12,
-      "trapCount": 3,
-      "reinforcementEnemyIds": [],
-      "reinforcementInterval": 0,
-      "reinforcementCount": 0,
-      "reinforcementLimit": 0,
-      "isBossStage": false,
-      "enemyLevel": 18,
-      "prerequisiteStageId": 7
-    },
-    {
-      "stageId": 9,
-      "fileName": "Stage_1_9",
-      "stageName": "Stage_1_9",
-      "chapterId": 1,
-      "enemyIds": [7, 8, 9],
-      "rewardStagePoints": 4,
-      "slotCount": 5,
-      "trapDamage": 12,
-      "trapCount": 4,
-      "reinforcementEnemyIds": [],
-      "reinforcementInterval": 0,
-      "reinforcementCount": 0,
-      "reinforcementLimit": 0,
-      "isBossStage": false,
-      "enemyLevel": 20,
-      "prerequisiteStageId": 8
-    },
-    {
-      "stageId": 10,
-      "fileName": "Stage_1_10",
-      "stageName": "Stage_1_10",
-      "chapterId": 1,
-      "enemyIds": [26],
-      "rewardStagePoints": 5,
-      "slotCount": 6,
-      "trapDamage": 15,
-      "trapCount": 5,
-      "reinforcementEnemyIds": [7, 8, 9],
-      "reinforcementInterval": 2,
-      "reinforcementCount": 1,
-      "reinforcementLimit": 3,
-      "isBossStage": true,
-      "enemyLevel": 25,
-      "prerequisiteStageId": 9
-    }
-  ]
+  {
+    "stageId": 1,
+    "fileName": "Stage_1_1",
+    "stageName": "一の稽古",
+    "chapterId": 1,
+    "enemyIds": [
+      1
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 1,
+    "trapDamage": 0,
+    "trapCount": 0,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 1,
+    "prerequisiteStageId": 0
+  },
+  {
+    "stageId": 2,
+    "fileName": "Stage_1_2",
+    "stageName": "二の稽古",
+    "chapterId": 1,
+    "enemyIds": [
+      2
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 1,
+    "trapDamage": 0,
+    "trapCount": 0,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 1,
+    "prerequisiteStageId": 1
+  },
+  {
+    "stageId": 3,
+    "fileName": "Stage_1_3",
+    "stageName": "三の稽古",
+    "chapterId": 1,
+    "enemyIds": [
+      3,
+      1
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 2,
+    "trapDamage": 0,
+    "trapCount": 0,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 2,
+    "prerequisiteStageId": 2
+  },
+  {
+    "stageId": 4,
+    "fileName": "Stage_1_4",
+    "stageName": "一二の組手",
+    "chapterId": 1,
+    "enemyIds": [
+      1,
+      2
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 2,
+    "trapDamage": 2,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 2,
+    "prerequisiteStageId": 3
+  },
+  {
+    "stageId": 5,
+    "fileName": "Stage_1_5",
+    "stageName": "数字の門番",
+    "chapterId": 1,
+    "enemyIds": [
+      2,
+      3
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 2,
+    "trapDamage": 3,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 3,
+    "prerequisiteStageId": 4
+  },
+  {
+    "stageId": 6,
+    "fileName": "Stage_1_6",
+    "stageName": "剣の間",
+    "chapterId": 2,
+    "enemyIds": [
+      10,
+      10
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 3,
+    "trapDamage": 2,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 3,
+    "prerequisiteStageId": 5
+  },
+  {
+    "stageId": 7,
+    "fileName": "Stage_1_7",
+    "stageName": "槍の間",
+    "chapterId": 2,
+    "enemyIds": [
+      11,
+      10,
+      11
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 3,
+    "trapDamage": 3,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 3,
+    "prerequisiteStageId": 6
+  },
+  {
+    "stageId": 8,
+    "fileName": "Stage_1_8",
+    "stageName": "槌の間",
+    "chapterId": 2,
+    "enemyIds": [
+      12,
+      10,
+      12
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 3,
+    "trapDamage": 4,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 4,
+    "prerequisiteStageId": 7
+  },
+  {
+    "stageId": 9,
+    "fileName": "Stage_1_9",
+    "stageName": "刃の組手",
+    "chapterId": 2,
+    "enemyIds": [
+      10,
+      11,
+      10
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 3,
+    "trapDamage": 4,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 4,
+    "prerequisiteStageId": 8
+  },
+  {
+    "stageId": 10,
+    "fileName": "Stage_1_10",
+    "stageName": "武器の門番",
+    "chapterId": 2,
+    "enemyIds": [
+      12,
+      10,
+      11
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 3,
+    "trapDamage": 5,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 5,
+    "prerequisiteStageId": 9
+  },
+  {
+    "stageId": 11,
+    "fileName": "Stage_1_11",
+    "stageName": "盾の間",
+    "chapterId": 3,
+    "enemyIds": [
+      13,
+      13,
+      10
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 3,
+    "trapDamage": 4,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 5,
+    "prerequisiteStageId": 10
+  },
+  {
+    "stageId": 12,
+    "fileName": "Stage_1_12",
+    "stageName": "鎧の間",
+    "chapterId": 3,
+    "enemyIds": [
+      14,
+      13,
+      14
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 3,
+    "trapDamage": 4,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 5,
+    "prerequisiteStageId": 11
+  },
+  {
+    "stageId": 13,
+    "fileName": "Stage_1_13",
+    "stageName": "壁の間",
+    "chapterId": 3,
+    "enemyIds": [
+      15,
+      13,
+      15,
+      14
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 4,
+    "trapDamage": 5,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 6,
+    "prerequisiteStageId": 12
+  },
+  {
+    "stageId": 14,
+    "fileName": "Stage_1_14",
+    "stageName": "守りの組手",
+    "chapterId": 3,
+    "enemyIds": [
+      13,
+      14,
+      13,
+      14
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 4,
+    "trapDamage": 5,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 6,
+    "prerequisiteStageId": 13
+  },
+  {
+    "stageId": 15,
+    "fileName": "Stage_1_15",
+    "stageName": "防御の門番",
+    "chapterId": 3,
+    "enemyIds": [
+      15,
+      13,
+      14,
+      15
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 4,
+    "trapDamage": 6,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 7,
+    "prerequisiteStageId": 14
+  },
+  {
+    "stageId": 16,
+    "fileName": "Stage_1_16",
+    "stageName": "四の間",
+    "chapterId": 4,
+    "enemyIds": [
+      4,
+      4,
+      1,
+      2
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 4,
+    "trapDamage": 5,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 7,
+    "prerequisiteStageId": 15
+  },
+  {
+    "stageId": 17,
+    "fileName": "Stage_1_17",
+    "stageName": "五の間",
+    "chapterId": 4,
+    "enemyIds": [
+      5,
+      5,
+      4,
+      1
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 4,
+    "trapDamage": 5,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 7,
+    "prerequisiteStageId": 16
+  },
+  {
+    "stageId": 18,
+    "fileName": "Stage_1_18",
+    "stageName": "六の間",
+    "chapterId": 4,
+    "enemyIds": [
+      6,
+      6,
+      5,
+      4
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 4,
+    "trapDamage": 6,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 8,
+    "prerequisiteStageId": 17
+  },
+  {
+    "stageId": 19,
+    "fileName": "Stage_1_19",
+    "stageName": "中位数字の組手",
+    "chapterId": 4,
+    "enemyIds": [
+      4,
+      5,
+      6,
+      4,
+      5
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 4,
+    "trapDamage": 6,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 8,
+    "prerequisiteStageId": 18
+  },
+  {
+    "stageId": 20,
+    "fileName": "Stage_1_20",
+    "stageName": "中位数字の門番",
+    "chapterId": 4,
+    "enemyIds": [
+      6,
+      6,
+      5,
+      4,
+      5
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 4,
+    "trapDamage": 7,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 9,
+    "prerequisiteStageId": 19
+  },
+  {
+    "stageId": 21,
+    "fileName": "Stage_1_21",
+    "stageName": "石の間",
+    "chapterId": 5,
+    "enemyIds": [
+      16,
+      16,
+      16,
+      16
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 4,
+    "trapDamage": 6,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 8,
+    "prerequisiteStageId": 20
+  },
+  {
+    "stageId": 22,
+    "fileName": "Stage_1_22",
+    "stageName": "矢の間",
+    "chapterId": 5,
+    "enemyIds": [
+      17,
+      16,
+      17,
+      16
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 4,
+    "trapDamage": 6,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 8,
+    "prerequisiteStageId": 21
+  },
+  {
+    "stageId": 23,
+    "fileName": "Stage_1_23",
+    "stageName": "銃の間",
+    "chapterId": 5,
+    "enemyIds": [
+      18,
+      17,
+      16,
+      18,
+      17
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 4,
+    "trapDamage": 7,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 9,
+    "prerequisiteStageId": 22
+  },
+  {
+    "stageId": 24,
+    "fileName": "Stage_1_24",
+    "stageName": "遠距離の組手",
+    "chapterId": 5,
+    "enemyIds": [
+      16,
+      17,
+      18,
+      16,
+      17
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 4,
+    "trapDamage": 7,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 9,
+    "prerequisiteStageId": 23
+  },
+  {
+    "stageId": 25,
+    "fileName": "Stage_1_25",
+    "stageName": "遠距離の門番",
+    "chapterId": 5,
+    "enemyIds": [
+      18,
+      18,
+      17,
+      16,
+      18
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 4,
+    "trapDamage": 8,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 10,
+    "prerequisiteStageId": 24
+  },
+  {
+    "stageId": 26,
+    "fileName": "Stage_1_26",
+    "stageName": "火の間",
+    "chapterId": 6,
+    "enemyIds": [
+      19,
+      19,
+      19,
+      19,
+      19
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 5,
+    "trapDamage": 7,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 10,
+    "prerequisiteStageId": 25
+  },
+  {
+    "stageId": 27,
+    "fileName": "Stage_1_27",
+    "stageName": "水の間",
+    "chapterId": 6,
+    "enemyIds": [
+      20,
+      19,
+      20,
+      19,
+      20
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 5,
+    "trapDamage": 7,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 10,
+    "prerequisiteStageId": 26
+  },
+  {
+    "stageId": 28,
+    "fileName": "Stage_1_28",
+    "stageName": "木の間",
+    "chapterId": 6,
+    "enemyIds": [
+      21,
+      20,
+      19,
+      21,
+      20,
+      19
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 5,
+    "trapDamage": 8,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 10,
+    "prerequisiteStageId": 27
+  },
+  {
+    "stageId": 29,
+    "fileName": "Stage_1_29",
+    "stageName": "土の間",
+    "chapterId": 6,
+    "enemyIds": [
+      22,
+      21,
+      20,
+      22,
+      21,
+      20
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 5,
+    "trapDamage": 8,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 11,
+    "prerequisiteStageId": 28
+  },
+  {
+    "stageId": 30,
+    "fileName": "Stage_1_30",
+    "stageName": "属性の門番",
+    "chapterId": 6,
+    "enemyIds": [
+      19,
+      20,
+      21,
+      22,
+      19,
+      20
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 5,
+    "trapDamage": 9,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 11,
+    "prerequisiteStageId": 29
+  },
+  {
+    "stageId": 31,
+    "fileName": "Stage_1_31",
+    "stageName": "馬の間",
+    "chapterId": 7,
+    "enemyIds": [
+      23,
+      23,
+      23,
+      23,
+      23
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 5,
+    "trapDamage": 8,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 11,
+    "prerequisiteStageId": 30
+  },
+  {
+    "stageId": 32,
+    "fileName": "Stage_1_32",
+    "stageName": "鳥の間",
+    "chapterId": 7,
+    "enemyIds": [
+      24,
+      23,
+      24,
+      23,
+      24
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 5,
+    "trapDamage": 8,
+    "trapCount": 1,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 11,
+    "prerequisiteStageId": 31
+  },
+  {
+    "stageId": 33,
+    "fileName": "Stage_1_33",
+    "stageName": "虎の間",
+    "chapterId": 7,
+    "enemyIds": [
+      25,
+      24,
+      23,
+      25,
+      24
+    ],
+    "rewardStagePoints": 2,
+    "slotCount": 5,
+    "trapDamage": 9,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 12,
+    "prerequisiteStageId": 32
+  },
+  {
+    "stageId": 34,
+    "fileName": "Stage_1_34",
+    "stageName": "動物の組手",
+    "chapterId": 7,
+    "enemyIds": [
+      23,
+      24,
+      25,
+      23,
+      24,
+      25
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 5,
+    "trapDamage": 9,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 12,
+    "prerequisiteStageId": 33
+  },
+  {
+    "stageId": 35,
+    "fileName": "Stage_1_35",
+    "stageName": "動物の門番",
+    "chapterId": 7,
+    "enemyIds": [
+      25,
+      25,
+      24,
+      23,
+      24,
+      25
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 5,
+    "trapDamage": 10,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 12,
+    "prerequisiteStageId": 34
+  },
+  {
+    "stageId": 36,
+    "fileName": "Stage_1_36",
+    "stageName": "七の間",
+    "chapterId": 8,
+    "enemyIds": [
+      7,
+      7,
+      4,
+      5,
+      6,
+      25
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 6,
+    "trapDamage": 9,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 13,
+    "prerequisiteStageId": 35
+  },
+  {
+    "stageId": 37,
+    "fileName": "Stage_1_37",
+    "stageName": "八の間",
+    "chapterId": 8,
+    "enemyIds": [
+      8,
+      8,
+      7,
+      4,
+      5,
+      24
+    ],
+    "rewardStagePoints": 3,
+    "slotCount": 6,
+    "trapDamage": 9,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 13,
+    "prerequisiteStageId": 36
+  },
+  {
+    "stageId": 38,
+    "fileName": "Stage_1_38",
+    "stageName": "九の間",
+    "chapterId": 8,
+    "enemyIds": [
+      9,
+      9,
+      8,
+      7,
+      6,
+      25
+    ],
+    "rewardStagePoints": 4,
+    "slotCount": 6,
+    "trapDamage": 10,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 14,
+    "prerequisiteStageId": 37
+  },
+  {
+    "stageId": 39,
+    "fileName": "Stage_1_39",
+    "stageName": "総力戦",
+    "chapterId": 8,
+    "enemyIds": [
+      7,
+      8,
+      9,
+      7,
+      8,
+      9
+    ],
+    "rewardStagePoints": 4,
+    "slotCount": 6,
+    "trapDamage": 10,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+
+    ],
+    "reinforcementInterval": 0,
+    "reinforcementCount": 0,
+    "reinforcementLimit": 0,
+    "isBossStage": false,
+    "enemyLevel": 14,
+    "prerequisiteStageId": 38
+  },
+  {
+    "stageId": 40,
+    "fileName": "Stage_1_40",
+    "stageName": "竜の座",
+    "chapterId": 8,
+    "enemyIds": [
+      26
+    ],
+    "rewardStagePoints": 6,
+    "slotCount": 6,
+    "trapDamage": 12,
+    "trapCount": 2,
+    "reinforcementEnemyIds": [
+      25,
+      24,
+      23,
+      22,
+      21
+    ],
+    "reinforcementInterval": 2,
+    "reinforcementCount": 1,
+    "reinforcementLimit": 5,
+    "isBossStage": true,
+    "enemyLevel": 15,
+    "prerequisiteStageId": 39
+  }
+]

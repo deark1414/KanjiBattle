@@ -12,23 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1df6bc30dc24f4ef8a24d39e608d3dda, type: 3}
   m_Name: Stage_1_10
   m_EditorClassIdentifier: 
-  stageName: Stage_1_10
+  stageName: "\u6B66\u5668\u306E\u9580\u756A"
   stageId: 10
-  chapterId: 1
+  chapterId: 2
   enemyPool:
-  - {fileID: 11400000, guid: b91030a4105e24210a202a0bd1427d0d, type: 2}
-  rewardStagePoints: 5
-  slotCount: 6
-  trapDamage: 15
-  trapCount: 5
-  reinforcementEnemy:
-  - {fileID: 11400000, guid: b78b90014b2f3477b9c3178b6f091bb8, type: 2}
-  - {fileID: 11400000, guid: ac1fac6eefc69432e8ab46c3f0827b2f, type: 2}
-  - {fileID: 11400000, guid: db82ac29718264256aa4b5d49d4cc7d1, type: 2}
-  reinforcementInterval: 2
-  reinforcementCount: 1
-  reinforcementLimit: 3
-  isBossStage: 1
-  enemyLevel: 25
+  - {fileID: 11400000, guid: ba2cceab41d834210a14946bc2fe9339, type: 2}
+  - {fileID: 11400000, guid: a45a3f137c1464a39a5bcd33f5e6348f, type: 2}
+  rewardStagePoints: 3
+  slotCount: 3
+  trapDamage: 4
+  trapCount: 2
+  reinforcementEnemy: []
+  reinforcementInterval: 0
+  reinforcementCount: 0
+  reinforcementLimit: 0
+  isBossStage: 0
+  enemyLevel: 5
   prerequisite: {fileID: 11400000, guid: 9677b37ce96fa48aeb5d598b6ddb5ffa, type: 2}
   isCleared: 0

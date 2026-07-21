@@ -123,35 +123,45 @@ public class PlayerInventory : MonoBehaviour
         Debug.Log($"新しいレベル上限: {GetEffectiveLevelCap()}");
     }
 
-    public void UnlockCharacterForSummon(CharacterData data)
+    public bool IsSummonable(CharacterData data)
     {
-        if (data == null) return;
+        return data != null && summonableCharacters.Contains(data);
+    }
 
-        if (!summonableCharacters.Contains(data))
+    public bool UnlockCharacterForSummon(CharacterData data)
+    {
+        if (data == null) return false;
+
+        if (summonableCharacters.Contains(data))
         {
-            summonableCharacters.Add(data);
-            onInventoryChanged?.Invoke(); // UI更新イベントがあれば
-            OnSummonableChanged?.Invoke();
-            Debug.Log($"[PlayerInventory] 召喚解放: {data.characterName}");
+            return false;
         }
+
+        summonableCharacters.Add(data);
+        onInventoryChanged?.Invoke();
+        OnSummonableChanged?.Invoke();
+        Debug.Log($"[PlayerInventory] 召喚解放: {data.characterName}");
+        return true;
     }
 
     // GameManager.AddCharacterUnlock(int id) から呼ばれる想定のオーバーロード
-    public void UnlockCharacterForSummon(int characterId)
+    public bool UnlockCharacterForSummon(int characterId)
     {
         var db = Resources.Load<CharacterDatabase>("CharacterDatabase");
         if (db == null)
         {
             Debug.LogError("[PlayerInventory] CharacterDatabase が見つかりません");
-            return;
+            return false;
         }
+
         var data = db.GetById(characterId);
         if (data == null)
         {
             Debug.LogError($"[PlayerInventory] characterId={characterId} が見つかりません");
-            return;
+            return false;
         }
-        UnlockCharacterForSummon(data);
+
+        return UnlockCharacterForSummon(data);
     }
 }
 

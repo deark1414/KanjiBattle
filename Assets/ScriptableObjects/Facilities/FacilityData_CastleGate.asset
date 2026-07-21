@@ -16,14 +16,22 @@ MonoBehaviour:
   facilityName: "\u57CE\u9580"
   effectType: 7
   unlockType: 1
-  requiredStageId: 10
-  unlockStagePointCost: 5
+  requiredStageId: 5
+  unlockStagePointCost: 2
   initialMaxLevel: 1
-  finalMaxLevel: 1
-  levelCapIncreasePerUnlock: 0
-  facilityLevelCapUnlocks: []
-  baseCost: 100
-  growthFactor: 1.2
+  finalMaxLevel: 5
+  levelCapIncreasePerUnlock: 1
+  facilityLevelCapUnlocks:
+  - stageId: 10
+    requiredStagePoints: 2
+  - stageId: 15
+    requiredStagePoints: 3
+  - stageId: 20
+    requiredStagePoints: 3
+  - stageId: 25
+    requiredStagePoints: 4
+  baseCost: 200
+  growthFactor: 1.25
   chapterUnlockRequirements: []
   effectPerLevel: 0
   summonCategory: 0

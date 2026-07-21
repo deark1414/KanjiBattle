@@ -16,18 +16,22 @@ MonoBehaviour:
   facilityName: "\u8A13\u7DF4\u5834"
   effectType: 4
   unlockType: 1
-  requiredStageId: 2
+  requiredStageId: 1
   unlockStagePointCost: 1
   initialMaxLevel: 1
   finalMaxLevel: 5
   levelCapIncreasePerUnlock: 1
   facilityLevelCapUnlocks:
-  - stageId: 2
-    requiredStagePoints: 1
-  - stageId: 4
+  - stageId: 5
     requiredStagePoints: 2
-  baseCost: 100
-  growthFactor: 1.2
+  - stageId: 10
+    requiredStagePoints: 2
+  - stageId: 15
+    requiredStagePoints: 3
+  - stageId: 20
+    requiredStagePoints: 3
+  baseCost: 80
+  growthFactor: 1.15
   chapterUnlockRequirements: []
   effectPerLevel: 1
   summonCategory: 0
