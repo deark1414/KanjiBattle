@@ -47,6 +47,7 @@ public class CharacterData : ScriptableObject
     public int characterId;
     public bool isBoss;
     public Sprite icon;
+    public Sprite enemyIcon;
 
     [Header("カテゴリ")]
     public CharacterCategory category = CharacterCategory.None;

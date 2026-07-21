@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df6bc30dc24f4ef8a24d39e608d3dda, type: 3}
+  m_Name: Stage_1_19
+  m_EditorClassIdentifier: 
+  stageName: "\u9060\u9694\u306E\u7D44\u624B"
+  stageId: 19
+  chapterId: 4
+  enemyPool:
+  - {fileID: 11400000, guid: 77e4edf0443a8447ba2b967699eaa2e7, type: 2}
+  - {fileID: 11400000, guid: 5461d3926e577437db81e4171e34682a, type: 2}
+  rewardStagePoints: 3
+  slotCount: 5
+  trapDamage: 8
+  trapCount: 1
+  reinforcementEnemy: []
+  reinforcementInterval: 0
+  reinforcementCount: 0
+  reinforcementLimit: 0
+  isBossStage: 0
+  enemyLevel: 8
+  prerequisite: {fileID: 11400000, guid: 3d9f4ff77a10835c297db9e3f020103b, type: 2}
+  isCleared: 0

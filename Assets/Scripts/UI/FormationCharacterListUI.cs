@@ -1,18 +1,37 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FormationCharacterListUI : MonoBehaviour
 {
     public static FormationCharacterListUI instance;
+
     [SerializeField] private Transform content;
     [SerializeField] private GameObject characterEntryPrefab;
-    [SerializeField] private FormationUI formationUI;
 
-    private void Awake() => instance = this;
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    private void OnEnable()
+    {
+        ApplyListLayout();
+        DisplayCharacters();
+    }
 
     public void DisplayCharacters()
     {
+        if (PlayerInventory.Instance == null || content == null)
+        {
+            return;
+        }
+
+        ApplyListLayout();
+
         foreach (Transform child in content)
+        {
             Destroy(child.gameObject);
+        }
 
         foreach (var kv in PlayerInventory.Instance.GetOwnedCharacters())
         {
@@ -24,38 +43,65 @@ public class FormationCharacterListUI : MonoBehaviour
 
     public void SelectCharacter(CharacterData character)
     {
-        // 所持数チェック
-        var owned = PlayerInventory.Instance.GetOwnedCharacters();
-        if (!owned.ContainsKey(character) || owned[character].count <= 0)
+        if (!PlayerInventory.Instance.GetOwnedCharacters().TryGetValue(character, out var info) || info.count <= 0)
         {
             Debug.Log($"{character.characterName} を所持していません");
             return;
         }
 
-        // すでに編成している数を数える
-        int alreadyInFormation = 0;
-        foreach (var c in formationUI.GetFormation())
+        int used = 0;
+        foreach (var selected in FormationUI.Instance.GetFormation())
         {
-            if (c == character) alreadyInFormation++;
+            if (selected == character)
+            {
+                used++;
+            }
         }
 
-        if (alreadyInFormation >= owned[character].count)
+        if (used >= info.count)
         {
             Debug.Log($"{character.characterName} は所持数以上に編成できません");
             return;
         }
 
-        // 空きスロットを探して配置
-        var slots = formationUI.GetFormation();
-        for (int i = 0; i < slots.Length; i++)
+        var formation = FormationUI.Instance.GetFormation();
+        for (int i = 0; i < formation.Length; i++)
         {
-            if (slots[i] == null)
+            if (formation[i] == null)
             {
-                formationUI.SetCharacterToSlot(i, character);
+                FormationUI.Instance.SetCharacterToSlot(i, character);
                 return;
             }
         }
 
         Debug.Log("空きスロットがありません");
+    }
+
+    private void ApplyListLayout()
+    {
+        var listRect = GetComponent<RectTransform>();
+        if (listRect != null)
+        {
+            listRect.anchorMin = new Vector2(0.04f, 0.10f);
+            listRect.anchorMax = new Vector2(0.96f, 0.72f);
+            listRect.anchoredPosition = Vector2.zero;
+            listRect.sizeDelta = Vector2.zero;
+        }
+
+        var grid = content != null ? content.GetComponent<GridLayoutGroup>() : null;
+        if (grid != null)
+        {
+            grid.cellSize = new Vector2(520f, 108f);
+            grid.spacing = new Vector2(12f, 12f);
+            grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            grid.constraintCount = 1;
+            grid.childAlignment = TextAnchor.UpperCenter;
+        }
+
+        var fitter = content != null ? content.GetComponent<ResponsiveGridFitter>() : null;
+        if (fitter != null)
+        {
+            fitter.enabled = false;
+        }
     }
 }

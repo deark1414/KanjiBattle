@@ -116,6 +116,7 @@ public class BattleManager : MonoBehaviour
         trapCells.Clear();
         soilTrapCells.Clear();
 
+        isPaused = false;
         StopAllCoroutines();
     }
 
@@ -134,6 +135,7 @@ public class BattleManager : MonoBehaviour
             {
                 GameObject cell = Instantiate(cellPrefab, battleField);
                 cell.name = $"Cell_{x}_{y}";
+                StyleBattleCell(cell, x, y);
 
                 // CellContent を必ず探す or なければ作る
                 Transform content = cell.transform.Find("CellContent");
@@ -178,6 +180,22 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    private static void StyleBattleCell(GameObject cell, int x, int y)
+    {
+        var image = cell.GetComponent<Image>();
+        if (image != null)
+        {
+            bool alternate = (x + y) % 2 == 0;
+            image.color = alternate ? new Color(0.80f, 0.84f, 0.88f, 1f) : new Color(0.69f, 0.75f, 0.82f, 1f);
+        }
+
+        var outline = cell.GetComponent<Outline>();
+        if (outline == null) outline = cell.AddComponent<Outline>();
+        outline.effectColor = new Color(0.18f, 0.22f, 0.28f, 0.75f);
+        outline.effectDistance = new Vector2(1f, -1f);
+        outline.useGraphicAlpha = false;
+    }
+
     private Vector2Int GetRandomFreeCell()
     {
         Vector2Int pos;
@@ -201,7 +219,7 @@ public class BattleManager : MonoBehaviour
         var bc = obj.GetComponent<BattleCharacter>();
 
         int level = 1;
-        if (ally && PlayerInventory.Instance.GetOwnedCharacters().TryGetValue(data, out var info))
+        if (ally && PlayerInventory.Instance != null && PlayerInventory.Instance.GetOwnedCharacters().TryGetValue(data, out var info))
         {
             level = info.level;
         }
@@ -628,17 +646,105 @@ public class BattleManager : MonoBehaviour
 
     private void ShowResult(string message, Color color, bool isWin = false)
     {
-        resultPanel.SetActive(true);
-        resultText.text = message;
-        resultText.color = color;
-
-        if (isWin)
+        int effectiveReward = 0;
+        if (isWin && GameManager.Instance != null && currentStage != null)
         {
             GameManager.Instance.RegisterClearedStage(currentStage.stageId);
-            int effectiveReward = GameManager.Instance.GetEffectiveStagePointReward(currentReward);
+            effectiveReward = GameManager.Instance.GetEffectiveStagePointReward(currentReward);
             GameManager.Instance.AddStagePoints(effectiveReward);
             AddLog($"報酬 {effectiveReward} ステージポイント を獲得！", Color.yellow);
         }
+
+        if (resultPanel == null || resultText == null)
+        {
+            AddLog(message, color);
+            return;
+        }
+
+        resultPanel.SetActive(true);
+        resultPanel.transform.SetAsLastSibling();
+
+        resultText.gameObject.SetActive(true);
+        resultText.transform.SetAsLastSibling();
+        resultText.text = isWin && effectiveReward > 0
+            ? $"{message}\n報酬 +{effectiveReward} StagePts"
+            : message;
+        resultText.color = color;
+        resultText.alignment = TextAlignmentOptions.Center;
+        resultText.enableAutoSizing = true;
+        resultText.fontSizeMin = 22f;
+        resultText.fontSizeMax = 48f;
+
+        Canvas.ForceUpdateCanvases();
+    }
+
+    public void PlayAttackVfx(BattleCharacter attacker, BattleCharacter target, bool skill = false)
+    {
+        if (attacker != null)
+        {
+            attacker.PlayCastEffect(skill ? new Color(0.45f, 0.85f, 1f) : new Color(1f, 0.9f, 0.35f));
+        }
+
+        if (target != null)
+        {
+            target.PlayHitEffect(skill ? new Color(0.85f, 0.55f, 1f) : new Color(1f, 0.35f, 0.25f));
+        }
+    }
+
+    public void PlayDamageVfx(BattleCharacter target, int amount, bool isHealing = false)
+    {
+        if (target == null) return;
+
+        target.PlayHitEffect(isHealing ? new Color(0.4f, 1f, 0.65f) : new Color(1f, 0.28f, 0.22f));
+        ShowFloatingText(target, isHealing ? $"+{amount}" : $"-{amount}", isHealing ? new Color(0.45f, 1f, 0.65f) : new Color(1f, 0.78f, 0.42f));
+    }
+
+    public void ShowFloatingText(BattleCharacter target, string message, Color color)
+    {
+        if (target == null || string.IsNullOrEmpty(message)) return;
+        StartCoroutine(FloatingTextRoutine(target.transform as RectTransform, message, color));
+    }
+
+    private IEnumerator FloatingTextRoutine(RectTransform parent, string message, Color color)
+    {
+        if (parent == null) yield break;
+
+        var obj = new GameObject("BattleFloatingText", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        var rect = obj.GetComponent<RectTransform>();
+        rect.SetParent(parent, false);
+        rect.anchorMin = new Vector2(0.5f, 0.55f);
+        rect.anchorMax = new Vector2(0.5f, 0.55f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.sizeDelta = new Vector2(100f, 36f);
+        rect.anchoredPosition = Vector2.zero;
+        rect.SetAsLastSibling();
+
+        var text = obj.GetComponent<TextMeshProUGUI>();
+        text.text = message;
+        text.alignment = TextAlignmentOptions.Center;
+        text.enableAutoSizing = true;
+        text.fontSizeMin = 12f;
+        text.fontSizeMax = 24f;
+        text.fontStyle = FontStyles.Bold;
+        text.color = color;
+        text.raycastTarget = false;
+
+        float duration = 0.55f;
+        float elapsed = 0f;
+        Vector2 start = rect.anchoredPosition;
+        while (elapsed < duration)
+        {
+            if (rect == null || text == null) yield break;
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            rect.anchoredPosition = start + new Vector2(0f, Mathf.Lerp(0f, 34f, t));
+            var c = color;
+            c.a = 1f - t;
+            text.color = c;
+            yield return null;
+        }
+
+        if (obj != null) Destroy(obj);
     }
 
     public void HandleDeath(BattleCharacter target)

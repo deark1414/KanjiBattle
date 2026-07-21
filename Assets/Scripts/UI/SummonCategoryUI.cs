@@ -7,76 +7,127 @@ public class SummonCategoryUI : MonoBehaviour
     [SerializeField] private TMP_Dropdown categoryDropdown;
 
     private List<CharacterCategory> availableCategories = new();
+    private bool subscribed;
 
     private void Start()
     {
-        SetupOptions();
-        if (FacilityManager.Instance != null)
+        if (categoryDropdown != null)
         {
-            FacilityManager.Instance.OnSummonCategoryUnlocked += HandleCategoryUnlocked;
+            categoryDropdown.onValueChanged.AddListener(OnCategorySelected);
         }
-        categoryDropdown.onValueChanged.AddListener(OnCategorySelected);
-        Refresh();
+    }
+
+    private void OnEnable()
+    {
+        Subscribe();
+        RebuildOptions();
     }
 
     private void OnDisable()
     {
-        if (FacilityManager.Instance != null)
+        if (FacilityManager.Instance != null && subscribed)
         {
             FacilityManager.Instance.OnSummonCategoryUnlocked -= HandleCategoryUnlocked;
+            subscribed = false;
         }
     }
 
-    private void SetupOptions()
+    private void Subscribe()
     {
+        if (FacilityManager.Instance == null || subscribed)
+        {
+            return;
+        }
+
+        FacilityManager.Instance.OnSummonCategoryUnlocked += HandleCategoryUnlocked;
+        subscribed = true;
+    }
+
+    private void RebuildOptions()
+    {
+        if (categoryDropdown == null)
+        {
+            return;
+        }
+
         categoryDropdown.ClearOptions();
         availableCategories.Clear();
 
-        List<string> options = new List<string>();
-
-        // まず「None」 (= 全カテゴリ)
+        var options = new List<string>();
         availableCategories.Add(CharacterCategory.None);
         options.Add("All");
 
-        // FacilityManager から解放済みカテゴリを列挙
-        foreach (CharacterCategory category in System.Enum.GetValues(typeof(CharacterCategory)))
+        if (FacilityManager.Instance != null)
         {
-            if (category == CharacterCategory.None) continue;
-
-            if (FacilityManager.Instance.IsCategoryUnlocked(category))
+            foreach (CharacterCategory category in System.Enum.GetValues(typeof(CharacterCategory)))
             {
-                availableCategories.Add(category);
-                options.Add(category.ToString());
+                if (category == CharacterCategory.None || category == CharacterCategory.Boss)
+                {
+                    continue;
+                }
+
+                if (FacilityManager.Instance.IsCategoryUnlocked(category))
+                {
+                    availableCategories.Add(category);
+                    options.Add(GetCategoryLabel(category));
+                }
             }
         }
 
         categoryDropdown.AddOptions(options);
+        Refresh();
+        categoryDropdown.RefreshShownValue();
     }
 
     private void OnCategorySelected(int index)
     {
-        if (index < 0 || index >= availableCategories.Count) return;
+        if (index < 0 || index >= availableCategories.Count || GameManager.Instance == null)
+        {
+            return;
+        }
 
-        var selected = availableCategories[index];
+        CharacterCategory selected = availableCategories[index];
         GameManager.Instance.ActiveSummonCategory = selected;
-
         Debug.Log($"[SummonCategoryUI] {selected} が選択されました");
     }
 
     public void Refresh()
     {
-        var active = GameManager.Instance.ActiveSummonCategory;
-        int idx = availableCategories.IndexOf(active);
-        if (idx >= 0)
+        if (categoryDropdown == null || GameManager.Instance == null)
         {
-            categoryDropdown.value = idx;
+            return;
         }
+
+        CharacterCategory active = GameManager.Instance.ActiveSummonCategory;
+        int index = availableCategories.IndexOf(active);
+        if (index < 0)
+        {
+            index = 0;
+            GameManager.Instance.ActiveSummonCategory = CharacterCategory.None;
+        }
+
+        categoryDropdown.SetValueWithoutNotify(index);
+        categoryDropdown.RefreshShownValue();
     }
 
     private void HandleCategoryUnlocked(CharacterCategory category)
     {
-        // 再構築
-        SetupOptions();
-        Refresh();
+        RebuildOptions();
+    }
+
+    private static string GetCategoryLabel(CharacterCategory category)
+    {
+        switch (category)
+        {
+            case CharacterCategory.Number1: return "数字1";
+            case CharacterCategory.Number2: return "数字2";
+            case CharacterCategory.Number3: return "数字3";
+            case CharacterCategory.Weapon: return "武器";
+            case CharacterCategory.Defense: return "防御";
+            case CharacterCategory.Ranged: return "遠隔";
+            case CharacterCategory.Nature: return "自然";
+            case CharacterCategory.Animal: return "動物";
+            default: return category.ToString();
+        }
     }
 }

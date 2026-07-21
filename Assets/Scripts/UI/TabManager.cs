@@ -11,8 +11,8 @@ public class TabManager : MonoBehaviour
     [SerializeField] private Button facilityButton;
 
     [Header("Tab Colors")]
-    [SerializeField] private Color selectedColor = Color.white;
-    [SerializeField] private Color normalColor = Color.gray;
+    [SerializeField] private Color selectedColor = new Color(1f, 0.94f, 0.74f);
+    [SerializeField] private Color normalColor = Color.white;
 
     private Button currentTab;
 
@@ -24,8 +24,15 @@ public class TabManager : MonoBehaviour
 
     private void ResetButtonColor(Button button)
     {
+        if (button == null) return;
+
         var colors = button.colors;
         colors.normalColor = normalColor;
+        colors.highlightedColor = new Color(1f, 0.94f, 0.78f);
+        colors.pressedColor = new Color(0.82f, 0.74f, 0.62f);
+        colors.selectedColor = normalColor;
+        colors.disabledColor = new Color(0.45f, 0.45f, 0.45f, 0.7f);
+        colors.colorMultiplier = 1f;
         button.colors = colors;
     }
 
@@ -46,6 +53,9 @@ public class TabManager : MonoBehaviour
             // 新しいタブをハイライト
             var colors = currentTab.colors;
             colors.normalColor = selectedColor;
+            colors.selectedColor = selectedColor;
+            colors.highlightedColor = selectedColor;
+            colors.colorMultiplier = 1f;
             currentTab.colors = colors;
         }
     }

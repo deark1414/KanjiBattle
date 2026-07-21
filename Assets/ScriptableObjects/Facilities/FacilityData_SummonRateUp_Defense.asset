@@ -16,8 +16,8 @@ MonoBehaviour:
   facilityName: "\u53EC\u559A\u52A0\u8B77\u30FB\u9632\u5FA1"
   effectType: 9
   unlockType: 1
-  requiredStageId: 5
-  unlockStagePointCost: 2
+  requiredStageId: 11
+  unlockStagePointCost: 1
   initialMaxLevel: 3
   finalMaxLevel: 10
   levelCapIncreasePerUnlock: 2

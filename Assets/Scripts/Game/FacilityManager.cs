@@ -22,7 +22,19 @@ public class FacilityManager : MonoBehaviour
     private HashSet<FacilityData> unlockedFacilities = new HashSet<FacilityData>();
     private Dictionary<FacilityData, int> facilityCapUnlockCount = new Dictionary<FacilityData, int>();
 
-    private Queue<CharacterData> characterUnlockQueue = new Queue<CharacterData>();
+    private struct CharacterUnlockStep
+    {
+        public readonly int characterId;
+        public readonly int requiredStageId;
+
+        public CharacterUnlockStep(int characterId, int requiredStageId)
+        {
+            this.characterId = characterId;
+            this.requiredStageId = requiredStageId;
+        }
+    }
+
+    private readonly List<CharacterUnlockStep> characterUnlockPlan = new List<CharacterUnlockStep>();
 
     private void Awake()
     {
@@ -56,21 +68,31 @@ public class FacilityManager : MonoBehaviour
             }
         }
 
-        // 初期化処理の後に
-        if (characterDatabase != null && characterDatabase.characters != null)
+        InitializeCharacterUnlockPlan();
+    }
+
+    private void InitializeCharacterUnlockPlan()
+    {
+        characterUnlockPlan.Clear();
+
+        int[,] steps =
         {
-            foreach (var c in characterDatabase.characters
-                                                .Where(x => x != null && !x.isBoss && x.characterId != 1)
-                                                .OrderBy(x => x.characterId))
-            {
-                characterUnlockQueue.Enqueue(c);
-            }
-            Debug.Log($"[FacilityManager] キャラ解放キュー初期化: {characterUnlockQueue.Count} 件");
-        }
-        else
+            { 2, 2 }, { 3, 3 },
+            { 10, 6 }, { 11, 7 }, { 12, 8 },
+            { 13, 11 }, { 14, 12 }, { 15, 13 },
+            { 4, 16 }, { 5, 17 }, { 6, 18 },
+            { 16, 21 }, { 17, 22 }, { 18, 23 },
+            { 19, 26 }, { 20, 27 }, { 21, 28 }, { 22, 29 },
+            { 23, 31 }, { 24, 32 }, { 25, 33 },
+            { 7, 36 }, { 8, 37 }, { 9, 38 }
+        };
+
+        for (int i = 0; i < steps.GetLength(0); i++)
         {
-            Debug.LogError("[FacilityManager] CharacterDatabase が設定されていない、または characters が空です");
+            characterUnlockPlan.Add(new CharacterUnlockStep(steps[i, 0], steps[i, 1]));
         }
+
+        Debug.Log($"[FacilityManager] 研究所キャラ解放計画初期化: {characterUnlockPlan.Count} 件");
     }
 
     public int GetLevel(FacilityData facility)
@@ -95,6 +117,7 @@ public class FacilityManager : MonoBehaviour
         int level = GetLevel(facility);
         int maxLevel = GetCurrentFacilityMaxLevel(facility);
         if (level >= maxLevel) return FacilityState.Maxed;
+        if (facility.effectType == FacilityEffectType.CharacterUnlock && !HasAvailableResearchCharacter()) return FacilityState.Maxed;
         return FacilityState.Available;
     }
 
@@ -108,6 +131,7 @@ public class FacilityManager : MonoBehaviour
         int currentLevel = GetLevel(facility);
         int maxLevel = GetCurrentFacilityMaxLevel(facility);
         if (currentLevel >= maxLevel) return false;
+        if (facility.effectType == FacilityEffectType.CharacterUnlock && !HasAvailableResearchCharacter()) return false;
 
         int cost = facility.GetUpgradeCost(currentLevel);
         if (!GameManager.Instance.SpendGold(cost)) return false;
@@ -256,22 +280,16 @@ public class FacilityManager : MonoBehaviour
                 }
                 break;
             case FacilityEffectType.FormationSlot:
-                GameManager.Instance.ApplyFormationSlotIncrease(1);
+                if (level > 0)
+                {
+                    GameManager.Instance.ApplyFormationSlotIncrease(1);
+                }
                 break;
             case FacilityEffectType.LevelCap:
                 PlayerInventory.Instance.AddLevelCapBonus(facility.levelCapIncreasePerUnlock);
                 break;
             case FacilityEffectType.CharacterUnlock:
-                if (characterUnlockQueue.Count > 0)
-                {
-                    var nextChar = characterUnlockQueue.Dequeue();
-                    PlayerInventory.Instance.UnlockCharacterForSummon(nextChar);
-                    Debug.Log($"[FacilityManager] {nextChar.characterName} を解放しました。");
-                }
-                else
-                {
-                    Debug.LogWarning("[FacilityManager] キャラクター解放キューが空です。");
-                }
+                UnlockNextResearchCharacter();
                 break;
             case FacilityEffectType.ChapterUnlock:
                 if (level > 0)
@@ -281,8 +299,8 @@ public class FacilityManager : MonoBehaviour
                 }
                 break;
             case FacilityEffectType.BossUnlock:
-                GameManager.Instance.UnlockBoss("龍");
-                Debug.Log("[FacilityManager] ボスキャラ 龍 を解放しました（召喚不可）");
+                GameManager.Instance.UnlockBoss("竜");
+                Debug.Log("[FacilityManager] ボスキャラ 竜 を解放しました（召喚不可）");
                 break;
             default:
                 Debug.LogWarning($"Unhandled FacilityEffectType: {facility.effectType}");
@@ -290,9 +308,70 @@ public class FacilityManager : MonoBehaviour
         }
     }
 
+    private bool HasAvailableResearchCharacter()
+    {
+        return TryGetNextResearchCharacter(out _, out _);
+    }
+
+    private bool TryGetNextResearchCharacter(out CharacterData character, out int requiredStageId)
+    {
+        character = null;
+        requiredStageId = 0;
+
+        if (PlayerInventory.Instance == null || characterDatabase == null)
+        {
+            return false;
+        }
+
+        int clearedStageId = GameManager.Instance != null ? GameManager.Instance.GetClearedStageId() : 0;
+
+        foreach (CharacterUnlockStep step in characterUnlockPlan)
+        {
+            CharacterData candidate = characterDatabase.GetById(step.characterId);
+            if (candidate == null || PlayerInventory.Instance.IsSummonable(candidate))
+            {
+                continue;
+            }
+
+            character = candidate;
+            requiredStageId = step.requiredStageId;
+            return clearedStageId >= step.requiredStageId;
+        }
+
+        return false;
+    }
+
+    private void UnlockNextResearchCharacter()
+    {
+        if (PlayerInventory.Instance == null || characterDatabase == null)
+        {
+            Debug.LogWarning("[FacilityManager] 研究所解放に必要な参照がありません。");
+            return;
+        }
+
+        if (!TryGetNextResearchCharacter(out CharacterData character, out int requiredStageId))
+        {
+            if (character != null)
+            {
+                Debug.Log($"[FacilityManager] 次の研究解放 {character.characterName} は Stage {requiredStageId} クリア後です。");
+            }
+            else
+            {
+                Debug.Log("[FacilityManager] 研究所で解放できるキャラクターはありません。");
+            }
+            return;
+        }
+
+        if (PlayerInventory.Instance.UnlockCharacterForSummon(character))
+        {
+            Debug.Log($"[FacilityManager] 研究所で {character.characterName} を解放しました。");
+        }
+    }
 
     public bool IsCategoryUnlocked(CharacterCategory category)
     {
+
+
         // FacilityData に「対象カテゴリ」を持たせておき、
         // そのカテゴリを解放する FacilityEffectType.SummonRateUp の施設が解放されているかチェック
         var facilities = facilityDatabase != null ? facilityDatabase.facilities : null;

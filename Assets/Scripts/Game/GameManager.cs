@@ -185,7 +185,7 @@ public class GameManager : MonoBehaviour
     public void StartStage(StageData stage, System.Collections.Generic.List<CharacterData> allies)
     {
         UIManager.Instance.ShowBattle();
-        BattleManager battleManager = FindObjectOfType<BattleManager>();
+        BattleManager battleManager = FindAnyObjectByType<BattleManager>();
         if (battleManager != null)
         {
             battleManager.StartBattle(allies, stage);

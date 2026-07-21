@@ -281,14 +281,15 @@ public class DataImporter : EditorWindow
             AssetDatabase.CreateAsset(db, dbPath);
         }
 
-        string[] guids = AssetDatabase.FindAssets("t:CharacterData", new[] { "Assets/ScriptableObjects/Characters" });
         db.characters.Clear();
-        foreach (string guid in guids)
+        foreach (var character in ReadJsonList<CharacterJson>(File.ReadAllText("Assets/Data/characters.json")))
         {
-            string path = AssetDatabase.GUIDToAssetPath(guid);
+            string path = $"Assets/ScriptableObjects/Characters/{character.fileName}.asset";
             CharacterData data = AssetDatabase.LoadAssetAtPath<CharacterData>(path);
             if (data != null)
+            {
                 db.characters.Add(data);
+            }
         }
 
         EditorUtility.SetDirty(db);
@@ -328,11 +329,10 @@ public class DataImporter : EditorWindow
             AssetDatabase.CreateAsset(db, dbPath);
         }
 
-        string[] guids = AssetDatabase.FindAssets("t:FacilityData", new[] { "Assets/ScriptableObjects/Facilities" });
         db.facilities.Clear();
-        foreach (string guid in guids)
+        foreach (var facility in ReadJsonList<FacilityJson>(File.ReadAllText("Assets/Data/facilities.json")))
         {
-            string path = AssetDatabase.GUIDToAssetPath(guid);
+            string path = $"Assets/ScriptableObjects/Facilities/{facility.fileName}.asset";
             FacilityData data = AssetDatabase.LoadAssetAtPath<FacilityData>(path);
             if (data != null)
             {
@@ -355,14 +355,15 @@ public class DataImporter : EditorWindow
             AssetDatabase.CreateAsset(db, dbPath);
         }
 
-        string[] guids = AssetDatabase.FindAssets("t:StageData", new[] { "Assets/ScriptableObjects/Stages" });
         db.stages.Clear();
-        foreach (string guid in guids)
+        foreach (var stage in ReadJsonList<StageJson>(File.ReadAllText("Assets/Data/stages.json")))
         {
-            string path = AssetDatabase.GUIDToAssetPath(guid);
+            string path = $"Assets/ScriptableObjects/Stages/{stage.fileName}.asset";
             StageData data = AssetDatabase.LoadAssetAtPath<StageData>(path);
             if (data != null)
+            {
                 db.stages.Add(data);
+            }
         }
 
         EditorUtility.SetDirty(db);

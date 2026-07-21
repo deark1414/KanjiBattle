@@ -12,8 +12,9 @@ public class SummonManager : MonoBehaviour
         get
         {
             int count = PlayerInventory.Instance != null ? PlayerInventory.Instance.GetSummonableCharacters().Count : 0;
-            int baseCostForCount = Mathf.FloorToInt(baseSummonCost * Mathf.Pow(2, Mathf.Max(0, count - 1)));
-            return GameManager.Instance.GetEffectiveSummonCost(baseCostForCount);
+            int extraSummonables = Mathf.Max(0, count - 1);
+            int baseCostForCount = baseSummonCost + (extraSummonables * 30) + Mathf.FloorToInt(extraSummonables * extraSummonables * 2.5f);
+            return GameManager.Instance != null ? GameManager.Instance.GetEffectiveSummonCost(baseCostForCount) : baseCostForCount;
         }
     }
 
@@ -44,6 +45,12 @@ public class SummonManager : MonoBehaviour
 
     public void Summon()
     {
+        if (GameManager.Instance == null || PlayerInventory.Instance == null)
+        {
+            Debug.LogWarning("[SummonManager] GameManager または PlayerInventory が見つかりません");
+            return;
+        }
+
         if (GameManager.Instance.SpendGold(CurrentSummonCost))
         {
             // ランダムキャラ召喚: 解放済み・撃破済みキャラのみから選択
