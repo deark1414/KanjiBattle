@@ -388,6 +388,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private static void ConfigureText(TextMeshProUGUI text, float max, float min, TextAlignmentOptions alignment)
     {
         if (text == null) return;
+        UnityUIRuntimeTheme.ApplyJapaneseFont(text);
         text.enableAutoSizing = true;
         text.fontSizeMax = max;
         text.fontSizeMin = min;
@@ -455,6 +456,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         var textObject = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
         textObject.transform.SetParent(tooltip.transform, false);
         tooltipText = textObject.GetComponent<TextMeshProUGUI>();
+        UnityUIRuntimeTheme.ApplyJapaneseFont(tooltipText);
         tooltipText.color = new Color(1f, 0.93f, 0.72f);
         tooltipText.raycastTarget = false;
         tooltipText.enableAutoSizing = true;

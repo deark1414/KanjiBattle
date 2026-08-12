@@ -259,11 +259,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
     {
         if (text == null) return;
 
-        var font = GetJapaneseFontAsset();
-        if (font != null)
-        {
-            text.font = font;
-        }
+        ApplyJapaneseFont(text);
 
         if (text.GetComponentInParent<FacilityUI>() != null) return;
 
@@ -309,6 +305,17 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         else if (!path.Contains("entry") && !path.Contains("facility") && !path.Contains("stagebutton") && text.fontSize < 18f)
         {
             text.fontSize = 18f;
+        }
+    }
+
+    public static void ApplyJapaneseFont(TextMeshProUGUI text)
+    {
+        if (text == null) return;
+
+        var font = GetJapaneseFontAsset();
+        if (font != null)
+        {
+            text.font = font;
         }
     }
 

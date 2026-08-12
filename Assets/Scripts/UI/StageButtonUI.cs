@@ -15,6 +15,7 @@ public class StageButtonUI : MonoBehaviour
     public void SetStage(StageData data)
     {
         stageData = data;
+        UnityUIRuntimeTheme.ApplyJapaneseFont(stageNameText);
         stageNameText.enableAutoSizing = true;
         stageNameText.fontSizeMin = 12f;
         stageNameText.fontSizeMax = 22f;
