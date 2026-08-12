@@ -66,6 +66,7 @@ if (background != null)
 
     if (nameText != null)
     {
+        UnityUIRuntimeTheme.ApplyJapaneseFont(nameText);
         nameText.gameObject.SetActive(!usesIcon);
         nameText.text = usesIcon ? "" : data.characterName;
     }
@@ -80,7 +81,10 @@ if (background != null)
     }
 
     if (levelText != null)
+    {
+        UnityUIRuntimeTheme.ApplyJapaneseFont(levelText);
         levelText.text = usesIcon ? $"Lv{level}" : $"Lv.{level} #{instanceId}";
+    }
 
     UpdateHPBar();
     UpdateDirection(Vector2Int.down);
@@ -254,7 +258,10 @@ public void UpdateDirection(Vector2Int dir)
     else if (dir.x == -1 && dir.y == -1) arrow = "↖";
 
     if (directionText != null)
+    {
+        UnityUIRuntimeTheme.ApplyJapaneseFont(directionText);
         directionText.text = arrow;
+    }
 }
 
 private void ConfigureBattleLabels(bool usesIcon, bool ally)
@@ -274,6 +281,7 @@ private void ConfigureBattleLabels(bool usesIcon, bool ally)
 
     if (levelText != null)
     {
+        UnityUIRuntimeTheme.ApplyJapaneseFont(levelText);
         levelText.gameObject.SetActive(true);
         levelText.color = usesIcon ? teamTextColor : new Color(0.13f, 0.08f, 0.04f, 0.95f);
         levelText.fontSize = usesIcon ? 14f : 10f;
@@ -290,6 +298,7 @@ private void ConfigureBattleLabels(bool usesIcon, bool ally)
 
     if (directionText != null)
     {
+        UnityUIRuntimeTheme.ApplyJapaneseFont(directionText);
         directionText.gameObject.SetActive(true);
         directionText.color = usesIcon ? teamTextColor : new Color(0.13f, 0.08f, 0.04f, 0.95f);
         directionText.fontSize = usesIcon ? 20f : 10f;
@@ -451,7 +460,10 @@ private void ConfigureBattleLabels(bool usesIcon, bool ally)
         attack = data.GetAttack(level);
         defense = data.GetDefense(level);
 if (levelText != null)
+{
+    UnityUIRuntimeTheme.ApplyJapaneseFont(levelText);
     levelText.text = data != null && data.icon != null ? $"Lv{level}" : $"Lv.{level} #{instanceId}";
+}
 UpdateHPBar();
     }
 

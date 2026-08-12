@@ -52,6 +52,7 @@ public class FormationUI : MonoBehaviour
             var text = slot.GetComponentInChildren<TMPro.TextMeshProUGUI>();
             if (text != null)
             {
+                UnityUIRuntimeTheme.ApplyJapaneseFont(text);
                 text.text = "空";
                 text.enableAutoSizing = true;
                 text.fontSizeMin = 12f;
@@ -80,6 +81,7 @@ public class FormationUI : MonoBehaviour
         var text = slot.GetComponentInChildren<TMPro.TextMeshProUGUI>();
         if (text != null)
         {
+            UnityUIRuntimeTheme.ApplyJapaneseFont(text);
             text.text = character.characterName;
             text.enableAutoSizing = true;
             text.fontSizeMin = 12f;
@@ -100,7 +102,11 @@ public class FormationUI : MonoBehaviour
 
         var slot = slotParent.GetChild(index);
         var text = slot.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-        if (text != null) text.text = "空";
+        if (text != null)
+        {
+            UnityUIRuntimeTheme.ApplyJapaneseFont(text);
+            text.text = "空";
+        }
 
         if (removedCharacter != null)
         {

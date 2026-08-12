@@ -26,6 +26,7 @@ public class StagePointUI : MonoBehaviour
     {
         if (stagePointText != null)
         {
+            UnityUIRuntimeTheme.ApplyJapaneseFont(stagePointText);
             stagePointText.text = $"StagePts: {points}";
         }
     }
