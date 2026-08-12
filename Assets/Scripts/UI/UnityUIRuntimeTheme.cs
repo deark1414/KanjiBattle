@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.TextCore.LowLevel;
 using UnityEngine.UI;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [ExecuteAlways]
 [DefaultExecutionOrder(-500)]
 public sealed class UnityUIRuntimeTheme : MonoBehaviour
 {
     private static UnityUIRuntimeTheme instance;
+    private static TMP_FontAsset japaneseFontAsset;
 
     private readonly Dictionary<string, Sprite> spriteCache = new();
 
@@ -252,6 +258,13 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
     private static void StyleText(TextMeshProUGUI text)
     {
         if (text == null) return;
+
+        var font = GetJapaneseFontAsset();
+        if (font != null)
+        {
+            text.font = font;
+        }
+
         if (text.GetComponentInParent<FacilityUI>() != null) return;
 
         string path = GetPath(text.transform).ToLowerInvariant();
@@ -297,6 +310,29 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         {
             text.fontSize = 18f;
         }
+    }
+
+    private static TMP_FontAsset GetJapaneseFontAsset()
+    {
+        if (japaneseFontAsset != null) return japaneseFontAsset;
+
+#if UNITY_EDITOR
+        var sourceFont = AssetDatabase.LoadAssetAtPath<Font>("Assets/Fonts/NotoSansJP-Medium.ttf");
+        if (sourceFont == null) return null;
+
+        japaneseFontAsset = TMP_FontAsset.CreateFontAsset(
+            sourceFont,
+            90,
+            9,
+            GlyphRenderMode.SDFAA,
+            1024,
+            1024,
+            AtlasPopulationMode.Dynamic);
+        japaneseFontAsset.name = "NotoSansJP-Medium Runtime SDF";
+        japaneseFontAsset.atlasPopulationMode = AtlasPopulationMode.Dynamic;
+#endif
+
+        return japaneseFontAsset;
     }
 
     private Sprite GetSprite(string name, Vector4 border)
