@@ -130,6 +130,7 @@ public class UIManager : MonoBehaviour
         if (existing != null && existing.TryGetComponent(out resetDataButton))
         {
             resetDataButtonText = resetDataButton.GetComponentInChildren<TextMeshProUGUI>();
+            ApplyResetDataButtonLayout(resetDataButton.GetComponent<RectTransform>());
             resetDataButton.onClick.RemoveAllListeners();
             resetDataButton.onClick.AddListener(HandleResetDataButtonClicked);
             SetResetDataButtonText("データ削除");
@@ -140,10 +141,7 @@ public class UIManager : MonoBehaviour
         go.transform.SetParent(TopPanel.transform, false);
 
         var rect = go.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(0.72f, 0.04f);
-        rect.anchorMax = new Vector2(0.96f, 0.12f);
-        rect.offsetMin = Vector2.zero;
-        rect.offsetMax = Vector2.zero;
+        ApplyResetDataButtonLayout(rect);
 
         var image = go.GetComponent<Image>();
         image.sprite = Resources.Load<Sprite>("Kenney/UIRPG/PNG/buttonLong_brown");
@@ -163,6 +161,19 @@ public class UIManager : MonoBehaviour
 
         resetDataButtonText = textObject.GetComponent<TextMeshProUGUI>();
         SetResetDataButtonText("データ削除");
+    }
+
+    private static void ApplyResetDataButtonLayout(RectTransform rect)
+    {
+        if (rect == null)
+        {
+            return;
+        }
+
+        rect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.56f, 0.035f) : new Vector2(0.72f, 0.04f);
+        rect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.105f) : new Vector2(0.96f, 0.12f);
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
     }
 
     private void HandleResetDataButtonClicked()
