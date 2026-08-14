@@ -24,12 +24,7 @@ public class StageSelectUI : MonoBehaviour
             return;
         }
 
-        foreach (Transform child in content)
-        {
-            child.gameObject.SetActive(false);
-            child.SetParent(null, false);
-            Destroy(child.gameObject);
-        }
+        ClearStageButtons();
 
         var gameManager = GameManager.Instance != null ? GameManager.Instance : FindAnyObjectByType<GameManager>();
         if (gameManager == null)
@@ -38,6 +33,7 @@ public class StageSelectUI : MonoBehaviour
         }
 
         int focusIndex = 0;
+        bool foundFocus = false;
         int index = 0;
         foreach (var stage in stageDatabase.stages.Where(stage => stage != null).OrderBy(stage => stage.stageId))
         {
@@ -52,14 +48,26 @@ public class StageSelectUI : MonoBehaviour
             btn.GetComponent<UnityEngine.UI.Button>().interactable = !locked;
             ui.SetState(locked, gameManager.IsStageCleared(stage.stageId));
 
-            if (!locked)
+            if (!locked && !gameManager.IsStageCleared(stage.stageId) && !foundFocus)
             {
                 focusIndex = index;
+                foundFocus = true;
             }
             index++;
         }
 
         FinalizeContentLayout(focusIndex);
+    }
+
+    private void ClearStageButtons()
+    {
+        for (int i = content.childCount - 1; i >= 0; i--)
+        {
+            var child = content.GetChild(i);
+            child.gameObject.SetActive(false);
+            child.SetParent(null, false);
+            Destroy(child.gameObject);
+        }
     }
 
     private static void ConfigureStageButtonLayout(GameObject buttonObject)
