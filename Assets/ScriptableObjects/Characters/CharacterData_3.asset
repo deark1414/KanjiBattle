@@ -13,11 +13,20 @@ MonoBehaviour:
   m_Name: CharacterData_3
   m_EditorClassIdentifier: 
   characterName: "\u4E09"
-  icon: {fileID: 0}
+  characterId: 3
+  isBoss: 0
+  icon: {fileID: 21300000, guid: 5ddca10484fa44ef3b45f86f0e2ee4ec, type: 3}
+  enemyIcon: {fileID: 21300000, guid: 964639eaad9474660acac3767e1ec6d3, type: 3}
   category: 1
-  maxHP: 20
-  attack: 5
+  baseHP: 160
+  baseAttack: 15
+  baseDefense: 12
   production: 3
   skillType: 7
-  skillChance: 0
-  skillPower: 1
+  skillChance: 15
+  skillPower: 1.2
+  level: 1
+  maxLevel: 50
+  attackGrowth: 2
+  hpGrowth: 10
+  defenseGrowth: 1

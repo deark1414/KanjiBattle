@@ -5,12 +5,16 @@ using UnityEngine;
 public class StageData : ScriptableObject
 {
     public string stageName;
+    public int stageId;
+
+    [Header("章情報")]
+    public int chapterId; // 所属する章
 
     [Header("敵キャラ編成")]
     public List<CharacterData> enemyPool = new();
 
     [Header("報酬")]
-    public int rewardGold = 10;
+    public int rewardStagePoints = 1; // ←追加
 
     [Header("フォーメーション設定")]
     public int slotCount = 3;   // このステージで使えるスロット数
@@ -28,4 +32,7 @@ public class StageData : ScriptableObject
     [SerializeField] public bool isBossStage = false;
 
     public int enemyLevel = 1;  // 🔹 ステージごとの敵レベル
+
+    public StageData prerequisite;     // このステージを解放するために必要なステージ
+    [HideInInspector] public bool isCleared;   // クリア済み
 }

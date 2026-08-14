@@ -9,7 +9,7 @@ public enum SkillType
     AreaCounter,
     Armor,
     Heal,
-    NumberPassive,
+    NumberPassive,  // 対象: Number1, Number2, Number3
     Arrow,
     Gun,
     Spear,
@@ -28,22 +28,34 @@ public enum SkillType
 
 public enum CharacterCategory
 {
-    Other,
-    Number
+    None, 
+    Number1,   // 1,2,3
+    Number2,   // 4,5,6
+    Number3,   // 7,8,9
+    Weapon,    // 剣, 槌 など
+    Defense,   // 盾, 城
+    Ranged,    // 石, 矢, 弓, 銃
+    Nature,    // 火, 水, 木, 山
+    Animal,    // 馬, 鳥, 虎
+    Boss       // ボス専用（龍含む）
 }
 
 [CreateAssetMenu(fileName = "CharacterData_", menuName = "Game/Character Data")]
 public class CharacterData : ScriptableObject
 {
     public string characterName;
+    public int characterId;
+    public bool isBoss;
     public Sprite icon;
+    public Sprite enemyIcon;
 
     [Header("カテゴリ")]
-    public CharacterCategory category = CharacterCategory.Other;
+    public CharacterCategory category = CharacterCategory.None;
 
     [Header("ステータス")]
     [SerializeField] private int baseHP = 100;
     [SerializeField] private int baseAttack = 20;
+    [SerializeField] private int baseDefense = 0;
     public int production = 0;
 
     [Header("スキル")]
@@ -56,6 +68,7 @@ public class CharacterData : ScriptableObject
     public int maxLevel = 50;             // 上限
     public int attackGrowth = 2;          // レベルごとの攻撃力増加量
     public int hpGrowth = 10;             // レベルごとのHP増加量
+    public int defenseGrowth = 1; // レベルごとの防御力増加量
 
     public int GetMaxHP(int level)
     {
@@ -65,5 +78,17 @@ public class CharacterData : ScriptableObject
     public int GetAttack(int level)
     {
         return baseAttack + attackGrowth * (level - 1);
+    }
+
+    public int GetDefense(int level)
+    {
+        return baseDefense + defenseGrowth * (level - 1);
+    }
+
+    public int GetUpgradeCost(int currentLevel)
+    {
+        int baseCost = 100;
+        float growthRate = 1.2f;
+        return Mathf.RoundToInt(baseCost * Mathf.Pow(growthRate, currentLevel));
     }
 }

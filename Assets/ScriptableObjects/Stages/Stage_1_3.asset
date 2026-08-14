@@ -12,9 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1df6bc30dc24f4ef8a24d39e608d3dda, type: 3}
   m_Name: Stage_1_3
   m_EditorClassIdentifier: 
-  stageName: 1-3
+  stageName: "\u4E09\u306E\u7A3D\u53E4"
+  stageId: 3
+  chapterId: 1
   enemyPool:
-  - {fileID: 11400000, guid: a8f9237dba00b460b8d915962812b47b, type: 2}
-  - {fileID: 11400000, guid: 0eaca48f611824f8abf71128035a7864, type: 2}
-  rewardGold: 10
-  slotCount: 3
+  - {fileID: 11400000, guid: 743f49379950446e8a751fbd6e7d1e94, type: 2}
+  rewardStagePoints: 2
+  slotCount: 2
+  trapDamage: 0
+  trapCount: 0
+  reinforcementEnemy: []
+  reinforcementInterval: 0
+  reinforcementCount: 0
+  reinforcementLimit: 0
+  isBossStage: 0
+  enemyLevel: 2
+  prerequisite: {fileID: 11400000, guid: 0e9cfd8f9853e469aaa467db0f447622, type: 2}
+  isCleared: 0

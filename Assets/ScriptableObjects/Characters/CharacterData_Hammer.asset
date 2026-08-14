@@ -13,11 +13,20 @@ MonoBehaviour:
   m_Name: CharacterData_Hammer
   m_EditorClassIdentifier: 
   characterName: "\u69CC"
-  icon: {fileID: 0}
-  category: 0
-  maxHP: 20
-  attack: 5
+  characterId: 12
+  isBoss: 0
+  icon: {fileID: 21300000, guid: f001087e49ad9463a96d03cd7a33b54e, type: 3}
+  enemyIcon: {fileID: 21300000, guid: 00280d9d37f4849c382b9a84927c39b5, type: 3}
+  category: 4
+  baseHP: 160
+  baseAttack: 30
+  baseDefense: 12
   production: 3
   skillType: 2
-  skillChance: 100
-  skillPower: 1.2
+  skillChance: 10
+  skillPower: 1.5
+  level: 1
+  maxLevel: 50
+  attackGrowth: 3
+  hpGrowth: 7
+  defenseGrowth: 1

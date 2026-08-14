@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
+  m_Name: FacilityData_CastleGate
+  m_EditorClassIdentifier: 
+  facilityId: 8
+  facilityName: "\u57CE\u9580"
+  effectType: 7
+  unlockType: 1
+  requiredStageId: 5
+  unlockStagePointCost: 2
+  initialMaxLevel: 1
+  finalMaxLevel: 7
+  levelCapIncreasePerUnlock: 1
+  facilityLevelCapUnlocks:
+  - stageId: 10
+    requiredStagePoints: 1
+  - stageId: 15
+    requiredStagePoints: 2
+  - stageId: 20
+    requiredStagePoints: 2
+  - stageId: 25
+    requiredStagePoints: 3
+  - stageId: 30
+    requiredStagePoints: 3
+  - stageId: 35
+    requiredStagePoints: 4
+  baseCost: 200
+  growthFactor: 1.25
+  chapterUnlockRequirements: []
+  effectPerLevel: 0
+  summonCategory: 0
+  summonRatePerLevel: 0

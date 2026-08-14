@@ -13,11 +13,20 @@ MonoBehaviour:
   m_Name: CharacterData_Soil
   m_EditorClassIdentifier: 
   characterName: "\u571F"
-  icon: {fileID: 0}
-  category: 0
-  maxHP: 30
-  attack: 5
+  characterId: 22
+  isBoss: 0
+  icon: {fileID: 21300000, guid: 6f12030244d7240ac9fc392f99ea2abf, type: 3}
+  enemyIcon: {fileID: 21300000, guid: 96244e716c77142bfa7a47bd1f8293d4, type: 3}
+  category: 7
+  baseHP: 180
+  baseAttack: 18
+  baseDefense: 12
   production: 3
   skillType: 14
-  skillChance: 30
+  skillChance: 0
   skillPower: 1
+  level: 1
+  maxLevel: 50
+  attackGrowth: 2
+  hpGrowth: 10
+  defenseGrowth: 1

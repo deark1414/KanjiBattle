@@ -13,11 +13,20 @@ MonoBehaviour:
   m_Name: CharacterData_Wood
   m_EditorClassIdentifier: 
   characterName: "\u6728"
-  icon: {fileID: 0}
-  category: 0
-  maxHP: 30
-  attack: 5
+  characterId: 21
+  isBoss: 0
+  icon: {fileID: 21300000, guid: b4ddfe31dc4a545f4bba80d2786325e9, type: 3}
+  enemyIcon: {fileID: 21300000, guid: 5995e8cb25dcf4147b21e9c84fd30967, type: 3}
+  category: 7
+  baseHP: 160
+  baseAttack: 22
+  baseDefense: 10
   production: 3
   skillType: 16
-  skillChance: 30
-  skillPower: 1
+  skillChance: 15
+  skillPower: 1.2
+  level: 1
+  maxLevel: 50
+  attackGrowth: 3
+  hpGrowth: 9
+  defenseGrowth: 1
