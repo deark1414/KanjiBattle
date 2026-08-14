@@ -6,7 +6,7 @@ public class StageButtonUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI stageNameText;
     private StageData stageData;
-    private TextMeshProUGUI clearIconText;
+    private TextMeshProUGUI statusText;
 
     private void Awake()
     {
@@ -27,7 +27,7 @@ public class StageButtonUI : MonoBehaviour
         stageNameText.alignment = TMPro.TextAlignmentOptions.Center;
         stageNameText.textWrappingMode = TMPro.TextWrappingModes.Normal;
         stageNameText.overflowMode = TMPro.TextOverflowModes.Truncate;
-        stageNameText.margin = new Vector4(8f, 2f, 36f, 2f);
+        stageNameText.margin = new Vector4(8f, 2f, 52f, 2f);
         var rect = stageNameText.GetComponent<RectTransform>();
         if (rect != null)
         {
@@ -48,24 +48,22 @@ public class StageButtonUI : MonoBehaviour
         }
 
         UnityUIRuntimeTheme.EnsureJapaneseCapableFont(stageNameText);
-        EnsureClearIconText();
+        EnsureStatusText();
+        stageNameText.text = stageData.stageName;
         if (locked)
         {
-            stageNameText.text = $"第{stageData.chapterId}章 未解放\n{stageData.stageName}";
             stageNameText.color = new Color(0.78f, 0.70f, 0.60f, 1f);
-            SetClearIconVisible(false);
+            SetStatus("未", new Color(0.78f, 0.70f, 0.60f, 1f), true);
         }
         else if (cleared)
         {
-            stageNameText.text = stageData.stageName;
             stageNameText.color = new Color(1f, 0.95f, 0.82f, 1f);
-            SetClearIconVisible(true);
+            SetStatus("✓", new Color(0.72f, 1f, 0.72f, 1f), true);
         }
         else
         {
-            stageNameText.text = stageData.stageName;
             stageNameText.color = new Color(1f, 0.95f, 0.82f, 1f);
-            SetClearIconVisible(false);
+            SetStatus(string.Empty, Color.white, false);
         }
         stageNameText.ForceMeshUpdate();
     }
@@ -83,50 +81,55 @@ public class StageButtonUI : MonoBehaviour
         }
     }
 
-    private void EnsureClearIconText()
+    private void EnsureStatusText()
     {
-        if (clearIconText != null)
+        if (statusText != null)
         {
             return;
         }
 
-        var existing = transform.Find("ClearIcon");
+        var existing = transform.Find("StageStatus");
+        if (existing == null)
+        {
+            existing = transform.Find("ClearIcon");
+        }
         if (existing != null)
         {
-            clearIconText = existing.GetComponent<TextMeshProUGUI>();
+            statusText = existing.GetComponent<TextMeshProUGUI>();
         }
 
-        if (clearIconText == null)
+        if (statusText == null)
         {
-            var iconObject = new GameObject("ClearIcon", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+            var iconObject = new GameObject("StageStatus", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
             iconObject.transform.SetParent(transform, false);
-            clearIconText = iconObject.GetComponent<TextMeshProUGUI>();
+            statusText = iconObject.GetComponent<TextMeshProUGUI>();
         }
+        statusText.gameObject.name = "StageStatus";
 
-        var rect = clearIconText.GetComponent<RectTransform>();
+        var rect = statusText.GetComponent<RectTransform>();
         rect.anchorMin = new Vector2(1f, 0f);
         rect.anchorMax = new Vector2(1f, 1f);
         rect.pivot = new Vector2(1f, 0.5f);
-        rect.sizeDelta = new Vector2(32f, 0f);
+        rect.sizeDelta = new Vector2(44f, 0f);
         rect.anchoredPosition = new Vector2(-8f, 0f);
 
-        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(clearIconText);
-        clearIconText.text = "✓";
-        clearIconText.alignment = TextAlignmentOptions.Center;
-        clearIconText.fontSize = 24f;
-        clearIconText.enableAutoSizing = true;
-        clearIconText.fontSizeMin = 16f;
-        clearIconText.fontSizeMax = 26f;
-        clearIconText.color = new Color(0.72f, 1f, 0.72f, 1f);
-        clearIconText.raycastTarget = false;
-        clearIconText.gameObject.SetActive(false);
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(statusText);
+        statusText.alignment = TextAlignmentOptions.Center;
+        statusText.fontSize = 22f;
+        statusText.enableAutoSizing = true;
+        statusText.fontSizeMin = 14f;
+        statusText.fontSizeMax = 24f;
+        statusText.raycastTarget = false;
+        statusText.gameObject.SetActive(false);
     }
 
-    private void SetClearIconVisible(bool visible)
+    private void SetStatus(string text, Color color, bool visible)
     {
-        if (clearIconText != null)
+        if (statusText != null)
         {
-            clearIconText.gameObject.SetActive(visible);
+            statusText.text = text;
+            statusText.color = color;
+            statusText.gameObject.SetActive(visible);
         }
     }
 
