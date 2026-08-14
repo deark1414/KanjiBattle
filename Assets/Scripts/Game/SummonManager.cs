@@ -41,7 +41,6 @@ public class SummonManager : MonoBehaviour
     {
         if (summonText != null)
         {
-            UnityUIRuntimeTheme.ApplyJapaneseFont(summonText);
             summonText.text = $"召喚 {CurrentSummonCost}G";
         }
     }

@@ -45,14 +45,21 @@ public class UIManager : MonoBehaviour
     {
         HideAll();
         if (TopPanel != null) TopPanel.SetActive(true);
-        TabManager.Instance.HighlightTop();
+        var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
+        tabs?.HighlightTop();
     }
 
     public void ShowStageSelect()
     {
         HideAll();
-        if (StageSelectPanel != null) StageSelectPanel.SetActive(true);
-        TabManager.Instance.HighlightStage();
+        if (StageSelectPanel != null)
+        {
+            StageSelectPanel.SetActive(true);
+            var stageSelect = StageSelectPanel.GetComponent<StageSelectUI>();
+            if (stageSelect != null) stageSelect.DisplayStages();
+        }
+        var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
+        tabs?.HighlightStage();
     }
 
     public void ShowFormation()
@@ -74,12 +81,14 @@ public class UIManager : MonoBehaviour
     {
         HideAll();
         if (FacilityPanel != null) FacilityPanel.SetActive(true);
-        TabManager.Instance.HighlightFacility();
+        var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
+        tabs?.HighlightFacility();
     }
 
     // === フォーメーションからバトル開始 ===
     public void StartBattleFromFormation()
     {
+        FormationUI.Instance.RememberCurrentFormation();
         var allies = new System.Collections.Generic.List<CharacterData>(FormationUI.Instance.GetFormation());
         GameManager.Instance.StartStage(GameManager.Instance.GetSelectedStage(), allies);
     }
@@ -87,6 +96,7 @@ public class UIManager : MonoBehaviour
     // === ステージ開始 ===
     public void StartStage(StageData stage)
     {
+        FormationUI.Instance.RememberCurrentFormation();
         var allies = new System.Collections.Generic.List<CharacterData>(FormationUI.Instance.GetFormation());
 
         HideAll();

@@ -89,7 +89,7 @@ public class CharacterEntryForFormationUI : MonoBehaviour
 private static void ConfigureText(TextMeshProUGUI text, float max, float min, TextAlignmentOptions alignment)
     {
         if (text == null) return;
-        UnityUIRuntimeTheme.ApplyJapaneseFont(text);
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
         text.enableAutoSizing = true;
         text.fontSizeMax = max;
         text.fontSizeMin = min;

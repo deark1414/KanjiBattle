@@ -21,7 +21,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 76349d043ec8445949168a7c39201e9e, type: 2}
   - {fileID: 11400000, guid: 927571de945b1422898eae1f5cfc1827, type: 2}
   - {fileID: 11400000, guid: 7cd32ba1bab21408d8adeb14f331e6dd, type: 2}
-  - {fileID: 11400000, guid: 76349d043ec8445949168a7c39201e9e, type: 2}
   rewardStagePoints: 3
   slotCount: 5
   trapDamage: 9
@@ -31,6 +30,6 @@ MonoBehaviour:
   reinforcementCount: 0
   reinforcementLimit: 0
   isBossStage: 0
-  enemyLevel: 12
+  enemyLevel: 11
   prerequisite: {fileID: 11400000, guid: 844576534242842d5984ff3f9c043027, type: 2}
   isCleared: 0

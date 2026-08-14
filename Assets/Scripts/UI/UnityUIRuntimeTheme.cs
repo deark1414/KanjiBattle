@@ -15,7 +15,7 @@ using UnityEditor;
 public sealed class UnityUIRuntimeTheme : MonoBehaviour
 {
     private static UnityUIRuntimeTheme instance;
-    private static TMP_FontAsset japaneseFontAsset;
+    private static TMP_FontAsset preferredJapaneseFont;
 
     private readonly Dictionary<string, Sprite> spriteCache = new();
 
@@ -259,7 +259,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
     {
         if (text == null) return;
 
-        ApplyJapaneseFont(text);
+        EnsureJapaneseCapableFont(text);
 
         if (text.GetComponentInParent<FacilityUI>() != null) return;
 
@@ -308,26 +308,52 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         }
     }
 
-    public static void ApplyJapaneseFont(TextMeshProUGUI text)
+    public static void EnsureJapaneseCapableFont(TextMeshProUGUI text)
     {
         if (text == null) return;
 
-        var font = GetJapaneseFontAsset();
-        if (font != null)
+        TMP_FontAsset font = GetPreferredJapaneseFont();
+        if (font != null && text.font != font)
         {
             text.font = font;
         }
+        if (text.font != null && text.font.material != null && text.fontSharedMaterial != text.font.material)
+        {
+            text.fontSharedMaterial = text.font.material;
+        }
+        text.SetAllDirty();
     }
 
-    private static TMP_FontAsset GetJapaneseFontAsset()
+    private static TMP_FontAsset GetPreferredJapaneseFont()
     {
-        if (japaneseFontAsset != null) return japaneseFontAsset;
+        if (preferredJapaneseFont != null) return preferredJapaneseFont;
 
+        foreach (var text in FindObjectsByType<TextMeshProUGUI>(FindObjectsInactive.Include))
+        {
+            TMP_FontAsset font = text.font;
+            if (font == null) continue;
+            string fontName = font.name;
+            if (fontName.Contains("NotoSansJP") && fontName.Contains("Runtime SDF"))
+            {
+                preferredJapaneseFont = font;
+                return preferredJapaneseFont;
+            }
+        }
+
+        preferredJapaneseFont = CreateRuntimeJapaneseFont();
+        if (preferredJapaneseFont != null) return preferredJapaneseFont;
+
+        preferredJapaneseFont = TMP_Settings.defaultFontAsset;
+        return preferredJapaneseFont;
+    }
+
+    private static TMP_FontAsset CreateRuntimeJapaneseFont()
+    {
 #if UNITY_EDITOR
         var sourceFont = AssetDatabase.LoadAssetAtPath<Font>("Assets/Fonts/NotoSansJP-Medium.ttf");
         if (sourceFont == null) return null;
 
-        japaneseFontAsset = TMP_FontAsset.CreateFontAsset(
+        var fontAsset = TMP_FontAsset.CreateFontAsset(
             sourceFont,
             90,
             9,
@@ -335,11 +361,12 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             1024,
             1024,
             AtlasPopulationMode.Dynamic);
-        japaneseFontAsset.name = "NotoSansJP-Medium Runtime SDF";
-        japaneseFontAsset.atlasPopulationMode = AtlasPopulationMode.Dynamic;
+        fontAsset.name = "NotoSansJP-Medium Runtime SDF";
+        fontAsset.atlasPopulationMode = AtlasPopulationMode.Dynamic;
+        return fontAsset;
+#else
+        return null;
 #endif
-
-        return japaneseFontAsset;
     }
 
     private Sprite GetSprite(string name, Vector4 border)

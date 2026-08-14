@@ -63,17 +63,20 @@ public class TabManager : MonoBehaviour
     // === タブ切り替え ===
     public void ShowHome()
     {
-        UIManager.Instance.ShowTop();
+        var uiManager = UIManager.Instance != null ? UIManager.Instance : FindAnyObjectByType<UIManager>();
+        if (uiManager != null) uiManager.ShowTop();
     }
 
     public void ShowBattle()
     {
-        UIManager.Instance.ShowStageSelect();
+        var uiManager = UIManager.Instance != null ? UIManager.Instance : FindAnyObjectByType<UIManager>();
+        if (uiManager != null) uiManager.ShowStageSelect();
     }
 
     public void ShowFacility()
     {
-        UIManager.Instance.ShowFacility();
+        var uiManager = UIManager.Instance != null ? UIManager.Instance : FindAnyObjectByType<UIManager>();
+        if (uiManager != null) uiManager.ShowFacility();
     }
 
     // 外部から直接呼べるショートカット

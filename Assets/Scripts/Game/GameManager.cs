@@ -4,6 +4,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    private const string SavePrefix = "KanjiBattle.";
+    private const string GoldKey = SavePrefix + "Gold";
+    private const string StagePointsKey = SavePrefix + "StagePoints";
+    private const string HighestClearedStageKey = SavePrefix + "HighestClearedStageId";
+    private const string UnlockedChapterKey = SavePrefix + "UnlockedChapter";
+    private const string ActiveSummonCategoryKey = SavePrefix + "ActiveSummonCategory";
 
     [SerializeField] private int baseGoldPerSecond = 100;
     [SerializeField] private int gold = 0;
@@ -57,6 +63,7 @@ public class GameManager : MonoBehaviour
                 {
                     Debug.Log($"[GameManager] Active summon category set to: {activeSummonCategory}");
                 }
+                SaveProgress();
             }
         }
     }
@@ -68,6 +75,7 @@ public class GameManager : MonoBehaviour
     {
         stagePoints += amount;
         OnStagePointsChanged?.Invoke(stagePoints);
+        SaveProgress();
     }
 
     /// <summary>
@@ -78,6 +86,7 @@ public class GameManager : MonoBehaviour
         if (stagePoints < amount) return false;
         stagePoints -= amount;
         OnStagePointsChanged?.Invoke(stagePoints);
+        SaveProgress();
         return true;
     }
 
@@ -98,6 +107,7 @@ public class GameManager : MonoBehaviour
             foreach (CharacterCategory category in Enum.GetValues(typeof(CharacterCategory))) {
                 summonRateMultipliers[category] = 1f;
             }
+            LoadProgress();
         }
         else
         {
@@ -112,6 +122,7 @@ public class GameManager : MonoBehaviour
     {
         gold += amount;
         OnGoldChanged?.Invoke(gold);
+        SaveProgress();
     }
 
     /// <summary>
@@ -123,6 +134,7 @@ public class GameManager : MonoBehaviour
 
         gold -= amount;
         OnGoldChanged?.Invoke(gold);
+        SaveProgress();
         return true;
     }
 
@@ -141,6 +153,7 @@ public class GameManager : MonoBehaviour
     {
         gold = amount;
         OnGoldChanged?.Invoke(gold);
+        SaveProgress();
     }
 
     /// <summary>
@@ -163,13 +176,15 @@ public class GameManager : MonoBehaviour
         {
             gold += goldPerSecond;
             OnGoldChanged?.Invoke(gold);
+            SaveProgress();
             yield return new WaitForSeconds(1f);
         }
     }
 
     public void UpdateProduction()
     {
-        goldPerSecond = Mathf.FloorToInt((baseGoldPerSecond + PlayerInventory.Instance.GetTotalProduction()) * productionMultiplier);
+        int inventoryProduction = PlayerInventory.Instance != null ? PlayerInventory.Instance.GetTotalProduction() : 0;
+        goldPerSecond = Mathf.FloorToInt((baseGoldPerSecond + inventoryProduction) * productionMultiplier);
     }
 
     public void SetSelectedStage(StageData stage)
@@ -212,6 +227,7 @@ public class GameManager : MonoBehaviour
         if (stageId > highestClearedStageId)
         {
             highestClearedStageId = stageId;
+            SaveProgress();
         }
     }
 
@@ -254,6 +270,7 @@ public class GameManager : MonoBehaviour
         {
             unlockedChapter = chapterId;
             Debug.Log($"Chapter {chapterId} が解放されました！");
+            SaveProgress();
         }
     }
 
@@ -301,6 +318,23 @@ public class GameManager : MonoBehaviour
 
     // 編成枠追加
     private int facilityFormationSlots = 1;
+    public void ResetRuntimeFacilityEffects()
+    {
+        productionMultiplier = 1f;
+        characterUpgradeCostMultiplier = 1f;
+        summonCostMultiplier = 1f;
+        stagePointMultiplier = 1f;
+        facilityFormationSlots = 1;
+
+        foreach (CharacterCategory category in Enum.GetValues(typeof(CharacterCategory)))
+        {
+            summonRateMultipliers[category] = 1f;
+        }
+
+        UpdateProduction();
+        OnCostModifiersChanged?.Invoke();
+    }
+
     public void ApplyFormationSlotIncrease(int slots)
     {
         facilityFormationSlots += slots;
@@ -388,5 +422,41 @@ public class GameManager : MonoBehaviour
     public CharacterCategory GetActiveSummonCategory()
     {
         return activeSummonCategory;
+    }
+
+    public void SaveProgress()
+    {
+        PlayerPrefs.SetInt(GoldKey, gold);
+        PlayerPrefs.SetInt(StagePointsKey, stagePoints);
+        PlayerPrefs.SetInt(HighestClearedStageKey, highestClearedStageId);
+        PlayerPrefs.SetInt(UnlockedChapterKey, unlockedChapter);
+        PlayerPrefs.SetInt(ActiveSummonCategoryKey, (int)activeSummonCategory);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadProgress()
+    {
+        gold = PlayerPrefs.GetInt(GoldKey, gold);
+        stagePoints = PlayerPrefs.GetInt(StagePointsKey, stagePoints);
+        highestClearedStageId = PlayerPrefs.GetInt(HighestClearedStageKey, highestClearedStageId);
+        unlockedChapter = Mathf.Max(1, PlayerPrefs.GetInt(UnlockedChapterKey, unlockedChapter));
+        activeSummonCategory = (CharacterCategory)PlayerPrefs.GetInt(ActiveSummonCategoryKey, (int)CharacterCategory.None);
+    }
+
+    public void ResetProgress()
+    {
+        PlayerPrefs.DeleteKey(GoldKey);
+        PlayerPrefs.DeleteKey(StagePointsKey);
+        PlayerPrefs.DeleteKey(HighestClearedStageKey);
+        PlayerPrefs.DeleteKey(UnlockedChapterKey);
+        PlayerPrefs.DeleteKey(ActiveSummonCategoryKey);
+        gold = 0;
+        stagePoints = 0;
+        highestClearedStageId = 0;
+        unlockedChapter = 1;
+        activeSummonCategory = CharacterCategory.None;
+        OnGoldChanged?.Invoke(gold);
+        OnStagePointsChanged?.Invoke(stagePoints);
+        PlayerPrefs.Save();
     }
 }

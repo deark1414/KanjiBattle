@@ -17,7 +17,6 @@ MonoBehaviour:
   chapterId: 7
   enemyPool:
   - {fileID: 11400000, guid: 76349d043ec8445949168a7c39201e9e, type: 2}
-  - {fileID: 11400000, guid: 76349d043ec8445949168a7c39201e9e, type: 2}
   - {fileID: 11400000, guid: 7cd32ba1bab21408d8adeb14f331e6dd, type: 2}
   - {fileID: 11400000, guid: 927571de945b1422898eae1f5cfc1827, type: 2}
   - {fileID: 11400000, guid: 7cd32ba1bab21408d8adeb14f331e6dd, type: 2}

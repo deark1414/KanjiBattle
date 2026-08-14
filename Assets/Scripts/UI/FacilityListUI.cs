@@ -69,6 +69,19 @@ public class FacilityListUI : MonoBehaviour
         }
 
         ApplyListLayout();
+        FinalizeContentLayout();
+    }
+
+    private void FinalizeContentLayout()
+    {
+        var contentRect = contentParent as RectTransform;
+        if (contentRect == null) return;
+
+        int rows = Mathf.CeilToInt(spawnedFacilities.Count / 2f);
+        float height = rows > 0 ? rows * CardHeight + Mathf.Max(0, rows - 1) * CardSpacing + 10f : 0f;
+        contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, height);
+        contentRect.anchoredPosition = Vector2.zero;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentRect);
     }
 
     public bool OwnsContent(Transform target)

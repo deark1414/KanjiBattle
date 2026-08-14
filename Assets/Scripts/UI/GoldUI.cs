@@ -26,7 +26,6 @@ public class GoldUI : MonoBehaviour
     {
         if (goldText != null)
         {
-            UnityUIRuntimeTheme.ApplyJapaneseFont(goldText);
             goldText.text = $"Gold: {gold}";
         }
     }

@@ -19,13 +19,18 @@ public class CharacterEntryUI : MonoBehaviour
         ApplyLayout(data);
 
         string skillName = GetSkillLabel(data.skillType);
-        infoText.text = $"{data.characterName}  {skillName}\nHP {data.GetMaxHP(level)} / ATK {data.GetAttack(level)} / DEF {data.GetDefense(level)}";
-        levelText.text = $"Lv.{level}";
-        countText.text = $"所持 x{count}";
+        string info = $"{data.characterName}  {skillName}\nHP {data.GetMaxHP(level)} / ATK {data.GetAttack(level)} / DEF {data.GetDefense(level)}";
+        string levelTextValue = $"Lv.{level}";
+        string countTextValue = $"所持 x{count}";
 
         int baseCost = data.GetUpgradeCost(level);
         int effectiveCost = GameManager.Instance.GetEffectiveUpgradeCost(baseCost);
-        costText.text = $"強化 {effectiveCost}G";
+        string costTextValue = $"強化 {effectiveCost}G";
+
+        if (infoText != null) infoText.text = info;
+        if (levelText != null) levelText.text = levelTextValue;
+        if (countText != null) countText.text = countTextValue;
+        if (costText != null) costText.text = costTextValue;
 
         selfButton.onClick.RemoveAllListeners();
         selfButton.onClick.AddListener(OnClickUpgrade);
@@ -39,10 +44,12 @@ public class CharacterEntryUI : MonoBehaviour
             rect.sizeDelta = new Vector2(Mathf.Max(rect.sizeDelta.x, 500f), 104f);
         }
 
-        ConfigureText(infoText, 22f, 16f, TextAlignmentOptions.Left);
-        ConfigureText(levelText, 21f, 16f, TextAlignmentOptions.Center);
-        ConfigureText(countText, 21f, 16f, TextAlignmentOptions.Center);
-        ConfigureText(costText, 21f, 16f, TextAlignmentOptions.Center);
+        EnsureIcon(data);
+
+        ConfigureText(infoText, 24f, 18f, TextAlignmentOptions.Left);
+        ConfigureText(levelText, 23f, 18f, TextAlignmentOptions.Center);
+        ConfigureText(countText, 23f, 18f, TextAlignmentOptions.Center);
+        ConfigureText(costText, 23f, 18f, TextAlignmentOptions.Center);
 
         RectTransform infoRect = infoText != null ? infoText.GetComponent<RectTransform>() : null;
         if (infoRect != null)
@@ -58,7 +65,10 @@ public class CharacterEntryUI : MonoBehaviour
         ConfigureBottomTextRect(costText, 0.5f, 170f);
         ConfigureBottomTextRect(countText, 1f, 112f);
 
-        EnsureIcon(data);
+        BringTextToFront(infoText);
+        BringTextToFront(levelText);
+        BringTextToFront(countText);
+        BringTextToFront(costText);
     }
 
     private void EnsureIcon(CharacterData data)
@@ -78,6 +88,7 @@ public class CharacterEntryUI : MonoBehaviour
         }
 
         iconImage.gameObject.SetActive(true);
+        iconImage.transform.SetAsFirstSibling();
         iconImage.sprite = data.icon;
         iconImage.preserveAspect = true;
         var iconRect = iconImage.GetComponent<RectTransform>();
@@ -89,32 +100,47 @@ public class CharacterEntryUI : MonoBehaviour
     }
 
     private static void ConfigureBottomTextRect(TextMeshProUGUI text, float anchorX, float width)
-{
-    if (text == null) return;
-    RectTransform rect = text.GetComponent<RectTransform>();
-    rect.anchorMin = new Vector2(anchorX, 0f);
-    rect.anchorMax = new Vector2(anchorX, 0f);
-    rect.pivot = new Vector2(anchorX, 0f);
-    rect.anchoredPosition = anchorX switch
-    {
-        0f => new Vector2(92f, 10f),
-        1f => new Vector2(-12f, 10f),
-        _ => new Vector2(0f, 10f)
-    };
-    rect.sizeDelta = new Vector2(width, 34f);
-}
-
-private static void ConfigureText(TextMeshProUGUI text, float max, float min, TextAlignmentOptions alignment)
     {
         if (text == null) return;
-        UnityUIRuntimeTheme.ApplyJapaneseFont(text);
+        RectTransform rect = text.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(anchorX, 0f);
+        rect.anchorMax = new Vector2(anchorX, 0f);
+        rect.pivot = new Vector2(anchorX, 0f);
+        rect.anchoredPosition = anchorX switch
+        {
+            0f => new Vector2(92f, 10f),
+            1f => new Vector2(-12f, 10f),
+            _ => new Vector2(0f, 10f)
+        };
+        rect.sizeDelta = new Vector2(width, 34f);
+    }
+
+    private static void ConfigureText(TextMeshProUGUI text, float max, float min, TextAlignmentOptions alignment)
+    {
+        if (text == null) return;
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
         text.enableAutoSizing = true;
         text.fontSizeMax = max;
         text.fontSizeMin = min;
         text.alignment = alignment;
+        text.color = new Color(1f, 0.94f, 0.76f, 1f);
+        text.faceColor = Color.white;
+        text.outlineColor = new Color(0.10f, 0.055f, 0.02f, 1f);
+        text.outlineWidth = 0.18f;
+        text.maskable = true;
         text.textWrappingMode = TextWrappingModes.Normal;
         text.overflowMode = TextOverflowModes.Truncate;
         text.raycastTarget = false;
+        text.canvasRenderer.SetAlpha(1f);
+        text.ForceMeshUpdate(true, true);
+    }
+
+    private static void BringTextToFront(TextMeshProUGUI text)
+    {
+        if (text == null) return;
+        text.transform.SetAsLastSibling();
+        text.SetVerticesDirty();
+        text.SetMaterialDirty();
     }
 
     private static string GetSkillLabel(SkillType skillType)
