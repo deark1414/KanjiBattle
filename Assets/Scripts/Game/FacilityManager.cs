@@ -78,6 +78,11 @@ public class FacilityManager : MonoBehaviour
         ReapplyAllEffects();
     }
 
+    private void Start()
+    {
+        RepairSummonableUnlocksFromResearch();
+    }
+
     private void InitializeCharacterUnlockPlan()
     {
         characterUnlockPlan.Clear();
@@ -382,6 +387,71 @@ public class FacilityManager : MonoBehaviour
         if (PlayerInventory.Instance.UnlockCharacterForSummon(character))
         {
             Debug.Log($"[FacilityManager] 研究所で {character.characterName} を解放しました。");
+        }
+    }
+
+    private void RepairSummonableUnlocksFromResearch()
+    {
+        if (PlayerInventory.Instance == null || characterDatabase == null)
+        {
+            return;
+        }
+
+        int unlockBudget = 0;
+        foreach (var kvp in facilityLevels)
+        {
+            FacilityData facility = kvp.Key;
+            if (facility == null || facility.effectType != FacilityEffectType.CharacterUnlock)
+            {
+                continue;
+            }
+
+            if (!unlockedFacilities.Contains(facility))
+            {
+                continue;
+            }
+
+            unlockBudget += Mathf.Max(0, kvp.Value);
+        }
+
+        if (unlockBudget <= 0)
+        {
+            return;
+        }
+
+        int clearedStageId = GameManager.Instance != null ? GameManager.Instance.GetClearedStageId() : 0;
+        int restoredCount = 0;
+        int eligibleCount = 0;
+
+        foreach (CharacterUnlockStep step in characterUnlockPlan)
+        {
+            if (eligibleCount >= unlockBudget)
+            {
+                break;
+            }
+
+            if (clearedStageId < step.requiredStageId)
+            {
+                break;
+            }
+
+            CharacterData candidate = characterDatabase.GetById(step.characterId);
+            if (candidate == null)
+            {
+                Debug.LogWarning($"[FacilityManager] 研究所復元対象 characterId={step.characterId} が見つかりません。");
+                continue;
+            }
+
+            eligibleCount++;
+            if (PlayerInventory.Instance.UnlockCharacterForSummon(candidate))
+            {
+                restoredCount++;
+            }
+        }
+
+        if (restoredCount > 0)
+        {
+            Debug.Log($"[FacilityManager] 研究所の保存データから召喚解放キャラを {restoredCount} 件復元しました。");
         }
     }
 

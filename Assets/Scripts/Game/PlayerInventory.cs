@@ -20,6 +20,7 @@ public class PlayerInventory : MonoBehaviour
 
     [SerializeField]
     private List<CharacterData> summonableCharacters = new List<CharacterData>();
+    private List<CharacterData> initialSummonableCharacters = new List<CharacterData>();
 
     [SerializeField] private int baseLevelCap = 5;
     private int globalLevelCapBonus = 0;
@@ -37,6 +38,7 @@ public class PlayerInventory : MonoBehaviour
             {
                 GameManager.Instance.OnCostModifiersChanged += HandleCostModifiersChanged;
             }
+            initialSummonableCharacters = new List<CharacterData>(summonableCharacters);
             DontDestroyOnLoad(gameObject);
             LoadProgress();
         }
@@ -211,6 +213,8 @@ public class PlayerInventory : MonoBehaviour
         PlayerPrefs.DeleteKey(SummonableKey);
         PlayerPrefs.DeleteKey(LevelCapBonusKey);
         ownedCharacters.Clear();
+        summonableCharacters.Clear();
+        summonableCharacters.AddRange(initialSummonableCharacters.FindAll(c => c != null));
         globalLevelCapBonus = 0;
         onInventoryChanged?.Invoke();
         OnSummonableChanged?.Invoke();
@@ -242,7 +246,11 @@ public class PlayerInventory : MonoBehaviour
             if (!int.TryParse(parts[2], out int count)) continue;
 
             CharacterData data = FindCharacterById(id);
-            if (data == null) continue;
+            if (data == null)
+            {
+                Debug.LogWarning($"[PlayerInventory] 保存済み所持キャラ characterId={id} を復元できませんでした。");
+                continue;
+            }
             ownedCharacters[data] = new CharacterInfo { level = Mathf.Max(1, level), count = Mathf.Max(0, count) };
         }
     }
@@ -259,6 +267,10 @@ public class PlayerInventory : MonoBehaviour
             if (data != null && !summonableCharacters.Contains(data))
             {
                 summonableCharacters.Add(data);
+            }
+            else if (data == null)
+            {
+                Debug.LogWarning($"[PlayerInventory] 保存済み召喚解放キャラ characterId={id} を復元できませんでした。");
             }
         }
     }
