@@ -227,8 +227,8 @@ public class FormationUI : MonoBehaviour
             var hostObject = new GameObject("FormationUtilityButtons", typeof(RectTransform), typeof(HorizontalLayoutGroup));
             hostObject.transform.SetParent(slotParent.parent, false);
             host = hostObject.GetComponent<RectTransform>();
-            host.anchorMin = new Vector2(0.04f, 0.74f);
-            host.anchorMax = new Vector2(0.96f, 0.82f);
+            host.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.68f) : new Vector2(0.04f, 0.74f);
+            host.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.75f) : new Vector2(0.96f, 0.82f);
             host.offsetMin = Vector2.zero;
             host.offsetMax = Vector2.zero;
 
@@ -238,6 +238,13 @@ public class FormationUI : MonoBehaviour
             layout.childForceExpandWidth = true;
             layout.childControlHeight = true;
             layout.childForceExpandHeight = true;
+        }
+        else
+        {
+            host.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.68f) : new Vector2(0.04f, 0.74f);
+            host.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.75f) : new Vector2(0.96f, 0.82f);
+            host.offsetMin = Vector2.zero;
+            host.offsetMax = Vector2.zero;
         }
 
         restoreButton = EnsureButton(host, "RestoreLastFormationButton", "前回編成");

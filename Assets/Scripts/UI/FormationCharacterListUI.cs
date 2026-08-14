@@ -19,6 +19,16 @@ public class FormationCharacterListUI : MonoBehaviour
         DisplayCharacters();
     }
 
+    private void OnRectTransformDimensionsChange()
+    {
+        if (!isActiveAndEnabled)
+        {
+            return;
+        }
+
+        ApplyListLayout();
+    }
+
     public void DisplayCharacters()
     {
         if (PlayerInventory.Instance == null || content == null)
@@ -90,8 +100,8 @@ public class FormationCharacterListUI : MonoBehaviour
         var listRect = GetComponent<RectTransform>();
         if (listRect != null)
         {
-            listRect.anchorMin = new Vector2(0.04f, 0.10f);
-            listRect.anchorMax = new Vector2(0.96f, 0.72f);
+            listRect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.08f) : new Vector2(0.04f, 0.10f);
+            listRect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.66f) : new Vector2(0.96f, 0.72f);
             listRect.anchoredPosition = Vector2.zero;
             listRect.sizeDelta = Vector2.zero;
         }
@@ -99,7 +109,7 @@ public class FormationCharacterListUI : MonoBehaviour
         var grid = content != null ? content.GetComponent<GridLayoutGroup>() : null;
         if (grid != null)
         {
-            grid.cellSize = new Vector2(520f, 108f);
+            grid.cellSize = new Vector2(GetListCellWidth(), UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 100f : 108f);
             grid.spacing = new Vector2(12f, 12f);
             grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             grid.constraintCount = 1;
@@ -111,5 +121,16 @@ public class FormationCharacterListUI : MonoBehaviour
         {
             fitter.enabled = false;
         }
+    }
+
+    private float GetListCellWidth()
+    {
+        var listRect = GetComponent<RectTransform>();
+        if (listRect != null && listRect.rect.width > 0f)
+        {
+            return Mathf.Clamp(listRect.rect.width - 24f, 280f, 520f);
+        }
+
+        return UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 320f : 520f;
     }
 }

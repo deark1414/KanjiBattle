@@ -26,6 +26,16 @@ public class CharacterListUI : MonoBehaviour
         RefreshList();
     }
 
+    private void OnRectTransformDimensionsChange()
+    {
+        if (!isActiveAndEnabled)
+        {
+            return;
+        }
+
+        ApplyListLayout();
+    }
+
     private void OnDestroy()
     {
         if (PlayerInventory.Instance != null)
@@ -73,8 +83,8 @@ public class CharacterListUI : MonoBehaviour
         var listRect = GetComponent<RectTransform>();
         if (listRect != null)
         {
-            listRect.anchorMin = new Vector2(0.04f, 0.10f);
-            listRect.anchorMax = new Vector2(0.96f, 0.64f);
+            listRect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.08f) : new Vector2(0.04f, 0.10f);
+            listRect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.62f) : new Vector2(0.96f, 0.64f);
             listRect.anchoredPosition = Vector2.zero;
             listRect.sizeDelta = Vector2.zero;
         }
@@ -82,7 +92,7 @@ public class CharacterListUI : MonoBehaviour
         var grid = content != null ? content.GetComponent<GridLayoutGroup>() : null;
         if (grid != null)
         {
-            grid.cellSize = new Vector2(520f, 108f);
+            grid.cellSize = new Vector2(GetListCellWidth(), UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 100f : 108f);
             grid.spacing = new Vector2(12f, 12f);
             grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             grid.constraintCount = 1;
@@ -94,5 +104,16 @@ public class CharacterListUI : MonoBehaviour
         {
             fitter.enabled = false;
         }
+    }
+
+    private float GetListCellWidth()
+    {
+        var listRect = GetComponent<RectTransform>();
+        if (listRect != null && listRect.rect.width > 0f)
+        {
+            return Mathf.Clamp(listRect.rect.width - 24f, 280f, 520f);
+        }
+
+        return UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 320f : 520f;
     }
 }

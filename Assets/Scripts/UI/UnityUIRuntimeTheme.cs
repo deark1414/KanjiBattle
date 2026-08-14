@@ -144,7 +144,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1280f, 720f);
         scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-        scaler.matchWidthOrHeight = 0.5f;
+        scaler.matchWidthOrHeight = IsPortraitNarrowScreen() ? 0f : 0.5f;
     }
 
     private void EnsureBackdrop(Canvas canvas)
@@ -193,15 +193,21 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
 
         if (path.Contains("facility"))
         {
-            Stretch(rect, new Vector2(0.54f, 0.14f), new Vector2(0.98f, 0.94f));
+            Stretch(rect,
+                IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.12f) : new Vector2(0.54f, 0.14f),
+                IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.88f) : new Vector2(0.98f, 0.94f));
         }
         else if (path.Contains("stage"))
         {
-            Stretch(rect, new Vector2(0.06f, 0.16f), new Vector2(0.94f, 0.90f));
+            Stretch(rect,
+                IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.13f) : new Vector2(0.06f, 0.16f),
+                IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.88f) : new Vector2(0.94f, 0.90f));
         }
         else if (path.Contains("formation") || path.Contains("character"))
         {
-            Stretch(rect, new Vector2(0.06f, 0.12f), new Vector2(0.94f, 0.62f));
+            Stretch(rect,
+                IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.08f) : new Vector2(0.06f, 0.12f),
+                IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.60f) : new Vector2(0.94f, 0.62f));
         }
 
         if (scrollRect.viewport != null && !path.Contains("battle"))
@@ -414,6 +420,11 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         rect.anchorMax = anchorMax;
         rect.offsetMin = Vector2.zero;
         rect.offsetMax = Vector2.zero;
+    }
+
+    public static bool IsPortraitNarrowScreen()
+    {
+        return Screen.height > Screen.width * 1.15f;
     }
 
     private static string GetPath(Transform transform)

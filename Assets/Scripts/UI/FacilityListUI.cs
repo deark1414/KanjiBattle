@@ -77,7 +77,8 @@ public class FacilityListUI : MonoBehaviour
         var contentRect = contentParent as RectTransform;
         if (contentRect == null) return;
 
-        int rows = Mathf.CeilToInt(spawnedFacilities.Count / 2f);
+        int columns = GetColumnCount(GetContentWidth(contentRect));
+        int rows = Mathf.CeilToInt(spawnedFacilities.Count / (float)columns);
         float height = rows > 0 ? rows * CardHeight + Mathf.Max(0, rows - 1) * CardSpacing + 10f : 0f;
         contentRect.sizeDelta = new Vector2(contentRect.sizeDelta.x, height);
         contentRect.anchoredPosition = Vector2.zero;
@@ -104,8 +105,8 @@ public class FacilityListUI : MonoBehaviour
         var listRect = GetComponent<RectTransform>();
         if (listRect != null)
         {
-            listRect.anchorMin = new Vector2(0.04f, 0.12f);
-            listRect.anchorMax = new Vector2(0.96f, 0.88f);
+            listRect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.10f) : new Vector2(0.04f, 0.12f);
+            listRect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.86f) : new Vector2(0.96f, 0.88f);
             listRect.anchoredPosition = Vector2.zero;
             listRect.sizeDelta = Vector2.zero;
         }
@@ -187,12 +188,22 @@ public class FacilityListUI : MonoBehaviour
     {
         if (grid == null) return;
 
-        float cardWidth = Mathf.Max(MinCardWidth, (contentWidth - CardSpacing) * 0.5f);
+        int columns = GetColumnCount(contentWidth);
+        float cardWidth = columns == 1
+            ? Mathf.Max(MinCardWidth, contentWidth)
+            : Mathf.Max(MinCardWidth, (contentWidth - CardSpacing) * 0.5f);
         grid.padding = new RectOffset(0, 0, 5, 0);
         grid.cellSize = new Vector2(cardWidth, CardHeight);
         grid.spacing = new Vector2(CardSpacing, CardSpacing);
         grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-        grid.constraintCount = 2;
+        grid.constraintCount = columns;
         grid.childAlignment = TextAnchor.UpperCenter;
+    }
+
+    private static int GetColumnCount(float contentWidth)
+    {
+        return UnityUIRuntimeTheme.IsPortraitNarrowScreen() || contentWidth < MinCardWidth * 2f + CardSpacing
+            ? 1
+            : 2;
     }
 }
