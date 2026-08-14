@@ -47,16 +47,24 @@ public class CharacterListUI : MonoBehaviour
 
         ApplyListLayout();
 
-        foreach (Transform child in content)
-        {
-            Destroy(child.gameObject);
-        }
+        ClearEntries();
 
         foreach (var kv in PlayerInventory.Instance.GetOwnedCharacters())
         {
             var entry = Instantiate(characterEntryPrefab, content);
             var ui = entry.GetComponent<CharacterEntryUI>();
             ui.SetCharacter(kv.Key, kv.Value.level, kv.Value.count);
+        }
+    }
+
+    private void ClearEntries()
+    {
+        for (int i = content.childCount - 1; i >= 0; i--)
+        {
+            var child = content.GetChild(i);
+            child.gameObject.SetActive(false);
+            child.SetParent(null, false);
+            Destroy(child.gameObject);
         }
     }
 

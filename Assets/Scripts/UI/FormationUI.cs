@@ -44,13 +44,7 @@ public class FormationUI : MonoBehaviour
 
     public void SetupSlots(int slotCount)
     {
-        // 古いスロット削除
-        foreach (Transform child in slotParent)
-        {
-            child.gameObject.SetActive(false);
-            child.SetParent(null, false);
-            Destroy(child.gameObject);
-        }
+        ClearSlotButtons();
 
         slotButtons.Clear();
         formationSlots = new CharacterData[slotCount];  // ← 修正
@@ -84,6 +78,17 @@ public class FormationUI : MonoBehaviour
         }
 
         RestoreLastBattleFormation(false);
+    }
+
+    private void ClearSlotButtons()
+    {
+        for (int i = slotParent.childCount - 1; i >= 0; i--)
+        {
+            var child = slotParent.GetChild(i);
+            child.gameObject.SetActive(false);
+            child.SetParent(null, false);
+            Destroy(child.gameObject);
+        }
     }
 
     public void SetCharacterToSlot(int index, CharacterData character)
