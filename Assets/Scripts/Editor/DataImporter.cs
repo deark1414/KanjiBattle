@@ -293,8 +293,31 @@ public class DataImporter : EditorWindow
         }
 
         EditorUtility.SetDirty(db);
+        SyncResourcesCharacterDatabase(db);
         AssetDatabase.SaveAssets();
         Debug.Log("✅ CharacterDatabase rebuilt.");
+    }
+
+    static void SyncResourcesCharacterDatabase(CharacterDatabase source)
+    {
+        const string resourcesDirectory = "Assets/Resources";
+        const string resourcesDbPath = "Assets/Resources/CharacterDatabase.asset";
+
+        if (!AssetDatabase.IsValidFolder(resourcesDirectory))
+        {
+            AssetDatabase.CreateFolder("Assets", "Resources");
+        }
+
+        CharacterDatabase resourcesDb = AssetDatabase.LoadAssetAtPath<CharacterDatabase>(resourcesDbPath);
+        if (resourcesDb == null)
+        {
+            resourcesDb = ScriptableObject.CreateInstance<CharacterDatabase>();
+            AssetDatabase.CreateAsset(resourcesDb, resourcesDbPath);
+        }
+
+        resourcesDb.characters.Clear();
+        resourcesDb.characters.AddRange(source.characters);
+        EditorUtility.SetDirty(resourcesDb);
     }
 
     static Dictionary<int, CharacterData> BuildCharacterIdMap()
