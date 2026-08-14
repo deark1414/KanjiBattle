@@ -366,6 +366,7 @@ public class DataImporter : EditorWindow
             }
         }
 
+        db.RepairMissingStageIdsFromAssetNames();
         EditorUtility.SetDirty(db);
         AssetDatabase.SaveAssets();
         Debug.Log("✅ StageDatabase rebuilt.");

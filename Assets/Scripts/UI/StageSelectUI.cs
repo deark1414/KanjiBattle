@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class StageSelectUI : MonoBehaviour
 {
@@ -38,7 +39,7 @@ public class StageSelectUI : MonoBehaviour
 
         int focusIndex = 0;
         int index = 0;
-        foreach (var stage in stageDatabase.stages)
+        foreach (var stage in stageDatabase.stages.Where(stage => stage != null).OrderBy(stage => stage.stageId))
         {
             var btn = Instantiate(stageButtonPrefab, content);
             ConfigureStageButtonLayout(btn);
@@ -85,7 +86,7 @@ public class StageSelectUI : MonoBehaviour
 
         const float rowHeight = 58f;
         const float spacing = 8f;
-        int count = stageDatabase.stages != null ? stageDatabase.stages.Count : 0;
+        int count = stageDatabase.stages != null ? stageDatabase.stages.Count(stage => stage != null) : 0;
         float height = count > 0 ? count * rowHeight + Mathf.Max(0, count - 1) * spacing + 10f : 0f;
         contentRect.anchorMin = new Vector2(0f, 1f);
         contentRect.anchorMax = new Vector2(1f, 1f);

@@ -16,20 +16,68 @@ public class StageDatabase : ScriptableObject
 
     public StageData GetStage(int index)
     {
+        SortStages();
         if (index < 0 || index >= stages.Count) return null;
         return stages[index];
     }
 
     public void AssignStageIds()
     {
-        for (int i = 0; i < stages.Count; i++)
+        SortStages();
+    }
+
+    public void SortStages()
+    {
+        stages = stages
+            .Where(stage => stage != null)
+            .OrderBy(stage => stage.stageId > 0 ? stage.stageId : int.MaxValue)
+            .ThenBy(stage => stage.name)
+            .ToList();
+    }
+
+    public void RepairMissingStageIdsFromAssetNames()
+    {
+        foreach (var stage in stages)
         {
-            stages[i].stageId = i + 1; // 1始まり
+            if (stage == null || stage.stageId > 0)
+            {
+                continue;
+            }
+
+            if (TryParseTrailingNumber(stage.name, out int parsedId))
+            {
+                stage.stageId = parsedId;
+            }
         }
+
+        SortStages();
+    }
+
+    private static bool TryParseTrailingNumber(string value, out int number)
+    {
+        number = 0;
+        if (string.IsNullOrEmpty(value))
+        {
+            return false;
+        }
+
+        int end = value.Length - 1;
+        while (end >= 0 && char.IsDigit(value[end]))
+        {
+            end--;
+        }
+
+        if (end == value.Length - 1)
+        {
+            return false;
+        }
+
+        return int.TryParse(value.Substring(end + 1), out number);
     }
 
     public StageData GetStageById(int id)
     {
+        SortStages();
         return stages.FirstOrDefault(s => s.stageId == id);
     }
 }
