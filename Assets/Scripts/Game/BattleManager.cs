@@ -632,6 +632,7 @@ public class BattleManager : MonoBehaviour
     {
         GameObject entry = Instantiate(logEntryPrefab, logContent);
         var text = entry.GetComponent<TextMeshProUGUI>();
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
         text.text = message;
 
         if (color.HasValue)
@@ -666,6 +667,7 @@ public class BattleManager : MonoBehaviour
 
         resultText.gameObject.SetActive(true);
         resultText.transform.SetAsLastSibling();
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(resultText);
         resultText.text = isWin && effectiveReward > 0
             ? $"{message}\n報酬 +{effectiveReward} StagePts"
             : message;
@@ -720,6 +722,7 @@ public class BattleManager : MonoBehaviour
         rect.SetAsLastSibling();
 
         var text = obj.GetComponent<TextMeshProUGUI>();
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
         text.text = message;
         text.alignment = TextAlignmentOptions.Center;
         text.enableAutoSizing = true;

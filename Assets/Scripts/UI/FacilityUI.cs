@@ -131,6 +131,11 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         nameText.text = facility.facilityName;
         levelText.text = GetLevelBadge(isUnlocked, level, maxLevel);
 
+        if (TryApplyResearchBlockedState(isUnlocked, level, maxLevel))
+        {
+            return;
+        }
+
         switch (state)
         {
             case FacilityActionState.UnlockReady:
@@ -159,8 +164,8 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 ApplyVisualState(MaxCardColor, ReadyTextColor, new Color(0.58f, 0.38f, 0.20f, 1f), true, true);
                 break;
             case FacilityActionState.CapBlocked:
-                costText.text = GetCapRequirementText("上限到達 / 次条件");
-                buttonText.text = "上限待ち";
+                costText.text = GetCapRequirementText("上限解放条件不足");
+                buttonText.text = "条件不足";
                 ApplyVisualState(MaxCardColor, NeedTextColor, new Color(0.38f, 0.30f, 0.23f, 1f), false, false);
                 break;
             default:
@@ -182,7 +187,8 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         return "解放済";
     }
 
-    return $"{GetEffectLabel()} Lv.{level} / {maxLevel}";
+    string capPrefix = level >= maxLevel ? "上限中 " : string.Empty;
+    return $"{capPrefix}{GetEffectLabel()} Lv.{level} / {maxLevel}";
 }
 
     private string GetEffectLabel()
@@ -207,6 +213,49 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         default: return "施設";
     }
 }
+
+    private bool TryApplyResearchBlockedState(bool isUnlocked, int level, int maxLevel)
+    {
+        if (!isUnlocked || facility.effectType != FacilityEffectType.CharacterUnlock || FacilityManager.Instance == null)
+        {
+            return false;
+        }
+
+        if (!FacilityManager.Instance.TryGetNextResearchUnlockInfo(out CharacterData nextCharacter, out int requiredStageId, out bool requirementMet))
+        {
+            costText.text = "研究完了 / 解放候補なし";
+            buttonText.text = "完了";
+            ApplyVisualState(MaxCardColor, MaxTextColor, new Color(0.40f, 0.30f, 0.22f, 1f), false, false);
+            return true;
+        }
+
+        if (!requirementMet)
+        {
+            costText.text = $"次: {nextCharacter.characterName} / 要 {ShortStageName(GetStageName(requiredStageId))}";
+            buttonText.text = "研究待ち";
+            ApplyVisualState(UnlockedCardColor, NeedTextColor, new Color(0.38f, 0.30f, 0.23f, 1f), false, false);
+            return true;
+        }
+
+        if (level >= maxLevel)
+        {
+            return false;
+        }
+
+        int cost = FacilityManager.Instance.GetUpgradeCost(facility);
+        if (GameManager.Instance == null || GameManager.Instance.GetGold() < cost)
+        {
+            costText.text = $"次: {nextCharacter.characterName} / Gold不足  {cost}G";
+            buttonText.text = "研究待ち";
+            ApplyVisualState(UnlockedCardColor, NeedTextColor, new Color(0.42f, 0.31f, 0.22f, 1f), false, false);
+            return true;
+        }
+
+        costText.text = $"次: {nextCharacter.characterName} / 研究可能  {cost}G";
+        buttonText.text = "研究";
+        ApplyVisualState(UnlockedCardColor, ReadyTextColor, new Color(0.64f, 0.42f, 0.20f, 1f), true, true);
+        return true;
+    }
 
     private bool IsUnlockStyleFacility()
 {
@@ -388,6 +437,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private static void ConfigureText(TextMeshProUGUI text, float max, float min, TextAlignmentOptions alignment)
     {
         if (text == null) return;
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
         text.enableAutoSizing = true;
         text.fontSizeMax = max;
         text.fontSizeMin = min;
@@ -455,6 +505,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         var textObject = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
         textObject.transform.SetParent(tooltip.transform, false);
         tooltipText = textObject.GetComponent<TextMeshProUGUI>();
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(tooltipText);
         tooltipText.color = new Color(1f, 0.93f, 0.72f);
         tooltipText.raycastTarget = false;
         tooltipText.enableAutoSizing = true;

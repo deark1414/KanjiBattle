@@ -28,6 +28,8 @@ public class BattleCharacter : MonoBehaviour
     private int instanceId;
     private int stunCounter = 0;
     private Color baseBackgroundColor = Color.white;
+    private static readonly Color battleInfoTextColor = new Color(1f, 0.96f, 0.78f, 1f);
+    private static readonly Color battleInfoShadowColor = new Color(0f, 0f, 0f, 0.85f);
     private Vector3 baseScale = Vector3.one;
     private Coroutine visualEffectRoutine;
 
@@ -80,7 +82,9 @@ if (background != null)
     }
 
     if (levelText != null)
+    {
         levelText.text = usesIcon ? $"Lv{level}" : $"Lv.{level} #{instanceId}";
+    }
 
     UpdateHPBar();
     UpdateDirection(Vector2Int.down);
@@ -254,12 +258,13 @@ public void UpdateDirection(Vector2Int dir)
     else if (dir.x == -1 && dir.y == -1) arrow = "↖";
 
     if (directionText != null)
+    {
         directionText.text = arrow;
+    }
 }
 
 private void ConfigureBattleLabels(bool usesIcon, bool ally)
 {
-    Color teamTextColor = new Color(0.08f, 0.05f, 0.03f, 1f);
 
     if (hpBar != null)
     {
@@ -275,34 +280,47 @@ private void ConfigureBattleLabels(bool usesIcon, bool ally)
     if (levelText != null)
     {
         levelText.gameObject.SetActive(true);
-        levelText.color = usesIcon ? teamTextColor : new Color(0.13f, 0.08f, 0.04f, 0.95f);
-        levelText.fontSize = usesIcon ? 14f : 10f;
-        levelText.fontStyle = FontStyles.Bold;
-        levelText.alignment = TextAlignmentOptions.TopRight;
-        levelText.enableAutoSizing = false;
+        StyleBattleInfoText(levelText, usesIcon ? 14f : 12f, TextAlignmentOptions.TopRight);
         var rect = levelText.rectTransform;
         rect.anchorMin = new Vector2(1f, 1f);
         rect.anchorMax = new Vector2(1f, 1f);
         rect.pivot = new Vector2(1f, 1f);
         rect.anchoredPosition = usesIcon ? new Vector2(-2f, -1f) : new Vector2(-12f, -10f);
-            rect.sizeDelta = usesIcon ? new Vector2(42f, 18f) : new Vector2(50f, 20f);
+            rect.sizeDelta = usesIcon ? new Vector2(48f, 20f) : new Vector2(56f, 22f);
     }
 
     if (directionText != null)
     {
         directionText.gameObject.SetActive(true);
-        directionText.color = usesIcon ? teamTextColor : new Color(0.13f, 0.08f, 0.04f, 0.95f);
-        directionText.fontSize = usesIcon ? 20f : 10f;
-        directionText.fontStyle = FontStyles.Bold;
-        directionText.alignment = TextAlignmentOptions.TopLeft;
-        directionText.enableAutoSizing = false;
+        StyleBattleInfoText(directionText, usesIcon ? 22f : 14f, TextAlignmentOptions.TopLeft);
         var rect = directionText.rectTransform;
         rect.anchorMin = new Vector2(0f, 1f);
         rect.anchorMax = new Vector2(0f, 1f);
         rect.pivot = new Vector2(0f, 1f);
         rect.anchoredPosition = usesIcon ? new Vector2(3f, -1f) : new Vector2(3f, -10f);
-            rect.sizeDelta = usesIcon ? new Vector2(26f, 22f) : new Vector2(10f, 10f);
+            rect.sizeDelta = usesIcon ? new Vector2(30f, 24f) : new Vector2(22f, 18f);
     }
+}
+
+private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, TextAlignmentOptions alignment)
+{
+    if (text == null) return;
+
+    UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
+    text.color = battleInfoTextColor;
+    text.fontSize = fontSize;
+    text.fontStyle = FontStyles.Bold;
+    text.alignment = alignment;
+    text.enableAutoSizing = false;
+    text.raycastTarget = false;
+    text.transform.SetAsLastSibling();
+
+    var shadow = text.GetComponent<Shadow>();
+    if (shadow == null) shadow = text.gameObject.AddComponent<Shadow>();
+    shadow.effectColor = battleInfoShadowColor;
+    shadow.effectDistance = new Vector2(1f, -1f);
+
+    text.SetAllDirty();
 }
 
     public IEnumerator AttackEffect()
@@ -451,7 +469,9 @@ private void ConfigureBattleLabels(bool usesIcon, bool ally)
         attack = data.GetAttack(level);
         defense = data.GetDefense(level);
 if (levelText != null)
+{
     levelText.text = data != null && data.icon != null ? $"Lv{level}" : $"Lv.{level} #{instanceId}";
+}
 UpdateHPBar();
     }
 
@@ -528,9 +548,9 @@ UpdateHPBar();
             for (int dy = -1; dy <= 1; dy++)
             {
                 if (dx == 0 && dy == 0) continue;
-                Vector2Int pos = target.gridPos + new Vector2Int(dx, dy);
+                Vector2Int pos = gridPos + new Vector2Int(dx, dy);
                 if (!bm.gridMap.TryGetValue(pos, out BattleCharacter splashTarget)) continue;
-                if (splashTarget == null || splashTarget.isDead || splashTarget.isAlly == isAlly) continue;
+                if (splashTarget == null || splashTarget == target || splashTarget.isDead || splashTarget.isAlly == isAlly) continue;
 
                 splashTarget.TakeDamage(splashDamage, bm, this, false, isBasicAttack: false);
                 hit = true;
@@ -539,7 +559,7 @@ UpdateHPBar();
 
         if (hit)
         {
-            bm.AddLog($"{DisplayName} の中位数字効果！ 周囲に {splashDamage} ダメージ");
+            bm.AddLog($"{DisplayName} の中位数字効果！ 自分の周囲に {splashDamage} ダメージ");
         }
     }
 

@@ -404,15 +404,15 @@
     "fileName": "CharacterData_Dragon",
     "characterName": "竜",
     "category": "Boss",
-    "baseHP": 2000,
-    "hpGrowth": 60,
-    "baseAttack": 400,
-    "attackGrowth": 8,
-    "baseDefense": 80,
+    "baseHP": 1300,
+    "hpGrowth": 15,
+    "baseAttack": 115,
+    "attackGrowth": 2,
+    "baseDefense": 35,
     "defenseGrowth": 0,
     "skillType": "Dragon",
-    "skillPower": 2.0,
-    "skillChance": 20,
+    "skillPower": 1.4,
+    "skillChance": 15,
     "isBoss": true
   }
 ]

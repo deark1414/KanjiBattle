@@ -17,6 +17,8 @@ MonoBehaviour:
   chapterId: 2
   enemyPool:
   - {fileID: 11400000, guid: 72ba58126cfe041d8ac0dc6cf96169fc, type: 2}
+  - {fileID: 11400000, guid: a45a3f137c1464a39a5bcd33f5e6348f, type: 2}
+  - {fileID: 11400000, guid: 72ba58126cfe041d8ac0dc6cf96169fc, type: 2}
   rewardStagePoints: 2
   slotCount: 3
   trapDamage: 3

@@ -1,88 +1,58 @@
-# KanjiBattle Game Design Specification (Full Version)
+# KanjiBattle Game Design Specification
 
-Version: 1.0  
-Last Updated: 2026-01-24  
-Author: Yuya Koyama + ChatGPT Design Support  
-Engine: Unity 2022+  
-Language: C# / ScriptableObject Based Architecture  
-
-============================================================
+Version: 1.1
+Last Updated: 2026-08-13
+Engine: Unity 2022+
+Language: C# / JSON + ScriptableObject Based Architecture
 
 ## 1. Overview
 
-KanjiBattle は、漢字をモチーフとした戦略RPG × 放置ハクスラゲーム。
-プレイヤーは「漢字キャラクター」を召喚し、成長・合成・配置・施設強化を通して
-全10ステージ＋ボス（竜）を攻略する。
+KanjiBattle は、漢字をモチーフとした戦略 RPG です。プレイヤーは漢字キャラクターを召喚し、成長、編成、施設強化を通して全8章40ステージを攻略します。
 
-------------------------------------------------------------
+Core Loop:
 
-### 🎮 Core Loop
+1. ゴールドを得る
+2. キャラクターを召喚する
+3. 編成してステージへ挑む
+4. クリア報酬の Stage Point を得る
+5. 施設でキャラクター解放、編成枠、レベル上限、章解放を進める
+6. 次ステージへ進む
 
-ゴールド生産 → キャラ召喚 → 戦闘 → ステージクリア報酬（SP） →  
-施設強化 / 新キャラ解放 → 次ステージ挑戦
+## 2. Release Baseline
 
-#### 各要素の役割
+- 章構成: 全8章、各5ステージ、合計40ステージ。
+- 最終ステージ: Stage 40 `竜の座`。
+- 初期キャラクター: `一`。
+- 研究所解放: Stage 2 以降、固定順でキャラクターを追加。
+- 初期レベル上限: 5。
+- 編成枠: ステージ `slotCount` と訓練場の進行で制御。
+- バランス方針: 現時点では全章クリア可能想定として、追加調整は重大詰まりのみ対象にする。
 
-要素 | 概要  
-------|------
-召喚 | ゴールドを消費してキャラを呼び出す。召喚ごとにコスト上昇。  
-戦闘 | ターン制のグリッドバトル。敵味方交互行動。  
-施設 | ゴールド生産・召喚コスト軽減・ステージポイント増加などの恒常効果。  
-ステージ | 各章で敵構成・罠・報酬が変化。最終章でボス戦（竜）。  
+## 3. Data Architecture
 
-============================================================
-
-## 2. Data Architecture
-
-各データはJSONで定義され、`DataImporter` により ScriptableObject に変換される。
-詳細は以下の分割ドキュメントにまとめる。
+各データは JSON で定義し、`DataImporter` により ScriptableObject に変換します。
 
 - Characters: `Docs/GameDesign/Characters.md`
 - Facilities: `Docs/GameDesign/Facilities.md`
 - Stages: `Docs/GameDesign/Stages.md`
+- Progression Summary: `Docs/GameDesign/StageProgressionSummary.md`
+- Release Milestones: `Docs/GameDesign/ReleaseMilestones.md`
 
-Importer動作（概要）:
+Importer:
 
-1. Tools > Import JSON Data を実行  
-2. JSONから `.asset` を生成 / 更新  
-3. 各Databaseを再構築  
+1. Unity Editor で `Tools > Import JSON Data` を実行する。
+2. `Assets/Data/*.json` から `.asset` を生成または更新する。
+3. Character / Facility / Stage の各 Database を再構築する。
 
-============================================================
+## 4. Current Release Risks
 
-## 3. References
+- Play 中の実装変更に由来する Missing Script は、通常手順で再現しない限り低優先とする。
+- UI 表示は日本語フォントと TMP のフォールバックに依存するため、主要画面の目視確認をリリース前必須にする。
+- バランスはシミュレーションと Debug Presets で確認済み想定だが、最終的な手触り確認は Milestone 2 で行う。
+
+## 5. References
 
 - Data importer: `Assets/Scripts/Editor/DataImporter.cs`
 - Data JSON: `Assets/Data/*.json`
 - ScriptableObjects: `Assets/ScriptableObjects/*`
-
-============================================================
-
-## 7. Future Extensions
-
-### 7.1 Chapter拡張
-- 章を増やし、自然→機械→神話など新カテゴリを導入可能。
-
-### 7.2 バランス調整方針
-- Lv50時点で攻撃300 / HP500前後が標準。
-- 防御軽減式:  
-  damage = attack × (1 - (defense / (defense + 100)))
-
-### 7.3 データ拡張ポリシー
-- JSONはID基準で参照統一。  
-- fileName・idは変更不可。  
-- 追加項目は必ず後方互換に配慮。
-
-============================================================
-
-## 8. Appendix
-
-### Unity上での操作例
-
-Tools > Import JSON Data  
-→ Character / Facility / Stage 各JSONを自動反映  
-→ 各.assetが生成・更新  
-→ Databases再構築  
-
-============================================================
-
-End of Document
+- Balance helper skill: `~/.codex/skills/kanji-battle-balance`

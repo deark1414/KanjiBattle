@@ -2,9 +2,18 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class PlayerInventory : MonoBehaviour
 {
     public static PlayerInventory Instance;
+    private const string SavePrefix = "KanjiBattle.Inventory.";
+    private const string OwnedKey = SavePrefix + "Owned";
+    private const string SummonableKey = SavePrefix + "Summonable";
+    private const string LevelCapBonusKey = SavePrefix + "LevelCapBonus";
+    private bool isLoadingProgress;
 
     public event Action onInventoryChanged;
     public event Action OnSummonableChanged;
@@ -29,6 +38,7 @@ public class PlayerInventory : MonoBehaviour
                 GameManager.Instance.OnCostModifiersChanged += HandleCostModifiersChanged;
             }
             DontDestroyOnLoad(gameObject);
+            LoadProgress();
         }
         else
         {
@@ -72,6 +82,7 @@ public class PlayerInventory : MonoBehaviour
             ownedCharacters[data] = new CharacterInfo { level = 1, count = 1 };
         }
         onInventoryChanged?.Invoke();
+        SaveProgress();
     }
 
     public List<CharacterData> GetSummonableCharacters()
@@ -110,6 +121,7 @@ public class PlayerInventory : MonoBehaviour
 
         // 🔑 UIへ通知
         onInventoryChanged?.Invoke();
+        SaveProgress();
     }
 
     public int GetEffectiveLevelCap()
@@ -121,6 +133,7 @@ public class PlayerInventory : MonoBehaviour
     {
         globalLevelCapBonus += value;
         Debug.Log($"新しいレベル上限: {GetEffectiveLevelCap()}");
+        SaveProgress();
     }
 
     public bool IsSummonable(CharacterData data)
@@ -141,6 +154,7 @@ public class PlayerInventory : MonoBehaviour
         onInventoryChanged?.Invoke();
         OnSummonableChanged?.Invoke();
         Debug.Log($"[PlayerInventory] 召喚解放: {data.characterName}");
+        SaveProgress();
         return true;
     }
 
@@ -148,6 +162,12 @@ public class PlayerInventory : MonoBehaviour
     public bool UnlockCharacterForSummon(int characterId)
     {
         var db = Resources.Load<CharacterDatabase>("CharacterDatabase");
+#if UNITY_EDITOR
+        if (db == null)
+        {
+            db = AssetDatabase.LoadAssetAtPath<CharacterDatabase>("Assets/ScriptableObjects/Characters/CharacterDatabase.asset");
+        }
+#endif
         if (db == null)
         {
             Debug.LogError("[PlayerInventory] CharacterDatabase が見つかりません");
@@ -162,6 +182,106 @@ public class PlayerInventory : MonoBehaviour
         }
 
         return UnlockCharacterForSummon(data);
+    }
+
+    public void SaveProgress()
+    {
+        if (isLoadingProgress) return;
+
+        PlayerPrefs.SetInt(LevelCapBonusKey, globalLevelCapBonus);
+        PlayerPrefs.SetString(OwnedKey, SerializeOwnedCharacters());
+        PlayerPrefs.SetString(SummonableKey, string.Join(",", summonableCharacters.FindAll(c => c != null).ConvertAll(c => c.characterId.ToString())));
+        PlayerPrefs.Save();
+    }
+
+    public void LoadProgress()
+    {
+        isLoadingProgress = true;
+        globalLevelCapBonus = PlayerPrefs.GetInt(LevelCapBonusKey, globalLevelCapBonus);
+        DeserializeOwnedCharacters(PlayerPrefs.GetString(OwnedKey, ""));
+        DeserializeSummonableCharacters(PlayerPrefs.GetString(SummonableKey, ""));
+        isLoadingProgress = false;
+        onInventoryChanged?.Invoke();
+        OnSummonableChanged?.Invoke();
+    }
+
+    public void ResetProgress()
+    {
+        PlayerPrefs.DeleteKey(OwnedKey);
+        PlayerPrefs.DeleteKey(SummonableKey);
+        PlayerPrefs.DeleteKey(LevelCapBonusKey);
+        ownedCharacters.Clear();
+        globalLevelCapBonus = 0;
+        onInventoryChanged?.Invoke();
+        OnSummonableChanged?.Invoke();
+        PlayerPrefs.Save();
+    }
+
+    private string SerializeOwnedCharacters()
+    {
+        var entries = new List<string>();
+        foreach (var kvp in ownedCharacters)
+        {
+            if (kvp.Key == null || kvp.Value == null) continue;
+            entries.Add($"{kvp.Key.characterId}:{kvp.Value.level}:{kvp.Value.count}");
+        }
+        return string.Join(",", entries);
+    }
+
+    private void DeserializeOwnedCharacters(string saved)
+    {
+        if (string.IsNullOrWhiteSpace(saved)) return;
+
+        ownedCharacters.Clear();
+        foreach (string entry in saved.Split(','))
+        {
+            string[] parts = entry.Split(':');
+            if (parts.Length != 3) continue;
+            if (!int.TryParse(parts[0], out int id)) continue;
+            if (!int.TryParse(parts[1], out int level)) continue;
+            if (!int.TryParse(parts[2], out int count)) continue;
+
+            CharacterData data = FindCharacterById(id);
+            if (data == null) continue;
+            ownedCharacters[data] = new CharacterInfo { level = Mathf.Max(1, level), count = Mathf.Max(0, count) };
+        }
+    }
+
+    private void DeserializeSummonableCharacters(string saved)
+    {
+        if (string.IsNullOrWhiteSpace(saved)) return;
+
+        summonableCharacters.Clear();
+        foreach (string part in saved.Split(','))
+        {
+            if (!int.TryParse(part, out int id)) continue;
+            CharacterData data = FindCharacterById(id);
+            if (data != null && !summonableCharacters.Contains(data))
+            {
+                summonableCharacters.Add(data);
+            }
+        }
+    }
+
+    private CharacterData FindCharacterById(int id)
+    {
+        foreach (var character in summonableCharacters)
+        {
+            if (character != null && character.characterId == id) return character;
+        }
+        foreach (var character in ownedCharacters.Keys)
+        {
+            if (character != null && character.characterId == id) return character;
+        }
+
+        var db = Resources.Load<CharacterDatabase>("CharacterDatabase");
+#if UNITY_EDITOR
+        if (db == null)
+        {
+            db = AssetDatabase.LoadAssetAtPath<CharacterDatabase>("Assets/ScriptableObjects/Characters/CharacterDatabase.asset");
+        }
+#endif
+        return db != null ? db.GetById(id) : null;
     }
 }
 

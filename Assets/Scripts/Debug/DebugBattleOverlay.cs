@@ -34,6 +34,11 @@ public class DebugBattleOverlay : MonoBehaviour
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Boot()
     {
+        if (!IsDebugOverlayEnabled())
+        {
+            return;
+        }
+
         var existing = FindAnyObjectByType<DebugBattleOverlay>();
         if (existing != null)
         {
@@ -43,6 +48,24 @@ public class DebugBattleOverlay : MonoBehaviour
         var go = new GameObject("DebugBattleOverlay");
         DontDestroyOnLoad(go);
         go.AddComponent<DebugBattleOverlay>();
+    }
+
+    private static bool IsDebugOverlayEnabled()
+    {
+        if (EditorPrefs.GetBool("KanjiBattle.DebugBattleOverlay.Enabled", false))
+        {
+            return true;
+        }
+
+        string[] args = System.Environment.GetCommandLineArgs();
+        for (int i = 0; i < args.Length; i++)
+        {
+            if (args[i] == "-kanjiBattleDebugOverlay")
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void Awake()
@@ -514,14 +537,22 @@ private void DrawProgressControls()
     if (GUILayout.Button("Late", GUILayout.Height(28))) ApplyProgressPreset(20, 50000, 500);
     GUILayout.EndHorizontal();
 
+    GUILayout.Label("Balance Presets");
     GUILayout.BeginHorizontal();
-    if (GUILayout.Button("Unlock Facilities", GUILayout.Height(28))) UnlockAvailableFacilities();
-    if (GUILayout.Button("Upgrade Facilities", GUILayout.Height(28))) UpgradeFacilitiesOnce();
+    if (GUILayout.Button("Ch1 End", GUILayout.Height(28))) ApplyBalancePreset(5, 5, 2000, 12, 6);
+    if (GUILayout.Button("Ch2 Mid", GUILayout.Height(28))) ApplyBalancePreset(7, 5, 6000, 24, 8);
+    if (GUILayout.Button("Ch4 Mid", GUILayout.Height(28))) ApplyBalancePreset(18, 8, 30000, 120, 19);
     GUILayout.EndHorizontal();
 
     GUILayout.BeginHorizontal();
+    if (GUILayout.Button("Ch6 Mid", GUILayout.Height(28))) ApplyBalancePreset(28, 11, 80000, 300, 29);
     if (GUILayout.Button("Roster Lv5", GUILayout.Height(28))) GrantRoster(5);
     if (GUILayout.Button("Roster Lv20", GUILayout.Height(28))) GrantRoster(20);
+    GUILayout.EndHorizontal();
+
+    GUILayout.BeginHorizontal();
+    if (GUILayout.Button("Unlock Facilities", GUILayout.Height(28))) UnlockAvailableFacilities();
+    if (GUILayout.Button("Upgrade Facilities", GUILayout.Height(28))) UpgradeFacilitiesOnce();
     GUILayout.EndHorizontal();
 }
 
@@ -624,6 +655,141 @@ private void ApplyProgressPreset(int clearedStageId, int gold, int stagePoints)
         GameManager.Instance.RegisterClearedStage(clearedStageId);
         Debug.Log($"[DebugBattleOverlay] Progress preset: cleared={clearedStageId}, gold={gold}, sp={stagePoints}");
     }
+}
+
+private void ApplyBalancePreset(int clearedStageId, int characterLevel, int gold, int stagePoints, int selectedStageId)
+{
+    ApplyProgressPreset(clearedStageId, gold, stagePoints);
+    UnlockCharactersAvailableByStage(clearedStageId, characterLevel);
+    PrepareFacilitiesForBalance(clearedStageId, characterLevel);
+    SetStageById(selectedStageId);
+
+    StageData stage = GetSelectedDebugStage();
+    if (stage != null && GameManager.Instance != null)
+    {
+        GameManager.Instance.SetSelectedStage(stage);
+    }
+
+    AutoFillFormation();
+    Debug.Log($"[DebugBattleOverlay] Balance preset: cleared={clearedStageId}, charLv={characterLevel}, selectedStage={selectedStageId}");
+}
+
+private void UnlockCharactersAvailableByStage(int clearedStageId, int level)
+{
+    if (PlayerInventory.Instance == null) return;
+
+    int[] unlockIds =
+    {
+        1, 2, 3,
+        10, 11, 12,
+        13, 14, 15,
+        4, 5, 6,
+        16, 17, 18,
+        19, 20, 21, 22,
+        23, 24, 25,
+        7, 8, 9
+    };
+
+    int[] requiredStages =
+    {
+        0, 2, 3,
+        6, 7, 8,
+        11, 12, 13,
+        16, 17, 18,
+        21, 22, 23,
+        26, 27, 28, 29,
+        31, 32, 33,
+        36, 37, 38
+    };
+
+    var owned = PlayerInventory.Instance.GetOwnedCharacters();
+    for (int i = 0; i < unlockIds.Length; i++)
+    {
+        if (clearedStageId < requiredStages[i]) continue;
+
+        CharacterData character = FindCharacterById(unlockIds[i]);
+        if (character == null || character.isBoss) continue;
+
+        PlayerInventory.Instance.UnlockCharacterForSummon(character);
+        if (!owned.ContainsKey(character))
+        {
+            PlayerInventory.Instance.AddCharacter(character);
+        }
+
+        owned[character].level = Mathf.Max(1, level);
+        owned[character].count = Mathf.Max(owned[character].count, 3);
+    }
+}
+
+private void PrepareFacilitiesForBalance(int clearedStageId, int targetLevelCap)
+{
+    if (FacilityManager.Instance == null || GameManager.Instance == null) return;
+
+    int savedGold = GameManager.Instance.GetGold();
+    int savedStagePoints = GameManager.Instance.GetStagePoints();
+    GameManager.Instance.SetGold(1000000);
+    GameManager.Instance.AddStagePoints(1000000 - savedStagePoints);
+
+    foreach (var facility in FacilityManager.Instance.GetFacilities())
+    {
+        if (facility == null || clearedStageId < facility.requiredStageId) continue;
+        FacilityManager.Instance.Unlock(facility);
+    }
+
+    int guard = 0;
+    while (GameManager.Instance.GetFacilityFormationSlots() < GetExpectedFormationSlots(clearedStageId) && guard++ < 10)
+    {
+        FacilityData training = FindFacility(FacilityEffectType.FormationSlot);
+        if (training == null || !FacilityManager.Instance.Upgrade(training)) break;
+    }
+
+    guard = 0;
+    while (PlayerInventory.Instance != null && PlayerInventory.Instance.GetEffectiveLevelCap() < targetLevelCap && guard++ < 20)
+    {
+        FacilityData library = FindFacility(FacilityEffectType.LevelCap);
+        if (library == null) break;
+
+        if (FacilityManager.Instance.IsMaxLevel(library))
+        {
+            if (!FacilityManager.Instance.UpgradeLevelCap(library)) break;
+        }
+        else if (!FacilityManager.Instance.Upgrade(library))
+        {
+            break;
+        }
+    }
+
+    GameManager.Instance.SetGold(savedGold);
+    int restoreDelta = savedStagePoints - GameManager.Instance.GetStagePoints();
+    GameManager.Instance.AddStagePoints(restoreDelta);
+}
+
+private int GetExpectedFormationSlots(int clearedStageId)
+{
+    if (clearedStageId >= 35) return 6;
+    if (clearedStageId >= 25) return 5;
+    if (clearedStageId >= 12) return 4;
+    if (clearedStageId >= 5) return 3;
+    if (clearedStageId >= 3) return 2;
+    return 1;
+}
+
+private CharacterData FindCharacterById(int characterId)
+{
+    return sortedCharacters.Find(character => character != null && character.characterId == characterId);
+}
+
+private FacilityData FindFacility(FacilityEffectType effectType)
+{
+    if (FacilityManager.Instance == null) return null;
+    foreach (var facility in FacilityManager.Instance.GetFacilities())
+    {
+        if (facility != null && facility.effectType == effectType)
+        {
+            return facility;
+        }
+    }
+    return null;
 }
 
 private void UnlockAvailableFacilities()

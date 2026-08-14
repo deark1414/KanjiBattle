@@ -18,15 +18,15 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: c03bff82574c24564ac825d2a50c7cd5, type: 3}
   enemyIcon: {fileID: 21300000, guid: 442a18651abc24357bf374b631a7b904, type: 3}
   category: 9
-  baseHP: 2000
-  baseAttack: 400
-  baseDefense: 80
+  baseHP: 1300
+  baseAttack: 115
+  baseDefense: 35
   production: 3
   skillType: 21
-  skillChance: 20
-  skillPower: 2
+  skillChance: 15
+  skillPower: 1.4
   level: 1
   maxLevel: 50
-  attackGrowth: 8
-  hpGrowth: 60
+  attackGrowth: 2
+  hpGrowth: 15
   defenseGrowth: 0

@@ -40,7 +40,9 @@ public class SummonManager : MonoBehaviour
     private void UpdateText()
     {
         if (summonText != null)
+        {
             summonText.text = $"召喚 {CurrentSummonCost}G";
+        }
     }
 
     public void Summon()

@@ -14,6 +14,8 @@ public class SummonCategoryUI : MonoBehaviour
         if (categoryDropdown != null)
         {
             categoryDropdown.onValueChanged.AddListener(OnCategorySelected);
+            ApplyDropdownLayout();
+            ApplyDropdownTextStyle();
         }
     }
 
@@ -77,6 +79,8 @@ public class SummonCategoryUI : MonoBehaviour
         categoryDropdown.AddOptions(options);
         Refresh();
         categoryDropdown.RefreshShownValue();
+        ApplyDropdownLayout();
+        ApplyDropdownTextStyle();
     }
 
     private void OnCategorySelected(int index)
@@ -108,6 +112,66 @@ public class SummonCategoryUI : MonoBehaviour
 
         categoryDropdown.SetValueWithoutNotify(index);
         categoryDropdown.RefreshShownValue();
+        ApplyDropdownTextStyle();
+    }
+
+    private void ApplyDropdownTextStyle()
+    {
+        if (categoryDropdown == null)
+        {
+            return;
+        }
+
+        StyleDropdownText(categoryDropdown.captionText);
+        StyleDropdownText(categoryDropdown.itemText);
+    }
+
+    private void ApplyDropdownLayout()
+    {
+        if (categoryDropdown == null)
+        {
+            return;
+        }
+
+        var rect = categoryDropdown.GetComponent<RectTransform>();
+        if (rect != null)
+        {
+            rect.sizeDelta = new Vector2(Mathf.Max(rect.sizeDelta.x, 160f), 42f);
+        }
+
+        if (categoryDropdown.template != null)
+        {
+            categoryDropdown.template.sizeDelta = new Vector2(Mathf.Max(categoryDropdown.template.sizeDelta.x, 180f), 240f);
+            var item = categoryDropdown.template.Find("Viewport/Content/Item") as RectTransform;
+            if (item != null)
+            {
+                item.sizeDelta = new Vector2(item.sizeDelta.x, 38f);
+                var layout = item.GetComponent<UnityEngine.UI.LayoutElement>();
+                if (layout == null) layout = item.gameObject.AddComponent<UnityEngine.UI.LayoutElement>();
+                layout.minHeight = 38f;
+                layout.preferredHeight = 38f;
+            }
+        }
+    }
+
+    private static void StyleDropdownText(TMP_Text text)
+    {
+        if (text == null)
+        {
+            return;
+        }
+
+        if (text is TextMeshProUGUI textMesh)
+        {
+            UnityUIRuntimeTheme.EnsureJapaneseCapableFont(textMesh);
+        }
+        text.color = new Color(0.16f, 0.10f, 0.05f, 1f);
+        text.enableAutoSizing = true;
+        text.fontSizeMin = 14f;
+        text.fontSizeMax = 22f;
+        text.overflowMode = TextOverflowModes.Truncate;
+        text.textWrappingMode = TextWrappingModes.NoWrap;
+        text.SetAllDirty();
     }
 
     private void HandleCategoryUnlocked(CharacterCategory category)

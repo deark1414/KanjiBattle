@@ -12,6 +12,11 @@ public enum FacilityState
 public class FacilityManager : MonoBehaviour
 {
     public static FacilityManager Instance;
+    private const string SavePrefix = "KanjiBattle.Facilities.";
+    private const string UnlockedKey = SavePrefix + "Unlocked";
+    private const string LevelsKey = SavePrefix + "Levels";
+    private const string CapUnlocksKey = SavePrefix + "CapUnlocks";
+    private bool isLoadingProgress;
 
     public event System.Action<CharacterCategory> OnSummonCategoryUnlocked;
 
@@ -69,6 +74,8 @@ public class FacilityManager : MonoBehaviour
         }
 
         InitializeCharacterUnlockPlan();
+        LoadProgress();
+        ReapplyAllEffects();
     }
 
     private void InitializeCharacterUnlockPlan()
@@ -139,6 +146,7 @@ public class FacilityManager : MonoBehaviour
         facilityLevels[facility] = currentLevel + 1;
 
         ApplyEffect(facility);
+        SaveProgress();
 
         Debug.Log($"{facility.facilityName} を Lv.{currentLevel + 1} に強化しました！");
         return true;
@@ -158,6 +166,7 @@ public class FacilityManager : MonoBehaviour
         
         facilityLevels[facility] = 0;
         ApplyEffect(facility);
+        SaveProgress();
         Debug.Log($"{facility.facilityName} を解放しました！");
 
         if (facility.effectType == FacilityEffectType.SummonRateUp && facility.summonCategory != CharacterCategory.None)
@@ -212,6 +221,7 @@ public class FacilityManager : MonoBehaviour
         {
             facilityCapUnlockCount[facility] = currentCapCount + 1;
             Debug.Log($"{facility.facilityName} のレベル上限を {facility.levelCapIncreasePerUnlock} 増加させました！");
+            SaveProgress();
             return true;
         }
 
@@ -313,6 +323,13 @@ public class FacilityManager : MonoBehaviour
         return TryGetNextResearchCharacter(out _, out _);
     }
 
+    public bool TryGetNextResearchUnlockInfo(out CharacterData character, out int requiredStageId, out bool requirementMet)
+    {
+        bool canUnlockNow = TryGetNextResearchCharacter(out character, out requiredStageId);
+        requirementMet = canUnlockNow;
+        return character != null;
+    }
+
     private bool TryGetNextResearchCharacter(out CharacterData character, out int requiredStageId)
     {
         character = null;
@@ -390,5 +407,140 @@ public class FacilityManager : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void SaveProgress()
+    {
+        if (isLoadingProgress) return;
+
+        PlayerPrefs.SetString(UnlockedKey, string.Join(",", unlockedFacilities.Where(f => f != null).Select(f => f.facilityId.ToString())));
+        PlayerPrefs.SetString(LevelsKey, SerializeDictionary(facilityLevels));
+        PlayerPrefs.SetString(CapUnlocksKey, SerializeDictionary(facilityCapUnlockCount));
+        PlayerPrefs.Save();
+    }
+
+    public void LoadProgress()
+    {
+        isLoadingProgress = true;
+        var facilities = GetFacilities();
+        DeserializeUnlocked(PlayerPrefs.GetString(UnlockedKey, ""), facilities);
+        DeserializeDictionary(PlayerPrefs.GetString(LevelsKey, ""), facilities, facilityLevels);
+        DeserializeDictionary(PlayerPrefs.GetString(CapUnlocksKey, ""), facilities, facilityCapUnlockCount);
+        isLoadingProgress = false;
+    }
+
+    public void ResetProgress()
+    {
+        PlayerPrefs.DeleteKey(UnlockedKey);
+        PlayerPrefs.DeleteKey(LevelsKey);
+        PlayerPrefs.DeleteKey(CapUnlocksKey);
+        facilityLevels.Clear();
+        unlockedFacilities.Clear();
+        facilityCapUnlockCount.Clear();
+
+        foreach (var facility in GetFacilities())
+        {
+            if (facility == null) continue;
+            facilityLevels[facility] = 0;
+            facilityCapUnlockCount[facility] = 0;
+            if (facility.unlockType == FacilityUnlockType.Free)
+            {
+                unlockedFacilities.Add(facility);
+            }
+        }
+
+        PlayerPrefs.Save();
+    }
+
+    private void ReapplyAllEffects()
+    {
+        isLoadingProgress = true;
+        GameManager.Instance?.ResetRuntimeFacilityEffects();
+        foreach (var facility in unlockedFacilities.ToList())
+        {
+            if (facility == null || !ShouldReapplyRuntimeEffect(facility))
+            {
+                continue;
+            }
+
+            int level = GetLevel(facility);
+            if (level <= 0)
+            {
+                continue;
+            }
+
+            if (ShouldReapplyPerLevel(facility))
+            {
+                for (int i = 0; i < level; i++)
+                {
+                    ApplyEffect(facility);
+                }
+            }
+            else
+            {
+                ApplyEffect(facility);
+            }
+        }
+        isLoadingProgress = false;
+    }
+
+    private static bool ShouldReapplyRuntimeEffect(FacilityData facility)
+    {
+        switch (facility.effectType)
+        {
+            case FacilityEffectType.LevelCap:
+            case FacilityEffectType.CharacterUnlock:
+            case FacilityEffectType.ChapterUnlock:
+            case FacilityEffectType.BossUnlock:
+                return false;
+            default:
+                return true;
+        }
+    }
+
+    private static bool ShouldReapplyPerLevel(FacilityData facility)
+    {
+        return facility.effectType == FacilityEffectType.FormationSlot
+            || facility.effectType == FacilityEffectType.SummonRateUp;
+    }
+
+    private static string SerializeDictionary(Dictionary<FacilityData, int> values)
+    {
+        return string.Join(",", values.Where(kvp => kvp.Key != null).Select(kvp => $"{kvp.Key.facilityId}:{kvp.Value}"));
+    }
+
+    private void DeserializeUnlocked(string saved, List<FacilityData> facilities)
+    {
+        if (string.IsNullOrWhiteSpace(saved)) return;
+
+        unlockedFacilities.Clear();
+        foreach (string part in saved.Split(','))
+        {
+            if (!int.TryParse(part, out int id)) continue;
+            FacilityData facility = facilities.Find(f => f != null && f.facilityId == id);
+            if (facility != null)
+            {
+                unlockedFacilities.Add(facility);
+            }
+        }
+    }
+
+    private void DeserializeDictionary(string saved, List<FacilityData> facilities, Dictionary<FacilityData, int> target)
+    {
+        if (string.IsNullOrWhiteSpace(saved)) return;
+
+        foreach (string entry in saved.Split(','))
+        {
+            string[] parts = entry.Split(':');
+            if (parts.Length != 2) continue;
+            if (!int.TryParse(parts[0], out int id)) continue;
+            if (!int.TryParse(parts[1], out int value)) continue;
+
+            FacilityData facility = facilities.Find(f => f != null && f.facilityId == id);
+            if (facility != null)
+            {
+                target[facility] = Mathf.Max(0, value);
+            }
+        }
     }
 }
