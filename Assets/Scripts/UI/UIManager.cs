@@ -16,8 +16,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        // 起動時にタブハイライトをTopに強制
-        TabManager.Instance?.HighlightTop();
+        ShowTop();
     }
 
     private void Awake()
