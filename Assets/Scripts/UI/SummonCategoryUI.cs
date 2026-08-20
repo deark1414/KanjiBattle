@@ -8,6 +8,8 @@ public class SummonCategoryUI : MonoBehaviour
 
     private List<CharacterCategory> availableCategories = new();
     private bool subscribed;
+    private int lastScreenWidth;
+    private int lastScreenHeight;
 
     private void Start()
     {
@@ -17,6 +19,21 @@ public class SummonCategoryUI : MonoBehaviour
             ApplyDropdownLayout();
             ApplyDropdownTextStyle();
         }
+    }
+
+    private void LateUpdate()
+    {
+        if (categoryDropdown == null)
+        {
+            return;
+        }
+
+        if (lastScreenWidth == Screen.width && lastScreenHeight == Screen.height)
+        {
+            return;
+        }
+
+        ApplyDropdownLayout();
     }
 
     private void OnEnable()
@@ -133,6 +150,9 @@ public class SummonCategoryUI : MonoBehaviour
             return;
         }
 
+        lastScreenWidth = Screen.width;
+        lastScreenHeight = Screen.height;
+
         var rect = categoryDropdown.GetComponent<RectTransform>();
         if (rect != null)
         {
@@ -145,7 +165,10 @@ public class SummonCategoryUI : MonoBehaviour
             }
             else
             {
-                rect.sizeDelta = new Vector2(Mathf.Max(rect.sizeDelta.x, 170f), 46f);
+                rect.anchorMin = new Vector2(0.08f, 0.705f);
+                rect.anchorMax = new Vector2(0.26f, 0.79f);
+                rect.offsetMin = Vector2.zero;
+                rect.offsetMax = Vector2.zero;
             }
         }
 
