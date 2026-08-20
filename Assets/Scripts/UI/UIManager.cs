@@ -121,8 +121,14 @@ public class UIManager : MonoBehaviour
 
     private void EnsureResetDataButton()
     {
-        if (TopPanel == null || resetDataButton != null)
+        if (TopPanel == null)
         {
+            return;
+        }
+
+        if (resetDataButton != null)
+        {
+            ApplyResetDataButtonLayout(resetDataButton.GetComponent<RectTransform>());
             return;
         }
 
@@ -170,7 +176,7 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        rect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.56f, 0.035f) : new Vector2(0.72f, 0.04f);
+        rect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.56f, 0.035f) : new Vector2(0.74f, 0.04f);
         rect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.105f) : new Vector2(0.96f, 0.12f);
         rect.offsetMin = Vector2.zero;
         rect.offsetMax = Vector2.zero;

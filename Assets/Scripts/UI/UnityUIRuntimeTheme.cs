@@ -205,9 +205,24 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         }
         else if (path.Contains("formation") || path.Contains("character"))
         {
-            Stretch(rect,
-                IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.08f) : new Vector2(0.06f, 0.12f),
-                IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.60f) : new Vector2(0.94f, 0.62f));
+            if (path.Contains("toppanel") && path.Contains("character"))
+            {
+                Stretch(rect,
+                    IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.15f) : new Vector2(0.04f, 0.10f),
+                    IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.69f) : new Vector2(0.96f, 0.66f));
+            }
+            else if (path.Contains("formation"))
+            {
+                Stretch(rect,
+                    IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.08f) : new Vector2(0.04f, 0.10f),
+                    IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.72f) : new Vector2(0.96f, 0.74f));
+            }
+            else
+            {
+                Stretch(rect,
+                    IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.08f) : new Vector2(0.06f, 0.12f),
+                    IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.62f) : new Vector2(0.94f, 0.64f));
+            }
         }
 
         if (scrollRect.viewport != null && !path.Contains("battle"))
@@ -228,6 +243,8 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
     private void StyleButton(Button button)
     {
         if (button == null) return;
+        ApplyResponsiveButtonPlacement(button);
+
         var image = button.targetGraphic as Image ?? button.GetComponent<Image>();
         if (image != null)
         {
@@ -258,6 +275,27 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             if (layout == null) layout = button.gameObject.AddComponent<LayoutElement>();
             layout.minHeight = Mathf.Max(layout.minHeight, button.name.ToLowerInvariant().Contains("tab") ? 46f : 54f);
             layout.flexibleWidth = 1f;
+        }
+    }
+
+    private static void ApplyResponsiveButtonPlacement(Button button)
+    {
+        if (button == null) return;
+
+        string path = GetPath(button.transform).ToLowerInvariant();
+        var rect = button.transform as RectTransform;
+        if (rect == null) return;
+
+        if (path.Contains("top") && path.Contains("summonbutton"))
+        {
+            if (IsPortraitNarrowScreen())
+            {
+                Stretch(rect, new Vector2(0.24f, 0.705f), new Vector2(0.76f, 0.775f));
+            }
+            else
+            {
+                Stretch(rect, new Vector2(0.36f, 0.70f), new Vector2(0.64f, 0.79f));
+            }
         }
     }
 
