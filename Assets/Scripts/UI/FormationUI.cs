@@ -24,6 +24,8 @@ public class FormationUI : MonoBehaviour
 
     private void OnEnable()
     {
+        ApplySlotAreaLayout();
+
         // 基本は施設の編成枠だが、ステージが制限を持っている場合は小さい方を採用
         if (GameManager.Instance != null && GameManager.Instance.GetSelectedStage() != null)
         {
@@ -40,6 +42,39 @@ public class FormationUI : MonoBehaviour
         {
             characterListUI.DisplayCharacters();
         }
+    }
+
+    private void OnRectTransformDimensionsChange()
+    {
+        if (!isActiveAndEnabled)
+        {
+            return;
+        }
+
+        ApplySlotAreaLayout();
+        EnsureUtilityButtons();
+    }
+
+    private void ApplySlotAreaLayout()
+    {
+        var slotRect = slotParent as RectTransform;
+        if (slotRect == null)
+        {
+            return;
+        }
+
+        if (UnityUIRuntimeTheme.IsPortraitNarrowScreen())
+        {
+            slotRect.anchorMin = new Vector2(0.04f, 0.79f);
+            slotRect.anchorMax = new Vector2(0.96f, 0.91f);
+        }
+        else
+        {
+            slotRect.anchorMin = new Vector2(0.04f, 0.82f);
+            slotRect.anchorMax = new Vector2(0.96f, 0.94f);
+        }
+        slotRect.offsetMin = Vector2.zero;
+        slotRect.offsetMax = Vector2.zero;
     }
 
     public void SetupSlots(int slotCount)
@@ -227,8 +262,8 @@ public class FormationUI : MonoBehaviour
             var hostObject = new GameObject("FormationUtilityButtons", typeof(RectTransform), typeof(HorizontalLayoutGroup));
             hostObject.transform.SetParent(slotParent.parent, false);
             host = hostObject.GetComponent<RectTransform>();
-            host.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.68f) : new Vector2(0.04f, 0.74f);
-            host.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.75f) : new Vector2(0.96f, 0.82f);
+            host.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.72f) : new Vector2(0.04f, 0.74f);
+            host.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.78f) : new Vector2(0.96f, 0.81f);
             host.offsetMin = Vector2.zero;
             host.offsetMax = Vector2.zero;
 
@@ -241,8 +276,8 @@ public class FormationUI : MonoBehaviour
         }
         else
         {
-            host.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.68f) : new Vector2(0.04f, 0.74f);
-            host.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.75f) : new Vector2(0.96f, 0.82f);
+            host.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.72f) : new Vector2(0.04f, 0.74f);
+            host.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.78f) : new Vector2(0.96f, 0.81f);
             host.offsetMin = Vector2.zero;
             host.offsetMax = Vector2.zero;
         }

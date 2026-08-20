@@ -83,8 +83,8 @@ public class CharacterListUI : MonoBehaviour
         var listRect = GetComponent<RectTransform>();
         if (listRect != null)
         {
-            listRect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.08f) : new Vector2(0.04f, 0.10f);
-            listRect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.62f) : new Vector2(0.96f, 0.64f);
+            listRect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.15f) : new Vector2(0.04f, 0.10f);
+            listRect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.69f) : new Vector2(0.96f, 0.66f);
             listRect.anchoredPosition = Vector2.zero;
             listRect.sizeDelta = Vector2.zero;
         }
@@ -92,8 +92,8 @@ public class CharacterListUI : MonoBehaviour
         var grid = content != null ? content.GetComponent<GridLayoutGroup>() : null;
         if (grid != null)
         {
-            grid.cellSize = new Vector2(GetListCellWidth(), UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 100f : 108f);
-            grid.spacing = new Vector2(12f, 12f);
+            grid.cellSize = new Vector2(GetListCellWidth(), UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 92f : 104f);
+            grid.spacing = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(10f, 8f) : new Vector2(12f, 10f);
             grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             grid.constraintCount = 1;
             grid.childAlignment = TextAnchor.UpperCenter;

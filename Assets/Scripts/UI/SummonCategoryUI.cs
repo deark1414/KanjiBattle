@@ -8,6 +8,8 @@ public class SummonCategoryUI : MonoBehaviour
 
     private List<CharacterCategory> availableCategories = new();
     private bool subscribed;
+    private int lastScreenWidth;
+    private int lastScreenHeight;
 
     private void Start()
     {
@@ -17,6 +19,21 @@ public class SummonCategoryUI : MonoBehaviour
             ApplyDropdownLayout();
             ApplyDropdownTextStyle();
         }
+    }
+
+    private void LateUpdate()
+    {
+        if (categoryDropdown == null)
+        {
+            return;
+        }
+
+        if (lastScreenWidth == Screen.width && lastScreenHeight == Screen.height)
+        {
+            return;
+        }
+
+        ApplyDropdownLayout();
     }
 
     private void OnEnable()
@@ -133,15 +150,31 @@ public class SummonCategoryUI : MonoBehaviour
             return;
         }
 
+        lastScreenWidth = Screen.width;
+        lastScreenHeight = Screen.height;
+
         var rect = categoryDropdown.GetComponent<RectTransform>();
         if (rect != null)
         {
-            rect.sizeDelta = new Vector2(Mathf.Max(rect.sizeDelta.x, 160f), 42f);
+            if (UnityUIRuntimeTheme.IsPortraitNarrowScreen())
+            {
+                rect.anchorMin = new Vector2(0.04f, 0.035f);
+                rect.anchorMax = new Vector2(0.52f, 0.105f);
+                rect.offsetMin = Vector2.zero;
+                rect.offsetMax = Vector2.zero;
+            }
+            else
+            {
+                rect.anchorMin = new Vector2(0.08f, 0.705f);
+                rect.anchorMax = new Vector2(0.26f, 0.79f);
+                rect.offsetMin = Vector2.zero;
+                rect.offsetMax = Vector2.zero;
+            }
         }
 
         if (categoryDropdown.template != null)
         {
-            categoryDropdown.template.sizeDelta = new Vector2(Mathf.Max(categoryDropdown.template.sizeDelta.x, 180f), 240f);
+            categoryDropdown.template.sizeDelta = new Vector2(Mathf.Max(categoryDropdown.template.sizeDelta.x, UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 210f : 190f), 240f);
             var item = categoryDropdown.template.Find("Viewport/Content/Item") as RectTransform;
             if (item != null)
             {
