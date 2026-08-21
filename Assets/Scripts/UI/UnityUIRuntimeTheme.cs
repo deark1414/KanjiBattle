@@ -209,7 +209,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             {
                 Stretch(rect,
                     IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.15f) : new Vector2(0.04f, 0.10f),
-                    IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.69f) : new Vector2(0.96f, 0.66f));
+                    IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.60f) : new Vector2(0.96f, 0.66f));
             }
             else if (path.Contains("formation"))
             {
@@ -290,7 +290,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         {
             if (IsPortraitNarrowScreen())
             {
-                Stretch(rect, new Vector2(0.24f, 0.705f), new Vector2(0.76f, 0.775f));
+                Stretch(rect, new Vector2(0.24f, 0.63f), new Vector2(0.76f, 0.70f));
             }
             else
             {
