@@ -100,7 +100,7 @@ public class FormationCharacterListUI : MonoBehaviour
         var listRect = GetComponent<RectTransform>();
         if (listRect != null)
         {
-            listRect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.08f) : new Vector2(0.04f, 0.10f);
+            listRect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.19f) : new Vector2(0.04f, 0.10f);
             listRect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.72f) : new Vector2(0.96f, 0.74f);
             listRect.anchoredPosition = Vector2.zero;
             listRect.sizeDelta = Vector2.zero;

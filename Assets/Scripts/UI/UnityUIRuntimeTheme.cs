@@ -219,7 +219,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             else if (path.Contains("formation"))
             {
                 Stretch(rect,
-                    IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.08f) : new Vector2(0.04f, 0.10f),
+                    IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.19f) : new Vector2(0.04f, 0.10f),
                     IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.72f) : new Vector2(0.96f, 0.74f));
             }
             else
@@ -326,6 +326,18 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             {
                 Stretch(rect, new Vector2(0.36f, 0.70f), new Vector2(0.64f, 0.79f));
             }
+        }
+        else if (path.Contains("formation") && path.Contains("startbattlebutton"))
+        {
+            Stretch(rect,
+                IsPortraitNarrowScreen() ? new Vector2(0.38f, 0.115f) : new Vector2(0.40f, 0.03f),
+                IsPortraitNarrowScreen() ? new Vector2(0.62f, 0.175f) : new Vector2(0.60f, 0.10f));
+        }
+        else if (path.Contains("formation") && path.Contains("backbutton"))
+        {
+            Stretch(rect,
+                IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.115f) : new Vector2(0.04f, 0.03f),
+                IsPortraitNarrowScreen() ? new Vector2(0.22f, 0.175f) : new Vector2(0.18f, 0.10f));
         }
     }
 
