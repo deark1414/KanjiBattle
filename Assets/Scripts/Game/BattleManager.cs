@@ -29,6 +29,7 @@ public class BattleManager : MonoBehaviour
     private const int maxLogs = 50;
     private RectTransform pauseButtonRect;
     private RectTransform resumeButtonRect;
+    private GameObject legacyBackButton;
 
     [SerializeField] private GameObject resultPanel;
     [SerializeField] private TextMeshProUGUI resultText;
@@ -211,25 +212,32 @@ public class BattleManager : MonoBehaviour
         var fieldRect = battleField as RectTransform;
         if (fieldRect != null)
         {
+            ConfigureBattleFieldContainer(fieldRect, portrait);
+
             if (portrait)
             {
-                fieldRect.anchorMin = new Vector2(0.02f, 0.36f);
-                fieldRect.anchorMax = new Vector2(0.98f, 0.84f);
+                fieldRect.anchorMin = new Vector2(0.5f, 0.5f);
+                fieldRect.anchorMax = new Vector2(0.5f, 0.5f);
             }
             else
             {
-                fieldRect.anchorMin = new Vector2(0.22f, 0.36f);
-                fieldRect.anchorMax = new Vector2(0.78f, 0.78f);
+                fieldRect.anchorMin = new Vector2(0.5f, 0.5f);
+                fieldRect.anchorMax = new Vector2(0.5f, 0.5f);
             }
 
-            fieldRect.offsetMin = Vector2.zero;
-            fieldRect.offsetMax = Vector2.zero;
-            EnsureBattleFieldAspect(fieldRect);
+            fieldRect.pivot = new Vector2(0.5f, 0.5f);
+            fieldRect.anchoredPosition = Vector2.zero;
+            RemoveBattleFieldAspectFitter(fieldRect);
         }
 
         var logRect = logScroll != null ? logScroll.GetComponent<RectTransform>() : null;
         if (logRect != null)
         {
+            logScroll.horizontal = false;
+            logScroll.horizontalScrollbar = null;
+            logScroll.verticalScrollbar = null;
+            HideScrollbars(logScroll);
+
             if (portrait)
             {
                 logRect.anchorMin = new Vector2(0.04f, 0.08f);
@@ -246,6 +254,7 @@ public class BattleManager : MonoBehaviour
         }
 
         ConfigureBattleControlButtons(portrait);
+        HideLegacyBackButton();
 
         if (battleField != null && battleField.TryGetComponent(out GridLayoutGroup grid))
         {
@@ -253,16 +262,43 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void EnsureBattleFieldAspect(RectTransform fieldRect)
+    private void ConfigureBattleFieldContainer(RectTransform fieldRect, bool portrait)
     {
-        var fitter = fieldRect.GetComponent<AspectRatioFitter>();
-        if (fitter == null)
+        var container = fieldRect.parent as RectTransform;
+        if (container == null || container == transform)
         {
-            fitter = fieldRect.gameObject.AddComponent<AspectRatioFitter>();
+            return;
         }
 
-        fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
-        fitter.aspectRatio = cols / (float)rows;
+        if (portrait)
+        {
+            container.anchorMin = new Vector2(0.5f, 0.64f);
+            container.anchorMax = new Vector2(0.5f, 0.64f);
+        }
+        else
+        {
+            container.anchorMin = new Vector2(0.5f, 0.56f);
+            container.anchorMax = new Vector2(0.5f, 0.56f);
+        }
+
+        container.pivot = new Vector2(0.5f, 0.5f);
+        container.anchoredPosition = Vector2.zero;
+    }
+
+    private static void HideScrollbars(ScrollRect scrollRect)
+    {
+        if (scrollRect == null) return;
+
+        foreach (var scrollbar in scrollRect.GetComponentsInChildren<Scrollbar>(true))
+        {
+            scrollbar.gameObject.SetActive(false);
+        }
+    }
+
+    private void RemoveBattleFieldAspectFitter(RectTransform fieldRect)
+    {
+        var fitter = fieldRect.GetComponent<AspectRatioFitter>();
+        if (fitter != null) Destroy(fitter);
     }
 
     private void ConfigureBattleControlButtons(bool portrait)
@@ -270,8 +306,25 @@ public class BattleManager : MonoBehaviour
         pauseButtonRect ??= FindChildRect(transform, "PauseButton");
         resumeButtonRect ??= FindChildRect(transform, "ResumeButton");
 
-        PlaceBattleControlButton(pauseButtonRect, portrait ? new Vector2(0.28f, 0.265f) : new Vector2(0.36f, 0.31f), portrait);
-        PlaceBattleControlButton(resumeButtonRect, portrait ? new Vector2(0.50f, 0.265f) : new Vector2(0.50f, 0.31f), portrait);
+        PlaceBattleControlButton(pauseButtonRect, portrait ? new Vector2(0.34f, 0.285f) : new Vector2(0.36f, 0.31f), portrait);
+        PlaceBattleControlButton(resumeButtonRect, portrait ? new Vector2(0.54f, 0.285f) : new Vector2(0.50f, 0.31f), portrait);
+    }
+
+    private void HideLegacyBackButton()
+    {
+        if (legacyBackButton == null)
+        {
+            var backButton = FindChildRect(transform, "BackButton");
+            if (backButton != null)
+            {
+                legacyBackButton = backButton.gameObject;
+            }
+        }
+
+        if (legacyBackButton != null)
+        {
+            legacyBackButton.SetActive(false);
+        }
     }
 
     private void PlaceBattleControlButton(RectTransform rect, Vector2 centerAnchor, bool portrait)
@@ -313,8 +366,13 @@ public class BattleManager : MonoBehaviour
         }
 
         var fieldRect = battleField as RectTransform;
-        float fieldWidth = fieldRect != null && fieldRect.rect.width > 0f ? fieldRect.rect.width : (UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 1120f : 720f);
-        float fieldHeight = fieldRect != null && fieldRect.rect.height > 0f ? fieldRect.rect.height : (UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 620f : 420f);
+        var containerRect = fieldRect != null ? fieldRect.parent as RectTransform : null;
+        var rootRect = transform as RectTransform;
+        bool portrait = UnityUIRuntimeTheme.IsPortraitNarrowScreen();
+        float rootWidth = rootRect != null && rootRect.rect.width > 0f ? rootRect.rect.width : (portrait ? 1280f : 1280f);
+        float rootHeight = rootRect != null && rootRect.rect.height > 0f ? rootRect.rect.height : (portrait ? 720f : 720f);
+        float fieldWidth = portrait ? rootWidth * 0.96f : rootWidth * 0.56f;
+        float fieldHeight = portrait ? rootHeight * 0.42f : rootHeight * 0.42f;
         float spacing = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 8f : 6f;
         float cellSize = Mathf.Floor(Mathf.Min(
             (fieldWidth - spacing * (cols - 1)) / cols,
@@ -323,6 +381,20 @@ public class BattleManager : MonoBehaviour
         grid.spacing = new Vector2(spacing, spacing);
         grid.cellSize = new Vector2(Mathf.Max(48f, cellSize), Mathf.Max(48f, cellSize));
         grid.childAlignment = TextAnchor.MiddleCenter;
+
+        if (fieldRect != null)
+        {
+            float safeCellSize = Mathf.Max(48f, cellSize);
+            var boardSize = new Vector2(
+                safeCellSize * cols + spacing * (cols - 1),
+                safeCellSize * rows + spacing * (rows - 1));
+
+            fieldRect.sizeDelta = boardSize;
+            if (containerRect != null)
+            {
+                containerRect.sizeDelta = boardSize;
+            }
+        }
     }
 
     private static void StyleBattleCell(GameObject cell, int x, int y)
