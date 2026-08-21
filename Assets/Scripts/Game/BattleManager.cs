@@ -30,6 +30,7 @@ public class BattleManager : MonoBehaviour
     private RectTransform pauseButtonRect;
     private RectTransform resumeButtonRect;
     private GameObject legacyBackButton;
+    private float currentBattleCellSize = 60f;
 
     [SerializeField] private GameObject resultPanel;
     [SerializeField] private TextMeshProUGUI resultText;
@@ -374,20 +375,22 @@ public class BattleManager : MonoBehaviour
         float fieldWidth = portrait ? rootWidth * 0.96f : rootWidth * 0.56f;
         float fieldHeight = portrait ? rootHeight * 0.42f : rootHeight * 0.42f;
         float spacing = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 8f : 6f;
+        int boardPadding = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 12 : 10;
         float cellSize = Mathf.Floor(Mathf.Min(
-            (fieldWidth - spacing * (cols - 1)) / cols,
-            (fieldHeight - spacing * (rows - 1)) / rows));
+            (fieldWidth - boardPadding * 2f - spacing * (cols - 1)) / cols,
+            (fieldHeight - boardPadding * 2f - spacing * (rows - 1)) / rows));
 
+        currentBattleCellSize = Mathf.Max(48f, cellSize);
+        grid.padding = new RectOffset(boardPadding, boardPadding, boardPadding, boardPadding);
         grid.spacing = new Vector2(spacing, spacing);
-        grid.cellSize = new Vector2(Mathf.Max(48f, cellSize), Mathf.Max(48f, cellSize));
+        grid.cellSize = new Vector2(currentBattleCellSize, currentBattleCellSize);
         grid.childAlignment = TextAnchor.MiddleCenter;
 
         if (fieldRect != null)
         {
-            float safeCellSize = Mathf.Max(48f, cellSize);
             var boardSize = new Vector2(
-                safeCellSize * cols + spacing * (cols - 1),
-                safeCellSize * rows + spacing * (rows - 1));
+                currentBattleCellSize * cols + spacing * (cols - 1) + boardPadding * 2f,
+                currentBattleCellSize * rows + spacing * (rows - 1) + boardPadding * 2f);
 
             fieldRect.sizeDelta = boardSize;
             if (containerRect != null)
@@ -449,10 +452,22 @@ public class BattleManager : MonoBehaviour
 
         RectTransform rect = obj.GetComponent<RectTransform>();
         rect.anchoredPosition = Vector2.zero;
+        ApplyCharacterVisualSize(rect);
         rect.SetAsLastSibling(); // 念のため一番前に
 
         gridMap[pos] = bc;
         if (ally) allies.Add(bc); else enemies.Add(bc);
+    }
+
+    private void ApplyCharacterVisualSize(RectTransform rect)
+    {
+        if (rect == null) return;
+
+        float pieceSize = Mathf.Clamp(currentBattleCellSize * 0.84f, 52f, 96f);
+        rect.anchorMin = new Vector2(0.5f, 0.5f);
+        rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.sizeDelta = new Vector2(pieceSize, pieceSize);
     }
 
     private IEnumerator BattleLoop()
