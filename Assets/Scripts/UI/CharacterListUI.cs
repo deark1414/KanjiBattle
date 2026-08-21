@@ -84,7 +84,7 @@ public class CharacterListUI : MonoBehaviour
         if (listRect != null)
         {
             listRect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.15f) : new Vector2(0.04f, 0.10f);
-            listRect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.69f) : new Vector2(0.96f, 0.66f);
+            listRect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.60f) : new Vector2(0.96f, 0.66f);
             listRect.anchoredPosition = Vector2.zero;
             listRect.sizeDelta = Vector2.zero;
         }
