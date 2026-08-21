@@ -246,8 +246,8 @@ public class BattleManager : MonoBehaviour
             }
             else
             {
-                logRect.anchorMin = new Vector2(0.18f, 0.12f);
-                logRect.anchorMax = new Vector2(0.82f, 0.30f);
+                logRect.anchorMin = new Vector2(0.16f, 0.08f);
+                logRect.anchorMax = new Vector2(0.84f, 0.23f);
             }
 
             logRect.offsetMin = Vector2.zero;
@@ -278,8 +278,8 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            container.anchorMin = new Vector2(0.5f, 0.56f);
-            container.anchorMax = new Vector2(0.5f, 0.56f);
+            container.anchorMin = new Vector2(0.5f, 0.66f);
+            container.anchorMax = new Vector2(0.5f, 0.66f);
         }
 
         container.pivot = new Vector2(0.5f, 0.5f);
@@ -307,8 +307,8 @@ public class BattleManager : MonoBehaviour
         pauseButtonRect ??= FindChildRect(transform, "PauseButton");
         resumeButtonRect ??= FindChildRect(transform, "ResumeButton");
 
-        PlaceBattleControlButton(pauseButtonRect, portrait ? new Vector2(0.34f, 0.285f) : new Vector2(0.36f, 0.31f), portrait);
-        PlaceBattleControlButton(resumeButtonRect, portrait ? new Vector2(0.54f, 0.285f) : new Vector2(0.50f, 0.31f), portrait);
+        PlaceBattleControlButton(pauseButtonRect, portrait ? new Vector2(0.34f, 0.285f) : new Vector2(0.42f, 0.285f), portrait);
+        PlaceBattleControlButton(resumeButtonRect, portrait ? new Vector2(0.54f, 0.285f) : new Vector2(0.58f, 0.285f), portrait);
     }
 
     private void HideLegacyBackButton()
@@ -372,8 +372,8 @@ public class BattleManager : MonoBehaviour
         bool portrait = UnityUIRuntimeTheme.IsPortraitNarrowScreen();
         float rootWidth = rootRect != null && rootRect.rect.width > 0f ? rootRect.rect.width : (portrait ? 1280f : 1280f);
         float rootHeight = rootRect != null && rootRect.rect.height > 0f ? rootRect.rect.height : (portrait ? 720f : 720f);
-        float fieldWidth = portrait ? rootWidth * 0.96f : rootWidth * 0.56f;
-        float fieldHeight = portrait ? rootHeight * 0.42f : rootHeight * 0.42f;
+        float fieldWidth = portrait ? rootWidth * 0.96f : rootWidth * 0.64f;
+        float fieldHeight = portrait ? rootHeight * 0.42f : rootHeight * 0.44f;
         float spacing = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 8f : 6f;
         int boardPadding = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 12 : 10;
         float cellSize = Mathf.Floor(Mathf.Min(
