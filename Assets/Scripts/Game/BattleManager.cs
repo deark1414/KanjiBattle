@@ -27,6 +27,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Transform logContent;
     [SerializeField] private GameObject logEntryPrefab;
     private const int maxLogs = 50;
+    private RectTransform pauseButtonRect;
+    private RectTransform resumeButtonRect;
 
     [SerializeField] private GameObject resultPanel;
     [SerializeField] private TextMeshProUGUI resultText;
@@ -211,8 +213,8 @@ public class BattleManager : MonoBehaviour
         {
             if (portrait)
             {
-                fieldRect.anchorMin = new Vector2(0.03f, 0.43f);
-                fieldRect.anchorMax = new Vector2(0.97f, 0.78f);
+                fieldRect.anchorMin = new Vector2(0.02f, 0.36f);
+                fieldRect.anchorMax = new Vector2(0.98f, 0.84f);
             }
             else
             {
@@ -222,6 +224,7 @@ public class BattleManager : MonoBehaviour
 
             fieldRect.offsetMin = Vector2.zero;
             fieldRect.offsetMax = Vector2.zero;
+            EnsureBattleFieldAspect(fieldRect);
         }
 
         var logRect = logScroll != null ? logScroll.GetComponent<RectTransform>() : null;
@@ -229,8 +232,8 @@ public class BattleManager : MonoBehaviour
         {
             if (portrait)
             {
-                logRect.anchorMin = new Vector2(0.06f, 0.17f);
-                logRect.anchorMax = new Vector2(0.94f, 0.34f);
+                logRect.anchorMin = new Vector2(0.04f, 0.08f);
+                logRect.anchorMax = new Vector2(0.96f, 0.25f);
             }
             else
             {
@@ -242,10 +245,64 @@ public class BattleManager : MonoBehaviour
             logRect.offsetMax = Vector2.zero;
         }
 
+        ConfigureBattleControlButtons(portrait);
+
         if (battleField != null && battleField.TryGetComponent(out GridLayoutGroup grid))
         {
             ApplyBattleGridCellSize(grid);
         }
+    }
+
+    private void EnsureBattleFieldAspect(RectTransform fieldRect)
+    {
+        var fitter = fieldRect.GetComponent<AspectRatioFitter>();
+        if (fitter == null)
+        {
+            fitter = fieldRect.gameObject.AddComponent<AspectRatioFitter>();
+        }
+
+        fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+        fitter.aspectRatio = cols / (float)rows;
+    }
+
+    private void ConfigureBattleControlButtons(bool portrait)
+    {
+        pauseButtonRect ??= FindChildRect(transform, "PauseButton");
+        resumeButtonRect ??= FindChildRect(transform, "ResumeButton");
+
+        PlaceBattleControlButton(pauseButtonRect, portrait ? new Vector2(0.28f, 0.265f) : new Vector2(0.36f, 0.31f), portrait);
+        PlaceBattleControlButton(resumeButtonRect, portrait ? new Vector2(0.50f, 0.265f) : new Vector2(0.50f, 0.31f), portrait);
+    }
+
+    private void PlaceBattleControlButton(RectTransform rect, Vector2 centerAnchor, bool portrait)
+    {
+        if (rect == null) return;
+
+        if (rect.parent != transform)
+        {
+            rect.SetParent(transform, false);
+        }
+
+        rect.anchorMin = centerAnchor;
+        rect.anchorMax = centerAnchor;
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = Vector2.zero;
+        rect.sizeDelta = portrait ? new Vector2(120f, 44f) : new Vector2(120f, 48f);
+    }
+
+    private static RectTransform FindChildRect(Transform root, string childName)
+    {
+        if (root == null) return null;
+
+        foreach (var rect in root.GetComponentsInChildren<RectTransform>(true))
+        {
+            if (rect.name == childName)
+            {
+                return rect;
+            }
+        }
+
+        return null;
     }
 
     private void ApplyBattleGridCellSize(GridLayoutGroup grid)
