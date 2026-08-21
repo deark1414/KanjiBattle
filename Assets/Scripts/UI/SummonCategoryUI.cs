@@ -158,8 +158,8 @@ public class SummonCategoryUI : MonoBehaviour
         {
             if (UnityUIRuntimeTheme.IsPortraitNarrowScreen())
             {
-                rect.anchorMin = new Vector2(0.04f, 0.055f);
-                rect.anchorMax = new Vector2(0.52f, 0.125f);
+                rect.anchorMin = new Vector2(0.04f, 0.18f);
+                rect.anchorMax = new Vector2(0.52f, 0.25f);
                 rect.offsetMin = Vector2.zero;
                 rect.offsetMax = Vector2.zero;
             }

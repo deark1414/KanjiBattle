@@ -176,8 +176,8 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        rect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.56f, 0.055f) : new Vector2(0.74f, 0.04f);
-        rect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.125f) : new Vector2(0.96f, 0.12f);
+        rect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.56f, 0.18f) : new Vector2(0.74f, 0.04f);
+        rect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.25f) : new Vector2(0.96f, 0.12f);
         rect.offsetMin = Vector2.zero;
         rect.offsetMax = Vector2.zero;
     }

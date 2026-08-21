@@ -82,6 +82,11 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             StyleScrollRect(scrollRect);
         }
 
+        foreach (var rect in FindObjectsByType<RectTransform>(FindObjectsInactive.Include))
+        {
+            ApplyResponsiveContainerPlacement(rect);
+        }
+
         foreach (var button in FindObjectsByType<Button>(FindObjectsInactive.Include))
         {
             StyleButton(button);
@@ -208,7 +213,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             if (path.Contains("toppanel") && path.Contains("character"))
             {
                 Stretch(rect,
-                    IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.15f) : new Vector2(0.04f, 0.10f),
+                    IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.27f) : new Vector2(0.04f, 0.10f),
                     IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.60f) : new Vector2(0.96f, 0.66f));
             }
             else if (path.Contains("formation"))
@@ -237,6 +242,31 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             scrollRect.content.pivot = new Vector2(0.5f, 1f);
             scrollRect.content.offsetMin = new Vector2(10f, scrollRect.content.offsetMin.y);
             scrollRect.content.offsetMax = new Vector2(-10f, scrollRect.content.offsetMax.y);
+        }
+    }
+
+    private static void ApplyResponsiveContainerPlacement(RectTransform rect)
+    {
+        if (rect == null) return;
+
+        string path = GetPath(rect.transform).ToLowerInvariant();
+        if (!path.EndsWith("tabbuttons")) return;
+
+        if (IsPortraitNarrowScreen())
+        {
+            rect.anchorMin = new Vector2(0f, 0.08f);
+            rect.anchorMax = new Vector2(1f, 0.08f);
+            rect.pivot = new Vector2(0f, 0f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = new Vector2(0f, 52f);
+        }
+        else
+        {
+            rect.anchorMin = new Vector2(0f, 0f);
+            rect.anchorMax = new Vector2(1f, 0f);
+            rect.pivot = new Vector2(0f, 0f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = new Vector2(0f, 60f);
         }
     }
 

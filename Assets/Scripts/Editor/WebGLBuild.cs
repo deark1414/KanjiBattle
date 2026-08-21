@@ -127,9 +127,11 @@ namespace KanjiBattle.Editor
     iframe { display: block; width: 100%; height: 100%; border: 0; }
     .open-link { color: var(--accent); text-decoration: none; font-weight: 700; white-space: nowrap; }
     @media (max-width: 720px) {
-      body { padding: 10px; }
+      body { padding: 10px; gap: 10px; }
       header { display: block; }
-      .game-frame { min-height: 72vh; aspect-ratio: auto; }
+      p { font-size: 14px; line-height: 1.45; }
+      .open-link { display: inline-block; margin-top: 6px; font-size: 20px; }
+      .game-frame { height: calc(100dvh - 150px); min-height: 520px; aspect-ratio: auto; }
     }
   </style>
 </head>
@@ -156,6 +158,7 @@ namespace KanjiBattle.Editor
             return @"html, body {
   width: 100%;
   height: 100%;
+  min-height: 100dvh;
   padding: 0;
   margin: 0;
   overflow: hidden;
@@ -185,7 +188,8 @@ namespace KanjiBattle.Editor
 }
 .unity-mobile #unity-canvas {
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
+  max-height: calc(100vh - env(safe-area-inset-bottom, 0px));
 }
 #unity-loading-bar {
   position: absolute;
