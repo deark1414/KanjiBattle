@@ -51,9 +51,25 @@ public class BattleManager : MonoBehaviour
         // GenerateField(); // debug用
     }
 
+    private void OnEnable()
+    {
+        ConfigureResponsiveLayout();
+    }
+
+    private void OnRectTransformDimensionsChange()
+    {
+        if (!isActiveAndEnabled)
+        {
+            return;
+        }
+
+        ConfigureResponsiveLayout();
+    }
+
     public void StartBattle(List<CharacterData> allies, StageData stage)
     {
         ResetBattle();
+        ConfigureResponsiveLayout();
         GenerateField(stage);
 
         currentReward = stage.rewardStagePoints;
@@ -122,12 +138,18 @@ public class BattleManager : MonoBehaviour
 
     private void GenerateField(StageData stage)
     {
+        ConfigureResponsiveLayout();
         gridCells = new Transform[cols, rows];
         trapCells.Clear();
         soilTrapCells.Clear();
 
         var grid = battleField.GetComponent<GridLayoutGroup>();
-        if (grid != null) grid.constraintCount = cols;
+        if (grid != null)
+        {
+            grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            grid.constraintCount = cols;
+            ApplyBattleGridCellSize(grid);
+        }
 
         for (int y = 0; y < rows; y++)
         {
@@ -178,6 +200,72 @@ public class BattleManager : MonoBehaviour
             Debug.Log($"[Trap] 配置 {pos}");
             placed++;
         }
+    }
+
+    private void ConfigureResponsiveLayout()
+    {
+        bool portrait = UnityUIRuntimeTheme.IsPortraitNarrowScreen();
+
+        var fieldRect = battleField as RectTransform;
+        if (fieldRect != null)
+        {
+            if (portrait)
+            {
+                fieldRect.anchorMin = new Vector2(0.03f, 0.405f);
+                fieldRect.anchorMax = new Vector2(0.97f, 0.79f);
+            }
+            else
+            {
+                fieldRect.anchorMin = new Vector2(0.22f, 0.36f);
+                fieldRect.anchorMax = new Vector2(0.78f, 0.78f);
+            }
+
+            fieldRect.offsetMin = Vector2.zero;
+            fieldRect.offsetMax = Vector2.zero;
+        }
+
+        var logRect = logScroll != null ? logScroll.GetComponent<RectTransform>() : null;
+        if (logRect != null)
+        {
+            if (portrait)
+            {
+                logRect.anchorMin = new Vector2(0.06f, 0.185f);
+                logRect.anchorMax = new Vector2(0.94f, 0.345f);
+            }
+            else
+            {
+                logRect.anchorMin = new Vector2(0.18f, 0.12f);
+                logRect.anchorMax = new Vector2(0.82f, 0.30f);
+            }
+
+            logRect.offsetMin = Vector2.zero;
+            logRect.offsetMax = Vector2.zero;
+        }
+
+        if (battleField != null && battleField.TryGetComponent(out GridLayoutGroup grid))
+        {
+            ApplyBattleGridCellSize(grid);
+        }
+    }
+
+    private void ApplyBattleGridCellSize(GridLayoutGroup grid)
+    {
+        if (grid == null)
+        {
+            return;
+        }
+
+        var fieldRect = battleField as RectTransform;
+        float fieldWidth = fieldRect != null && fieldRect.rect.width > 0f ? fieldRect.rect.width : (UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 1120f : 720f);
+        float fieldHeight = fieldRect != null && fieldRect.rect.height > 0f ? fieldRect.rect.height : (UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 620f : 420f);
+        float spacing = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 8f : 6f;
+        float cellSize = Mathf.Floor(Mathf.Min(
+            (fieldWidth - spacing * (cols - 1)) / cols,
+            (fieldHeight - spacing * (rows - 1)) / rows));
+
+        grid.spacing = new Vector2(spacing, spacing);
+        grid.cellSize = new Vector2(Mathf.Max(48f, cellSize), Mathf.Max(48f, cellSize));
+        grid.childAlignment = TextAnchor.MiddleCenter;
     }
 
     private static void StyleBattleCell(GameObject cell, int x, int y)
