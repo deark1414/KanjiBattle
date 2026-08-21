@@ -254,11 +254,11 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
 
         if (IsPortraitNarrowScreen())
         {
-            rect.anchorMin = new Vector2(0f, 0.08f);
-            rect.anchorMax = new Vector2(1f, 0.08f);
+            rect.anchorMin = new Vector2(0f, 0f);
+            rect.anchorMax = new Vector2(1f, 0f);
             rect.pivot = new Vector2(0f, 0f);
             rect.anchoredPosition = Vector2.zero;
-            rect.sizeDelta = new Vector2(0f, 52f);
+            rect.sizeDelta = new Vector2(0f, 56f);
         }
         else
         {
@@ -338,6 +338,18 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             Stretch(rect,
                 IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.115f) : new Vector2(0.04f, 0.03f),
                 IsPortraitNarrowScreen() ? new Vector2(0.22f, 0.175f) : new Vector2(0.18f, 0.10f));
+        }
+        else if (path.Contains("battle") && path.Contains("pausebutton"))
+        {
+            Stretch(rect,
+                IsPortraitNarrowScreen() ? new Vector2(0.06f, 0.355f) : new Vector2(0.18f, 0.31f),
+                IsPortraitNarrowScreen() ? new Vector2(0.25f, 0.405f) : new Vector2(0.30f, 0.38f));
+        }
+        else if (path.Contains("battle") && path.Contains("resumebutton"))
+        {
+            Stretch(rect,
+                IsPortraitNarrowScreen() ? new Vector2(0.27f, 0.355f) : new Vector2(0.32f, 0.31f),
+                IsPortraitNarrowScreen() ? new Vector2(0.46f, 0.405f) : new Vector2(0.44f, 0.38f));
         }
     }
 

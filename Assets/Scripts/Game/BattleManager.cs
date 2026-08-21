@@ -211,8 +211,8 @@ public class BattleManager : MonoBehaviour
         {
             if (portrait)
             {
-                fieldRect.anchorMin = new Vector2(0.03f, 0.405f);
-                fieldRect.anchorMax = new Vector2(0.97f, 0.79f);
+                fieldRect.anchorMin = new Vector2(0.03f, 0.43f);
+                fieldRect.anchorMax = new Vector2(0.97f, 0.78f);
             }
             else
             {
@@ -229,8 +229,8 @@ public class BattleManager : MonoBehaviour
         {
             if (portrait)
             {
-                logRect.anchorMin = new Vector2(0.06f, 0.185f);
-                logRect.anchorMax = new Vector2(0.94f, 0.345f);
+                logRect.anchorMin = new Vector2(0.06f, 0.17f);
+                logRect.anchorMax = new Vector2(0.94f, 0.34f);
             }
             else
             {
