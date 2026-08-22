@@ -1,6 +1,6 @@
 # Font Optimization
 
-Current risk: `Assets/Fonts/NotoSansJP-Medium SDF.asset` contains an 8192x8192 TMP atlas and is much larger than the source font. This directly increases WebGL `game.data` size and mobile load time.
+Current state: `Assets/Fonts/NotoSansJP-Medium.ttf` is subset for the game's current text, and `Assets/Fonts/NotoSansJP-Medium SDF.asset` is regenerated as a small dynamic TMP font asset. The SDF asset is force-tracked because `Assets/Fonts/*.asset` is ignored by default.
 
 ## Audit
 
@@ -13,15 +13,31 @@ This writes:
 - `tmp/font/glyphs.txt`
 - `tmp/font/glyphs-report.json`
 
-Use the collected glyph list as a starting point when regenerating a smaller TMP font asset in Unity.
+Use the collected glyph list as a starting point when updating the subset source font.
 
 ## Recommended Safe Path
 
-1. Keep the original `NotoSansJP-Medium.ttf`.
-2. Regenerate `NotoSansJP-Medium SDF.asset` in Unity with a smaller atlas, using `tmp/font/glyphs.txt` plus any planned future Japanese text.
-3. Prefer a static atlas for release if all in-game text is known.
-4. Verify Japanese text in Top, Battle, Formation, Facilities, summon category tabs, battle log, and result panels.
-5. Rebuild WebGL and compare `Docs/game/Build/game.data`.
+1. Update `tmp/font/glyphs.txt` with `npm run font:glyphs`.
+2. Rebuild the subset `NotoSansJP-Medium.ttf` with `fonttools`.
+3. Regenerate `NotoSansJP-Medium SDF.asset` in Unity:
+
+```bash
+/Applications/Unity/Hub/Editor/6000.4.4f1/Unity.app/Contents/MacOS/Unity \
+  -batchmode \
+  -quit \
+  -projectPath /Users/yuya/UnityProjects/KanjiBattle \
+  -executeMethod KanjiBattle.Editor.FontAssetMaintenance.RebuildJapaneseTmpFontAsset \
+  -logFile /tmp/kanjibattle_rebuild_font.log
+```
+
+4. Force-add the regenerated SDF asset because `Assets/Fonts/*.asset` is ignored:
+
+```bash
+git add -f Assets/Fonts/NotoSansJP-Medium\ SDF.asset Assets/Fonts/NotoSansJP-Medium\ SDF.asset.meta
+```
+
+5. Verify Japanese text in Top, Battle, Formation, Facilities, summon category tabs, battle log, and result panels.
+6. Rebuild WebGL and compare `Docs/game/Build/game.data`.
 
 Do not manually edit the serialized SDF asset. Missing glyphs are easy to introduce and hard to notice without visual checks.
 
@@ -45,4 +61,4 @@ python3 -m fontTools.subset Assets/Fonts/NotoSansJP-Medium.ttf \
   --output-file=/tmp/NotoSansJP-Medium.subset.ttf
 ```
 
-Replacing `Assets/Fonts/NotoSansJP-Medium.ttf` with this subset keeps existing Unity references intact. After doing so, rebuild WebGL and run `npm run qa:visual`.
+Replacing `Assets/Fonts/NotoSansJP-Medium.ttf` with this subset keeps existing Unity references intact. After doing so, regenerate the TMP SDF asset, rebuild WebGL, and run `npm run qa:visual`.
