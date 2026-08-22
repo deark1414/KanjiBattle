@@ -797,11 +797,47 @@ public class BattleManager : MonoBehaviour
 
         caster.PlayCastEffect(color);
         ShowFloatingText(caster, SkillDescription.GetShort(skillType), color);
-        if (target != null)
+
+        switch (skillType)
         {
-            StartCoroutine(SkillTrailRoutine(caster.transform as RectTransform, target.transform as RectTransform, color));
+            case SkillType.Arrow:
+            case SkillType.Spear:
+            case SkillType.Gun:
+            case SkillType.Stone:
+                if (target != null) StartCoroutine(ProjectileVfxRoutine(caster.transform as RectTransform, target.transform as RectTransform, GetProjectileSymbol(skillType), color));
+                break;
+            case SkillType.Fireball:
+                if (target != null) StartCoroutine(FallingFireVfxRoutine(target.transform as RectTransform));
+                break;
+            case SkillType.Dragon:
+                StartCoroutine(DragonBreathVfxRoutine(caster.transform as RectTransform, target != null ? target.transform as RectTransform : null));
+                break;
+            case SkillType.Slash:
+            case SkillType.TigerTwinClaw:
+            case SkillType.StunBlow:
+                if (target != null) StartCoroutine(SlashVfxRoutine(target.transform as RectTransform, skillType == SkillType.TigerTwinClaw));
+                break;
+            case SkillType.WaterHeal:
+            case SkillType.Heal:
+                if (target != null) StartCoroutine(HealBurstVfxRoutine(target.transform as RectTransform));
+                break;
+            default:
+                if (target != null) StartCoroutine(SkillTrailRoutine(caster.transform as RectTransform, target.transform as RectTransform, color));
+                break;
         }
         GameAudio.Instance.Play(skillType == SkillType.WaterHeal || skillType == SkillType.Heal ? GameSound.Heal : GameSound.Skill);
+    }
+
+    private static string GetProjectileSymbol(SkillType skillType)
+    {
+        return skillType switch
+        {
+            SkillType.Arrow => "➤",
+            SkillType.Spear => "—",
+            SkillType.Gun => "•",
+            SkillType.Stone => "●",
+            _ => "•"
+        };
     }
 
     private IEnumerator SkillTrailRoutine(RectTransform from, RectTransform to, Color color)
@@ -833,6 +869,162 @@ public class BattleManager : MonoBehaviour
         }
 
         if (obj != null) Destroy(obj);
+    }
+
+    private IEnumerator ProjectileVfxRoutine(RectTransform from, RectTransform to, string symbol, Color color)
+    {
+        if (from == null || to == null) yield break;
+
+        var obj = CreateVfxText("SkillProjectile", symbol, 38f, color);
+        var rect = obj.GetComponent<RectTransform>();
+        Vector3 start = from.position;
+        Vector3 end = to.position;
+        Vector3 delta = end - start;
+        rect.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg);
+
+        float duration = 0.34f / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            if (rect == null) yield break;
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            rect.position = Vector3.Lerp(start, end, Mathf.SmoothStep(0f, 1f, t));
+            rect.localScale = Vector3.one * Mathf.Lerp(1.15f, 0.9f, t);
+            yield return null;
+        }
+
+        if (obj != null) Destroy(obj);
+    }
+
+    private IEnumerator FallingFireVfxRoutine(RectTransform target)
+    {
+        if (target == null) yield break;
+
+        Vector3 targetPos = target.position;
+        Vector3 start = targetPos + new Vector3(0f, currentBattleCellSize * 1.7f, 0f);
+        var fire = CreateVfxText("FallingFire", "火", 42f, new Color(1f, 0.26f, 0.04f));
+        var rect = fire.GetComponent<RectTransform>();
+
+        float duration = 0.38f / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            if (rect == null) yield break;
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            rect.position = Vector3.Lerp(start, targetPos, t);
+            rect.localScale = Vector3.one * Mathf.Lerp(1.2f, 0.82f, t);
+            yield return null;
+        }
+
+        if (fire != null) Destroy(fire);
+        yield return BurstTextRoutine(target, "炎", new Color(1f, 0.58f, 0.08f), 52f, 0.22f);
+    }
+
+    private IEnumerator DragonBreathVfxRoutine(RectTransform caster, RectTransform target)
+    {
+        if (caster == null) yield break;
+
+        Vector3 start = caster.position;
+        Vector3 end = target != null ? target.position : start + new Vector3(currentBattleCellSize * 2.2f, 0f, 0f);
+        Vector3 midpoint = (start + end) * 0.5f;
+        Vector3 delta = end - start;
+        float length = Mathf.Max(currentBattleCellSize * 1.6f, delta.magnitude);
+
+        var obj = new GameObject("DragonBreath", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        obj.transform.SetParent(transform, false);
+        var rect = obj.GetComponent<RectTransform>();
+        rect.position = midpoint;
+        rect.sizeDelta = new Vector2(length, currentBattleCellSize * 0.62f);
+        rect.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg);
+        var image = obj.GetComponent<Image>();
+        image.color = new Color(0.9f, 0.25f, 1f, 0.74f);
+
+        float duration = 0.34f / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            if (rect == null) yield break;
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            rect.localScale = new Vector3(Mathf.Lerp(0.1f, 1f, t), Mathf.Lerp(0.35f, 1.15f, Mathf.Sin(t * Mathf.PI)), 1f);
+            var c = image.color;
+            c.a = Mathf.Lerp(0.82f, 0f, t);
+            image.color = c;
+            yield return null;
+        }
+
+        if (obj != null) Destroy(obj);
+    }
+
+    private IEnumerator SlashVfxRoutine(RectTransform target, bool twin)
+    {
+        if (target == null) yield break;
+
+        yield return BurstTextRoutine(target, "斬", new Color(1f, 0.92f, 0.55f), 52f, 0.18f, -28f);
+        if (twin)
+        {
+            yield return BurstTextRoutine(target, "斬", new Color(1f, 0.72f, 0.40f), 48f, 0.16f, 28f);
+        }
+    }
+
+    private IEnumerator HealBurstVfxRoutine(RectTransform target)
+    {
+        if (target == null) yield break;
+        yield return BurstTextRoutine(target, "癒", new Color(0.45f, 1f, 0.72f), 48f, 0.30f);
+    }
+
+    private IEnumerator BurstTextRoutine(RectTransform parent, string symbol, Color color, float fontSize, float duration, float angle = 0f)
+    {
+        var obj = CreateVfxText("SkillBurst", symbol, fontSize, color);
+        var rect = obj.GetComponent<RectTransform>();
+        rect.position = parent.position;
+        rect.rotation = Quaternion.Euler(0f, 0f, angle);
+
+        float elapsed = 0f;
+        float scaledDuration = duration / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        while (elapsed < scaledDuration)
+        {
+            if (rect == null) yield break;
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / scaledDuration);
+            rect.localScale = Vector3.one * Mathf.Lerp(0.45f, 1.45f, t);
+            var text = obj.GetComponent<TextMeshProUGUI>();
+            if (text != null)
+            {
+                var c = color;
+                c.a = 1f - t;
+                text.color = c;
+            }
+            yield return null;
+        }
+
+        if (obj != null) Destroy(obj);
+    }
+
+    private GameObject CreateVfxText(string objectName, string textValue, float fontSize, Color color)
+    {
+        var obj = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        obj.transform.SetParent(transform, false);
+        obj.transform.SetAsLastSibling();
+        var rect = obj.GetComponent<RectTransform>();
+        rect.sizeDelta = new Vector2(96f, 64f);
+
+        var text = obj.GetComponent<TextMeshProUGUI>();
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
+        text.text = textValue;
+        text.alignment = TextAlignmentOptions.Center;
+        text.fontStyle = FontStyles.Bold;
+        text.fontSize = fontSize;
+        text.enableAutoSizing = false;
+        text.color = color;
+        text.raycastTarget = false;
+
+        var shadow = obj.AddComponent<Shadow>();
+        shadow.effectColor = new Color(0f, 0f, 0f, 0.65f);
+        shadow.effectDistance = new Vector2(2f, -2f);
+        return obj;
     }
 
     public void ShowFloatingText(BattleCharacter target, string message, Color color)
