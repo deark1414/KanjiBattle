@@ -17,8 +17,9 @@ public class CharacterEntryUI : MonoBehaviour
     {
         characterData = data;
         ApplyLayout(data);
+        EnsureSkillTooltip(data);
 
-        string skillName = GetSkillLabel(data.skillType);
+        string skillName = SkillDescription.GetShort(data.skillType);
         string info = $"{data.characterName}  {skillName}\nHP {data.GetMaxHP(level)} / ATK {data.GetAttack(level)} / DEF {data.GetDefense(level)}";
         string levelTextValue = $"Lv.{level}";
         string countTextValue = $"所持 x{count}";
@@ -143,9 +144,11 @@ public class CharacterEntryUI : MonoBehaviour
         text.SetMaterialDirty();
     }
 
-    private static string GetSkillLabel(SkillType skillType)
+    private void EnsureSkillTooltip(CharacterData data)
     {
-        return skillType == SkillType.None ? "スキルなし" : skillType.ToString();
+        var tooltip = GetComponent<SkillTooltipPresenter>();
+        if (tooltip == null) tooltip = gameObject.AddComponent<SkillTooltipPresenter>();
+        tooltip.SetCharacter(data);
     }
 
     private void OnClickUpgrade()

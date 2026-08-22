@@ -35,30 +35,43 @@ public static class SkillExecutor
             }
         }
 
+        bool executed;
         if (skillType == SkillType.Spear)
         {
-            return ExecuteSpearPierce(new SkillContext(bm, caster, target));
+            executed = ExecuteSpearPierce(new SkillContext(bm, caster, target));
+            if (executed) bm?.PlaySkillVfx(caster, target, skillType);
+            return executed;
         }
         if (skillType == SkillType.Gun)
         {
-            return ExecuteGunLine(new SkillContext(bm, caster, target));
+            executed = ExecuteGunLine(new SkillContext(bm, caster, target));
+            if (executed) bm?.PlaySkillVfx(caster, target, skillType);
+            return executed;
         }
         if (skillType == SkillType.TigerTwinClaw)
         {
-            return ExecuteTigerTwinClaw(new SkillContext(bm, caster, target));
+            executed = ExecuteTigerTwinClaw(new SkillContext(bm, caster, target));
+            if (executed) bm?.PlaySkillVfx(caster, target, skillType);
+            return executed;
         }
         if (skillType == SkillType.Dragon)
         {
-            return ExecuteDragon(new SkillContext(bm, caster, target));
+            executed = ExecuteDragon(new SkillContext(bm, caster, target));
+            if (executed) bm?.PlaySkillVfx(caster, target, skillType);
+            return executed;
         }
 
         SkillData dataDriven = SkillCatalog.Get(skillType);
         if (dataDriven != null && dataDriven.effects != null && dataDriven.effects.Count > 0)
         {
-            return ExecuteDataDriven(new SkillContext(bm, caster, target), dataDriven);
+            executed = ExecuteDataDriven(new SkillContext(bm, caster, target), dataDriven);
+            if (executed) bm?.PlaySkillVfx(caster, target, skillType);
+            return executed;
         }
 
-        return ExecuteLegacy(new SkillContext(bm, caster, target));
+        executed = ExecuteLegacy(new SkillContext(bm, caster, target));
+        if (executed) bm?.PlaySkillVfx(caster, target, skillType);
+        return executed;
     }
 
     private static int GetSkillChance(CharacterData data, SkillType skillType)
