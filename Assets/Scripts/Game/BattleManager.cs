@@ -27,9 +27,6 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Transform logContent;
     [SerializeField] private GameObject logEntryPrefab;
     private const int maxLogs = 50;
-    private RectTransform pauseButtonRect;
-    private RectTransform resumeButtonRect;
-    private GameObject legacyBackButton;
     private float currentBattleCellSize = 60f;
 
     [SerializeField] private GameObject resultPanel;
@@ -152,7 +149,7 @@ public class BattleManager : MonoBehaviour
         {
             grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             grid.constraintCount = cols;
-            ApplyBattleGridCellSize(grid);
+            currentBattleCellSize = BattleUILayout.Apply(transform, battleField, logScroll, cols, rows);
         }
 
         for (int y = 0; y < rows; y++)
@@ -161,7 +158,7 @@ public class BattleManager : MonoBehaviour
             {
                 GameObject cell = Instantiate(cellPrefab, battleField);
                 cell.name = $"Cell_{x}_{y}";
-                StyleBattleCell(cell, x, y);
+                BattleUILayout.StyleBattleCell(cell, x, y);
 
                 // CellContent を必ず探す or なければ作る
                 Transform content = cell.transform.Find("CellContent");
@@ -208,212 +205,7 @@ public class BattleManager : MonoBehaviour
 
     private void ConfigureResponsiveLayout()
     {
-        bool portrait = UnityUIRuntimeTheme.IsPortraitNarrowScreen();
-
-        var fieldRect = battleField as RectTransform;
-        if (fieldRect != null)
-        {
-            ConfigureBattleFieldContainer(fieldRect, portrait);
-
-            if (portrait)
-            {
-                fieldRect.anchorMin = new Vector2(0.5f, 0.5f);
-                fieldRect.anchorMax = new Vector2(0.5f, 0.5f);
-            }
-            else
-            {
-                fieldRect.anchorMin = new Vector2(0.5f, 0.5f);
-                fieldRect.anchorMax = new Vector2(0.5f, 0.5f);
-            }
-
-            fieldRect.pivot = new Vector2(0.5f, 0.5f);
-            fieldRect.anchoredPosition = Vector2.zero;
-            RemoveBattleFieldAspectFitter(fieldRect);
-        }
-
-        var logRect = logScroll != null ? logScroll.GetComponent<RectTransform>() : null;
-        if (logRect != null)
-        {
-            logScroll.horizontal = false;
-            logScroll.horizontalScrollbar = null;
-            logScroll.verticalScrollbar = null;
-            HideScrollbars(logScroll);
-
-            if (portrait)
-            {
-                logRect.anchorMin = new Vector2(0.04f, 0.08f);
-                logRect.anchorMax = new Vector2(0.96f, 0.25f);
-            }
-            else
-            {
-                logRect.anchorMin = new Vector2(0.16f, 0.08f);
-                logRect.anchorMax = new Vector2(0.84f, 0.23f);
-            }
-
-            logRect.offsetMin = Vector2.zero;
-            logRect.offsetMax = Vector2.zero;
-        }
-
-        ConfigureBattleControlButtons(portrait);
-        HideLegacyBackButton();
-
-        if (battleField != null && battleField.TryGetComponent(out GridLayoutGroup grid))
-        {
-            ApplyBattleGridCellSize(grid);
-        }
-    }
-
-    private void ConfigureBattleFieldContainer(RectTransform fieldRect, bool portrait)
-    {
-        var container = fieldRect.parent as RectTransform;
-        if (container == null || container == transform)
-        {
-            return;
-        }
-
-        if (portrait)
-        {
-            container.anchorMin = new Vector2(0.5f, 0.64f);
-            container.anchorMax = new Vector2(0.5f, 0.64f);
-        }
-        else
-        {
-            container.anchorMin = new Vector2(0.5f, 0.66f);
-            container.anchorMax = new Vector2(0.5f, 0.66f);
-        }
-
-        container.pivot = new Vector2(0.5f, 0.5f);
-        container.anchoredPosition = Vector2.zero;
-    }
-
-    private static void HideScrollbars(ScrollRect scrollRect)
-    {
-        if (scrollRect == null) return;
-
-        foreach (var scrollbar in scrollRect.GetComponentsInChildren<Scrollbar>(true))
-        {
-            scrollbar.gameObject.SetActive(false);
-        }
-    }
-
-    private void RemoveBattleFieldAspectFitter(RectTransform fieldRect)
-    {
-        var fitter = fieldRect.GetComponent<AspectRatioFitter>();
-        if (fitter != null) Destroy(fitter);
-    }
-
-    private void ConfigureBattleControlButtons(bool portrait)
-    {
-        pauseButtonRect ??= FindChildRect(transform, "PauseButton");
-        resumeButtonRect ??= FindChildRect(transform, "ResumeButton");
-
-        PlaceBattleControlButton(pauseButtonRect, portrait ? new Vector2(0.34f, 0.285f) : new Vector2(0.42f, 0.285f), portrait);
-        PlaceBattleControlButton(resumeButtonRect, portrait ? new Vector2(0.54f, 0.285f) : new Vector2(0.58f, 0.285f), portrait);
-    }
-
-    private void HideLegacyBackButton()
-    {
-        if (legacyBackButton == null)
-        {
-            var backButton = FindChildRect(transform, "BackButton");
-            if (backButton != null)
-            {
-                legacyBackButton = backButton.gameObject;
-            }
-        }
-
-        if (legacyBackButton != null)
-        {
-            legacyBackButton.SetActive(false);
-        }
-    }
-
-    private void PlaceBattleControlButton(RectTransform rect, Vector2 centerAnchor, bool portrait)
-    {
-        if (rect == null) return;
-
-        if (rect.parent != transform)
-        {
-            rect.SetParent(transform, false);
-        }
-
-        rect.anchorMin = centerAnchor;
-        rect.anchorMax = centerAnchor;
-        rect.pivot = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = Vector2.zero;
-        rect.sizeDelta = portrait ? new Vector2(120f, 44f) : new Vector2(120f, 48f);
-    }
-
-    private static RectTransform FindChildRect(Transform root, string childName)
-    {
-        if (root == null) return null;
-
-        foreach (var rect in root.GetComponentsInChildren<RectTransform>(true))
-        {
-            if (rect.name == childName)
-            {
-                return rect;
-            }
-        }
-
-        return null;
-    }
-
-    private void ApplyBattleGridCellSize(GridLayoutGroup grid)
-    {
-        if (grid == null)
-        {
-            return;
-        }
-
-        var fieldRect = battleField as RectTransform;
-        var containerRect = fieldRect != null ? fieldRect.parent as RectTransform : null;
-        var rootRect = transform as RectTransform;
-        bool portrait = UnityUIRuntimeTheme.IsPortraitNarrowScreen();
-        float rootWidth = rootRect != null && rootRect.rect.width > 0f ? rootRect.rect.width : (portrait ? 1280f : 1280f);
-        float rootHeight = rootRect != null && rootRect.rect.height > 0f ? rootRect.rect.height : (portrait ? 720f : 720f);
-        float fieldWidth = portrait ? rootWidth * 0.96f : rootWidth * 0.64f;
-        float fieldHeight = portrait ? rootHeight * 0.42f : rootHeight * 0.44f;
-        float spacing = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 8f : 6f;
-        int boardPadding = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 12 : 10;
-        float cellSize = Mathf.Floor(Mathf.Min(
-            (fieldWidth - boardPadding * 2f - spacing * (cols - 1)) / cols,
-            (fieldHeight - boardPadding * 2f - spacing * (rows - 1)) / rows));
-
-        currentBattleCellSize = Mathf.Max(48f, cellSize);
-        grid.padding = new RectOffset(boardPadding, boardPadding, boardPadding, boardPadding);
-        grid.spacing = new Vector2(spacing, spacing);
-        grid.cellSize = new Vector2(currentBattleCellSize, currentBattleCellSize);
-        grid.childAlignment = TextAnchor.MiddleCenter;
-
-        if (fieldRect != null)
-        {
-            var boardSize = new Vector2(
-                currentBattleCellSize * cols + spacing * (cols - 1) + boardPadding * 2f,
-                currentBattleCellSize * rows + spacing * (rows - 1) + boardPadding * 2f);
-
-            fieldRect.sizeDelta = boardSize;
-            if (containerRect != null)
-            {
-                containerRect.sizeDelta = boardSize;
-            }
-        }
-    }
-
-    private static void StyleBattleCell(GameObject cell, int x, int y)
-    {
-        var image = cell.GetComponent<Image>();
-        if (image != null)
-        {
-            bool alternate = (x + y) % 2 == 0;
-            image.color = alternate ? new Color(0.80f, 0.84f, 0.88f, 1f) : new Color(0.69f, 0.75f, 0.82f, 1f);
-        }
-
-        var outline = cell.GetComponent<Outline>();
-        if (outline == null) outline = cell.AddComponent<Outline>();
-        outline.effectColor = new Color(0.18f, 0.22f, 0.28f, 0.75f);
-        outline.effectDistance = new Vector2(1f, -1f);
-        outline.useGraphicAlpha = false;
+        currentBattleCellSize = BattleUILayout.Apply(transform, battleField, logScroll, cols, rows);
     }
 
     private Vector2Int GetRandomFreeCell()
@@ -452,22 +244,11 @@ public class BattleManager : MonoBehaviour
 
         RectTransform rect = obj.GetComponent<RectTransform>();
         rect.anchoredPosition = Vector2.zero;
-        ApplyCharacterVisualSize(rect);
+        BattleUILayout.ApplyCharacterVisualSize(rect, currentBattleCellSize);
         rect.SetAsLastSibling(); // 念のため一番前に
 
         gridMap[pos] = bc;
         if (ally) allies.Add(bc); else enemies.Add(bc);
-    }
-
-    private void ApplyCharacterVisualSize(RectTransform rect)
-    {
-        if (rect == null) return;
-
-        float pieceSize = Mathf.Clamp(currentBattleCellSize * 0.84f, 52f, 96f);
-        rect.anchorMin = new Vector2(0.5f, 0.5f);
-        rect.anchorMax = new Vector2(0.5f, 0.5f);
-        rect.pivot = new Vector2(0.5f, 0.5f);
-        rect.sizeDelta = new Vector2(pieceSize, pieceSize);
     }
 
     private IEnumerator BattleLoop()

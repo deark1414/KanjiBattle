@@ -25,7 +25,9 @@ The script starts a local static server for `Docs`, opens Playwright-managed Chr
 
 Unity canvas clicks are based on the canvas bounding box, not viewport coordinates. This keeps desktop checks stable when the canvas is centered inside the page.
 
-The desktop direct-game check performs a light battle flow. The mobile direct-game check currently captures the loaded top screen because headless mobile input can differ from real Safari touch handling for Unity WebGL. Use it to catch canvas sizing, top layout, font, and bottom-tab visibility regressions.
+The desktop direct-game check performs a light stage-screen flow. The mobile direct-game check currently captures the loaded top screen because headless input can differ from real browser input for Unity WebGL. Use it to catch canvas sizing, top layout, font, and bottom-tab visibility regressions.
+
+The script fails if the direct-game canvas is still loading, unexpectedly small, horizontally overflowing, or outside the viewport. Screenshots remain the final visual review layer for detailed UI overlap.
 
 ## Notes
 
