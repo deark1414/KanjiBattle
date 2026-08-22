@@ -60,6 +60,17 @@ ruby ~/.codex/skills/kanji-battle-balance/scripts/simulate_balance.rb --project 
 ## WebGL Visual QA
 
 - Use Playwright-managed Chromium for repeatable WebGL layout screenshots.
+- Use the local .NET SDK at `/Users/yuya/.dotnet/dotnet` for quick compile checks.
+- `KanjiBattle.slnx` is not supported by the installed .NET 8 SDK, so build the Unity-generated project files directly:
+
+```bash
+DOTNET_CLI_TELEMETRY_OPTOUT=1 /Users/yuya/.dotnet/dotnet restore Assembly-CSharp.csproj
+DOTNET_CLI_TELEMETRY_OPTOUT=1 /Users/yuya/.dotnet/dotnet restore Assembly-CSharp-Editor.csproj
+DOTNET_CLI_TELEMETRY_OPTOUT=1 /Users/yuya/.dotnet/dotnet build Assembly-CSharp.csproj --no-restore
+DOTNET_CLI_TELEMETRY_OPTOUT=1 /Users/yuya/.dotnet/dotnet build Assembly-CSharp-Editor.csproj --no-restore
+```
+
+- The current C# quick build emits Unity serialization warnings such as CS0649 for inspector-assigned fields; treat zero errors as the pass condition.
 - Setup:
 
 ```bash
@@ -79,10 +90,40 @@ npm run qa:visual
 ## Font Optimization
 
 - The current `NotoSansJP-Medium SDF.asset` is very large because it contains an 8192x8192 TMP atlas.
+- The release TTF is intentionally subset from `NotoSansJP-Medium.ttf` using the in-project glyph list. If any visible text is added, renamed, or localized, regenerate the glyph list and subset font before deploying.
 - Before regenerating the TMP font asset, collect the in-project glyph set:
 
 ```bash
 npm run font:glyphs
 ```
 
-- Use `tmp/font/glyphs.txt` as the starting character list in Unity, then verify all Japanese UI screens before release.
+- Use `tmp/font/glyphs.txt` as the source for the font subset, then verify all Japanese UI screens before release.
+- Subset regeneration command:
+
+```bash
+python3 -m fontTools.subset Assets/Fonts/NotoSansJP-Medium.ttf \
+  --text-file=tmp/font/glyphs.txt \
+  --layout-features='*' \
+  --glyph-names \
+  --symbol-cmap \
+  --legacy-cmap \
+  --notdef-glyph \
+  --notdef-outline \
+  --recommended-glyphs \
+  --name-IDs='*' \
+  --name-legacy \
+  --name-languages='*' \
+  --output-file=/tmp/NotoSansJP-Medium.subset.ttf
+```
+
+- Replace `Assets/Fonts/NotoSansJP-Medium.ttf` with the subset output only after confirming the glyph list includes every expected Japanese character. Keeping the same path preserves the Unity asset GUID.
+- After font changes, run:
+
+```bash
+npm run font:glyphs
+DOTNET_CLI_TELEMETRY_OPTOUT=1 /Users/yuya/.dotnet/dotnet restore Assembly-CSharp.csproj
+DOTNET_CLI_TELEMETRY_OPTOUT=1 /Users/yuya/.dotnet/dotnet restore Assembly-CSharp-Editor.csproj
+DOTNET_CLI_TELEMETRY_OPTOUT=1 /Users/yuya/.dotnet/dotnet build Assembly-CSharp.csproj --no-restore
+DOTNET_CLI_TELEMETRY_OPTOUT=1 /Users/yuya/.dotnet/dotnet build Assembly-CSharp-Editor.csproj --no-restore
+npm run qa:visual
+```
