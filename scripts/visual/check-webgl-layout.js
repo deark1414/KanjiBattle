@@ -189,6 +189,8 @@ async function main() {
         await waitForUnityCanvas(page);
         if (target.flow === "battle") {
           await runBattleSmokeFlow(page);
+        } else {
+          await page.waitForTimeout(target.name.startsWith("mobile") ? 12000 : 3000);
         }
       } else {
         await page.waitForSelector("iframe", { timeout: 30000 });

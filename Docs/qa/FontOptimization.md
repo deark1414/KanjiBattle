@@ -24,3 +24,25 @@ Use the collected glyph list as a starting point when regenerating a smaller TMP
 5. Rebuild WebGL and compare `Docs/game/Build/game.data`.
 
 Do not manually edit the serialized SDF asset. Missing glyphs are easy to introduce and hard to notice without visual checks.
+
+## Current Release Approach
+
+The source TTF can be subset with `fonttools` using the generated glyph list while keeping the same Unity asset GUID:
+
+```bash
+python3 -m fontTools.subset Assets/Fonts/NotoSansJP-Medium.ttf \
+  --text-file=tmp/font/glyphs.txt \
+  --layout-features='*' \
+  --glyph-names \
+  --symbol-cmap \
+  --legacy-cmap \
+  --notdef-glyph \
+  --notdef-outline \
+  --recommended-glyphs \
+  --name-IDs='*' \
+  --name-legacy \
+  --name-languages='*' \
+  --output-file=/tmp/NotoSansJP-Medium.subset.ttf
+```
+
+Replacing `Assets/Fonts/NotoSansJP-Medium.ttf` with this subset keeps existing Unity references intact. After doing so, rebuild WebGL and run `npm run qa:visual`.
