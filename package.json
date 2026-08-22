@@ -1,0 +1,14 @@
+{
+  "name": "kanji-battle-qa",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "install:browsers": "playwright install chromium",
+    "qa:visual": "node scripts/visual/check-webgl-layout.js",
+    "font:glyphs": "node scripts/font/collect-glyphs.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.57.0"
+  }
+}

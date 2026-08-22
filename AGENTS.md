@@ -56,3 +56,33 @@ ruby ~/.codex/skills/kanji-battle-balance/scripts/simulate_balance.rb --project 
   2. matching `Assets/ScriptableObjects/Characters/CharacterData_*.asset`
 - Pay special attention to boss data. Bosses may be balanced at level 1, so high `enemyLevel` values can make them overpowered.
 - After a tuning change, rerun the simulator and summarize before/after values.
+
+## WebGL Visual QA
+
+- Use Playwright-managed Chromium for repeatable WebGL layout screenshots.
+- Setup:
+
+```bash
+npm install
+npm run install:browsers
+```
+
+- Run:
+
+```bash
+npm run qa:visual
+```
+
+- Screenshots and the JSON report are written under `tmp/playwright-screenshots/`.
+- On macOS inside Codex, browser launch may need sandbox escalation.
+
+## Font Optimization
+
+- The current `NotoSansJP-Medium SDF.asset` is very large because it contains an 8192x8192 TMP atlas.
+- Before regenerating the TMP font asset, collect the in-project glyph set:
+
+```bash
+npm run font:glyphs
+```
+
+- Use `tmp/font/glyphs.txt` as the starting character list in Unity, then verify all Japanese UI screens before release.
