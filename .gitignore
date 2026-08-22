@@ -109,3 +109,4 @@ Assets/Fonts/*.asset
 *.slnx
 
 tmp
+node_modules/
