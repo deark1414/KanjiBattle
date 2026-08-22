@@ -40,6 +40,10 @@ public class BattleManager : MonoBehaviour
 
     private int trapDamage = 5;
     private bool isPaused = false;
+    private readonly float[] battleSpeeds = { 1f, 2f, 4f };
+    private int battleSpeedIndex = 0;
+    private Button speedButton;
+    private TextMeshProUGUI speedButtonText;
 
     // === Reinforcement fields ===
     private int reinforcementIndex = 0;
@@ -54,6 +58,7 @@ public class BattleManager : MonoBehaviour
 
     private void OnEnable()
     {
+        EnsureSpeedButton();
         ConfigureResponsiveLayout();
     }
 
@@ -69,6 +74,7 @@ public class BattleManager : MonoBehaviour
 
     public void StartBattle(List<CharacterData> allies, StageData stage)
     {
+        GameAudio.Instance.EnsureBgm();
         ResetBattle();
         ConfigureResponsiveLayout();
         GenerateField(stage);
@@ -269,13 +275,13 @@ public class BattleManager : MonoBehaviour
             foreach (var ally in new List<BattleCharacter>(allies))
             {
                 if (ally != null) DoAction(ally, "味方");
-                yield return new WaitForSeconds(0.3f);
+                yield return BattleWait(0.3f);
             }
 
             foreach (var enemy in new List<BattleCharacter>(enemies))
             {
                 if (enemy != null) DoAction(enemy, "敵");
-                yield return new WaitForSeconds(0.3f);
+                yield return BattleWait(0.3f);
             }
 
             // 土の罠による継続ダメージ
@@ -345,7 +351,63 @@ public class BattleManager : MonoBehaviour
             }
 
             turn++;
-            yield return new WaitForSeconds(0.5f);
+            yield return BattleWait(0.5f);
+        }
+    }
+
+    private WaitForSeconds BattleWait(float seconds)
+    {
+        return new WaitForSeconds(seconds / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]));
+    }
+
+    private void EnsureSpeedButton()
+    {
+        if (speedButton != null) return;
+
+        var buttonObj = new GameObject("SpeedButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+        buttonObj.transform.SetParent(transform, false);
+        speedButton = buttonObj.GetComponent<Button>();
+        var image = buttonObj.GetComponent<Image>();
+        image.color = new Color(0.62f, 0.42f, 0.23f, 1f);
+        var outline = buttonObj.AddComponent<Outline>();
+        outline.effectColor = new Color(0.95f, 0.72f, 0.42f, 0.8f);
+        outline.effectDistance = new Vector2(1f, -1f);
+
+        var textObj = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        textObj.transform.SetParent(buttonObj.transform, false);
+        speedButtonText = textObj.GetComponent<TextMeshProUGUI>();
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(speedButtonText);
+        speedButtonText.alignment = TextAlignmentOptions.Center;
+        speedButtonText.enableAutoSizing = true;
+        speedButtonText.fontSizeMin = 14f;
+        speedButtonText.fontSizeMax = 24f;
+        speedButtonText.color = Color.white;
+        speedButtonText.raycastTarget = false;
+
+        var textRect = speedButtonText.rectTransform;
+        textRect.anchorMin = Vector2.zero;
+        textRect.anchorMax = Vector2.one;
+        textRect.offsetMin = Vector2.zero;
+        textRect.offsetMax = Vector2.zero;
+
+        speedButton.onClick.AddListener(ToggleBattleSpeed);
+        UpdateSpeedButtonLabel();
+    }
+
+    private void ToggleBattleSpeed()
+    {
+        GameAudio.Instance.EnsureBgm();
+        battleSpeedIndex = (battleSpeedIndex + 1) % battleSpeeds.Length;
+        GameAudio.Instance.Play(GameSound.Click);
+        AddLog($"バトル速度 x{battleSpeeds[battleSpeedIndex]:0}", Color.cyan);
+        UpdateSpeedButtonLabel();
+    }
+
+    private void UpdateSpeedButtonLabel()
+    {
+        if (speedButtonText != null)
+        {
+            speedButtonText.text = $"x{battleSpeeds[battleSpeedIndex]:0}";
         }
     }
 
@@ -573,6 +635,7 @@ public class BattleManager : MonoBehaviour
         gridMap[newPos] = character;
 
         StartCoroutine(SmoothMove(character, gridCells[newPos.x, newPos.y]));
+        GameAudio.Instance.Play(GameSound.Click);
         AddLog($"{side} {character.data.characterName} が移動！", Color.white);
 
         // 移動方向を更新
@@ -660,6 +723,7 @@ public class BattleManager : MonoBehaviour
 
     private void ShowResult(string message, Color color, bool isWin = false)
     {
+        GameAudio.Instance.Play(isWin ? GameSound.Win : GameSound.Lose);
         int effectiveReward = 0;
         if (isWin && GameManager.Instance != null && currentStage != null)
         {
@@ -695,6 +759,7 @@ public class BattleManager : MonoBehaviour
 
     public void PlayAttackVfx(BattleCharacter attacker, BattleCharacter target, bool skill = false)
     {
+        GameAudio.Instance.Play(skill ? GameSound.Skill : GameSound.Attack);
         if (attacker != null)
         {
             attacker.PlayCastEffect(skill ? new Color(0.45f, 0.85f, 1f) : new Color(1f, 0.9f, 0.35f));
@@ -710,8 +775,64 @@ public class BattleManager : MonoBehaviour
     {
         if (target == null) return;
 
+        GameAudio.Instance.Play(isHealing ? GameSound.Heal : GameSound.Hit);
         target.PlayHitEffect(isHealing ? new Color(0.4f, 1f, 0.65f) : new Color(1f, 0.28f, 0.22f));
         ShowFloatingText(target, isHealing ? $"+{amount}" : $"-{amount}", isHealing ? new Color(0.45f, 1f, 0.65f) : new Color(1f, 0.78f, 0.42f));
+    }
+
+    public void PlaySkillVfx(BattleCharacter caster, BattleCharacter target, SkillType skillType)
+    {
+        if (caster == null) return;
+
+        Color color = skillType switch
+        {
+            SkillType.Fireball => new Color(1f, 0.30f, 0.08f),
+            SkillType.Arrow or SkillType.Spear or SkillType.Gun => new Color(1f, 0.88f, 0.42f),
+            SkillType.WaterHeal or SkillType.Heal => new Color(0.36f, 0.95f, 1f),
+            SkillType.Soil or SkillType.WoodPush => new Color(0.50f, 0.95f, 0.35f),
+            SkillType.StunBlow => new Color(0.85f, 0.55f, 1f),
+            SkillType.Dragon => new Color(0.95f, 0.35f, 1f),
+            _ => new Color(0.62f, 0.92f, 1f)
+        };
+
+        caster.PlayCastEffect(color);
+        ShowFloatingText(caster, SkillDescription.GetShort(skillType), color);
+        if (target != null)
+        {
+            StartCoroutine(SkillTrailRoutine(caster.transform as RectTransform, target.transform as RectTransform, color));
+        }
+        GameAudio.Instance.Play(skillType == SkillType.WaterHeal || skillType == SkillType.Heal ? GameSound.Heal : GameSound.Skill);
+    }
+
+    private IEnumerator SkillTrailRoutine(RectTransform from, RectTransform to, Color color)
+    {
+        if (from == null || to == null || transform == null) yield break;
+
+        var obj = new GameObject("SkillTrail", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        var rect = obj.GetComponent<RectTransform>();
+        rect.SetParent(transform, false);
+        rect.sizeDelta = new Vector2(18f, 18f);
+        var image = obj.GetComponent<Image>();
+        image.color = color;
+
+        Vector3 start = from.position;
+        Vector3 end = to.position;
+        float elapsed = 0f;
+        float duration = 0.24f / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        while (elapsed < duration)
+        {
+            if (rect == null) yield break;
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            rect.position = Vector3.Lerp(start, end, t);
+            rect.localScale = Vector3.one * Mathf.Lerp(1.2f, 0.45f, t);
+            var c = color;
+            c.a = 1f - t * 0.35f;
+            image.color = c;
+            yield return null;
+        }
+
+        if (obj != null) Destroy(obj);
     }
 
     public void ShowFloatingText(BattleCharacter target, string message, Color color)
