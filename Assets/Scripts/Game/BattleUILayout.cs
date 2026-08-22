@@ -110,6 +110,7 @@ public static class BattleUILayout
     {
         PlaceControlButton(FindChildRect(panelRoot, "PauseButton"), portrait ? new Vector2(0.34f, 0.285f) : new Vector2(0.42f, 0.285f), portrait, panelRoot);
         PlaceControlButton(FindChildRect(panelRoot, "ResumeButton"), portrait ? new Vector2(0.54f, 0.285f) : new Vector2(0.58f, 0.285f), portrait, panelRoot);
+        PlaceControlButton(FindChildRect(panelRoot, "SpeedButton"), portrait ? new Vector2(0.74f, 0.285f) : new Vector2(0.70f, 0.285f), portrait, panelRoot);
     }
 
     private static void PlaceControlButton(RectTransform rect, Vector2 centerAnchor, bool portrait, Transform panelRoot)
