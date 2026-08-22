@@ -60,6 +60,7 @@ ruby ~/.codex/skills/kanji-battle-balance/scripts/simulate_balance.rb --project 
 ## WebGL Visual QA
 
 - Use Playwright-managed Chromium for repeatable WebGL layout screenshots.
+- UI prefabs are mostly structural templates. Before changing prefab visual values, check runtime layout owners documented in `Docs/Architecture/UIRuntimeLayout.md`.
 - Use the local .NET SDK at `/Users/yuya/.dotnet/dotnet` for quick compile checks.
 - `KanjiBattle.slnx` is not supported by the installed .NET 8 SDK, so build the Unity-generated project files directly:
 

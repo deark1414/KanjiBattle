@@ -114,22 +114,15 @@ async function clickCanvasRatio(page, xRatio, yRatio) {
   }
 }
 
-async function runBattleSmokeFlow(page) {
+async function runDesktopStageSmokeFlow(page) {
   await waitForUnityCanvas(page);
 
-  // Bottom battle tab, first stage, first three owned characters, then start battle.
+  // Bottom battle tab and first visible stage. Unity WebGL input in headless
+  // Chromium is not identical to real browser input, so this flow is kept light.
   await clickCanvasRatio(page, 0.50, 0.985);
   await page.waitForTimeout(800);
-  await clickCanvasRatio(page, 0.50, 0.20);
-  await page.waitForTimeout(800);
-  await clickCanvasRatio(page, 0.16, 0.39);
-  await page.waitForTimeout(250);
-  await clickCanvasRatio(page, 0.16, 0.47);
-  await page.waitForTimeout(250);
-  await clickCanvasRatio(page, 0.16, 0.55);
-  await page.waitForTimeout(250);
-  await clickCanvasRatio(page, 0.50, 0.92);
-  await page.waitForTimeout(2500);
+  await clickCanvasRatio(page, 0.50, 0.13);
+  await page.waitForTimeout(1500);
 }
 
 async function inspectCanvas(page) {
@@ -153,6 +146,33 @@ async function inspectCanvas(page) {
       }
     };
   });
+}
+
+function validateMetrics(target, metrics) {
+  const issues = [];
+  if (!metrics) return issues;
+
+  const { canvas, body, loadingVisible } = metrics;
+  if (loadingVisible) {
+    issues.push("Unity loading bar is still visible");
+  }
+  if (canvas.width < 300 || canvas.height < 300) {
+    issues.push(`Unity canvas is unexpectedly small: ${canvas.width}x${canvas.height}`);
+  }
+  if (canvas.x < -1 || canvas.y < -1) {
+    issues.push(`Unity canvas starts outside viewport: x=${canvas.x}, y=${canvas.y}`);
+  }
+  if (canvas.x + canvas.width > body.width + 1) {
+    issues.push(`Unity canvas overflows horizontally: right=${canvas.x + canvas.width}, viewport=${body.width}`);
+  }
+  if (target.url.includes("/game/") && canvas.y + canvas.height > body.height + 1) {
+    issues.push(`Unity canvas overflows vertically: bottom=${canvas.y + canvas.height}, viewport=${body.height}`);
+  }
+  if (body.scrollWidth > body.width + 1) {
+    issues.push(`Page has horizontal overflow: scrollWidth=${body.scrollWidth}, viewport=${body.width}`);
+  }
+
+  return issues;
 }
 
 async function main() {
@@ -188,7 +208,7 @@ async function main() {
       if (target.url.includes("/game/")) {
         await waitForUnityCanvas(page);
         if (target.flow === "battle") {
-          await runBattleSmokeFlow(page);
+          await runDesktopStageSmokeFlow(page);
         } else {
           await page.waitForTimeout(target.name.startsWith("mobile") ? 12000 : 3000);
         }
@@ -200,7 +220,8 @@ async function main() {
       const screenshotPath = path.join(outDir, `${target.name}.png`);
       await page.screenshot({ path: screenshotPath, fullPage: true });
       const metrics = target.url.includes("/game/") ? await inspectCanvas(page) : null;
-      report.push({ name: target.name, url: target.url, screenshotPath, metrics });
+      const issues = validateMetrics(target, metrics);
+      report.push({ name: target.name, url: target.url, screenshotPath, metrics, issues });
       await context.close();
     }
   } finally {
@@ -213,6 +234,14 @@ async function main() {
   console.log(`Visual QA complete: ${reportPath}`);
   for (const item of report) {
     console.log(`- ${item.name}: ${item.screenshotPath}`);
+    for (const issue of item.issues) {
+      console.log(`  ! ${issue}`);
+    }
+  }
+
+  const issueCount = report.reduce((count, item) => count + item.issues.length, 0);
+  if (issueCount > 0) {
+    throw new Error(`Visual QA found ${issueCount} layout issue(s). See ${reportPath}`);
   }
 }
 
