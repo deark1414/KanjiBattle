@@ -1151,7 +1151,7 @@ public class BattleManager : MonoBehaviour
         }
 
         DestroyBattleVfx(fire);
-        yield return BurstTextRoutine(target, "炎", new Color(1f, 0.58f, 0.08f), 52f, 0.22f);
+        yield return BurstTextRoutine(target, "火", new Color(1f, 0.58f, 0.08f), 52f, 0.22f);
     }
 
     private IEnumerator DragonBreathVfxRoutine(RectTransform caster, RectTransform target)
