@@ -346,22 +346,30 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
     public int GetEffectiveAttack(BattleManager bm)
     {
         float buff = 1f;
-        int uniqueCount = 0;
 
         if (data.skillType == SkillType.NumberPassive)
         {
             var result = CalculateNumberPassiveBuff(bm);
-            uniqueCount = result.uniqueCount;
             buff = result.buff;
         }
 
-        if (buff > 1f && bm != null)
+        return Mathf.RoundToInt(attack * buff);
+    }
+
+    public bool TryGetNumberPassiveBuff(BattleManager bm, out int uniqueCount, out int percent)
+    {
+        uniqueCount = 0;
+        percent = 0;
+
+        if (data == null || data.skillType != SkillType.NumberPassive)
         {
-            int percent = Mathf.RoundToInt((buff - 1f) * 100);
-            bm.AddLog($"{DisplayName} の攻撃力バフ: ユニークタイプ数 {uniqueCount}, バフ倍率 {percent}%");
+            return false;
         }
 
-        return Mathf.RoundToInt(attack * buff);
+        var result = CalculateNumberPassiveBuff(bm);
+        uniqueCount = result.uniqueCount;
+        percent = Mathf.RoundToInt((result.buff - 1f) * 100);
+        return percent > 0;
     }
 
     public bool IsStunned() => stunCounter > 0;

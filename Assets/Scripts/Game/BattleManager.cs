@@ -44,6 +44,9 @@ public class BattleManager : MonoBehaviour
     private int battleSpeedIndex = 0;
     private Button speedButton;
     private TextMeshProUGUI speedButtonText;
+    private readonly List<GameObject> activeVfxObjects = new();
+    private const float skillCinematicScale = 1.85f;
+    private float skillCinematicUntil = 0f;
 
     // === Reinforcement fields ===
     private int reinforcementIndex = 0;
@@ -60,6 +63,11 @@ public class BattleManager : MonoBehaviour
     {
         EnsureSpeedButton();
         ConfigureResponsiveLayout();
+    }
+
+    private void OnDisable()
+    {
+        CleanupBattleVfx();
     }
 
     private void OnRectTransformDimensionsChange()
@@ -101,6 +109,9 @@ public class BattleManager : MonoBehaviour
             SpawnCharacter(enemy, pos, false);
         }
 
+        LogNumberPassiveBuffs("味方", this.allies);
+        LogNumberPassiveBuffs("敵", this.enemies);
+
         StartCoroutine(StartBattleAfterSetup(stage));
     }
 
@@ -126,6 +137,9 @@ public class BattleManager : MonoBehaviour
 
     private void ResetBattle()
     {
+        StopAllCoroutines();
+        CleanupBattleVfx();
+
         foreach (Transform child in battleField)
             Destroy(child.gameObject);
 
@@ -140,7 +154,7 @@ public class BattleManager : MonoBehaviour
         soilTrapCells.Clear();
 
         isPaused = false;
-        StopAllCoroutines();
+        skillCinematicUntil = 0f;
     }
 
     private void GenerateField(StageData stage)
@@ -357,7 +371,31 @@ public class BattleManager : MonoBehaviour
 
     private WaitForSeconds BattleWait(float seconds)
     {
-        return new WaitForSeconds(seconds / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]));
+        float cinematicScale = Time.time < skillCinematicUntil ? skillCinematicScale : 1f;
+        return new WaitForSeconds(seconds * cinematicScale / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]));
+    }
+
+    private void LogNumberPassiveBuffs(string side, List<BattleCharacter> characters)
+    {
+        if (characters == null) return;
+
+        foreach (BattleCharacter character in characters)
+        {
+            if (character == null || character.isDead) continue;
+            if (!character.TryGetNumberPassiveBuff(this, out int uniqueCount, out int percent)) continue;
+            AddLog($"{side} {character.DisplayName} の数字結束: {uniqueCount}種で攻撃力+{percent}%", new Color(0.78f, 0.92f, 1f));
+        }
+    }
+
+    private void StartSkillCinematic(float seconds)
+    {
+        float scaledSeconds = seconds * skillCinematicScale / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        skillCinematicUntil = Mathf.Max(skillCinematicUntil, Time.time + scaledSeconds);
+    }
+
+    private float SkillVfxDuration(float seconds)
+    {
+        return seconds * skillCinematicScale / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
     }
 
     private void EnsureSpeedButton()
@@ -564,10 +602,11 @@ public class BattleManager : MonoBehaviour
 
             if (path != null && path.Count > 1)
             {
-                Vector2Int nextStep = path[1];
+                int destinationIndex = GetMovementDestinationIndex(character, path, targetCellOccupied: true);
+                Vector2Int nextStep = path[destinationIndex];
                 if (IsCellFree(nextStep))
                 {
-                    MoveCharacter(character, nextStep, side);
+                    MoveCharacter(character, path, destinationIndex, side);
                     return;
                 }
             }
@@ -610,16 +649,24 @@ public class BattleManager : MonoBehaviour
                 }
                 if (bestPath != null && bestPath.Count > 1)
                 {
-                    Vector2Int nextStep = bestPath[1];
+                    int destinationIndex = GetMovementDestinationIndex(character, bestPath, targetCellOccupied: false);
+                    Vector2Int nextStep = bestPath[destinationIndex];
                     if (IsCellFree(nextStep))
                     {
-                        MoveCharacter(character, nextStep, side);
+                        MoveCharacter(character, bestPath, destinationIndex, side);
                         return;
                     }
                 }
                 AddLog($"{side} {character.data.characterName} は動けない！", Color.gray);
             }
         }
+    }
+
+    private static int GetMovementDestinationIndex(BattleCharacter character, List<Vector2Int> path, bool targetCellOccupied)
+    {
+        int maxSteps = character != null && character.data != null && character.data.category == CharacterCategory.Animal ? 2 : 1;
+        int lastWalkableIndex = targetCellOccupied ? path.Count - 2 : path.Count - 1;
+        return Mathf.Clamp(maxSteps, 1, Mathf.Max(1, lastWalkableIndex));
     }
 
     private bool IsCellFree(Vector2Int pos)
@@ -629,12 +676,18 @@ public class BattleManager : MonoBehaviour
 
     private void MoveCharacter(BattleCharacter character, Vector2Int newPos, string side)
     {
+        MoveCharacter(character, new List<Vector2Int> { character.gridPos, newPos }, 1, side);
+    }
+
+    private void MoveCharacter(BattleCharacter character, List<Vector2Int> path, int destinationIndex, string side)
+    {
         Vector2Int oldPos = character.gridPos;
+        Vector2Int newPos = path[destinationIndex];
         gridMap.Remove(oldPos);
         character.gridPos = newPos;
         gridMap[newPos] = character;
 
-        StartCoroutine(SmoothMove(character, gridCells[newPos.x, newPos.y]));
+        StartCoroutine(SmoothMoveAlongPath(character, path, destinationIndex));
         GameAudio.Instance.Play(GameSound.Click);
         AddLog($"{side} {character.data.characterName} が移動！", Color.white);
 
@@ -655,6 +708,19 @@ public class BattleManager : MonoBehaviour
             {
                 AddLog($"{side} {character.data.characterName} は土の罠の上に立っている！", Color.yellow);
             }
+        }
+    }
+
+    public IEnumerator SmoothMoveAlongPath(BattleCharacter character, List<Vector2Int> path, int destinationIndex)
+    {
+        if (path == null || path.Count <= 1) yield break;
+
+        int lastIndex = Mathf.Clamp(destinationIndex, 1, path.Count - 1);
+        for (int i = 1; i <= lastIndex; i++)
+        {
+            Vector2Int step = path[i];
+            if (gridCells == null || step.x < 0 || step.x >= cols || step.y < 0 || step.y >= rows) yield break;
+            yield return SmoothMove(character, gridCells[step.x, step.y], 0.14f);
         }
     }
 
@@ -784,6 +850,8 @@ public class BattleManager : MonoBehaviour
     {
         if (caster == null) return;
 
+        StartSkillCinematic(0.5f);
+
         Color color = skillType switch
         {
             SkillType.Fireball => new Color(1f, 0.30f, 0.08f),
@@ -811,7 +879,7 @@ public class BattleManager : MonoBehaviour
                 if (target != null) StartCoroutine(FallingFireVfxRoutine(target.transform as RectTransform));
                 break;
             case SkillType.Dragon:
-                StartCoroutine(DragonBreathVfxRoutine(caster.transform as RectTransform, target != null ? target.transform as RectTransform : null));
+                // Dragon breath highlights the exact chosen attack cells in PerformDragonBreath.
                 break;
             case SkillType.Slash:
             case SkillType.TigerTwinClaw:
@@ -827,6 +895,40 @@ public class BattleManager : MonoBehaviour
                 break;
         }
         GameAudio.Instance.Play(skillType == SkillType.WaterHeal || skillType == SkillType.Heal ? GameSound.Heal : GameSound.Skill);
+    }
+
+    public void PlayGunLineVfx(BattleCharacter caster, Vector2Int dir)
+    {
+        if (caster == null) return;
+
+        dir = new Vector2Int(Mathf.Clamp(dir.x, -1, 1), Mathf.Clamp(dir.y, -1, 1));
+        if (dir == Vector2Int.zero) return;
+
+        StartSkillCinematic(0.5f);
+
+        Color color = new Color(1f, 0.88f, 0.42f);
+        caster.PlayCastEffect(color);
+        ShowFloatingText(caster, SkillDescription.GetShort(SkillType.Gun), color);
+
+        List<Vector2Int> cells = GetLineCellsFromDirection(caster.gridPos, dir, rows + cols);
+        Color highlightColor = color;
+        highlightColor.a = 0.82f;
+        StartCoroutine(HighlightCellsRoutine(cells, highlightColor, 0.34f));
+
+        RectTransform from = caster.transform as RectTransform;
+        Vector2Int endPos = cells.Count > 0 ? cells[cells.Count - 1] : caster.gridPos + dir;
+        RectTransform to = null;
+        if (endPos.x >= 0 && endPos.x < cols && endPos.y >= 0 && endPos.y < rows && gridCells != null)
+        {
+            to = gridCells[endPos.x, endPos.y] as RectTransform;
+        }
+
+        if (from != null && to != null)
+        {
+            StartCoroutine(ProjectileVfxRoutine(from, to, GetProjectileSymbol(SkillType.Gun), color));
+        }
+
+        GameAudio.Instance.Play(GameSound.Skill);
     }
 
     private void HighlightSkillRange(BattleCharacter caster, BattleCharacter target, SkillType skillType, Color color)
@@ -847,15 +949,7 @@ public class BattleManager : MonoBehaviour
         switch (skillType)
         {
             case SkillType.Stone:
-            case SkillType.Soil:
-            case SkillType.HorseCharge:
                 AddBoxCells(cells, caster.gridPos, 2);
-                break;
-            case SkillType.WaterHeal:
-            case SkillType.Heal:
-            case SkillType.StunBlow:
-            case SkillType.TigerTwinClaw:
-                AddBoxCells(cells, caster.gridPos, 1);
                 break;
             case SkillType.Slash:
                 AddDirectionalCells(cells, caster.gridPos, 2, diagonals: true);
@@ -922,6 +1016,21 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    private List<Vector2Int> GetLineCellsFromDirection(Vector2Int from, Vector2Int dir, int maxDistance)
+    {
+        var cells = new List<Vector2Int>();
+        if (dir == Vector2Int.zero) return cells;
+
+        for (int d = 1; d <= maxDistance; d++)
+        {
+            Vector2Int pos = from + dir * d;
+            if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) break;
+            cells.Add(pos);
+        }
+
+        return cells;
+    }
+
     private IEnumerator HighlightCellsRoutine(List<Vector2Int> cells, Color highlightColor, float duration)
     {
         var originals = new Dictionary<Image, Color>();
@@ -938,7 +1047,7 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(duration / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]));
+        yield return new WaitForSeconds(SkillVfxDuration(duration));
 
         foreach (var pair in originals)
         {
@@ -966,6 +1075,7 @@ public class BattleManager : MonoBehaviour
         if (from == null || to == null || transform == null) yield break;
 
         var obj = new GameObject("SkillTrail", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        RegisterBattleVfx(obj);
         var rect = obj.GetComponent<RectTransform>();
         rect.SetParent(transform, false);
         rect.sizeDelta = new Vector2(18f, 18f);
@@ -975,7 +1085,7 @@ public class BattleManager : MonoBehaviour
         Vector3 start = from.position;
         Vector3 end = to.position;
         float elapsed = 0f;
-        float duration = 0.24f / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float duration = SkillVfxDuration(0.24f);
         while (elapsed < duration)
         {
             if (rect == null) yield break;
@@ -989,7 +1099,7 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
-        if (obj != null) Destroy(obj);
+        DestroyBattleVfx(obj);
     }
 
     private IEnumerator ProjectileVfxRoutine(RectTransform from, RectTransform to, string symbol, Color color)
@@ -1003,7 +1113,7 @@ public class BattleManager : MonoBehaviour
         Vector3 delta = end - start;
         rect.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg);
 
-        float duration = 0.34f / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float duration = SkillVfxDuration(0.34f);
         float elapsed = 0f;
         while (elapsed < duration)
         {
@@ -1015,7 +1125,7 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
-        if (obj != null) Destroy(obj);
+        DestroyBattleVfx(obj);
     }
 
     private IEnumerator FallingFireVfxRoutine(RectTransform target)
@@ -1027,7 +1137,7 @@ public class BattleManager : MonoBehaviour
         var fire = CreateVfxText("FallingFire", "火", 42f, new Color(1f, 0.26f, 0.04f));
         var rect = fire.GetComponent<RectTransform>();
 
-        float duration = 0.38f / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float duration = SkillVfxDuration(0.38f);
         float elapsed = 0f;
         while (elapsed < duration)
         {
@@ -1039,8 +1149,8 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
-        if (fire != null) Destroy(fire);
-        yield return BurstTextRoutine(target, "炎", new Color(1f, 0.58f, 0.08f), 52f, 0.22f);
+        DestroyBattleVfx(fire);
+        yield return BurstTextRoutine(target, "火", new Color(1f, 0.58f, 0.08f), 52f, 0.22f);
     }
 
     private IEnumerator DragonBreathVfxRoutine(RectTransform caster, RectTransform target)
@@ -1054,6 +1164,7 @@ public class BattleManager : MonoBehaviour
         float length = Mathf.Max(currentBattleCellSize * 1.6f, delta.magnitude);
 
         var obj = new GameObject("DragonBreath", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        RegisterBattleVfx(obj);
         obj.transform.SetParent(transform, false);
         var rect = obj.GetComponent<RectTransform>();
         rect.position = midpoint;
@@ -1062,7 +1173,7 @@ public class BattleManager : MonoBehaviour
         var image = obj.GetComponent<Image>();
         image.color = new Color(0.9f, 0.25f, 1f, 0.74f);
 
-        float duration = 0.34f / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float duration = SkillVfxDuration(0.34f);
         float elapsed = 0f;
         while (elapsed < duration)
         {
@@ -1076,7 +1187,7 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
-        if (obj != null) Destroy(obj);
+        DestroyBattleVfx(obj);
     }
 
     private IEnumerator SlashVfxRoutine(RectTransform target, bool twin)
@@ -1098,13 +1209,15 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator BurstTextRoutine(RectTransform parent, string symbol, Color color, float fontSize, float duration, float angle = 0f)
     {
+        if (parent == null) yield break;
+
         var obj = CreateVfxText("SkillBurst", symbol, fontSize, color);
         var rect = obj.GetComponent<RectTransform>();
         rect.position = parent.position;
         rect.rotation = Quaternion.Euler(0f, 0f, angle);
 
         float elapsed = 0f;
-        float scaledDuration = duration / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float scaledDuration = SkillVfxDuration(duration);
         while (elapsed < scaledDuration)
         {
             if (rect == null) yield break;
@@ -1121,12 +1234,13 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
-        if (obj != null) Destroy(obj);
+        DestroyBattleVfx(obj);
     }
 
     private GameObject CreateVfxText(string objectName, string textValue, float fontSize, Color color)
     {
         var obj = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        RegisterBattleVfx(obj);
         obj.transform.SetParent(transform, false);
         obj.transform.SetAsLastSibling();
         var rect = obj.GetComponent<RectTransform>();
@@ -1146,6 +1260,35 @@ public class BattleManager : MonoBehaviour
         shadow.effectColor = new Color(0f, 0f, 0f, 0.65f);
         shadow.effectDistance = new Vector2(2f, -2f);
         return obj;
+    }
+
+    private void RegisterBattleVfx(GameObject obj)
+    {
+        if (obj != null && !activeVfxObjects.Contains(obj))
+        {
+            activeVfxObjects.Add(obj);
+        }
+    }
+
+    private void DestroyBattleVfx(GameObject obj)
+    {
+        if (obj == null) return;
+        activeVfxObjects.Remove(obj);
+        Destroy(obj);
+    }
+
+    private void CleanupBattleVfx()
+    {
+        for (int i = activeVfxObjects.Count - 1; i >= 0; i--)
+        {
+            GameObject obj = activeVfxObjects[i];
+            if (obj != null)
+            {
+                Destroy(obj);
+            }
+        }
+
+        activeVfxObjects.Clear();
     }
 
     public void ShowFloatingText(BattleCharacter target, string message, Color color)
@@ -1435,7 +1578,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    // 🔥 ドラゴンのブレス攻撃（方向ごとに N×N 範囲）
+    // ドラゴンのブレス攻撃（選択方向の前方3x3）
     public bool PerformDragonBreath(BattleCharacter dragon, int range)
     {
         if (dragon == null || dragon.isDead) return false;
@@ -1449,32 +1592,9 @@ public class BattleManager : MonoBehaviour
 
         foreach (var dir in dirs)
         {
-            // この方向に range×range のブロックを配置
-            for (int d = 1; d <= range; d++)
+            foreach (Vector2Int pos in GetDragonBreathCells(dragon.gridPos, dir, range))
             {
-                bool found = false;
-                for (int dx = -range + 1; dx <= range - 1; dx++)
-                {
-                    for (int dy = -range + 1; dy <= range - 1; dy++)
-                    {
-                        Vector2Int offset = new Vector2Int(dx, dy);
-                        Vector2Int pos = dragon.gridPos + dir * d;
-
-                        // dir が上下なら「上にずらして正方形」
-                        if (dir == Vector2Int.up || dir == Vector2Int.down)
-                            pos += new Vector2Int(dx, dy >= 0 ? dy : 0);
-                        else // 左右なら横にずらして正方形
-                            pos += new Vector2Int(dx >= 0 ? dx : 0, dy);
-
-                        if (gridMap.TryGetValue(pos, out var bc) && bc.isAlly != dragon.isAlly && !bc.isDead)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (found) break;
-                }
-                if (found)
+                if (gridMap.TryGetValue(pos, out var bc) && bc.isAlly != dragon.isAlly && !bc.isDead)
                 {
                     validDirs.Add(dir);
                     break;
@@ -1490,7 +1610,7 @@ public class BattleManager : MonoBehaviour
             new Color(0.9f, 0.25f, 1f, 0.82f),
             0.45f));
 
-        // 攻撃処理：chosenDir 方向の range×range 全員にダメージ
+        // 攻撃処理：chosenDir 方向の前方3x3全員にダメージ
         foreach (Vector2Int pos in GetDragonBreathCells(dragon.gridPos, chosenDir, range))
         {
             if (gridMap.TryGetValue(pos, out var bc) && bc.isAlly != dragon.isAlly && !bc.isDead)
@@ -1508,23 +1628,21 @@ public class BattleManager : MonoBehaviour
     private List<Vector2Int> GetDragonBreathCells(Vector2Int origin, Vector2Int dir, int range)
     {
         var cells = new List<Vector2Int>();
+        const int sideRadius = 1;
         for (int d = 1; d <= range; d++)
         {
-            for (int dx = -range + 1; dx <= range - 1; dx++)
+            for (int offset = -sideRadius; offset <= sideRadius; offset++)
             {
-                for (int dy = -range + 1; dy <= range - 1; dy++)
-                {
-                    Vector2Int pos = origin + dir * d;
-                    if (dir == Vector2Int.up || dir == Vector2Int.down)
-                        pos += new Vector2Int(dx, dy >= 0 ? dy : 0);
-                    else
-                        pos += new Vector2Int(dx >= 0 ? dx : 0, dy);
+                Vector2Int pos = origin + dir * d;
+                if (dir == Vector2Int.up || dir == Vector2Int.down)
+                    pos += new Vector2Int(offset, 0);
+                else
+                    pos += new Vector2Int(0, offset);
 
-                    if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) continue;
-                    if (!cells.Contains(pos))
-                    {
-                        cells.Add(pos);
-                    }
+                if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) continue;
+                if (!cells.Contains(pos))
+                {
+                    cells.Add(pos);
                 }
             }
         }
