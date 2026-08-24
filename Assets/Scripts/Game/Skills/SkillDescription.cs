@@ -20,6 +20,13 @@ public static class SkillDescription
         builder.AppendLine($"{data.characterName} / {GetName(skillType)}");
         builder.Append(GetBaseDescription(skillType));
 
+        string characterSpecificDescription = GetCharacterSpecificDescription(data);
+        if (!string.IsNullOrEmpty(characterSpecificDescription))
+        {
+            builder.Append("\n");
+            builder.Append(characterSpecificDescription);
+        }
+
         SkillData skillData = SkillCatalog.Get(skillType);
         int chance = skillData != null && skillData.chanceOverride >= 0 ? skillData.chanceOverride : data.skillChance;
         if (UsesChance(skillType))
@@ -109,6 +116,29 @@ public static class SkillDescription
         };
     }
 
+    private static string GetCharacterSpecificDescription(CharacterData data)
+    {
+        if (data == null) return "";
+
+        if (data.skillType == SkillType.NumberPassive)
+        {
+            return data.category switch
+            {
+                CharacterCategory.Number1 => "初位数字: 数字の種類1つごとに攻撃力+3%、最大+9%。",
+                CharacterCategory.Number2 => "中位数字: 数字の種類1つごとに攻撃力+2%、最大+6%。通常攻撃時、自分周囲8マスの敵に攻撃力25%の追加ダメージ。",
+                CharacterCategory.Number3 => "上位数字: 数字の種類1つごとに攻撃力+6%、最大+18%。通常攻撃時35%で、主対象以外の低HP敵へ攻撃力60%の追撃。",
+                _ => ""
+            };
+        }
+
+        if (data.category == CharacterCategory.Animal)
+        {
+            return "動物: 通常移動時、敵へ近づく移動は最大2マス。";
+        }
+
+        return "";
+    }
+
     private static string GetRangeDiagram(SkillType skillType)
     {
         return skillType switch
@@ -124,6 +154,7 @@ public static class SkillDescription
             SkillType.Soil => "攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 自 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n注候補から最大2マスに罠",
             SkillType.Fireball => "・ ・ ・\n・ 的 ・\n・ ・ ・\n注選ばれた敵1体へ落下",
             SkillType.WaterHeal or SkillType.Heal => "攻 攻 攻\n攻 自 攻\n攻 攻 攻\n注隣接味方を回復",
+            SkillType.BirdRetreat => "移 移 移 移 移\n移 移 移 移 移\n移 移 自 移 移\n移 移 移 移 移\n移 移 移 移 移\n注攻撃後に最大2マス退避",
             SkillType.HorseCharge => "攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 自 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n注2マス以内へ突進",
             SkillType.Dragon => "・ 攻 攻 攻 ・\n・ 攻 攻 攻 ・\n・ 自 攻 攻 ・\n・ 攻 攻 攻 ・\n・ 攻 攻 攻 ・\n注方向を選び広範囲ブレス",
             _ => ""

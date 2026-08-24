@@ -564,7 +564,8 @@ public class BattleManager : MonoBehaviour
 
             if (path != null && path.Count > 1)
             {
-                Vector2Int nextStep = path[1];
+                int destinationIndex = GetMovementDestinationIndex(character, path, targetCellOccupied: true);
+                Vector2Int nextStep = path[destinationIndex];
                 if (IsCellFree(nextStep))
                 {
                     MoveCharacter(character, nextStep, side);
@@ -610,7 +611,8 @@ public class BattleManager : MonoBehaviour
                 }
                 if (bestPath != null && bestPath.Count > 1)
                 {
-                    Vector2Int nextStep = bestPath[1];
+                    int destinationIndex = GetMovementDestinationIndex(character, bestPath, targetCellOccupied: false);
+                    Vector2Int nextStep = bestPath[destinationIndex];
                     if (IsCellFree(nextStep))
                     {
                         MoveCharacter(character, nextStep, side);
@@ -620,6 +622,13 @@ public class BattleManager : MonoBehaviour
                 AddLog($"{side} {character.data.characterName} は動けない！", Color.gray);
             }
         }
+    }
+
+    private static int GetMovementDestinationIndex(BattleCharacter character, List<Vector2Int> path, bool targetCellOccupied)
+    {
+        int maxSteps = character != null && character.data != null && character.data.category == CharacterCategory.Animal ? 2 : 1;
+        int lastWalkableIndex = targetCellOccupied ? path.Count - 2 : path.Count - 1;
+        return Mathf.Clamp(maxSteps, 1, Mathf.Max(1, lastWalkableIndex));
     }
 
     private bool IsCellFree(Vector2Int pos)
