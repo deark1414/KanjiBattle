@@ -143,19 +143,10 @@ public static class SkillDescription
     {
         return skillType switch
         {
-            SkillType.Slash => "・ ・ 攻 ・ ・\n・ ・ 攻 ・ ・\n攻 攻 自 攻 攻\n・ ・ 攻 ・ ・\n・ ・ 攻 ・ ・\n注上下左右2マス先まで候補",
-            SkillType.StunBlow => "攻 攻 攻\n攻 自 攻\n攻 攻 攻",
-            SkillType.TigerTwinClaw => "攻 攻 攻\n攻 自 攻\n攻 攻 攻\n注隣接敵へ連撃",
             SkillType.AreaCounter => "攻 攻 攻\n攻 自 攻\n攻 攻 攻\n注被弾時に周囲へ反撃",
-            SkillType.Arrow => "攻 ・ 攻\n・ 自 ・\n攻 ・ 攻\n注8方向の直線上の最初の敵",
             SkillType.Gun => "攻 ・ 攻\n・ 自 ・\n攻 ・ 攻\n注8方向の直線を貫通",
             SkillType.Spear => "攻 ・ 攻 ・ 攻\n・ 攻 攻 攻 ・\n攻 攻 自 攻 攻\n・ 攻 攻 攻 ・\n攻 ・ 攻 ・ 攻\n注8方向2マスまで貫通",
-            SkillType.Stone => "攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 自 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻",
             SkillType.Soil => "攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 自 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n注候補から最大2マスに罠",
-            SkillType.Fireball => "・ ・ ・\n・ 的 ・\n・ ・ ・\n注選ばれた敵1体へ落下",
-            SkillType.WaterHeal or SkillType.Heal => "攻 攻 攻\n攻 自 攻\n攻 攻 攻\n注隣接味方を回復",
-            SkillType.BirdRetreat => "移 移 移 移 移\n移 移 移 移 移\n移 移 自 移 移\n移 移 移 移 移\n移 移 移 移 移\n注攻撃後に最大2マス退避",
-            SkillType.HorseCharge => "攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 自 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n注2マス以内へ突進",
             SkillType.Dragon => "・ 攻 攻 攻 ・\n・ 攻 攻 攻 ・\n・ 自 攻 攻 ・\n・ 攻 攻 攻 ・\n・ 攻 攻 攻 ・\n注方向を選び広範囲ブレス",
             _ => ""
         };
