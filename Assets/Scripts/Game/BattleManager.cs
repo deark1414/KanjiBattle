@@ -576,7 +576,7 @@ public class BattleManager : MonoBehaviour
                 Vector2Int nextStep = path[destinationIndex];
                 if (IsCellFree(nextStep))
                 {
-                    MoveCharacter(character, nextStep, side);
+                    MoveCharacter(character, path, destinationIndex, side);
                     return;
                 }
             }
@@ -623,7 +623,7 @@ public class BattleManager : MonoBehaviour
                     Vector2Int nextStep = bestPath[destinationIndex];
                     if (IsCellFree(nextStep))
                     {
-                        MoveCharacter(character, nextStep, side);
+                        MoveCharacter(character, bestPath, destinationIndex, side);
                         return;
                     }
                 }
@@ -646,12 +646,18 @@ public class BattleManager : MonoBehaviour
 
     private void MoveCharacter(BattleCharacter character, Vector2Int newPos, string side)
     {
+        MoveCharacter(character, new List<Vector2Int> { character.gridPos, newPos }, 1, side);
+    }
+
+    private void MoveCharacter(BattleCharacter character, List<Vector2Int> path, int destinationIndex, string side)
+    {
         Vector2Int oldPos = character.gridPos;
+        Vector2Int newPos = path[destinationIndex];
         gridMap.Remove(oldPos);
         character.gridPos = newPos;
         gridMap[newPos] = character;
 
-        StartCoroutine(SmoothMove(character, gridCells[newPos.x, newPos.y]));
+        StartCoroutine(SmoothMoveAlongPath(character, path, destinationIndex));
         GameAudio.Instance.Play(GameSound.Click);
         AddLog($"{side} {character.data.characterName} が移動！", Color.white);
 
@@ -672,6 +678,19 @@ public class BattleManager : MonoBehaviour
             {
                 AddLog($"{side} {character.data.characterName} は土の罠の上に立っている！", Color.yellow);
             }
+        }
+    }
+
+    public IEnumerator SmoothMoveAlongPath(BattleCharacter character, List<Vector2Int> path, int destinationIndex)
+    {
+        if (path == null || path.Count <= 1) yield break;
+
+        int lastIndex = Mathf.Clamp(destinationIndex, 1, path.Count - 1);
+        for (int i = 1; i <= lastIndex; i++)
+        {
+            Vector2Int step = path[i];
+            if (gridCells == null || step.x < 0 || step.x >= cols || step.y < 0 || step.y >= rows) yield break;
+            yield return SmoothMove(character, gridCells[step.x, step.y], 0.14f);
         }
     }
 
@@ -865,14 +884,7 @@ public class BattleManager : MonoBehaviour
         {
             case SkillType.Stone:
             case SkillType.Soil:
-            case SkillType.HorseCharge:
                 AddBoxCells(cells, caster.gridPos, 2);
-                break;
-            case SkillType.WaterHeal:
-            case SkillType.Heal:
-            case SkillType.StunBlow:
-            case SkillType.TigerTwinClaw:
-                AddBoxCells(cells, caster.gridPos, 1);
                 break;
             case SkillType.Slash:
                 AddDirectionalCells(cells, caster.gridPos, 2, diagonals: true);
