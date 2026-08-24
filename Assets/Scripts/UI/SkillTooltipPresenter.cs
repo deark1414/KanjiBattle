@@ -8,6 +8,10 @@ public sealed class SkillTooltipPresenter : MonoBehaviour, IPointerEnterHandler,
     private CharacterData characterData;
     private static GameObject tooltipObject;
     private static TextMeshProUGUI tooltipText;
+    private static SkillTooltipPresenter activePresenter;
+    private static bool pointerOverTooltip;
+    private bool pointerOverOwner;
+    private Coroutine hideRoutine;
 
     public void SetCharacter(CharacterData data)
     {
@@ -16,30 +20,51 @@ public sealed class SkillTooltipPresenter : MonoBehaviour, IPointerEnterHandler,
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        pointerOverOwner = true;
         Show();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Hide();
+        pointerOverOwner = false;
+        ScheduleHide();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (tooltipObject != null && tooltipObject.activeSelf)
+        if (activePresenter == this && tooltipObject != null && tooltipObject.activeSelf)
         {
-            Hide();
+            HideAll();
         }
         else
         {
+            pointerOverOwner = true;
             Show();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (activePresenter == this)
+        {
+            HideAll();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (activePresenter == this)
+        {
+            HideAll();
         }
     }
 
     private void Show()
     {
         if (characterData == null) return;
+        CancelHide();
         EnsureTooltip();
+        activePresenter = this;
         tooltipText.text = SkillDescription.GetDetail(characterData);
 
         var targetRect = transform as RectTransform;
@@ -57,11 +82,53 @@ public sealed class SkillTooltipPresenter : MonoBehaviour, IPointerEnterHandler,
         GameAudio.Instance.Play(GameSound.Click);
     }
 
-    private static void Hide()
+    public static void HideAll()
     {
+        pointerOverTooltip = false;
+        activePresenter = null;
         if (tooltipObject != null)
         {
             tooltipObject.SetActive(false);
+        }
+    }
+
+    private void ScheduleHide()
+    {
+        CancelHide();
+        hideRoutine = StartCoroutine(HideWhenPointerLeavesRoutine());
+    }
+
+    private void CancelHide()
+    {
+        if (hideRoutine != null)
+        {
+            StopCoroutine(hideRoutine);
+            hideRoutine = null;
+        }
+    }
+
+    private System.Collections.IEnumerator HideWhenPointerLeavesRoutine()
+    {
+        yield return null;
+        hideRoutine = null;
+        if (activePresenter == this && !pointerOverOwner && !pointerOverTooltip)
+        {
+            HideAll();
+        }
+    }
+
+    private static void SetPointerOverTooltip(bool value)
+    {
+        pointerOverTooltip = value;
+        if (activePresenter == null) return;
+
+        if (value)
+        {
+            activePresenter.CancelHide();
+        }
+        else
+        {
+            activePresenter.ScheduleHide();
         }
     }
 
@@ -82,9 +149,11 @@ public sealed class SkillTooltipPresenter : MonoBehaviour, IPointerEnterHandler,
 
         var image = tooltipObject.GetComponent<Image>();
         image.color = new Color(0.15f, 0.12f, 0.10f, 0.94f);
+        image.raycastTarget = true;
         var outline = tooltipObject.GetComponent<Outline>();
         outline.effectColor = new Color(0.95f, 0.72f, 0.42f, 0.9f);
         outline.effectDistance = new Vector2(1f, -1f);
+        tooltipObject.AddComponent<SkillTooltipSurface>();
 
         var textObj = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
         textObj.transform.SetParent(tooltipObject.transform, false);
@@ -105,5 +174,18 @@ public sealed class SkillTooltipPresenter : MonoBehaviour, IPointerEnterHandler,
         textRect.offsetMax = new Vector2(-14f, -10f);
 
         tooltipObject.SetActive(false);
+    }
+
+    private sealed class SkillTooltipSurface : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    {
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            SetPointerOverTooltip(true);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            SetPointerOverTooltip(false);
+        }
     }
 }
