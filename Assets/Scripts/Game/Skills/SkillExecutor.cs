@@ -45,7 +45,6 @@ public static class SkillExecutor
         if (skillType == SkillType.Gun)
         {
             executed = ExecuteGunLine(new SkillContext(bm, caster, target));
-            if (executed) bm?.PlaySkillVfx(caster, target, skillType);
             return executed;
         }
         if (skillType == SkillType.TigerTwinClaw)
@@ -383,6 +382,7 @@ public static class SkillExecutor
 
         Vector2Int chosenDir = validDirs[Random.Range(0, validDirs.Count)];
         bool didHit = false;
+        ctx.BattleManager.PlayGunLineVfx(ctx.Caster, chosenDir);
 
         for (int d = 1; d <= ctx.BattleManager.Rows + ctx.BattleManager.Cols; d++)
         {

@@ -897,6 +897,40 @@ public class BattleManager : MonoBehaviour
         GameAudio.Instance.Play(skillType == SkillType.WaterHeal || skillType == SkillType.Heal ? GameSound.Heal : GameSound.Skill);
     }
 
+    public void PlayGunLineVfx(BattleCharacter caster, Vector2Int dir)
+    {
+        if (caster == null) return;
+
+        dir = new Vector2Int(Mathf.Clamp(dir.x, -1, 1), Mathf.Clamp(dir.y, -1, 1));
+        if (dir == Vector2Int.zero) return;
+
+        StartSkillCinematic(0.5f);
+
+        Color color = new Color(1f, 0.88f, 0.42f);
+        caster.PlayCastEffect(color);
+        ShowFloatingText(caster, SkillDescription.GetShort(SkillType.Gun), color);
+
+        List<Vector2Int> cells = GetLineCellsFromDirection(caster.gridPos, dir, rows + cols);
+        Color highlightColor = color;
+        highlightColor.a = 0.82f;
+        StartCoroutine(HighlightCellsRoutine(cells, highlightColor, 0.34f));
+
+        RectTransform from = caster.transform as RectTransform;
+        Vector2Int endPos = cells.Count > 0 ? cells[cells.Count - 1] : caster.gridPos + dir;
+        RectTransform to = null;
+        if (endPos.x >= 0 && endPos.x < cols && endPos.y >= 0 && endPos.y < rows && gridCells != null)
+        {
+            to = gridCells[endPos.x, endPos.y] as RectTransform;
+        }
+
+        if (from != null && to != null)
+        {
+            StartCoroutine(ProjectileVfxRoutine(from, to, GetProjectileSymbol(SkillType.Gun), color));
+        }
+
+        GameAudio.Instance.Play(GameSound.Skill);
+    }
+
     private void HighlightSkillRange(BattleCharacter caster, BattleCharacter target, SkillType skillType, Color color)
     {
         List<Vector2Int> cells = GetSkillHighlightCells(caster, target, skillType);
@@ -981,6 +1015,21 @@ public class BattleManager : MonoBehaviour
             cells.Add(pos);
             if (pos == to) break;
         }
+    }
+
+    private List<Vector2Int> GetLineCellsFromDirection(Vector2Int from, Vector2Int dir, int maxDistance)
+    {
+        var cells = new List<Vector2Int>();
+        if (dir == Vector2Int.zero) return cells;
+
+        for (int d = 1; d <= maxDistance; d++)
+        {
+            Vector2Int pos = from + dir * d;
+            if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) break;
+            cells.Add(pos);
+        }
+
+        return cells;
     }
 
     private IEnumerator HighlightCellsRoutine(List<Vector2Int> cells, Color highlightColor, float duration)
@@ -1530,7 +1579,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    // 🔥 ドラゴンのブレス攻撃（方向ごとに N×N 範囲）
+    // ドラゴンのブレス攻撃（選択方向の前方3x3）
     public bool PerformDragonBreath(BattleCharacter dragon, int range)
     {
         if (dragon == null || dragon.isDead) return false;
@@ -1544,32 +1593,9 @@ public class BattleManager : MonoBehaviour
 
         foreach (var dir in dirs)
         {
-            // この方向に range×range のブロックを配置
-            for (int d = 1; d <= range; d++)
+            foreach (Vector2Int pos in GetDragonBreathCells(dragon.gridPos, dir, range))
             {
-                bool found = false;
-                for (int dx = -range + 1; dx <= range - 1; dx++)
-                {
-                    for (int dy = -range + 1; dy <= range - 1; dy++)
-                    {
-                        Vector2Int offset = new Vector2Int(dx, dy);
-                        Vector2Int pos = dragon.gridPos + dir * d;
-
-                        // dir が上下なら「上にずらして正方形」
-                        if (dir == Vector2Int.up || dir == Vector2Int.down)
-                            pos += new Vector2Int(dx, dy >= 0 ? dy : 0);
-                        else // 左右なら横にずらして正方形
-                            pos += new Vector2Int(dx >= 0 ? dx : 0, dy);
-
-                        if (gridMap.TryGetValue(pos, out var bc) && bc.isAlly != dragon.isAlly && !bc.isDead)
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (found) break;
-                }
-                if (found)
+                if (gridMap.TryGetValue(pos, out var bc) && bc.isAlly != dragon.isAlly && !bc.isDead)
                 {
                     validDirs.Add(dir);
                     break;
@@ -1585,7 +1611,7 @@ public class BattleManager : MonoBehaviour
             new Color(0.9f, 0.25f, 1f, 0.82f),
             0.45f));
 
-        // 攻撃処理：chosenDir 方向の range×range 全員にダメージ
+        // 攻撃処理：chosenDir 方向の前方3x3全員にダメージ
         foreach (Vector2Int pos in GetDragonBreathCells(dragon.gridPos, chosenDir, range))
         {
             if (gridMap.TryGetValue(pos, out var bc) && bc.isAlly != dragon.isAlly && !bc.isDead)
@@ -1603,23 +1629,21 @@ public class BattleManager : MonoBehaviour
     private List<Vector2Int> GetDragonBreathCells(Vector2Int origin, Vector2Int dir, int range)
     {
         var cells = new List<Vector2Int>();
+        const int sideRadius = 1;
         for (int d = 1; d <= range; d++)
         {
-            for (int dx = -range + 1; dx <= range - 1; dx++)
+            for (int offset = -sideRadius; offset <= sideRadius; offset++)
             {
-                for (int dy = -range + 1; dy <= range - 1; dy++)
-                {
-                    Vector2Int pos = origin + dir * d;
-                    if (dir == Vector2Int.up || dir == Vector2Int.down)
-                        pos += new Vector2Int(dx, dy >= 0 ? dy : 0);
-                    else
-                        pos += new Vector2Int(dx >= 0 ? dx : 0, dy);
+                Vector2Int pos = origin + dir * d;
+                if (dir == Vector2Int.up || dir == Vector2Int.down)
+                    pos += new Vector2Int(offset, 0);
+                else
+                    pos += new Vector2Int(0, offset);
 
-                    if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) continue;
-                    if (!cells.Contains(pos))
-                    {
-                        cells.Add(pos);
-                    }
+                if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) continue;
+                if (!cells.Contains(pos))
+                {
+                    cells.Add(pos);
                 }
             }
         }
