@@ -44,6 +44,7 @@ public class BattleManager : MonoBehaviour
     private int battleSpeedIndex = 0;
     private Button speedButton;
     private TextMeshProUGUI speedButtonText;
+    private readonly List<GameObject> activeVfxObjects = new();
 
     // === Reinforcement fields ===
     private int reinforcementIndex = 0;
@@ -60,6 +61,11 @@ public class BattleManager : MonoBehaviour
     {
         EnsureSpeedButton();
         ConfigureResponsiveLayout();
+    }
+
+    private void OnDisable()
+    {
+        CleanupBattleVfx();
     }
 
     private void OnRectTransformDimensionsChange()
@@ -126,6 +132,9 @@ public class BattleManager : MonoBehaviour
 
     private void ResetBattle()
     {
+        StopAllCoroutines();
+        CleanupBattleVfx();
+
         foreach (Transform child in battleField)
             Destroy(child.gameObject);
 
@@ -140,7 +149,6 @@ public class BattleManager : MonoBehaviour
         soilTrapCells.Clear();
 
         isPaused = false;
-        StopAllCoroutines();
     }
 
     private void GenerateField(StageData stage)
@@ -975,6 +983,7 @@ public class BattleManager : MonoBehaviour
         if (from == null || to == null || transform == null) yield break;
 
         var obj = new GameObject("SkillTrail", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        RegisterBattleVfx(obj);
         var rect = obj.GetComponent<RectTransform>();
         rect.SetParent(transform, false);
         rect.sizeDelta = new Vector2(18f, 18f);
@@ -998,7 +1007,7 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
-        if (obj != null) Destroy(obj);
+        DestroyBattleVfx(obj);
     }
 
     private IEnumerator ProjectileVfxRoutine(RectTransform from, RectTransform to, string symbol, Color color)
@@ -1024,7 +1033,7 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
-        if (obj != null) Destroy(obj);
+        DestroyBattleVfx(obj);
     }
 
     private IEnumerator FallingFireVfxRoutine(RectTransform target)
@@ -1048,7 +1057,7 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
-        if (fire != null) Destroy(fire);
+        DestroyBattleVfx(fire);
         yield return BurstTextRoutine(target, "炎", new Color(1f, 0.58f, 0.08f), 52f, 0.22f);
     }
 
@@ -1063,6 +1072,7 @@ public class BattleManager : MonoBehaviour
         float length = Mathf.Max(currentBattleCellSize * 1.6f, delta.magnitude);
 
         var obj = new GameObject("DragonBreath", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        RegisterBattleVfx(obj);
         obj.transform.SetParent(transform, false);
         var rect = obj.GetComponent<RectTransform>();
         rect.position = midpoint;
@@ -1085,7 +1095,7 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
-        if (obj != null) Destroy(obj);
+        DestroyBattleVfx(obj);
     }
 
     private IEnumerator SlashVfxRoutine(RectTransform target, bool twin)
@@ -1107,6 +1117,8 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator BurstTextRoutine(RectTransform parent, string symbol, Color color, float fontSize, float duration, float angle = 0f)
     {
+        if (parent == null) yield break;
+
         var obj = CreateVfxText("SkillBurst", symbol, fontSize, color);
         var rect = obj.GetComponent<RectTransform>();
         rect.position = parent.position;
@@ -1130,12 +1142,13 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
-        if (obj != null) Destroy(obj);
+        DestroyBattleVfx(obj);
     }
 
     private GameObject CreateVfxText(string objectName, string textValue, float fontSize, Color color)
     {
         var obj = new GameObject(objectName, typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        RegisterBattleVfx(obj);
         obj.transform.SetParent(transform, false);
         obj.transform.SetAsLastSibling();
         var rect = obj.GetComponent<RectTransform>();
@@ -1155,6 +1168,35 @@ public class BattleManager : MonoBehaviour
         shadow.effectColor = new Color(0f, 0f, 0f, 0.65f);
         shadow.effectDistance = new Vector2(2f, -2f);
         return obj;
+    }
+
+    private void RegisterBattleVfx(GameObject obj)
+    {
+        if (obj != null && !activeVfxObjects.Contains(obj))
+        {
+            activeVfxObjects.Add(obj);
+        }
+    }
+
+    private void DestroyBattleVfx(GameObject obj)
+    {
+        if (obj == null) return;
+        activeVfxObjects.Remove(obj);
+        Destroy(obj);
+    }
+
+    private void CleanupBattleVfx()
+    {
+        for (int i = activeVfxObjects.Count - 1; i >= 0; i--)
+        {
+            GameObject obj = activeVfxObjects[i];
+            if (obj != null)
+            {
+                Destroy(obj);
+            }
+        }
+
+        activeVfxObjects.Clear();
     }
 
     public void ShowFloatingText(BattleCharacter target, string message, Color color)
