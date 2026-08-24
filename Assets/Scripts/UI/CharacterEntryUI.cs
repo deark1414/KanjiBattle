@@ -20,7 +20,7 @@ public class CharacterEntryUI : MonoBehaviour
         EnsureSkillTooltip(data);
 
         string skillName = SkillDescription.GetShort(data.skillType);
-        string info = $"{data.characterName}  {skillName}\nHP {data.GetMaxHP(level)} / ATK {data.GetAttack(level)} / DEF {data.GetDefense(level)}";
+        string info = $"{data.characterName}  {skillName}\nHP {data.GetMaxHP(level)}  ATK {data.GetAttack(level)}  DEF {data.GetDefense(level)}";
         string levelTextValue = $"Lv.{level}";
         string countTextValue = $"所持 x{count}";
 
@@ -123,6 +123,7 @@ public class CharacterEntryUI : MonoBehaviour
         text.enableAutoSizing = true;
         text.fontSizeMax = max;
         text.fontSizeMin = min;
+        text.fontStyle = FontStyles.Normal;
         text.alignment = alignment;
         text.color = new Color(1f, 0.94f, 0.76f, 1f);
         text.faceColor = Color.white;
