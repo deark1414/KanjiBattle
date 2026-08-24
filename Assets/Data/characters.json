@@ -252,7 +252,7 @@
     "defenseGrowth": 1,
     "skillType": "Soil",
     "skillPower": 1.0,
-    "skillChance": 0,
+    "skillChance": 15,
     "isBoss": false
   },
   {
