@@ -78,7 +78,7 @@ public sealed class SkillTooltipPresenter : MonoBehaviour, IPointerEnterHandler,
         rect.anchorMin = new Vector2(0.5f, 0.5f);
         rect.anchorMax = new Vector2(0.5f, 0.5f);
         rect.pivot = new Vector2(1f, 1f);
-        rect.sizeDelta = new Vector2(300f, 156f);
+        rect.sizeDelta = new Vector2(330f, 236f);
 
         var image = tooltipObject.GetComponent<Image>();
         image.color = new Color(0.15f, 0.12f, 0.10f, 0.94f);
@@ -93,8 +93,8 @@ public sealed class SkillTooltipPresenter : MonoBehaviour, IPointerEnterHandler,
         tooltipText.color = new Color(1f, 0.94f, 0.78f, 1f);
         tooltipText.alignment = TextAlignmentOptions.TopLeft;
         tooltipText.enableAutoSizing = true;
-        tooltipText.fontSizeMin = 13f;
-        tooltipText.fontSizeMax = 20f;
+        tooltipText.fontSizeMin = 12f;
+        tooltipText.fontSizeMax = 18f;
         tooltipText.textWrappingMode = TextWrappingModes.Normal;
         tooltipText.raycastTarget = false;
 
