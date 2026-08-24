@@ -10,6 +10,7 @@ namespace KanjiBattle.Editor
     {
         private const string SourceFontPath = "Assets/Fonts/NotoSansJP-Medium.ttf";
         private const string TargetFontAssetPath = "Assets/Fonts/NotoSansJP-Medium SDF.asset";
+        private const string GlyphListPath = "tmp/font/glyphs.txt";
 
         public static void RebuildJapaneseTmpFontAsset()
         {
@@ -35,7 +36,24 @@ namespace KanjiBattle.Editor
 
             fontAsset.name = "NotoSansJP-Medium SDF";
             fontAsset.atlasPopulationMode = AtlasPopulationMode.Dynamic;
+
+            string projectRoot = Directory.GetParent(Application.dataPath)?.FullName ?? Directory.GetCurrentDirectory();
+            string glyphListFullPath = Path.Combine(projectRoot, GlyphListPath);
+            if (File.Exists(glyphListFullPath))
+            {
+                string characters = File.ReadAllText(glyphListFullPath);
+                if (!fontAsset.TryAddCharacters(characters, out string missingCharacters))
+                {
+                    Debug.LogWarning($"Missing glyphs while rebuilding TMP font asset: {missingCharacters}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"Glyph list not found: {glyphListFullPath}");
+            }
+
             AssetDatabase.CreateAsset(fontAsset, TargetFontAssetPath);
+            DisableClearDynamicDataOnBuild(fontAsset);
 
             if (fontAsset.material != null)
             {
@@ -62,6 +80,16 @@ namespace KanjiBattle.Editor
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        private static void DisableClearDynamicDataOnBuild(TMP_FontAsset fontAsset)
+        {
+            var serializedObject = new SerializedObject(fontAsset);
+            SerializedProperty property = serializedObject.FindProperty("m_ClearDynamicDataOnBuild");
+            if (property == null) return;
+
+            property.boolValue = false;
+            serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
     }
 }

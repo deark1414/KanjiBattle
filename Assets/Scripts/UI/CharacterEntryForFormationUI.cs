@@ -16,7 +16,7 @@ public class CharacterEntryForFormationUI : MonoBehaviour
         ApplyLayout(data);
         EnsureSkillTooltip(data);
         string skillName = SkillDescription.GetShort(data.skillType);
-        infoText.text = $"{data.characterName}  {skillName}\nHP {data.GetMaxHP(level)} / ATK {data.GetAttack(level)} / DEF {data.GetDefense(level)}";
+        infoText.text = $"{data.characterName}  {skillName}\nHP {data.GetMaxHP(level)}  ATK {data.GetAttack(level)}  DEF {data.GetDefense(level)}";
         levelText.text = $"Lv.{level}";
         countText.text = $"所持 x{count}";
     }
@@ -94,6 +94,7 @@ private static void ConfigureText(TextMeshProUGUI text, float max, float min, Te
         text.enableAutoSizing = true;
         text.fontSizeMax = max;
         text.fontSizeMin = min;
+        text.fontStyle = FontStyles.Normal;
         text.alignment = alignment;
         text.textWrappingMode = TextWrappingModes.Normal;
         text.overflowMode = TextOverflowModes.Truncate;

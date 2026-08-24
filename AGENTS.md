@@ -90,16 +90,39 @@ npm run qa:visual
 
 ## Font Optimization
 
-- The current `NotoSansJP-Medium SDF.asset` is very large because it contains an 8192x8192 TMP atlas.
-- The release TTF is intentionally subset from `NotoSansJP-Medium.ttf` using the in-project glyph list. If any visible text is added, renamed, or localized, regenerate the glyph list and subset font before deploying.
+- Correct Japanese and Latin glyph rendering is higher priority than font size.
+- Do not replace `Assets/Fonts/NotoSansJP-Medium.ttf` with a subset font unless the resulting WebGL build has been visually verified in the actual browser game screen.
+- A previous subset font caused incorrect TMP rendering in WebGL: `HP` appeared as `GP`, `ATK` appeared as `ASK`, some digits such as `0` looked wrong or disappeared, and some character-list status text was missing.
+- If that kind of one-character shift, missing digit, or strange bold digit appears, suspect the font file / TMP atlas first, not the UI text strings.
+- The current safe fallback is to restore the original `NotoSansJP-VF.otf` contents into `Assets/Fonts/NotoSansJP-Medium.ttf`, preserving the Unity asset GUID/path, then rebuild the TMP SDF asset and WebGL output.
+- `JapaneseFontProvider` should prefer `TMP_Settings.defaultFontAsset` when it is a `NotoSansJP` asset. Avoid preferring stale scene-embedded `NotoSansJP-Medium Runtime SDF` assets over the project font asset.
+- `NotoSansJP-Medium SDF.asset` must keep required glyphs in the asset for WebGL. The font rebuild method should read `tmp/font/glyphs.txt`, call `TryAddCharacters`, and keep `m_ClearDynamicDataOnBuild: 0`; otherwise Unity/TMP may clear dynamic glyph data during build or editor quit.
 - Before regenerating the TMP font asset, collect the in-project glyph set:
 
 ```bash
 npm run font:glyphs
 ```
 
-- Use `tmp/font/glyphs.txt` as the source for the font subset, then verify all Japanese UI screens before release.
-- Subset regeneration command:
+- Rebuild the TMP SDF asset through Unity after collecting glyphs:
+
+```bash
+/Applications/Unity/Hub/Editor/6000.4.4f1/Unity.app/Contents/MacOS/Unity \
+  -batchmode \
+  -quit \
+  -projectPath /Users/yuya/UnityProjects/KanjiBattle \
+  -executeMethod KanjiBattle.Editor.FontAssetMaintenance.RebuildJapaneseTmpFontAsset \
+  -logFile /tmp/kanjibattle_rebuild_font.log
+```
+
+- If Unity-generated YAML has trailing spaces, remove trailing whitespace from `Assets/Fonts/NotoSansJP-Medium SDF.asset` before committing.
+- After rebuilding the TMP SDF asset, verify that important glyphs were persisted:
+
+```bash
+rg -n "m_Unicode: 48|m_Unicode: 72|m_Unicode: 84|m_Unicode: 19968|m_ClearDynamicDataOnBuild" "Assets/Fonts/NotoSansJP-Medium SDF.asset"
+```
+
+- Expected examples: `m_Unicode: 48` for `0`, `72` for `H`, `84` for `T`, `19968` for `一`, and `m_ClearDynamicDataOnBuild: 0`.
+- Only attempt subset regeneration as a separate optimization task, and keep this command as a reference rather than the default workflow:
 
 ```bash
 python3 -m fontTools.subset Assets/Fonts/NotoSansJP-Medium.ttf \
@@ -117,7 +140,7 @@ python3 -m fontTools.subset Assets/Fonts/NotoSansJP-Medium.ttf \
   --output-file=/tmp/NotoSansJP-Medium.subset.ttf
 ```
 
-- Replace `Assets/Fonts/NotoSansJP-Medium.ttf` with the subset output only after confirming the glyph list includes every expected Japanese character. Keeping the same path preserves the Unity asset GUID.
+- If a subset font is tested again, check browser-rendered `Gold`, `召喚 100G`, `HP`, `ATK`, `DEF`, `所持 x1`, and several digits in the in-app browser or Chrome before accepting it.
 - After font changes, run:
 
 ```bash
@@ -128,3 +151,5 @@ DOTNET_CLI_TELEMETRY_OPTOUT=1 /Users/yuya/.dotnet/dotnet build Assembly-CSharp.c
 DOTNET_CLI_TELEMETRY_OPTOUT=1 /Users/yuya/.dotnet/dotnet build Assembly-CSharp-Editor.csproj --no-restore
 npm run qa:visual
 ```
+
+- `npm run qa:visual` is useful but not sufficient for font regressions by itself. Also inspect an actual rendered WebGL screen and confirm visible text, because Playwright layout screenshots can pass while glyph mapping is wrong.

@@ -30,23 +30,23 @@ public static class JapaneseFontProvider
     {
         if (preferredJapaneseFont != null) return preferredJapaneseFont;
 
-        foreach (var text in Object.FindObjectsByType<TextMeshProUGUI>(FindObjectsInactive.Include))
+        var defaultFont = TMP_Settings.defaultFontAsset;
+        if (IsJapaneseProjectFont(defaultFont))
         {
-            TMP_FontAsset font = text.font;
-            if (font == null) continue;
-            string fontName = font.name;
-            if (fontName.Contains("NotoSansJP") && fontName.Contains("Runtime SDF"))
-            {
-                preferredJapaneseFont = font;
-                return preferredJapaneseFont;
-            }
+            preferredJapaneseFont = defaultFont;
+            return preferredJapaneseFont;
         }
 
         preferredJapaneseFont = CreateRuntimeJapaneseFont();
         if (preferredJapaneseFont != null) return preferredJapaneseFont;
 
-        preferredJapaneseFont = TMP_Settings.defaultFontAsset;
+        preferredJapaneseFont = defaultFont;
         return preferredJapaneseFont;
+    }
+
+    private static bool IsJapaneseProjectFont(TMP_FontAsset font)
+    {
+        return font != null && font.name.Contains("NotoSansJP");
     }
 
     private static TMP_FontAsset CreateRuntimeJapaneseFont()

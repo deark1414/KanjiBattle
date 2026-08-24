@@ -93,7 +93,7 @@ public static class SkillDescription
             SkillType.NumberPassive => "編成内の数字の種類に応じて攻撃力が上がる。",
             SkillType.Arrow => "離れた敵に矢を放つ。",
             SkillType.Gun => "直線上の敵を撃ち抜く。",
-            SkillType.Spear => "前方の敵を貫通して攻撃する。",
+            SkillType.Spear => "8方向の敵を最大2マスまで貫通して攻撃する。",
             SkillType.Stone => "離れた敵へ石を投げる。",
             SkillType.Shield => "防御寄りの能力を持つ。",
             SkillType.Wall => "高い耐久で前線を支える。",
@@ -113,13 +113,13 @@ public static class SkillDescription
     {
         return skillType switch
         {
-            SkillType.Slash => "・ 攻 ・\n攻 自 攻\n・ 攻 ・\n注周囲2マス先まで候補",
+            SkillType.Slash => "・ ・ 攻 ・ ・\n・ ・ 攻 ・ ・\n攻 攻 自 攻 攻\n・ ・ 攻 ・ ・\n・ ・ 攻 ・ ・\n注上下左右2マス先まで候補",
             SkillType.StunBlow => "攻 攻 攻\n攻 自 攻\n攻 攻 攻",
             SkillType.TigerTwinClaw => "攻 攻 攻\n攻 自 攻\n攻 攻 攻\n注隣接敵へ連撃",
             SkillType.AreaCounter => "攻 攻 攻\n攻 自 攻\n攻 攻 攻\n注被弾時に周囲へ反撃",
             SkillType.Arrow => "攻 ・ 攻\n・ 自 ・\n攻 ・ 攻\n注8方向の直線上の最初の敵",
             SkillType.Gun => "攻 ・ 攻\n・ 自 ・\n攻 ・ 攻\n注8方向の直線を貫通",
-            SkillType.Spear => "・ 攻 ・\n・ 自 攻\n・ 攻 ・\n注方向上2マスまで貫通",
+            SkillType.Spear => "攻 ・ 攻 ・ 攻\n・ 攻 攻 攻 ・\n攻 攻 自 攻 攻\n・ 攻 攻 攻 ・\n攻 ・ 攻 ・ 攻\n注8方向2マスまで貫通",
             SkillType.Stone => "攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 自 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻",
             SkillType.Soil => "攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 自 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n注候補から最大2マスに罠",
             SkillType.Fireball => "・ ・ ・\n・ 的 ・\n・ ・ ・\n注選ばれた敵1体へ落下",
