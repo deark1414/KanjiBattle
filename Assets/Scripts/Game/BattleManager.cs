@@ -949,7 +949,6 @@ public class BattleManager : MonoBehaviour
         switch (skillType)
         {
             case SkillType.Stone:
-            case SkillType.Soil:
                 AddBoxCells(cells, caster.gridPos, 2);
                 break;
             case SkillType.Slash:
