@@ -144,7 +144,7 @@ public static class SkillDescription
         return skillType switch
         {
             SkillType.AreaCounter => "攻 攻 攻\n攻 自 攻\n攻 攻 攻\n注被弾時に周囲へ反撃",
-            SkillType.Gun => "攻 ・ 攻\n・ 自 ・\n攻 ・ 攻\n注8方向の直線を貫通",
+            SkillType.Gun => "攻 ・ 攻 ・ 攻\n・ 攻 攻 攻 ・\n攻 攻 自 攻 攻\n・ 攻 攻 攻 ・\n攻 ・ 攻 ・ 攻\n注8方向の直線を端まで貫通",
             SkillType.Spear => "攻 ・ 攻 ・ 攻\n・ 攻 攻 攻 ・\n攻 攻 自 攻 攻\n・ 攻 攻 攻 ・\n攻 ・ 攻 ・ 攻\n注8方向2マスまで貫通",
             SkillType.Soil => "攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 自 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n注候補から最大2マスに罠",
             SkillType.Dragon => "・ 攻 攻 攻 ・\n・ 攻 攻 攻 ・\n・ 自 攻 攻 ・\n・ 攻 攻 攻 ・\n・ 攻 攻 攻 ・\n注方向を選び広範囲ブレス",

@@ -879,7 +879,7 @@ public class BattleManager : MonoBehaviour
                 if (target != null) StartCoroutine(FallingFireVfxRoutine(target.transform as RectTransform));
                 break;
             case SkillType.Dragon:
-                StartCoroutine(DragonBreathVfxRoutine(caster.transform as RectTransform, target != null ? target.transform as RectTransform : null));
+                // Dragon breath highlights the exact chosen attack cells in PerformDragonBreath.
                 break;
             case SkillType.Slash:
             case SkillType.TigerTwinClaw:
