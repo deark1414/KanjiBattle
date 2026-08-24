@@ -38,6 +38,7 @@ public class UIManager : MonoBehaviour
 
     private void HideAll()
     {
+        SkillTooltipPresenter.HideAll();
         if (StageSelectPanel != null) StageSelectPanel.SetActive(false);
         if (FormationPanel != null) FormationPanel.SetActive(false);
         if (BattlePanel != null) BattlePanel.SetActive(false);
