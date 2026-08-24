@@ -45,6 +45,8 @@ public class BattleManager : MonoBehaviour
     private Button speedButton;
     private TextMeshProUGUI speedButtonText;
     private readonly List<GameObject> activeVfxObjects = new();
+    private const float skillCinematicScale = 1.85f;
+    private float skillCinematicUntil = 0f;
 
     // === Reinforcement fields ===
     private int reinforcementIndex = 0;
@@ -107,6 +109,9 @@ public class BattleManager : MonoBehaviour
             SpawnCharacter(enemy, pos, false);
         }
 
+        LogNumberPassiveBuffs("味方", this.allies);
+        LogNumberPassiveBuffs("敵", this.enemies);
+
         StartCoroutine(StartBattleAfterSetup(stage));
     }
 
@@ -149,6 +154,7 @@ public class BattleManager : MonoBehaviour
         soilTrapCells.Clear();
 
         isPaused = false;
+        skillCinematicUntil = 0f;
     }
 
     private void GenerateField(StageData stage)
@@ -365,7 +371,31 @@ public class BattleManager : MonoBehaviour
 
     private WaitForSeconds BattleWait(float seconds)
     {
-        return new WaitForSeconds(seconds / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]));
+        float cinematicScale = Time.time < skillCinematicUntil ? skillCinematicScale : 1f;
+        return new WaitForSeconds(seconds * cinematicScale / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]));
+    }
+
+    private void LogNumberPassiveBuffs(string side, List<BattleCharacter> characters)
+    {
+        if (characters == null) return;
+
+        foreach (BattleCharacter character in characters)
+        {
+            if (character == null || character.isDead) continue;
+            if (!character.TryGetNumberPassiveBuff(this, out int uniqueCount, out int percent)) continue;
+            AddLog($"{side} {character.DisplayName} の数字結束: {uniqueCount}種で攻撃力+{percent}%", new Color(0.78f, 0.92f, 1f));
+        }
+    }
+
+    private void StartSkillCinematic(float seconds)
+    {
+        float scaledSeconds = seconds * skillCinematicScale / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        skillCinematicUntil = Mathf.Max(skillCinematicUntil, Time.time + scaledSeconds);
+    }
+
+    private float SkillVfxDuration(float seconds)
+    {
+        return seconds * skillCinematicScale / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
     }
 
     private void EnsureSpeedButton()
@@ -820,6 +850,8 @@ public class BattleManager : MonoBehaviour
     {
         if (caster == null) return;
 
+        StartSkillCinematic(0.5f);
+
         Color color = skillType switch
         {
             SkillType.Fireball => new Color(1f, 0.30f, 0.08f),
@@ -967,7 +999,7 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(duration / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]));
+        yield return new WaitForSeconds(SkillVfxDuration(duration));
 
         foreach (var pair in originals)
         {
@@ -1005,7 +1037,7 @@ public class BattleManager : MonoBehaviour
         Vector3 start = from.position;
         Vector3 end = to.position;
         float elapsed = 0f;
-        float duration = 0.24f / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float duration = SkillVfxDuration(0.24f);
         while (elapsed < duration)
         {
             if (rect == null) yield break;
@@ -1033,7 +1065,7 @@ public class BattleManager : MonoBehaviour
         Vector3 delta = end - start;
         rect.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg);
 
-        float duration = 0.34f / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float duration = SkillVfxDuration(0.34f);
         float elapsed = 0f;
         while (elapsed < duration)
         {
@@ -1057,7 +1089,7 @@ public class BattleManager : MonoBehaviour
         var fire = CreateVfxText("FallingFire", "火", 42f, new Color(1f, 0.26f, 0.04f));
         var rect = fire.GetComponent<RectTransform>();
 
-        float duration = 0.38f / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float duration = SkillVfxDuration(0.38f);
         float elapsed = 0f;
         while (elapsed < duration)
         {
@@ -1093,7 +1125,7 @@ public class BattleManager : MonoBehaviour
         var image = obj.GetComponent<Image>();
         image.color = new Color(0.9f, 0.25f, 1f, 0.74f);
 
-        float duration = 0.34f / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float duration = SkillVfxDuration(0.34f);
         float elapsed = 0f;
         while (elapsed < duration)
         {
@@ -1137,7 +1169,7 @@ public class BattleManager : MonoBehaviour
         rect.rotation = Quaternion.Euler(0f, 0f, angle);
 
         float elapsed = 0f;
-        float scaledDuration = duration / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]);
+        float scaledDuration = SkillVfxDuration(duration);
         while (elapsed < scaledDuration)
         {
             if (rect == null) yield break;
