@@ -104,7 +104,7 @@ public static class SkillDescription
             SkillType.Stone => "離れた敵へ石を投げる。",
             SkillType.Shield => "防御寄りの能力を持つ。",
             SkillType.Wall => "高い耐久で前線を支える。",
-            SkillType.Soil => "自分の周囲に土の罠を設置する。",
+            SkillType.Soil => "周囲5x5の候補から最大2マスに土の罠を設置する。土以外が土罠の上にいると、ターンごとにダメージを受ける。",
             SkillType.Fireball => "敵に防御無視の火球を放つ。",
             SkillType.WoodPush => "敵を攻撃し、後方へ押し出す。",
             SkillType.WaterHeal => "隣接した味方を回復する。",
@@ -146,7 +146,6 @@ public static class SkillDescription
             SkillType.AreaCounter => "攻 攻 攻\n攻 自 攻\n攻 攻 攻\n注被弾時に周囲へ反撃",
             SkillType.Gun => "攻 ・ 攻 ・ 攻\n・ 攻 攻 攻 ・\n攻 攻 自 攻 攻\n・ 攻 攻 攻 ・\n攻 ・ 攻 ・ 攻\n注8方向の直線を端まで貫通",
             SkillType.Spear => "攻 ・ 攻 ・ 攻\n・ 攻 攻 攻 ・\n攻 攻 自 攻 攻\n・ 攻 攻 攻 ・\n攻 ・ 攻 ・ 攻\n注8方向2マスまで貫通",
-            SkillType.Soil => "攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 自 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n注候補から最大2マスに罠",
             SkillType.Dragon => "・ ・ ・ ・ ・\n・ ・ 攻 攻 攻\n・ 自 攻 攻 攻\n・ ・ 攻 攻 攻\n・ ・ ・ ・ ・\n注方向を選び前方3x3ブレス",
             _ => ""
         };
