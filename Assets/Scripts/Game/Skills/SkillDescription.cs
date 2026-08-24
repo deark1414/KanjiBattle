@@ -32,6 +32,13 @@ public static class SkillDescription
             builder.Append($"\n威力補正: x{data.skillPower:0.##}");
         }
 
+        string rangeDiagram = GetRangeDiagram(skillType);
+        if (!string.IsNullOrEmpty(rangeDiagram))
+        {
+            builder.Append("\n範囲:\n");
+            builder.Append(rangeDiagram);
+        }
+
         return builder.ToString();
     }
 
@@ -99,6 +106,27 @@ public static class SkillDescription
             SkillType.TigerTwinClaw => "近くの敵に連続攻撃を行う。",
             SkillType.Dragon => "広範囲攻撃や咆哮で戦場を制圧する。",
             _ => "特殊な効果を持つ。"
+        };
+    }
+
+    private static string GetRangeDiagram(SkillType skillType)
+    {
+        return skillType switch
+        {
+            SkillType.Slash => "・ 攻 ・\n攻 自 攻\n・ 攻 ・\n注周囲2マス先まで候補",
+            SkillType.StunBlow => "攻 攻 攻\n攻 自 攻\n攻 攻 攻",
+            SkillType.TigerTwinClaw => "攻 攻 攻\n攻 自 攻\n攻 攻 攻\n注隣接敵へ連撃",
+            SkillType.AreaCounter => "攻 攻 攻\n攻 自 攻\n攻 攻 攻\n注被弾時に周囲へ反撃",
+            SkillType.Arrow => "攻 ・ 攻\n・ 自 ・\n攻 ・ 攻\n注8方向の直線上の最初の敵",
+            SkillType.Gun => "攻 ・ 攻\n・ 自 ・\n攻 ・ 攻\n注8方向の直線を貫通",
+            SkillType.Spear => "・ 攻 ・\n・ 自 攻\n・ 攻 ・\n注方向上2マスまで貫通",
+            SkillType.Stone => "攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 自 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻",
+            SkillType.Soil => "攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 自 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n注候補から最大2マスに罠",
+            SkillType.Fireball => "・ ・ ・\n・ 的 ・\n・ ・ ・\n注選ばれた敵1体へ落下",
+            SkillType.WaterHeal or SkillType.Heal => "攻 攻 攻\n攻 自 攻\n攻 攻 攻\n注隣接味方を回復",
+            SkillType.HorseCharge => "攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 自 攻 攻\n攻 攻 攻 攻 攻\n攻 攻 攻 攻 攻\n注2マス以内へ突進",
+            SkillType.Dragon => "・ 攻 攻 攻 ・\n・ 攻 攻 攻 ・\n・ 自 攻 攻 ・\n・ 攻 攻 攻 ・\n・ 攻 攻 攻 ・\n注方向を選び広範囲ブレス",
+            _ => ""
         };
     }
 }

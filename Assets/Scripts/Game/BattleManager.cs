@@ -797,6 +797,7 @@ public class BattleManager : MonoBehaviour
 
         caster.PlayCastEffect(color);
         ShowFloatingText(caster, SkillDescription.GetShort(skillType), color);
+        HighlightSkillRange(caster, target, skillType, color);
 
         switch (skillType)
         {
@@ -826,6 +827,126 @@ public class BattleManager : MonoBehaviour
                 break;
         }
         GameAudio.Instance.Play(skillType == SkillType.WaterHeal || skillType == SkillType.Heal ? GameSound.Heal : GameSound.Skill);
+    }
+
+    private void HighlightSkillRange(BattleCharacter caster, BattleCharacter target, SkillType skillType, Color color)
+    {
+        List<Vector2Int> cells = GetSkillHighlightCells(caster, target, skillType);
+        if (cells.Count == 0) return;
+
+        Color highlightColor = color;
+        highlightColor.a = 0.82f;
+        StartCoroutine(HighlightCellsRoutine(cells, highlightColor, 0.34f));
+    }
+
+    private List<Vector2Int> GetSkillHighlightCells(BattleCharacter caster, BattleCharacter target, SkillType skillType)
+    {
+        var cells = new List<Vector2Int>();
+        if (caster == null) return cells;
+
+        switch (skillType)
+        {
+            case SkillType.Stone:
+            case SkillType.Soil:
+            case SkillType.HorseCharge:
+                AddBoxCells(cells, caster.gridPos, 2);
+                break;
+            case SkillType.WaterHeal:
+            case SkillType.Heal:
+            case SkillType.StunBlow:
+            case SkillType.TigerTwinClaw:
+                AddBoxCells(cells, caster.gridPos, 1);
+                break;
+            case SkillType.Slash:
+                AddDirectionalCells(cells, caster.gridPos, 2, diagonals: true);
+                break;
+            case SkillType.Arrow:
+            case SkillType.Gun:
+                AddLineToTargetCells(cells, caster.gridPos, target != null ? target.gridPos : caster.gridPos, maxDistance: rows + cols);
+                break;
+            case SkillType.Spear:
+                AddLineToTargetCells(cells, caster.gridPos, target != null ? target.gridPos : caster.gridPos, maxDistance: 2);
+                break;
+            case SkillType.Fireball:
+                if (target != null) cells.Add(target.gridPos);
+                break;
+        }
+
+        cells.RemoveAll(pos => pos == caster.gridPos || pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows);
+        return cells;
+    }
+
+    private void AddBoxCells(List<Vector2Int> cells, Vector2Int center, int radius)
+    {
+        for (int dx = -radius; dx <= radius; dx++)
+        {
+            for (int dy = -radius; dy <= radius; dy++)
+            {
+                if (dx == 0 && dy == 0) continue;
+                cells.Add(center + new Vector2Int(dx, dy));
+            }
+        }
+    }
+
+    private void AddDirectionalCells(List<Vector2Int> cells, Vector2Int center, int distance, bool diagonals)
+    {
+        Vector2Int[] dirs = diagonals
+            ? new[]
+            {
+                Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right,
+                new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(1, -1), new Vector2Int(-1, -1)
+            }
+            : new[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+
+        foreach (var dir in dirs)
+        {
+            for (int d = 1; d <= distance; d++)
+            {
+                cells.Add(center + dir * d);
+            }
+        }
+    }
+
+    private void AddLineToTargetCells(List<Vector2Int> cells, Vector2Int from, Vector2Int to, int maxDistance)
+    {
+        Vector2Int delta = to - from;
+        if (delta == Vector2Int.zero) return;
+        Vector2Int dir = new Vector2Int(Mathf.Clamp(delta.x, -1, 1), Mathf.Clamp(delta.y, -1, 1));
+
+        for (int d = 1; d <= maxDistance; d++)
+        {
+            Vector2Int pos = from + dir * d;
+            if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) break;
+            cells.Add(pos);
+            if (pos == to) break;
+        }
+    }
+
+    private IEnumerator HighlightCellsRoutine(List<Vector2Int> cells, Color highlightColor, float duration)
+    {
+        var originals = new Dictionary<Image, Color>();
+        foreach (var pos in cells)
+        {
+            if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) continue;
+            if (gridCells == null || gridCells[pos.x, pos.y] == null) continue;
+            Transform cell = gridCells[pos.x, pos.y].parent;
+            if (cell == null || !cell.TryGetComponent(out Image image)) continue;
+            if (!originals.ContainsKey(image))
+            {
+                originals.Add(image, image.color);
+                image.color = Color.Lerp(image.color, highlightColor, 0.72f);
+            }
+        }
+
+        yield return new WaitForSeconds(duration / Mathf.Max(1f, battleSpeeds[battleSpeedIndex]));
+
+        foreach (var pair in originals)
+        {
+            if (pair.Key != null)
+            {
+                pair.Key.color = pair.Value;
+            }
+        }
     }
 
     private static string GetProjectileSymbol(SkillType skillType)
@@ -1364,32 +1485,50 @@ public class BattleManager : MonoBehaviour
         if (validDirs.Count == 0) return false;
 
         Vector2Int chosenDir = validDirs[Random.Range(0, validDirs.Count)];
+        StartCoroutine(HighlightCellsRoutine(
+            GetDragonBreathCells(dragon.gridPos, chosenDir, range),
+            new Color(0.9f, 0.25f, 1f, 0.82f),
+            0.45f));
 
         // 攻撃処理：chosenDir 方向の range×range 全員にダメージ
+        foreach (Vector2Int pos in GetDragonBreathCells(dragon.gridPos, chosenDir, range))
+        {
+            if (gridMap.TryGetValue(pos, out var bc) && bc.isAlly != dragon.isAlly && !bc.isDead)
+            {
+                int dmg = Mathf.RoundToInt(dragon.GetEffectiveAttack(this) * dragon.data.skillPower);
+                AddLog($"{dragon.data.characterName} のブレスが {bc.data.characterName} に命中！ {dmg} ダメージ", Color.red);
+                bc.TakeDamage(dmg, this, dragon, isBasicAttack: false);
+            }
+        }
+
+        dragon.UpdateDirection(chosenDir);
+        return true;
+    }
+
+    private List<Vector2Int> GetDragonBreathCells(Vector2Int origin, Vector2Int dir, int range)
+    {
+        var cells = new List<Vector2Int>();
         for (int d = 1; d <= range; d++)
         {
             for (int dx = -range + 1; dx <= range - 1; dx++)
             {
                 for (int dy = -range + 1; dy <= range - 1; dy++)
                 {
-                    Vector2Int pos = dragon.gridPos + chosenDir * d;
-                    if (chosenDir == Vector2Int.up || chosenDir == Vector2Int.down)
+                    Vector2Int pos = origin + dir * d;
+                    if (dir == Vector2Int.up || dir == Vector2Int.down)
                         pos += new Vector2Int(dx, dy >= 0 ? dy : 0);
                     else
                         pos += new Vector2Int(dx >= 0 ? dx : 0, dy);
 
-                    if (gridMap.TryGetValue(pos, out var bc) && bc.isAlly != dragon.isAlly && !bc.isDead)
+                    if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) continue;
+                    if (!cells.Contains(pos))
                     {
-                        int dmg = Mathf.RoundToInt(dragon.GetEffectiveAttack(this) * dragon.data.skillPower);
-                        AddLog($"{dragon.data.characterName} のブレスが {bc.data.characterName} に命中！ {dmg} ダメージ", Color.red);
-                        bc.TakeDamage(dmg, this, dragon, isBasicAttack: false);
+                        cells.Add(pos);
                     }
                 }
             }
         }
-
-        dragon.UpdateDirection(chosenDir);
-        return true;
+        return cells;
     }
 
     // 🐉 ドラゴンの咆哮（周囲8方向、スタン＋小ダメージ）
