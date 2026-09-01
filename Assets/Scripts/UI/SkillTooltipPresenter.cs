@@ -9,6 +9,7 @@ public sealed class SkillTooltipPresenter : MonoBehaviour, IPointerEnterHandler,
     private static GameObject tooltipObject;
     private static TextMeshProUGUI tooltipText;
     private static SkillTooltipPresenter activePresenter;
+    private static bool pointerOverTooltip;
     private bool pointerOverOwner;
     private Coroutine hideRoutine;
 
@@ -84,6 +85,7 @@ public sealed class SkillTooltipPresenter : MonoBehaviour, IPointerEnterHandler,
     public static void HideAll()
     {
         activePresenter = null;
+        pointerOverTooltip = false;
         if (tooltipObject != null)
         {
             tooltipObject.SetActive(false);
@@ -109,9 +111,22 @@ public sealed class SkillTooltipPresenter : MonoBehaviour, IPointerEnterHandler,
     {
         yield return null;
         hideRoutine = null;
-        if (activePresenter == this && !pointerOverOwner)
+        if (activePresenter == this && !pointerOverOwner && !pointerOverTooltip)
         {
             HideAll();
+        }
+    }
+
+    private static void SetTooltipPointer(bool isOver)
+    {
+        pointerOverTooltip = isOver;
+        if (isOver && activePresenter != null)
+        {
+            activePresenter.CancelHide();
+        }
+        else if (!isOver && activePresenter != null && !activePresenter.pointerOverOwner)
+        {
+            activePresenter.ScheduleHide();
         }
     }
 
@@ -132,7 +147,8 @@ public sealed class SkillTooltipPresenter : MonoBehaviour, IPointerEnterHandler,
 
         var image = tooltipObject.GetComponent<Image>();
         image.color = new Color(0.15f, 0.12f, 0.10f, 0.94f);
-        image.raycastTarget = false;
+        image.raycastTarget = true;
+        tooltipObject.AddComponent<SkillTooltipHoverRelay>();
         var outline = tooltipObject.GetComponent<Outline>();
         outline.effectColor = new Color(0.95f, 0.72f, 0.42f, 0.9f);
         outline.effectDistance = new Vector2(1f, -1f);
@@ -156,5 +172,18 @@ public sealed class SkillTooltipPresenter : MonoBehaviour, IPointerEnterHandler,
         textRect.offsetMax = new Vector2(-14f, -10f);
 
         tooltipObject.SetActive(false);
+    }
+
+    private sealed class SkillTooltipHoverRelay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    {
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            SetTooltipPointer(true);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            SetTooltipPointer(false);
+        }
     }
 }
