@@ -32916,6 +32916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   summonableCharacters:
   - {fileID: 11400000, guid: a8f9237dba00b460b8d915962812b47b, type: 2}
+  characterDatabase: {fileID: 11400000, guid: b6179f9f0755a4c7ab0cec764b9824aa, type: 2}
   baseLevelCap: 5
 --- !u!1 &1155833374
 GameObject:
