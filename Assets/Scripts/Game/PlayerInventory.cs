@@ -20,6 +20,8 @@ public class PlayerInventory : MonoBehaviour
 
     [SerializeField]
     private List<CharacterData> summonableCharacters = new List<CharacterData>();
+    [SerializeField]
+    private CharacterDatabase characterDatabase;
     private List<CharacterData> initialSummonableCharacters = new List<CharacterData>();
 
     [SerializeField] private int baseLevelCap = 5;
@@ -163,7 +165,7 @@ public class PlayerInventory : MonoBehaviour
     // GameManager.AddCharacterUnlock(int id) から呼ばれる想定のオーバーロード
     public bool UnlockCharacterForSummon(int characterId)
     {
-        var db = Resources.Load<CharacterDatabase>("CharacterDatabase");
+        var db = GetCharacterDatabase();
 #if UNITY_EDITOR
         if (db == null)
         {
@@ -286,7 +288,7 @@ public class PlayerInventory : MonoBehaviour
             if (character != null && character.characterId == id) return character;
         }
 
-        var db = Resources.Load<CharacterDatabase>("CharacterDatabase");
+        var db = GetCharacterDatabase();
 #if UNITY_EDITOR
         if (db == null)
         {
@@ -294,6 +296,16 @@ public class PlayerInventory : MonoBehaviour
         }
 #endif
         return db != null ? db.GetById(id) : null;
+    }
+
+    private CharacterDatabase GetCharacterDatabase()
+    {
+        if (characterDatabase != null)
+        {
+            return characterDatabase;
+        }
+
+        return Resources.Load<CharacterDatabase>("CharacterDatabase");
     }
 }
 
