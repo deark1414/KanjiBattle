@@ -894,7 +894,7 @@ public class BattleManager : MonoBehaviour
                 if (target != null) StartCoroutine(SkillTrailRoutine(caster.transform as RectTransform, target.transform as RectTransform, color));
                 break;
         }
-        GameAudio.Instance.Play(skillType == SkillType.WaterHeal || skillType == SkillType.Heal ? GameSound.Heal : GameSound.Skill);
+        GameAudio.Instance.PlaySkillSound(skillType);
     }
 
     public void PlayGunLineVfx(BattleCharacter caster, Vector2Int dir)
@@ -928,7 +928,7 @@ public class BattleManager : MonoBehaviour
             StartCoroutine(ProjectileVfxRoutine(from, to, GetProjectileSymbol(SkillType.Gun), color));
         }
 
-        GameAudio.Instance.Play(GameSound.Skill);
+        GameAudio.Instance.PlaySkillSound(SkillType.Gun);
     }
 
     private void HighlightSkillRange(BattleCharacter caster, BattleCharacter target, SkillType skillType, Color color)

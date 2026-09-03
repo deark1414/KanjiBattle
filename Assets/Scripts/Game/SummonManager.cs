@@ -55,6 +55,7 @@ public class SummonManager : MonoBehaviour
 
         if (GameManager.Instance.SpendGold(CurrentSummonCost))
         {
+            GameAudio.Instance.Play(GameSound.Summon);
             // ランダムキャラ召喚: 解放済み・撃破済みキャラのみから選択
             var unlockedChars = PlayerInventory.Instance.GetSummonableCharacters();
             if (unlockedChars != null && unlockedChars.Count > 0)
