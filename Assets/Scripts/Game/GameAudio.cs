@@ -18,6 +18,7 @@ public sealed class GameAudio : MonoBehaviour
     private AudioSource bgmSource;
     private readonly Dictionary<GameSound, AudioClip> clips = new();
     private readonly Dictionary<GameBgm, AudioClip> bgmClips = new();
+    private bool bgmRequested;
 
     public static GameAudio Instance
     {
@@ -51,19 +52,30 @@ public sealed class GameAudio : MonoBehaviour
         bgmSource.volume = 0.12f;
     }
 
-    public void EnsureBgm() => PlayBgm(GameBgm.Battle, false);
+    public void EnsureBgm() => PlayBgm(GameBgm.Battle, true);
 
     public void PlayBgm(GameBgm bgm) => PlayBgm(bgm, true);
 
     private void PlayBgm(GameBgm bgm, bool restartIfDifferent)
     {
         EnsureSources();
+        bgmRequested = true;
         var clip = GetBgmClip(bgm);
         if (clip == null) return;
         if (!restartIfDifferent && bgmSource.isPlaying) return;
         if (bgmSource.isPlaying && bgmSource.clip == clip) return;
         bgmSource.clip = clip;
         bgmSource.Play();
+    }
+
+    private void Update()
+    {
+        // WebGL may reject the first Play call until the user interacts with the page.
+        // Retry the already-selected clip on a later frame after that gesture unlocks audio.
+        if (bgmRequested && bgmSource != null && bgmSource.clip != null && !bgmSource.isPlaying)
+        {
+            bgmSource.Play();
+        }
     }
 
     public void Play(GameSound sound)
