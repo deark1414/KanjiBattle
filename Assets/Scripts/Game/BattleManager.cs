@@ -45,6 +45,7 @@ public class BattleManager : MonoBehaviour
     private Button speedButton;
     private TextMeshProUGUI speedButtonText;
     private readonly List<GameObject> activeVfxObjects = new();
+    private static Sprite[] vfxCatalogSprites;
     private const float skillCinematicScale = 1.85f;
     private float skillCinematicUntil = 0f;
 
@@ -866,6 +867,7 @@ public class BattleManager : MonoBehaviour
         caster.PlayCastEffect(color);
         ShowFloatingText(caster, SkillDescription.GetShort(skillType), color);
         HighlightSkillRange(caster, target, skillType, color);
+        PlayCatalogVfx(target != null ? target : caster, skillType, color);
 
         switch (skillType)
         {
@@ -929,6 +931,65 @@ public class BattleManager : MonoBehaviour
         }
 
         GameAudio.Instance.PlaySkillSound(SkillType.Gun);
+    }
+
+    private void PlayCatalogVfx(BattleCharacter target, SkillType skillType, Color color)
+    {
+        if (target == null) return;
+        if (vfxCatalogSprites == null || vfxCatalogSprites.Length == 0)
+        {
+            vfxCatalogSprites = Resources.LoadAll<Sprite>("VFX/kanjibattle_vfx_catalog_02");
+        }
+        if (vfxCatalogSprites == null || vfxCatalogSprites.Length == 0) return;
+
+        int index = skillType switch
+        {
+            SkillType.Arrow => 16,
+            SkillType.Spear => 17,
+            SkillType.Gun => 18,
+            SkillType.Stone => 19,
+            SkillType.WoodPush => 20,
+            SkillType.Fireball => 21,
+            SkillType.Slash or SkillType.TigerTwinClaw => 22,
+            SkillType.Dragon => 28,
+            _ => 0
+        };
+        index = Mathf.Clamp(index, 0, vfxCatalogSprites.Length - 1);
+        StartCoroutine(CatalogVfxRoutine(target.transform as RectTransform, vfxCatalogSprites[index], color));
+    }
+
+    private IEnumerator CatalogVfxRoutine(RectTransform target, Sprite sprite, Color color)
+    {
+        if (target == null || sprite == null) yield break;
+        var obj = new GameObject("CatalogVfx", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        RegisterBattleVfx(obj);
+        var rect = obj.GetComponent<RectTransform>();
+        rect.SetParent(transform, false);
+        rect.position = target.position;
+        rect.sizeDelta = target.rect.size * 1.65f;
+        rect.localScale = Vector3.one * 0.55f;
+
+        var image = obj.GetComponent<Image>();
+        image.sprite = sprite;
+        image.preserveAspect = true;
+        image.raycastTarget = false;
+        color.a = 0.95f;
+        image.color = color;
+
+        float duration = SkillVfxDuration(0.42f);
+        float elapsed = 0f;
+        while (elapsed < duration && obj != null)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float progress = Mathf.Clamp01(elapsed / duration);
+            float scale = Mathf.Lerp(0.55f, 1.08f, Mathf.SmoothStep(0f, 1f, progress));
+            rect.localScale = Vector3.one * scale;
+            Color current = image.color;
+            current.a = Mathf.Lerp(0.95f, 0f, progress);
+            image.color = current;
+            yield return null;
+        }
+        if (obj != null) DestroyBattleVfx(obj);
     }
 
     private void HighlightSkillRange(BattleCharacter caster, BattleCharacter target, SkillType skillType, Color color)
