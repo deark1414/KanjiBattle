@@ -106,14 +106,14 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ## Number Aura Sequences
 
-Create a separate 3x3 sheet for persistent number auras. Use the same visual family within each tier group: 1–3 lower, 4–6 middle, and 7–9 upper.
+Create nine separate animated sprite assets for persistent number auras, one for each number 1 through 9. Use the same visual family within each tier group: 1–3 lower, 4–6 middle, and 7–9 upper. A review contact sheet may arrange them as a 3x3 grid, but runtime assets must remain individually addressable.
 
 - Rows: lower green, middle yellow, upper red.
-- Columns: small, medium, maximum intensity.
+- Within each tier, increase particle density and motion richness gradually from the first number to the third number. Do not create nine unrelated designs.
 - Replace the current simplified placeholder with a material-based aura: rough ink-brush arcs, small motes, and restrained warm highlights surrounding an empty center where the kanji remains readable. It should feel like a persistent power field, not a clean UI ring or a decorative badge.
-- Each cell must be a complete, loopable aura field with safe transparent margins and no character, number, text, or fixed emblem baked in.
-- The aura should loop smoothly without changing the character position. Keep the motion slow and subtle enough for permanent display.
-- Intensity is represented by particle count, brush density, glow radius, and brightness. The maximum column may be visibly richer, but must remain readable and avoid a full-screen flare.
+- Each number asset should contain a fixed-frame loop, preferably 8 frames, with a complete aura field in every frame, safe transparent margins, and no character, number, text, or fixed emblem baked in.
+- The aura should visibly well up, curl, and settle in a slow seamless loop without changing the character position. Keep the motion subtle enough for permanent display while making it feel alive rather than static.
+- Intensity is represented by particle count, brush density, glow radius, brightness, and motion amplitude. The strongest upper-tier assets may be richer, but must remain readable and avoid a full-screen flare.
 
 ## Unity Import Requirements
 
