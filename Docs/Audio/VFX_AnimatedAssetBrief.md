@@ -77,7 +77,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 - Fireball: falling fireball, contact explosion, ember fade.
 - Water heal: expanding blue ring, droplets, soft upward particles.
 - Soil trap: ground crack or mound, trap activation, dust settling. Do not imply that every highlighted cell is damaged.
-- Wood push: a natural ground-born attack led by the roots themselves. Keep the trunk or stump short at the origin; several thick roots must grow long from the ground, extend toward the local forward direction, and whip or sweep through the target area before retracting underground. The motion should feel like a living root system rather than a pre-placed horizontal log or a swinging trunk; include soil lift, root flex, a clear forward sweep, small leaves/splinters, and settling dust. Keep the local forward axis code-controlled and do not include a character or target.
+- Wood push: a natural ground-born attack led by a bundled root arm. Keep the trunk or stump short at the origin; several very thick primary roots must grow long from the ground and remain tightly bundled, with enough mass to read as capable of physically pushing an opponent. Extend the bundled roots toward the local forward direction and sweep them through the target area before retracting underground. The motion should feel like a living root system rather than a pre-placed horizontal log or a swinging trunk; include soil lift, heavy root flex, a clear forward push, small leaves/splinters, and settling dust. Keep the local forward axis code-controlled and do not include a character or target.
 
 ### Defense and Counter Skills
 
