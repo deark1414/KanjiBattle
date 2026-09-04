@@ -16,6 +16,13 @@
 - Unity may need to be foregrounded by the user for compilation or editor refresh to proceed. If changes appear not to compile, ask the user to bring Unity to the front before assuming the code is broken.
 - For UI or font issues, verify the result in Unity Play mode or through the visible game screen when possible.
 
+## Generated VFX Workflow
+
+- When the user requests new VFX or changes the VFX art direction, update `Docs/Audio/VFX_AnimatedAssetBrief.md` and continue directly into asset generation in the same run.
+- Do not stop after writing the brief: generate at least one representative sprite sequence, inspect its visual result, and verify transparency, fixed-cell layout, safe padding, stable origin, and intended direction.
+- Keep generated drafts separate from production assets until they pass review. Only then copy them into `Assets/Resources/VFX/` and wire them into Unity/gallery playback.
+- For animated VFX, prefer grounded shogi-fantasy materials such as wood, iron, dust, smoke, sparks, embers, and water. Avoid futuristic beams, neon outlines, and holographic effects unless explicitly requested.
+
 ## Deployment Policy
 
 - GitHub Pages deployment is based on `main`.
