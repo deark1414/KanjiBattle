@@ -67,7 +67,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ### Melee Skills
 
-- Sword: support two readable variants. For a pivot slash, hold the hilt as the stable pivot and visibly rotate the blade through the attack. For the preferred horizontal slash, treat the top of the cell as the front: hold the sword blade broadly vertical or slightly diagonal with the cutting edge crossing the row, then sweep the blade itself from left to right across the target. The sword must not point its tip toward the right like a spear or thrust. In both variants the motion must be unambiguous; do not keep a static sword while only changing the trail. The blade must not appear to fall from the hilt. Follow with a bright contact spark, a short residual arc, and settling dust.
+- Sword: support two readable variants. For a pivot slash, hold the hilt as the stable pivot and visibly rotate the blade through the attack. For the preferred horizontal slash, treat the top of the cell as the front: hold the sword blade broadly vertical or slightly diagonal with the cutting edge crossing the row, then sweep the blade itself from left to right across the target. The sword must not point its tip toward the right like a spear or thrust. In the horizontal version, the blade must be visibly displaced between frames 1, 4, and 6 and cross the target broadside. In both variants the motion must be unambiguous; do not keep a static sword while only changing the trail. The blade must not appear to fall from the hilt. Follow with a bright contact spark, a short residual arc, and settling dust.
 - Hammer: overhead swing, contact flash, stun ring, fade.
 - Claw: two clearly separated diagonal slashes, then a small impact burst.
 
