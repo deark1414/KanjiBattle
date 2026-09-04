@@ -67,7 +67,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ### Melee Skills
 
-- Sword: hold the hilt as the stable pivot; raise the tip during the wind-up, then move the tip clearly downward through the target during the diagonal slash. The blade must not translate downward as a whole or appear to fall from the hilt. Follow with a bright contact spark, a short residual arc, and settling dust.
+- Sword: hold the hilt as the stable pivot; raise the tip during the wind-up, then move the tip clearly through the target in a diagonal or horizontal slash. A horizontal sweep is preferred when it reads more naturally from the top-down view. The blade must not translate downward as a whole or appear to fall from the hilt. Follow with a bright contact spark, a short residual arc, and settling dust.
 - Hammer: overhead swing, contact flash, stun ring, fade.
 - Claw: two clearly separated diagonal slashes, then a small impact burst.
 
@@ -100,6 +100,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 - Use restrained material-based color families: fire orange/red, water blue/cyan, soil olive/brown, defense iron/blue-white, boss vermilion/deep violet.
 - Keep glow localized and warm. Avoid laser lines, holograms, neon outlines, lens-flare-heavy beams, floating magic circles, and clean futuristic energy ribbons.
 - Prefer hand-drawn brush edges, chipped metal, rough wood grain, smoke, sparks, and uneven particle sizes over perfectly smooth geometric effects.
+- Ground shadows should be soft, short, and attached to the contact area. Do not let a large detached shadow imply that the sword or effect is floating.
 - Reserve the largest particle count and brightest flash for impact frames and boss skills; the overall effect should still feel physical and grounded.
 
 ## Number Aura Sequences
