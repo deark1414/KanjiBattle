@@ -949,9 +949,9 @@ public class BattleManager : MonoBehaviour
             SkillType.Gun => 18,
             SkillType.Stone => 19,
             SkillType.WoodPush => 20,
-            SkillType.Fireball => 21,
+            SkillType.Fireball => 28,
             SkillType.Slash or SkillType.TigerTwinClaw => 22,
-            SkillType.Dragon => 28,
+            SkillType.Dragon => 35,
             _ => 0
         };
         index = Mathf.Clamp(index, 0, vfxCatalogSprites.Length - 1);
