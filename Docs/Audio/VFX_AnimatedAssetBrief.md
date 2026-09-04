@@ -106,12 +106,12 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ## Number Aura Sequences
 
-Create three separate animated sprite assets for persistent number auras: lower (1–3), middle (4–6), and upper (7–9). A review contact sheet may arrange the three assets together, but runtime assets must remain individually addressable. Numbers within the same tier share one aura asset; the aura communicates tier color and identity, while the exact number remains in the character and status data.
+Create nine separate animated sprite assets for persistent number auras, one for each number 1 through 9. Group them by the actual three-tier structure: lower (1–3 / Number1), middle (4–6 / Number2), and upper (7–9 / Number3). A review contact sheet may arrange the nine assets together, but runtime assets must remain individually addressable. Each tier shares a material and color family, while each number keeps its own animation asset and can have a distinct rotation rhythm or particle arrangement.
 
 - Rows: lower green, middle yellow, upper red.
-- Do not use particle count or brightness to communicate the exact number. Keep the three tier assets visually distinct by color, while preserving a common material family.
+- Do not reduce the system to only three runtime assets. Keep all nine number mappings explicit. Avoid communicating the exact number through a simple weak/medium/strong scale alone; use each number's animation rhythm, brush composition, and particle arrangement while preserving the tier's shared color family.
 - Replace the current simplified placeholder with a material-based aura: rough ink-brush arcs, small motes, and restrained warm highlights surrounding an empty center where the kanji remains readable. It should feel like a persistent power field, not a clean UI ring or a decorative badge.
-- Each number asset should contain a fixed-frame loop, preferably 8 frames, with a complete aura field in every frame, safe transparent margins, and no character, number, text, or fixed emblem baked in.
+- Each number asset should contain a fixed-frame loop, preferably 8 frames, with a complete aura field in every frame, safe transparent margins, and no character, number, text, or fixed emblem baked in. Keep enough spacing around every cell for independent use; never rely on a tightly packed 3x3 production atlas.
 - The aura should slowly rotate around the empty center in a seamless loop, with ink-brush arcs and motes drifting around the orbit at slightly different speeds. Keep the motion subtle enough for permanent display while making it feel alive rather than static. Do not pulse, pop, or expand dramatically.
 - Make the three tiers clearly distinct in presence as well as color: lower should be a thin, quiet aura with sparse wisps and few motes; middle should have a readable rotating brush ring and moderate particles; upper should be deliberately more dramatic with a larger orbit, thicker swirling ink-smoke, more visible motes, and stronger warm sparks. Keep the upper tier localized around the character and never turn it into a full-screen flare.
 
