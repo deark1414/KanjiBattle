@@ -70,7 +70,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 - Sword: use a heavy, straight, double-edged greatsword as the motif for the 剣 character, not a curved single-edged katana. Support two readable variants. For a pivot slash, hold the hilt as the stable pivot and visibly rotate the blade through the attack. For the preferred left-to-right slash, place the user/attacker on the left and the target on the right in top-down view. Start with the straight blade tip pointing upper-right or straight up, then make a large readable clockwise motion through right-up -> right -> right-down -> down while the sword advances toward the target. The attack must visibly cross the space between attacker and target; it must not be a small local trail or a point-forward thrust. In the horizontal version, the blade must be visibly displaced between frames 1, 4, and 6. Keep the blade straight in every frame, especially the fourth frame; do not introduce an artificial bend or banana-shaped blade. Follow with a bright contact spark, a short residual arc, and settling dust.
 - The left/right attacker-target relationship is a staging instruction only. Never draw the attacker, target, dummy, board, or any other scene object into the sword sprite sheet.
 - Hammer: overhead swing, contact flash, stun ring, fade.
-- Claw: two clearly separated diagonal slashes, then a small impact burst.
+- Claw: four clearly separated claw marks per swipe, with the four lines kept readable and naturally irregular rather than perfectly parallel. Use two diagonal swipes, a restrained contact burst, and a short dust fade; do not include a tiger body, paw, enemy, or target.
 
 ### Elemental Skills
 
