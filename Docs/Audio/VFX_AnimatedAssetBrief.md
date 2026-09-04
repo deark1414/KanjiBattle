@@ -62,7 +62,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 - Arrow: show only the reusable arrow effect: a short wooden shaft, clearly separated fletching/羽根, and a smaller arrowhead. Do not include a bow, archer, or launch platform. The silhouette must read as an arrow rather than a spear or generic glowing bolt. Use nock/release, three flight frames, impact, and fade; include a restrained dust or air trail behind the fletching.
 - Spear: two-cell piercing thrust. Use a mostly top-down view with a short rearward ready pose, then extend the full spear straight along its local forward axis so the shaft and spearhead visibly cover the two cells ahead. Avoid diagonal-only poses; the runtime rotates the straight sequence to the attack direction. Include a clear extend, full reach, restrained impact, and retract sequence.
-- Gun: muzzle flash, straight projectile, hit spark. Keep the travel direction code-controlled.
+- Gun: prioritize the projectile rather than repeatedly animating the gun. Use one recoil/muzzle-flash frame, then a clearly enlarged round bullet traveling on a perfectly straight local axis, followed by a restrained impact spark/dust frame that can be replayed at each pierced target. The runtime applies the effect to every target on the line; the sprite must not imply a single-target range.
 - Stone: lift, arc, impact dust, falling debris.
 
 ### Melee Skills
