@@ -67,7 +67,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ### Melee Skills
 
-- Sword: wind-up, diagonal slash, bright impact, short residual arc.
+- Sword: hold the hilt as the stable pivot; raise the tip during the wind-up, then move the tip clearly downward through the target during the diagonal slash. The blade must not translate downward as a whole or appear to fall from the hilt. Follow with a bright contact spark, a short residual arc, and settling dust.
 - Hammer: overhead swing, contact flash, stun ring, fade.
 - Claw: two clearly separated diagonal slashes, then a small impact burst.
 
