@@ -88,7 +88,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 - Horse charge: dust trail and forward rush.
 - Bird retreat: wing streak and backward motion.
-- Dragon breath: mouth glow, expanding horizontal flame stream, hot impact, smoke fade.
+- Dragon breath: effect-only sequence with no dragon head or character artwork. Start from a clear source point on the dragon's side, then expand a grounded cone of flame, smoke, embers, and heat distortion toward the front across the full affected area. The source is supplied by the game character; the sprite must describe the breath volume and its impact, not the dragon.
 - Dragon roar: expanding shockwave rings and a short screen-facing burst.
 
 ## Visual Style
@@ -123,6 +123,12 @@ Create a separate 3x3 sheet for persistent number auras:
 - Mipmaps: Off.
 - Keep the texture readable only if runtime frame extraction requires it; otherwise leave Read/Write disabled.
 - Verify the first, middle, impact, and final frame in Unity and WebGL.
+
+## Asset Identity and Non-Replacement Rules
+
+- Keep arrow, sword, spear, gun, and other effects as separate named assets. Creating a new sword sequence must never replace or rename the existing arrow asset.
+- Use explicit filenames such as `arrow_attack`, `sword_slash`, and `dragon_breath_area` and keep a small manifest with the skill mapping.
+- Dragon breath is an area effect and must be authored without the dragon body; the runtime places it at the dragon's origin and rotates it toward the target direction.
 
 ## Acceptance Checklist
 
