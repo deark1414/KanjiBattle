@@ -60,7 +60,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ### Projectile Skills
 
-- Arrow: draw, release, three flight frames, impact, fade.
+- Arrow: show a short wooden shaft, a clearly separated fletching/羽根, and a smaller arrowhead. The silhouette must read as an arrow rather than a spear or generic glowing bolt. Use draw, release, three flight frames, impact, and fade; include a restrained dust or air trail behind the fletching.
 - Spear: thrust or straight throw, with a strong horizontal axis.
 - Gun: muzzle flash, straight projectile, hit spark. Keep the travel direction code-controlled.
 - Stone: lift, arc, impact dust, falling debris.
