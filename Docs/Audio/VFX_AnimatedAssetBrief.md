@@ -106,14 +106,14 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ## Number Aura Sequences
 
-Create nine separate animated sprite assets for persistent number auras, one for each number 1 through 9. Use the same visual family within each tier group: 1–3 lower, 4–6 middle, and 7–9 upper. A review contact sheet may arrange them as a 3x3 grid, but runtime assets must remain individually addressable.
+Create three separate animated sprite assets for persistent number auras: lower (1–3), middle (4–6), and upper (7–9). A review contact sheet may arrange the three assets together, but runtime assets must remain individually addressable. Numbers within the same tier share one aura asset; the aura communicates tier color and identity, while the exact number remains in the character and status data.
 
 - Rows: lower green, middle yellow, upper red.
-- Within each tier, increase particle density and motion richness gradually from the first number to the third number. Do not create nine unrelated designs.
+- Do not use particle count or brightness to communicate the exact number. Keep the three tier assets visually distinct by color, while preserving a common material family.
 - Replace the current simplified placeholder with a material-based aura: rough ink-brush arcs, small motes, and restrained warm highlights surrounding an empty center where the kanji remains readable. It should feel like a persistent power field, not a clean UI ring or a decorative badge.
 - Each number asset should contain a fixed-frame loop, preferably 8 frames, with a complete aura field in every frame, safe transparent margins, and no character, number, text, or fixed emblem baked in.
-- The aura should visibly well up, curl, and settle in a slow seamless loop without changing the character position. Keep the motion subtle enough for permanent display while making it feel alive rather than static.
-- Intensity is represented by particle count, brush density, glow radius, brightness, and motion amplitude. The strongest upper-tier assets may be richer, but must remain readable and avoid a full-screen flare.
+- The aura should slowly rotate around the empty center in a seamless loop, with ink-brush arcs and motes drifting around the orbit at slightly different speeds. Keep the motion subtle enough for permanent display while making it feel alive rather than static. Do not pulse, pop, or expand dramatically.
+- Keep particle density, glow radius, and brightness restrained and broadly consistent across tiers; use green, yellow, and red as the primary tier distinction. The upper tier may be slightly warmer, but must not become a full-screen flare.
 
 ## Unity Import Requirements
 
