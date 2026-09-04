@@ -81,7 +81,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ### Defense and Counter Skills
 
-- Shield: a large rugged inverted-pentagonal wooden-and-iron tower shield, with the broad edge at the top and a single point at the bottom, inspired by a heavy shield guardian archetype but without depicting a character. Do not bake an enemy, projectile, attack direction, or impact object into the asset; those are supplied by gameplay. Keep the face readable from above with a central boss and metal rim. Animate only shield deployment, a firm guard state, a restrained defensive glint, and return to idle. The inverted-pentagonal silhouette must remain stable while the effect rotates with the character.
+- Shield: a large rugged inverted-pentagonal wooden-and-iron tower shield, with the broad edge at the top and a single point at the bottom, inspired by a heavy shield guardian archetype but without depicting a character. Show it from a shallow top-down oblique angle rather than a flat front view: when placed between source and target, the shield should read as a thin, weighty barrier with visible thickness and a narrow top edge. Do not bake an enemy, projectile, attack direction, or impact object into the asset; those are supplied by gameplay. Keep the inverted-pentagonal profile readable while preserving the side thickness. Animate only shield deployment, a firm guard state, a restrained defensive glint, and return to idle. The local forward face should point toward the target and rotate with the character.
 - Armor: brief metallic shell or plate shimmer, then settle.
 - Wall: rising wall fragment, block flash, small counter shockwave.
 
