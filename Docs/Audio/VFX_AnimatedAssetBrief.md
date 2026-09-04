@@ -87,7 +87,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ### Animal and Boss Skills
 
-- Horse charge: use a reusable speed-only effect rather than a horse or hoof illustration. Dust, sand, small debris, and short ground scuffs should wrap around the moving character while streaming along the local forward axis, creating a compact speed aura rather than a detached projectile trail. Keep the center clear enough for the horse character to remain readable; the surrounding dust should build during movement, flow backward, and trail off after the charge. Do not include a horse body, hooves, enemy, or impact target; the character supplies the horse identity and the runtime rotates the speed effect.
+- Horse charge: use a reusable speed-only effect rather than a horse or hoof illustration. Use a thick, low horizontal stream of dust, sand, small debris, and short ground scuffs along the local forward axis; the runtime can layer the character and other effects over its center as needed. Build the smoke width and density during the charge, then let the stream trail off naturally. Do not include a horse body, hooves, enemy, or impact target; the character supplies the horse identity and the runtime rotates the speed effect.
 - Bird retreat: wing streak and backward motion.
 - Dragon breath: effect-only sequence with no dragon head or character artwork. Start from a clear source point on the dragon's side, then expand a grounded cone of flame, smoke, embers, and heat distortion toward the front across the full affected area. The source is supplied by the game character; the sprite must describe the breath volume and its impact, not the dragon.
 - Dragon roar: expanding shockwave rings and a short screen-facing burst.
