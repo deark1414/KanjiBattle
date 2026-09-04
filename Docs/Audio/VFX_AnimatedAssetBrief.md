@@ -67,7 +67,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ### Melee Skills
 
-- Sword: hold the hilt as the stable pivot and visibly rotate the blade through the attack. For a horizontal sweep, use a clear angle progression such as tip-up diagonal -> near-horizontal -> tip-down diagonal -> follow-through; do not keep the sword pointing right in every frame. A horizontal sweep is preferred when it reads naturally from the top-down view. The blade must not translate downward as a whole or appear to fall from the hilt. Follow with a bright contact spark, a short residual arc, and settling dust.
+- Sword: support two readable variants. For a pivot slash, hold the hilt as the stable pivot and visibly rotate the blade through the attack. For the preferred movement slash, treat the top of the cell as the front: start with the sword at the left side, sweep it from left to right across the target, and let the blade and trail exit to the right as they fade. In both variants the motion must be unambiguous; do not keep a static right-facing sword while only changing the trail. The blade must not appear to fall from the hilt. Follow with a bright contact spark, a short residual arc, and settling dust.
 - Hammer: overhead swing, contact flash, stun ring, fade.
 - Claw: two clearly separated diagonal slashes, then a small impact burst.
 
