@@ -42,7 +42,8 @@ namespace KanjiBattle.Editor
                     sprites[index] = new SpriteRect
                     {
                         name = $"{System.IO.Path.GetFileNameWithoutExtension(path)}_{index:00}",
-                        rect = new Rect(column * cellSize, row * cellSize, cellSize, cellSize),
+                        // Atlas labels are read top-to-bottom, while Unity rects use bottom-left origin.
+                        rect = new Rect(column * cellSize, (rows - row - 1) * cellSize, cellSize, cellSize),
                         pivot = new Vector2(0.5f, 0.5f)
                     };
                     index++;

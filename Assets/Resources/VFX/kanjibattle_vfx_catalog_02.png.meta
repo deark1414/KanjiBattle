@@ -120,7 +120,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 960
         width: 192
         height: 192
       alignment: 0
@@ -131,7 +131,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 405fa733d5a0a4716bcfd8363fa739d9
+      spriteID: d59d1dd2ccb684b9fabd037076578b9e
       internalID: -1366159756
       vertices: []
       indices: 
@@ -142,7 +142,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 192
-        y: 0
+        y: 960
         width: 192
         height: 192
       alignment: 0
@@ -153,7 +153,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0f90fd0cba0a842c4b0c0095ec824a9b
+      spriteID: d82fcf3cd6c1a4e9690d2cc5507c6549
       internalID: -2129386079
       vertices: []
       indices: 
@@ -164,7 +164,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 384
-        y: 0
+        y: 960
         width: 192
         height: 192
       alignment: 0
@@ -175,7 +175,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5b47b76b6f46d4e36846b76a5ea38911
+      spriteID: 6d3d6c3b171e743c0b06d2de51335ec0
       internalID: 681867164
       vertices: []
       indices: 
@@ -186,7 +186,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 576
-        y: 0
+        y: 960
         width: 192
         height: 192
       alignment: 0
@@ -197,7 +197,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f50b8fcad20984ef5bccd6783e648e43
+      spriteID: 54d67529422cf4f779c6f0e4ed87bc71
       internalID: -1304132652
       vertices: []
       indices: 
@@ -208,7 +208,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 768
-        y: 0
+        y: 960
         width: 192
         height: 192
       alignment: 0
@@ -219,7 +219,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 91e4c9f8fc4ea4d9fbae1b948b9a2310
+      spriteID: 8930c57faf05b42e5a7beac6c4bd3861
       internalID: 605253153
       vertices: []
       indices: 
@@ -230,7 +230,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 960
-        y: 0
+        y: 960
         width: 192
         height: 192
       alignment: 0
@@ -241,7 +241,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e71ff4c66cefc469e883697be84c7a23
+      spriteID: 8114023746c484dae863e96d37196ab9
       internalID: 1862401880
       vertices: []
       indices: 
@@ -252,6 +252,644 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1152
+        y: 960
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce60cee621e2143c5b94bccfd35f8b70
+      internalID: -1391721530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_07
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62175f6efc1e44e19920a048b968f409
+      internalID: 1015207303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_08
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2411156d772684aa6b789b736e5bbaae
+      internalID: 243911365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_09
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1429bb68a30ef493ea5bda8712f481f5
+      internalID: 354008419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_10
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39a0ee0376da4437fb1556c3952ec6d1
+      internalID: -295442212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_11
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01ff9686217424620844823cabec7a9e
+      internalID: 517462524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_12
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6a7a3e3cc98845f78e274478ef690b1
+      internalID: 598520336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_13
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 768
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a96eda01e35e149b889ded603cd15ad2
+      internalID: -375662492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_14
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ec4c3f1baf69416588bb4b7ff33e7b5
+      internalID: 151165431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_15
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8580f880be9144dd8bdafe7b8cbc2428
+      internalID: -1310027949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_16
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50f69a255a78b4bac9698353d25f435a
+      internalID: -2121028013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_17
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45d7f7689e1894600b0a4707b9928efd
+      internalID: -1425798319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_18
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ba7960562da946f98f2af89f0e6c489
+      internalID: -1090244110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_19
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a806802f56004151824f65bdc18ff9f
+      internalID: -1206673881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_20
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 576
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffffc0b9221b7480390333b6e5976d24
+      internalID: 513694883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_21
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5350d801667f440c8506765a43370c3
+      internalID: -689951270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_22
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e13097193097f4ea8bf1885ea1cdb1d3
+      internalID: 1223269384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_23
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06db8c008b8af41e99a1729fca483e73
+      internalID: -57375266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_24
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0ed9de1aec754fa989e4a9191ca089f
+      internalID: 1879675630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_25
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6847de77b24741e3abcb8d506f8032c
+      internalID: 425173319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_26
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdc1b1ff0367848699a1c67233473e16
+      internalID: -2062537336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_27
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 384
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ded611e9c8b794d63a7be761f707b576
+      internalID: -1458898851
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_28
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e70b46fae18464858bb0d2ee526e03fb
+      internalID: 894443923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_29
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4abd6bda9f7824f2594b3b2d0e17d445
+      internalID: 708098896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_30
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 360404cea90364b07abe02bda49c8723
+      internalID: 1466679657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_31
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f2c97f5d1d9041139321e3c38867db2
+      internalID: -1541522982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_32
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50640c4bb713241b6bf0829366311ee8
+      internalID: -1068761184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_33
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41ef5797fc1e44978a7a82e34c99a6dc
+      internalID: -10434642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_34
+      rect:
+        serializedVersion: 2
+        x: 1152
+        y: 192
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da7f917df22ee4b2a9b4e65818f59430
+      internalID: 1982263770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kanjibattle_vfx_catalog_02_35
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 0
         width: 192
         height: 192
@@ -263,645 +901,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1e8d5b0c8a993482484b05a778d288ba
-      internalID: -1391721530
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_07
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 192
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dba04a5fdaadb491086369703d9d9cc2
-      internalID: 1015207303
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_08
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 192
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7e8386835efe8423198b10c9eacf259e
-      internalID: 243911365
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_09
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 192
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 993c054d3f9ff42b88f7543ed5b3ddbb
-      internalID: 354008419
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_10
-      rect:
-        serializedVersion: 2
-        x: 576
-        y: 192
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ddfed78734e6d44899fae75d3772c276
-      internalID: -295442212
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_11
-      rect:
-        serializedVersion: 2
-        x: 768
-        y: 192
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1f091bddf46d64e19bc1db16b2b1f607
-      internalID: 517462524
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_12
-      rect:
-        serializedVersion: 2
-        x: 960
-        y: 192
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 82b27156e75984d3abd0aa174626782b
-      internalID: 598520336
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_13
-      rect:
-        serializedVersion: 2
-        x: 1152
-        y: 192
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9af392aad0de949acae4257e0e8b4fc2
-      internalID: -375662492
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_14
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 384
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b2ce5a0e309fb46f8aca3f1b3fd82ec1
-      internalID: 151165431
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_15
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 384
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 93bea802f990a4a118f3932c442d6177
-      internalID: -1310027949
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_16
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 384
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ee94aeb4e600e4cf18897de06137ba03
-      internalID: -2121028013
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_17
-      rect:
-        serializedVersion: 2
-        x: 576
-        y: 384
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e1a5fc289dfea460eb0d60878d6d5829
-      internalID: -1425798319
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_18
-      rect:
-        serializedVersion: 2
-        x: 768
-        y: 384
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1799b66b65ba1407b9b0d48061bb249a
-      internalID: -1090244110
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_19
-      rect:
-        serializedVersion: 2
-        x: 960
-        y: 384
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 40c3df8339e944eedbad1d999aef2307
-      internalID: -1206673881
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_20
-      rect:
-        serializedVersion: 2
-        x: 1152
-        y: 384
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2b1777d7e83b642b1b11cdf726ea480d
-      internalID: 513694883
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_21
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 576
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6e0b653e8677442a4bc47edf8a3f0850
-      internalID: -689951270
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_22
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 576
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d42574e60037c4bac987edb2d398aeba
-      internalID: 1223269384
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_23
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 576
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fef268dd9a9224430b8b5a56451dffcb
-      internalID: -57375266
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_24
-      rect:
-        serializedVersion: 2
-        x: 576
-        y: 576
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7882c8ca22b6547999a269352e299fb3
-      internalID: 1879675630
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_25
-      rect:
-        serializedVersion: 2
-        x: 768
-        y: 576
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 42b667c261fdd49bf8d12e9a69eff328
-      internalID: 425173319
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_26
-      rect:
-        serializedVersion: 2
-        x: 960
-        y: 576
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fc900117f5726404ebb02ff026654bfc
-      internalID: -2062537336
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_27
-      rect:
-        serializedVersion: 2
-        x: 1152
-        y: 576
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1047ead829c34458d8381f6bb5b46708
-      internalID: -1458898851
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_28
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 768
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e81d7cdbace714807b8adae9c22d2bb9
-      internalID: 894443923
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_29
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 768
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5d4c42542f8204520942de84bb7112cd
-      internalID: 708098896
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_30
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 768
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8fe8de85512ad48aa984c817e7c29296
-      internalID: 1466679657
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_31
-      rect:
-        serializedVersion: 2
-        x: 576
-        y: 768
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9932bde56269b45a987cf32bc60207a5
-      internalID: -1541522982
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_32
-      rect:
-        serializedVersion: 2
-        x: 768
-        y: 768
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e90a0f0c2fe704400b18ec6446fe8330
-      internalID: -1068761184
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_33
-      rect:
-        serializedVersion: 2
-        x: 960
-        y: 768
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6bcb6b836644c44018d89744b828b571
-      internalID: -10434642
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_34
-      rect:
-        serializedVersion: 2
-        x: 1152
-        y: 768
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b1b5d4dda9a7f42acab55ba23931f4fe
-      internalID: 1982263770
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: kanjibattle_vfx_catalog_02_35
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 960
-        width: 192
-        height: 192
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f6ebe09095e354e0096241483037c4e5
+      spriteID: 5b6d2fce295c24c478700951b58e7f28
       internalID: 391740729
       vertices: []
       indices: 
@@ -912,7 +912,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 192
-        y: 960
+        y: 0
         width: 192
         height: 192
       alignment: 0
@@ -923,7 +923,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c0545344e3cc5469a95ebf9482e16efd
+      spriteID: 02e7084397a20478cabf50c7f330ab10
       internalID: -1611548408
       vertices: []
       indices: 
@@ -934,7 +934,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 384
-        y: 960
+        y: 0
         width: 192
         height: 192
       alignment: 0
@@ -945,7 +945,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 895b873465cc740b7ae86dcd364407ab
+      spriteID: d44cc1e70294d4b2a9cc371f30df6e5c
       internalID: 1594954014
       vertices: []
       indices: 
@@ -956,7 +956,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 576
-        y: 960
+        y: 0
         width: 192
         height: 192
       alignment: 0
@@ -967,7 +967,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c8454f80984514c3c911aab5f96f6b87
+      spriteID: 8d69da27a2c234713ac2ea27c785778d
       internalID: -1503529674
       vertices: []
       indices: 
@@ -978,7 +978,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 768
-        y: 960
+        y: 0
         width: 192
         height: 192
       alignment: 0
@@ -989,7 +989,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1e81b64a7e8b54e78a1dcd680d96e085
+      spriteID: 43bfd65388ac44880a4ec7354cc647e9
       internalID: 1238989554
       vertices: []
       indices: 
@@ -1000,7 +1000,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 960
-        y: 960
+        y: 0
         width: 192
         height: 192
       alignment: 0
@@ -1011,7 +1011,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9f330e31ef07e4558aa91d92cc1c0641
+      spriteID: 3b790b523576b492e9d07304231ccc0d
       internalID: -549839225
       vertices: []
       indices: 
@@ -1022,7 +1022,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1152
-        y: 960
+        y: 0
         width: 192
         height: 192
       alignment: 0
@@ -1033,7 +1033,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4965ece7a93c749e7bdbce3f53c1ef85
+      spriteID: c0664cacd75df4bf4aca33398d9a3554
       internalID: 810344136
       vertices: []
       indices: 

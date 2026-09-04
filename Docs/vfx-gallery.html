@@ -21,6 +21,10 @@
     .label { position:absolute; left:4px; bottom:3px; padding:2px 5px; background:#000b; color:#fff; font-size:11px; }
     .legend { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 12px; color:var(--muted); font-size:13px; }
     .tag { padding:4px 8px; border:1px solid var(--line); background:var(--panel); }
+    .demos { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .demo { padding:10px; border:1px solid var(--line); background:var(--panel); }
+    .demo h3 { margin:0 0 8px; font-size:15px; }
+    .demo canvas { display:block; width:100%; height:auto; background:#101217; }
     dialog { width:min(420px,calc(100% - 28px)); padding:0; border:1px solid #9f7549; background:var(--panel); color:var(--text); }
     dialog::backdrop { background:#0009; }
     .preview { padding:20px; text-align:center; }
@@ -28,12 +32,18 @@
     .preview h3 { margin:12px 0 4px; }
     .close { margin-top:14px; padding:8px 18px; border:1px solid #9f7549; background:#7d542d; color:var(--text); cursor:pointer; }
     @media (max-width:600px) { body { padding:14px; } .grid { gap:5px; } .label { font-size:9px; left:2px; bottom:2px; } }
+    @media (max-width:600px) { .demos { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
   <main>
     <h1>VFX Gallery</h1>
     <p>KanjiBattleで使用する生成VFXを、実際のatlas分割単位で確認できます。セルを選ぶと拡大表示します。</p>
+    <section>
+      <h2>Skill Motion Preview</h2>
+      <div class="legend"><span class="tag">単発素材をゲーム内の移動・拡大・フェードと組み合わせた確認用プレビュー</span></div>
+      <div id="demos" class="demos"></div>
+    </section>
     <section>
       <h2>Skill Catalog / 7 x 6</h2>
       <div class="legend">
@@ -84,7 +94,47 @@
       parent.append(tile);
       drawCell(canvas, image, index, columns);
     };
-    catalogImage.onload = () => { for (let i = 0; i < 42; i++) addTile(document.querySelector('#catalog'), catalogImage, i, 7, labels[i] || 'カタログ'); };
+    const demos = [
+      { name:'矢 / Projectile', cell:16, kind:'projectile', color:'#ffe39a' },
+      { name:'火球 / Falling Fire', cell:28, kind:'fall', color:'#ff713d' },
+      { name:'斬撃 / Slash', cell:22, kind:'slash', color:'#9edbff' },
+      { name:'竜の息吹 / Breath', cell:35, kind:'breath', color:'#ff9b56' }
+    ];
+    const drawDemoSprite = (ctx, image, cell, x, y, size, alpha, rotation = 0) => {
+      const row = Math.floor(cell / 7), column = cell % 7;
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.drawImage(image, column * cellSize, row * cellSize, cellSize, cellSize, -size / 2, -size / 2, size, size);
+      ctx.restore();
+    };
+    const animateDemo = (canvas, demo) => {
+      const ctx = canvas.getContext('2d');
+      const start = performance.now();
+      const frame = now => {
+        const t = ((now - start) % 1400) / 1400;
+        const w = canvas.width, h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = '#20242e'; ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = '#596273'; ctx.lineWidth = 2;
+        ctx.strokeRect(32, 35, 72, 72); ctx.strokeRect(w - 104, 35, 72, 72);
+        ctx.fillStyle = demo.color; ctx.globalAlpha = 0.8; ctx.fillRect(w - 104, 105, 72, 3); ctx.globalAlpha = 1;
+        if (demo.kind === 'projectile') drawDemoSprite(ctx, catalogImage, demo.cell, 100 + t * (w - 200), 70, 64, 1);
+        if (demo.kind === 'fall') drawDemoSprite(ctx, catalogImage, demo.cell, w - 68, 8 + t * 110, 84, 1 - Math.max(0, t - 0.75) * 3);
+        if (demo.kind === 'slash') drawDemoSprite(ctx, catalogImage, demo.cell, w - 68, 70, 100, 1 - t, (t - 0.5) * 1.5);
+        if (demo.kind === 'breath') drawDemoSprite(ctx, catalogImage, demo.cell, 110 + t * (w - 180), 70, 110, 1 - t * 0.55);
+        requestAnimationFrame(frame);
+      };
+      requestAnimationFrame(frame);
+    };
+    const addDemo = demo => {
+      const card = document.createElement('div'); card.className = 'demo';
+      const title = document.createElement('h3'); title.textContent = demo.name; card.append(title);
+      const canvas = document.createElement('canvas'); canvas.width = 360; canvas.height = 140; card.append(canvas);
+      document.querySelector('#demos').append(card); animateDemo(canvas, demo);
+    };
+    catalogImage.onload = () => { for (let i = 0; i < 42; i++) addTile(document.querySelector('#catalog'), catalogImage, i, 7, labels[i] || 'カタログ'); demos.forEach(addDemo); };
     auraImage.onload = () => { for (let i = 0; i < 9; i++) addTile(document.querySelector('#auras'), auraImage, i, 3, `段${Math.floor(i / 3) + 1} / ${['小','中','最大'][i % 3]}`); };
     catalogImage.src = 'vfx-gallery-assets/kanjibattle_vfx_catalog_02.png';
     auraImage.src = 'vfx-gallery-assets/kanjibattle_vfx_number_auras_01.png';
