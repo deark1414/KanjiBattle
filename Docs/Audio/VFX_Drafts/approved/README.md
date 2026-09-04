@@ -1,0 +1,14 @@
+# 承認済みVFX試作
+
+ここには、見た目と動きの方向性について確認済みのVFX試作を置く。
+
+- `arrow_attack_sheet_draft.png`: 矢
+- `sword_greatsword_slash_sheet_draft.png`: 両刃大剣の斬撃
+- `dragon_breath_area_sheet_draft.png`: 竜なしのブレス範囲
+- `hammer_stunblow_sheet_draft.png`: 下側から振り上げる槌
+
+## 注意
+
+- これらはRGB形式の確認用画像で、背景のチェック柄は透過ではない。
+- 透過化、固定セル分割、余白、原点、フレーム順の確認が完了するまで、`Assets/Resources/VFX/`へ移動しない。
+- 本番投入時は元画像を上書きせず、スキル名に対応した専用ファイル名で登録する。
