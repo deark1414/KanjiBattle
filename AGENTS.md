@@ -16,6 +16,10 @@
 - Unity may need to be foregrounded by the user for compilation or editor refresh to proceed. If changes appear not to compile, ask the user to bring Unity to the front before assuming the code is broken.
 - For UI or font issues, verify the result in Unity Play mode or through the visible game screen when possible.
 
+## Communication
+
+- User-facing reports, plans, review results, and project documents should be written in Japanese by default. Keep English only for code identifiers, asset filenames, API names, and required technical terms.
+
 ## Generated VFX Workflow
 
 - When the user requests new VFX or changes the VFX art direction, update `Docs/Audio/VFX_AnimatedAssetBrief.md` and continue directly into asset generation in the same run.

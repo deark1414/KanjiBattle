@@ -1,49 +1,46 @@
-# KanjiBattle Skill VFX Coverage
+# KanjiBattle スキル別VFX対応表
 
-Updated: 2026-09-04
+更新日: 2026-09-04
 
-This table tracks whether each runtime skill has a dedicated visual asset. Existing catalog cells are the current single-frame atlas effects. Generated sheets are visual prototypes only until real alpha, fixed-cell slicing, and Unity/WebGL review are complete.
-
-| Skill | Character | Current runtime VFX | Generated prototype | Dedicated animated sprite status | Priority |
+| スキル | キャラクター | 現在の実行時VFX | 生成試作 | 専用アニメーションスプライトの状態 | 優先度 |
 | --- | --- | --- | --- | --- | --- |
-| Slash | 剣 | Catalog cell 22 + slash routine | Greatsword slash | Prototype reviewed; double-edged greatsword direction is good, alpha cleanup pending | High |
-| StunBlow | 槌 | Generic trail / stun text | None | Missing dedicated hammer swing, impact, and stun ring | High |
-| WaterHeal | 水 | Generic heal burst | None | Missing dedicated water ring, droplets, and upward particles | Medium |
-| Fireball | 火 | Catalog cell 28 + falling fire routine | Fireball sheet | Prototype reviewed; grounded fire/stone direction is good, alpha cleanup pending | High |
-| Arrow | 矢 | Catalog cell 16 + projectile routine | Arrow-only sheet | Prototype reviewed; bow removed, alpha cleanup pending | High |
-| Spear | 槍 | Catalog cell 17 + projectile routine | None | Missing dedicated spear thrust/throw sheet | High |
-| Gun | 銃 | Catalog cell 18 + line projectile routine | None | Missing dedicated muzzle flash and projectile sheet | High |
-| Stone | 石 | Catalog cell 19 + projectile routine | None | Missing dedicated lift, arc, impact, and debris sheet | Medium |
-| WoodPush | 木 | Catalog cell 20 + trail routine | None | Missing dedicated roots/timber push sheet | Medium |
-| Soil | 土 | Generic trail plus trap logic | None | Missing dedicated soil trap activation sheet; must not imply all highlighted cells are damaged | Medium |
-| BirdRetreat | 鳥 | Generic trail / retreat logic | None | Missing dedicated wing streak and backward motion sheet | Low |
-| TigerTwinClaw | 虎 | Catalog cell 22 + double slash routine | None | Missing dedicated two-claw slash sheet; current catalog cell is shared with 剣 | Medium |
-| HorseCharge | 馬 | Generic trail / charge logic | None | Missing dedicated charge dust and rush sheet | Medium |
-| Counter | 盾 | Generic counter effect | None | Missing dedicated shield deflection and reflected spark sheet | High |
-| AreaCounter | 壁 | Generic area counter effect | None | Missing dedicated wall rise, block flash, and shockwave sheet | High |
-| Armor | 鎧 | Generic defense effect | None | Missing dedicated armor shimmer and plate impact sheet | Medium |
-| NumberPassive | 一〜九 | Persistent number aura / text | Existing aura atlas | Covered by 3x3 aura atlas; verify intensity and loop separately | High |
-| Dragon | 竜 | Catalog cell 35 + breath/range logic | Effect-only breath sheet | Prototype reviewed; dragon removed and area cone is good, alpha cleanup pending | High |
+| Slash | 剣 | アトラス22 + 斬撃処理 | 両刃大剣の斬撃 | 方向性確認済み。透過処理待ち | 高 |
+| StunBlow | 槌 | 汎用軌跡 + 気絶表示 | なし | 槌の振り下ろし、命中、気絶輪が未作成 | 高 |
+| WaterHeal | 水 | 汎用回復演出 | なし | 水輪、水滴、上昇粒子が未作成 | 中 |
+| Fireball | 火 | アトラス28 + 落下火球処理 | 火球シート | 方向性確認済み。透過処理待ち | 高 |
+| Arrow | 矢 | アトラス16 + 飛翔処理 | 矢のみのシート | 弓を除去済み。透過処理待ち | 高 |
+| Spear | 槍 | アトラス17 + 投射処理 | なし | 槍の突き・投擲シートが未作成 | 高 |
+| Gun | 銃 | アトラス18 + 直線射撃処理 | なし | 銃口、弾道、命中火花が未作成 | 高 |
+| Stone | 石 | アトラス19 + 投射処理 | なし | 持ち上がり、弧、着弾、破片が未作成 | 中 |
+| WoodPush | 木 | アトラス20 + 軌跡処理 | なし | 根・木材の押し出しが未作成 | 中 |
+| Soil | 土 | 汎用軌跡 + 罠処理 | なし | 土の罠の発動演出が未作成 | 中 |
+| BirdRetreat | 鳥 | 汎用軌跡 + 後退処理 | なし | 翼の軌跡と後退演出が未作成 | 低 |
+| TigerTwinClaw | 虎 | アトラス22 + 二連斬撃処理 | なし | 虎専用の二連爪撃が未作成。剣とセル共有 | 中 |
+| HorseCharge | 馬 | 汎用軌跡 + 突進処理 | なし | 土煙と突進演出が未作成 | 中 |
+| Counter | 盾 | 汎用反撃演出 | なし | 盾の受け流しと反射火花が未作成 | 高 |
+| AreaCounter | 壁 | 汎用範囲反撃演出 | なし | 壁の出現、防御衝撃波が未作成 | 高 |
+| Armor | 鎧 | 汎用防御演出 | なし | 鎧の光沢と装甲衝撃が未作成 | 中 |
+| NumberPassive | 一〜九 | 常時数字オーラ + 表示 | 既存3×3オーラ | 対応済み。強度とループを別途確認 | 高 |
+| Dragon | 竜 | アトラス35 + ブレス範囲処理 | 竜なしブレス範囲シート | 方向性確認済み。透過処理待ち | 高 |
 
-## Coverage Summary
+## 集計
 
-- Runtime skill types: 18.
-- Dedicated catalog mappings: 8 skill types, with `Slash` and `TigerTwinClaw` currently sharing one cell.
-- Dedicated animated prototypes: 4 core skills, all still awaiting alpha cleanup and Unity import verification.
-- Number passive: covered by the separate 3x3 aura atlas.
-- Skills requiring new dedicated animated sheets: StunBlow, WaterHeal, Spear, Gun, Stone, WoodPush, Soil, BirdRetreat, TigerTwinClaw, HorseCharge, Counter, AreaCounter, Armor.
+- スキル種類: 18
+- 既存アトラスの専用マッピング: 8種類
+- 生成済み試作: 矢、火球、剣、竜ブレス
+- 数字パッシブ: 3×3オーラで対応
+- 専用アニメーション不足: 14種類
+- 剣と虎の爪は現在同じアトラスセルを共有
 
-## Production Order
+## 制作順
 
-1. Finish and import the four reviewed core sheets: Arrow, Fireball, Greatsword Slash, and Dragon Breath Area.
-2. Produce the high-impact missing set: Hammer/StunBlow, Spear, Gun, Shield/Counter, and Wall/AreaCounter.
-3. Produce elemental and movement set: WaterHeal, Stone, WoodPush, Soil, HorseCharge, and BirdRetreat.
-4. Produce the dedicated TigerTwinClaw sheet and replace the shared Slash catalog mapping.
-5. Verify every skill in the VFX gallery and at least one real WebGL battle before wiring the final assets into runtime.
+1. 矢、火球、両刃大剣、竜ブレスの4種を透過・Unity対応まで仕上げる
+2. 槌、槍、銃、盾、壁を作成する
+3. 水、石、木、土、馬、鳥を作成する
+4. 虎専用の二連爪撃を作成し、剣とのセル共有を解消する
+5. 全スキルをギャラリーとWebGL実戦で確認する
 
-## Naming Rules
-
-Use explicit names and never replace another skill's asset:
+## 命名規則
 
 - `arrow_attack_sheet`
 - `fireball_attack_sheet`
@@ -53,3 +50,4 @@ Use explicit names and never replace another skill's asset:
 - `shield_counter_sheet`
 - `wall_area_counter_sheet`
 
+スキル追加時は既存アセットを置き換えず、専用名で新規追加する。
