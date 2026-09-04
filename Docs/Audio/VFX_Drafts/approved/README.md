@@ -8,6 +8,7 @@
 - `hammer_stunblow_sheet_draft.png`: 下側から振り上げる槌
 - `spear_two_cell_thrust_sheet_draft.png`: 2マス先まで一直線に伸びる槍
 - `gun_piercing_shot_sheet_draft.png`: 大きめの弾丸が一直線に貫通する銃
+- `wood_root_swing_sheet_draft.png`: 太い根束が横薙ぎする木
 
 ## 注意
 
