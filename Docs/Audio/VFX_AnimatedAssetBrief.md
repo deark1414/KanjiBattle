@@ -113,7 +113,7 @@ Create three separate animated sprite assets for persistent number auras: lower 
 - Replace the current simplified placeholder with a material-based aura: rough ink-brush arcs, small motes, and restrained warm highlights surrounding an empty center where the kanji remains readable. It should feel like a persistent power field, not a clean UI ring or a decorative badge.
 - Each number asset should contain a fixed-frame loop, preferably 8 frames, with a complete aura field in every frame, safe transparent margins, and no character, number, text, or fixed emblem baked in.
 - The aura should slowly rotate around the empty center in a seamless loop, with ink-brush arcs and motes drifting around the orbit at slightly different speeds. Keep the motion subtle enough for permanent display while making it feel alive rather than static. Do not pulse, pop, or expand dramatically.
-- Keep particle density, glow radius, and brightness restrained and broadly consistent across tiers; use green, yellow, and red as the primary tier distinction. The upper tier may be slightly warmer, but must not become a full-screen flare.
+- Make the three tiers clearly distinct in presence as well as color: lower should be a thin, quiet aura with sparse wisps and few motes; middle should have a readable rotating brush ring and moderate particles; upper should be deliberately more dramatic with a larger orbit, thicker swirling ink-smoke, more visible motes, and stronger warm sparks. Keep the upper tier localized around the character and never turn it into a full-screen flare.
 
 ## Unity Import Requirements
 
