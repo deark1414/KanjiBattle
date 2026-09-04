@@ -6,6 +6,7 @@
 - `sword_greatsword_slash_sheet_draft.png`: 両刃大剣の斬撃
 - `dragon_breath_area_sheet_draft.png`: 竜なしのブレス範囲
 - `hammer_stunblow_sheet_draft.png`: 下側から振り上げる槌
+- `spear_two_cell_thrust_sheet_draft.png`: 2マス先まで一直線に伸びる槍
 
 ## 注意
 
