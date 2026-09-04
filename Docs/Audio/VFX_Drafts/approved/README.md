@@ -7,6 +7,7 @@
 - `dragon_breath_area_sheet_draft.png`: 竜なしのブレス範囲
 - `hammer_stunblow_sheet_draft.png`: 下側から振り上げる槌
 - `spear_two_cell_thrust_sheet_draft.png`: 2マス先まで一直線に伸びる槍
+- `gun_piercing_shot_sheet_draft.png`: 大きめの弾丸が一直線に貫通する銃
 
 ## 注意
 

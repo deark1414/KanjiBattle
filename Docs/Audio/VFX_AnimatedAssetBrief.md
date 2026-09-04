@@ -81,7 +81,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ### Defense and Counter Skills
 
-- Shield: shield flash, incoming impact deflection, small reflected spark.
+- Shield: a recognizable rugged five-sided wooden-and-iron shield, not a round shield. Keep the face readable from above with a central boss and metal rim. Animate an incoming impact, deflection arc, restrained reflected sparks, and return to guard; the pentagonal silhouette must remain stable while the effect rotates with the character.
 - Armor: brief metallic shell or plate shimmer, then settle.
 - Wall: rising wall fragment, block flash, small counter shockwave.
 
