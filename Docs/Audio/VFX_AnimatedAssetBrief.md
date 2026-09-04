@@ -93,11 +93,14 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ## Visual Style
 
-- Dark transparent background with luminous colored effects.
+- Aim for a rugged shogi-board fantasy style: carved wood, forged iron, worn leather, paper, soil, smoke, sparks, embers, and water droplets.
+- Use directional light, contact shadows, debris, dust, and practical-looking impact flashes instead of sci-fi beams.
 - Strong silhouettes and high contrast at small display sizes.
 - Keep the kanji character visible beneath the effect whenever possible.
-- Use restrained color families: fire orange/red, water cyan/blue, soil green/brown, defense blue/white, boss red/purple.
-- Reserve the largest bloom and particle count for impact frames and boss skills.
+- Use restrained material-based color families: fire orange/red, water blue/cyan, soil olive/brown, defense iron/blue-white, boss vermilion/deep violet.
+- Keep glow localized and warm. Avoid laser lines, holograms, neon outlines, lens-flare-heavy beams, floating magic circles, and clean futuristic energy ribbons.
+- Prefer hand-drawn brush edges, chipped metal, rough wood grain, smoke, sparks, and uneven particle sizes over perfectly smooth geometric effects.
+- Reserve the largest particle count and brightest flash for impact frames and boss skills; the overall effect should still feel physical and grounded.
 
 ## Number Aura Sequences
 
