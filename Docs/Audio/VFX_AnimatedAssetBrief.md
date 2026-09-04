@@ -17,6 +17,34 @@ Create animated transparent sprite assets that make the simple kanji characters 
 - Do not use a white, black, board, or colored matte behind the effect.
 - Avoid baked-in text, kanji, damage numbers, UI, or background scenery.
 
+## Art Direction
+
+- Use a mostly top-down view so the effect can be rotated to match the actual attack direction.
+- Keep the visual center and the origin point stable across every frame; rotation must happen around the gameplay origin, not around a changing visual center.
+- Do not bake screen direction into reusable effects. A projectile or slash should have a clear local forward axis, while the game determines its final rotation.
+- For real-world objects, include the object itself in the sprite: a recognizable sword blade, spear, shield, hammer head, arrow, stone, claw, or timber shape is preferable to an abstract streak alone.
+- Use lighting, trails, sparks, impact rings, and particles to make the simple kanji character feel powerful, while keeping the character readable underneath the effect.
+- Separate the object silhouette from the supporting glow and particles so the object remains legible at small smartphone sizes.
+- When an effect is attached to a character, keep the character's kanji as the visual anchor and let the effect expand around it without permanently obscuring it.
+
+### Rotation and Direction
+
+- Author directional assets facing a documented local direction, preferably upward or to the right, and record that direction in the delivery notes.
+- Test the same sequence at 0, 90, 180, and 270 degrees. The object, trail, and impact should rotate together without stretching or changing scale.
+- Effects that are inherently radial, such as shields, auras, explosions, and roar shockwaves, should remain rotation-neutral.
+- Long effects such as dragon breath, spear throws, and gun shots should use a stable local axis and enough transparent margin at both ends for rotation.
+
+### Object Priority
+
+When an effect contains a real object, preserve this order of readability:
+
+1. Object silhouette and direction.
+2. Impact or activation point.
+3. Supporting glow, trail, sparks, smoke, or dust.
+4. Very bright bloom only at the key impact frame.
+
+Do not let bloom or particles erase the object in every frame. The most spectacular frame should be the impact frame, not the entire sequence.
+
 ## Animation Rules
 
 Each sequence should contain a clear four-part arc:
