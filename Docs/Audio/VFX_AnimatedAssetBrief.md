@@ -61,7 +61,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 ### Projectile Skills
 
 - Arrow: show only the reusable arrow effect: a short wooden shaft, clearly separated fletching/羽根, and a smaller arrowhead. Do not include a bow, archer, or launch platform. The silhouette must read as an arrow rather than a spear or generic glowing bolt. Use nock/release, three flight frames, impact, and fade; include a restrained dust or air trail behind the fletching.
-- Spear: thrust or straight throw, with a strong horizontal axis.
+- Spear: two-cell piercing thrust. Use a mostly top-down view with a short rearward ready pose, then extend the full spear straight along its local forward axis so the shaft and spearhead visibly cover the two cells ahead. Avoid diagonal-only poses; the runtime rotates the straight sequence to the attack direction. Include a clear extend, full reach, restrained impact, and retract sequence.
 - Gun: muzzle flash, straight projectile, hit spark. Keep the travel direction code-controlled.
 - Stone: lift, arc, impact dust, falling debris.
 
