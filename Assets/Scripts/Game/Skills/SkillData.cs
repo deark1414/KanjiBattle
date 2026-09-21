@@ -21,11 +21,26 @@ public class SkillData
     public List<SkillEffectData> effects = new();
 
     // NumberPassive tuning (percent values).
-    public int numberPassiveBonus1 = 5;
-    public int numberPassiveBonus2 = 10;
-    public int numberPassiveBonus3 = 15;
-    public int numberPassiveOneBonusPer = 5;
-    public int numberPassiveOneBonusCap = 25;
+    // Standard tier strength is the number of other living numeric types.
+    // A party made entirely of 一 uses the dedicated 2-5 ally table instead.
+    public int numberPassiveBonus1 = 15;
+    public int numberPassiveBonus2 = 30;
+    public int numberPassiveBonus3 = 50;
+    public int numberPassiveOneBonus4 = 150;
+    public int numberPassiveOneBonus5 = 300;
+
+    // Mid: self-heal at the start of its side's turn.
+    public int numberPassiveMidHealWeak = 5;
+    public int numberPassiveMidHealMedium = 10;
+    public int numberPassiveMidHealStrong = 15;
+
+    // High: compounded attack bonus per completed round, capped by active tier.
+    public int numberPassiveHighBonusPerRoundWeak = 3;
+    public int numberPassiveHighBonusPerRoundMedium = 5;
+    public int numberPassiveHighBonusPerRoundStrong = 10;
+    public int numberPassiveHighBonusCapWeak = 100;
+    public int numberPassiveHighBonusCapMedium = 200;
+    public int numberPassiveHighBonusCapStrong = 300;
 
     // Dragon tuning.
     public int dragonRoarChance = -1;

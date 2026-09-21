@@ -32,6 +32,7 @@ public class BattleCharacter : MonoBehaviour
     private static readonly Color battleInfoShadowColor = new Color(0f, 0f, 0f, 0.85f);
     private Vector3 baseScale = Vector3.one;
     private Coroutine visualEffectRoutine;
+    private int numberPassiveAttackBonusPercent;
 
     public int InstanceId => instanceId;
 
@@ -45,6 +46,7 @@ public void Init(CharacterData data, Vector2Int pos, bool ally, int level = 1)
     currentHP = data.GetMaxHP(level);
     attack    = data.GetAttack(level);
     defense   = data.GetDefense(level);
+    numberPassiveAttackBonusPercent = 0;
 
 Sprite displayIcon = ally || data.enemyIcon == null ? data.icon : data.enemyIcon;
 bool usesIcon = displayIcon != null;
@@ -129,6 +131,7 @@ if (background != null)
             int reduction = level * Mathf.Max(0, reductionPerLevel);
             int reduced = Mathf.Max(1, dmg - reduction);
             bm.AddLog($"{DisplayName} のアーマーでダメージが {dmg} → {reduced} に軽減！（Lv{level}×{reductionPerLevel}={reduction} 減少）");
+            bm?.PlayDefensiveVfx(this, SkillType.Armor);
             dmg = reduced;
         }
 
@@ -157,6 +160,7 @@ if (background != null)
                     if (reflect > 0)
                     {
                         bm.AddLog($"{DisplayName} のカウンター発動！{attacker.DisplayName} に {reflect} ダメージを反射！");
+                        bm?.PlayDefensiveVfx(this, SkillType.Counter);
                         attacker.TakeDamage(reflect, bm, this, ignoreDefense: false, isBasicAttack: false);
                         attacker.UpdateHPBar();
                     }
@@ -192,6 +196,7 @@ if (background != null)
                         if (targets.Count > 0)
                         {
                             bm.AddLog($"{DisplayName} の範囲カウンター発動！周囲の敵に {reflect} ダメージを反射！");
+                            bm?.PlayDefensiveVfx(this, SkillType.AreaCounter);
                             foreach (var target in targets)
                             {
                                 target.TakeDamage(reflect, bm, this, ignoreDefense: false, isBasicAttack: false);
@@ -210,17 +215,12 @@ if (background != null)
         reflectPercent = defaultReflect;
 
         SkillData skillData = SkillCatalog.Get(skillType);
-        if (skillData == null)
-        {
-            return;
-        }
-
-        if (skillData.chanceOverride >= 0)
+        if (skillData != null && skillData.chanceOverride >= 0)
         {
             chance = skillData.chanceOverride;
         }
 
-        if (skillData.effects != null)
+        if (skillData != null && skillData.effects != null)
         {
             foreach (var effect in skillData.effects)
             {
@@ -230,9 +230,14 @@ if (background != null)
                     {
                         reflectPercent = effect.value / 100f;
                     }
-                    return;
+                    break;
                 }
             }
+        }
+
+        if (SkillExecutor.ForceSkillActivationForVfxReview)
+        {
+            chance = 100;
         }
     }
 
@@ -345,31 +350,13 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
 
     public int GetEffectiveAttack(BattleManager bm)
     {
-        float buff = 1f;
-
-        if (data.skillType == SkillType.NumberPassive)
-        {
-            var result = CalculateNumberPassiveBuff(bm);
-            buff = result.buff;
-        }
-
+        float buff = 1f + numberPassiveAttackBonusPercent / 100f;
         return Mathf.RoundToInt(attack * buff);
     }
 
-    public bool TryGetNumberPassiveBuff(BattleManager bm, out int uniqueCount, out int percent)
+    public void SetNumberPassiveAttackBonus(int percent)
     {
-        uniqueCount = 0;
-        percent = 0;
-
-        if (data == null || data.skillType != SkillType.NumberPassive)
-        {
-            return false;
-        }
-
-        var result = CalculateNumberPassiveBuff(bm);
-        uniqueCount = result.uniqueCount;
-        percent = Mathf.RoundToInt((result.buff - 1f) * 100);
-        return percent > 0;
+        numberPassiveAttackBonusPercent = Mathf.Max(0, percent);
     }
 
     public bool IsStunned() => stunCounter > 0;
@@ -400,7 +387,6 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
             bm.AddLog(string.Format(logMessage, dmg));
         }
         target.TakeDamage(dmg, bm, this, false, isBasicAttack: true);
-        ApplyNumberPassiveAttackEffect(target, bm);
         UpdateDirection(target.gridPos - this.gridPos);
     }
 
@@ -409,9 +395,16 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
         StartVisualEffect(CastEffectRoutine(color));
     }
 
-    public void PlayHitEffect(Color color)
+    public void PlayHitEffect(Color color, bool emphasize = false)
     {
-        StartVisualEffect(HitEffectRoutine(color));
+        StartVisualEffect(HitEffectRoutine(color, emphasize));
+    }
+
+    // スキルの着弾先を、素材が届く前から短く示す。実際のダメージ時には
+    // PlayHitEffect がこの演出を引き継いで、より強いヒット反応へ切り替える。
+    public void PlaySkillTargetCue(Color color)
+    {
+        StartVisualEffect(SkillTargetCueRoutine(color));
     }
 
     private void CaptureBaseVisualState()
@@ -460,12 +453,65 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
         visualEffectRoutine = null;
     }
 
-    private IEnumerator HitEffectRoutine(Color flashColor)
+    private IEnumerator HitEffectRoutine(Color flashColor, bool emphasize)
     {
         if (background == null) yield break;
 
-        background.color = flashColor;
-        yield return new WaitForSeconds(0.08f);
+        var rect = transform as RectTransform;
+        if (!emphasize)
+        {
+            background.color = flashColor;
+            yield return new WaitForSeconds(0.08f);
+            RestoreBaseVisualState();
+            visualEffectRoutine = null;
+            yield break;
+        }
+
+        // スキル命中は半透明と不透明を繰り返す。火球を含む全ダメージ系スキルの
+        // 着弾先を見失わず、短いヒットストップも視覚的に伝える。
+        const float duration = 0.24f;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float progress = Mathf.Clamp01(elapsed / duration);
+            float blink = Mathf.PingPong(progress * 3f, 1f);
+            Color current = Color.Lerp(baseBackgroundColor, flashColor, 0.9f);
+            current.a = baseBackgroundColor.a * Mathf.Lerp(0.42f, 1f, blink);
+            background.color = current;
+            if (rect != null)
+            {
+                rect.localScale = baseScale * Mathf.Lerp(1.05f, 1.14f, blink);
+            }
+            yield return null;
+        }
+
+        RestoreBaseVisualState();
+        visualEffectRoutine = null;
+    }
+
+    private IEnumerator SkillTargetCueRoutine(Color cueColor)
+    {
+        if (background == null) yield break;
+
+        var rect = transform as RectTransform;
+        const float duration = 0.18f;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float progress = Mathf.Clamp01(elapsed / duration);
+            float blink = Mathf.PingPong(progress * 2f, 1f);
+            Color current = Color.Lerp(baseBackgroundColor, cueColor, 0.46f);
+            current.a = baseBackgroundColor.a * Mathf.Lerp(0.48f, 1f, blink);
+            background.color = current;
+            if (rect != null)
+            {
+                rect.localScale = baseScale * Mathf.Lerp(1.01f, 1.06f, blink);
+            }
+            yield return null;
+        }
+
         RestoreBaseVisualState();
         visualEffectRoutine = null;
     }
@@ -483,123 +529,4 @@ if (levelText != null)
 UpdateHPBar();
     }
 
-    // Helper method to calculate NumberPassive buff and unique count
-    private (int uniqueCount, int countOtherOnes, float buff) CalculateNumberPassiveBuff(BattleManager bm)
-    {
-        HashSet<string> uniqueNumbers = new HashSet<string>();
-
-        if (bm == null || data == null)
-        {
-            return (0, 0, 1f);
-        }
-
-        foreach (var kvp in bm.gridMap)
-        {
-            var character = kvp.Value;
-            if (character == null || character.isDead || character.data == null) continue;
-            if (character.isAlly != isAlly) continue;
-            if (!IsNumberCategory(character.data.category)) continue;
-
-            uniqueNumbers.Add(character.data.characterName);
-        }
-
-        int uniqueCount = uniqueNumbers.Count;
-        float perTypeBonus = 0.03f;
-        float maxBonus = 0.09f;
-
-        if (data.category == CharacterCategory.Number2)
-        {
-            perTypeBonus = 0.02f;
-            maxBonus = 0.06f;
-        }
-        else if (data.category == CharacterCategory.Number3)
-        {
-            perTypeBonus = 0.06f;
-            maxBonus = 0.18f;
-        }
-
-        float buff = 1f + Mathf.Min(uniqueCount * perTypeBonus, maxBonus);
-        return (uniqueCount, 0, buff);
-    }
-
-    private static bool IsNumberCategory(CharacterCategory category)
-    {
-        return category == CharacterCategory.Number1 ||
-               category == CharacterCategory.Number2 ||
-               category == CharacterCategory.Number3;
-    }
-
-    private void ApplyNumberPassiveAttackEffect(BattleCharacter target, BattleManager bm)
-    {
-        if (bm == null || target == null || data == null || data.skillType != SkillType.NumberPassive)
-        {
-            return;
-        }
-
-        if (data.category == CharacterCategory.Number2)
-        {
-            ApplyNumber2Splash(target, bm);
-        }
-        else if (data.category == CharacterCategory.Number3)
-        {
-            ApplyNumber3Judgement(target, bm);
-        }
-    }
-
-    private void ApplyNumber2Splash(BattleCharacter target, BattleManager bm)
-    {
-        int splashDamage = Mathf.Max(1, Mathf.RoundToInt(GetEffectiveAttack(bm) * 0.25f));
-        bool hit = false;
-
-        for (int dx = -1; dx <= 1; dx++)
-        {
-            for (int dy = -1; dy <= 1; dy++)
-            {
-                if (dx == 0 && dy == 0) continue;
-                Vector2Int pos = gridPos + new Vector2Int(dx, dy);
-                if (!bm.gridMap.TryGetValue(pos, out BattleCharacter splashTarget)) continue;
-                if (splashTarget == null || splashTarget == target || splashTarget.isDead || splashTarget.isAlly == isAlly) continue;
-
-                splashTarget.TakeDamage(splashDamage, bm, this, false, isBasicAttack: false);
-                hit = true;
-            }
-        }
-
-        if (hit)
-        {
-            bm.AddLog($"{DisplayName} の中位数字効果！ 自分の周囲に {splashDamage} ダメージ");
-        }
-    }
-
-    private void ApplyNumber3Judgement(BattleCharacter target, BattleManager bm)
-    {
-        if (Random.value > 0.35f)
-        {
-            return;
-        }
-
-        BattleCharacter judgementTarget = null;
-        foreach (var kvp in bm.gridMap)
-        {
-            BattleCharacter candidate = kvp.Value;
-            if (candidate == null || candidate.isDead || candidate.isAlly == isAlly || candidate == target)
-            {
-                continue;
-            }
-
-            if (judgementTarget == null || candidate.currentHP < judgementTarget.currentHP)
-            {
-                judgementTarget = candidate;
-            }
-        }
-
-        if (judgementTarget == null)
-        {
-            return;
-        }
-
-        int judgementDamage = Mathf.Max(1, Mathf.RoundToInt(GetEffectiveAttack(bm) * 0.6f));
-        bm.AddLog($"{DisplayName} の上位数字効果！ {judgementTarget.DisplayName} に {judgementDamage} ダメージ");
-        judgementTarget.TakeDamage(judgementDamage, bm, this, false, isBasicAttack: false);
-    }
 }

@@ -223,4 +223,5 @@ public class UIManager : MonoBehaviour
         resetDataButtonText.color = new Color(1f, 0.95f, 0.82f);
         resetDataButtonText.raycastTarget = false;
     }
+
 }

@@ -52,12 +52,14 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/game.loader.js";
+      var buildVersion = new URLSearchParams(window.location.search).get('v');
+      var buildCacheSuffix = buildVersion ? '?v=' + encodeURIComponent(buildVersion) : '';
+      var loaderUrl = buildUrl + "/game.loader.js" + buildCacheSuffix;
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/game.data",
-        frameworkUrl: buildUrl + "/game.framework.js",
-        codeUrl: buildUrl + "/game.wasm",
+        dataUrl: buildUrl + "/game.data" + buildCacheSuffix,
+        frameworkUrl: buildUrl + "/game.framework.js" + buildCacheSuffix,
+        codeUrl: buildUrl + "/game.wasm" + buildCacheSuffix,
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "KanjiBattle",
