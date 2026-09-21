@@ -426,30 +426,30 @@ public class GameManager : MonoBehaviour
 
     public void SaveProgress()
     {
-        PlayerPrefs.SetInt(GoldKey, gold);
-        PlayerPrefs.SetInt(StagePointsKey, stagePoints);
-        PlayerPrefs.SetInt(HighestClearedStageKey, highestClearedStageId);
-        PlayerPrefs.SetInt(UnlockedChapterKey, unlockedChapter);
-        PlayerPrefs.SetInt(ActiveSummonCategoryKey, (int)activeSummonCategory);
-        PlayerPrefs.Save();
+        PlayerProgressStore.SetInt(GoldKey, gold);
+        PlayerProgressStore.SetInt(StagePointsKey, stagePoints);
+        PlayerProgressStore.SetInt(HighestClearedStageKey, highestClearedStageId);
+        PlayerProgressStore.SetInt(UnlockedChapterKey, unlockedChapter);
+        PlayerProgressStore.SetInt(ActiveSummonCategoryKey, (int)activeSummonCategory);
+        PlayerProgressStore.Save();
     }
 
     public void LoadProgress()
     {
-        gold = PlayerPrefs.GetInt(GoldKey, gold);
-        stagePoints = PlayerPrefs.GetInt(StagePointsKey, stagePoints);
-        highestClearedStageId = PlayerPrefs.GetInt(HighestClearedStageKey, highestClearedStageId);
-        unlockedChapter = Mathf.Max(1, PlayerPrefs.GetInt(UnlockedChapterKey, unlockedChapter));
-        activeSummonCategory = (CharacterCategory)PlayerPrefs.GetInt(ActiveSummonCategoryKey, (int)CharacterCategory.None);
+        gold = PlayerProgressStore.GetInt(GoldKey, gold);
+        stagePoints = PlayerProgressStore.GetInt(StagePointsKey, stagePoints);
+        highestClearedStageId = PlayerProgressStore.GetInt(HighestClearedStageKey, highestClearedStageId);
+        unlockedChapter = Mathf.Max(1, PlayerProgressStore.GetInt(UnlockedChapterKey, unlockedChapter));
+        activeSummonCategory = (CharacterCategory)PlayerProgressStore.GetInt(ActiveSummonCategoryKey, (int)CharacterCategory.None);
     }
 
     public void ResetProgress()
     {
-        PlayerPrefs.DeleteKey(GoldKey);
-        PlayerPrefs.DeleteKey(StagePointsKey);
-        PlayerPrefs.DeleteKey(HighestClearedStageKey);
-        PlayerPrefs.DeleteKey(UnlockedChapterKey);
-        PlayerPrefs.DeleteKey(ActiveSummonCategoryKey);
+        PlayerProgressStore.Delete(GoldKey);
+        PlayerProgressStore.Delete(StagePointsKey);
+        PlayerProgressStore.Delete(HighestClearedStageKey);
+        PlayerProgressStore.Delete(UnlockedChapterKey);
+        PlayerProgressStore.Delete(ActiveSummonCategoryKey);
         gold = 0;
         stagePoints = 0;
         highestClearedStageId = 0;
@@ -457,6 +457,6 @@ public class GameManager : MonoBehaviour
         activeSummonCategory = CharacterCategory.None;
         OnGoldChanged?.Invoke(gold);
         OnStagePointsChanged?.Invoke(stagePoints);
-        PlayerPrefs.Save();
+        PlayerProgressStore.Save();
     }
 }
