@@ -1,14 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
+
+public enum GameBgm { Top, Battle, Boss }
 
 public enum GameSound
 {
-    Click,
-    Attack,
-    Skill,
-    Heal,
-    Hit,
-    Win,
-    Lose
+    Click, Attack, Skill, Heal, Hit, Win, Lose, Summon, Slash, HammerStun,
+    Spear, Gun, Arrow, Stone, Fireball, WoodPush, TrapSet, Charge,
+    BirdRetreat, ClawDouble, Defense, ShieldReflect, ArmorReduce, WallCounter,
+    DragonBreath, DragonRoar
 }
 
 public sealed class GameAudio : MonoBehaviour
@@ -16,7 +16,9 @@ public sealed class GameAudio : MonoBehaviour
     private static GameAudio instance;
     private AudioSource sfxSource;
     private AudioSource bgmSource;
-    private readonly System.Collections.Generic.Dictionary<GameSound, AudioClip> clips = new();
+    private readonly Dictionary<GameSound, AudioClip> clips = new();
+    private readonly Dictionary<GameBgm, AudioClip> bgmClips = new();
+    private bool bgmRequested;
 
     public static GameAudio Instance
     {
@@ -39,35 +41,133 @@ public sealed class GameAudio : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
         instance = this;
+        DontDestroyOnLoad(gameObject);
         sfxSource = gameObject.AddComponent<AudioSource>();
         sfxSource.playOnAwake = false;
         sfxSource.volume = 0.45f;
-
         bgmSource = gameObject.AddComponent<AudioSource>();
         bgmSource.playOnAwake = false;
         bgmSource.loop = true;
         bgmSource.volume = 0.12f;
     }
 
-    public void EnsureBgm()
+    public void EnsureBgm() => PlayBgm(GameBgm.Battle, true);
+
+    public void PlayBgm(GameBgm bgm) => PlayBgm(bgm, true);
+
+    private void PlayBgm(GameBgm bgm, bool restartIfDifferent)
     {
-        if (bgmSource == null) Awake();
-        if (bgmSource.isPlaying) return;
-        bgmSource.clip = CreateToneClip("BGM", 0.08f, 20f, 196f, 247f, 294f, 247f);
+        EnsureSources();
+        bgmRequested = true;
+        var clip = GetBgmClip(bgm);
+        if (clip == null) return;
+        if (!restartIfDifferent && bgmSource.isPlaying) return;
+        if (bgmSource.isPlaying && bgmSource.clip == clip) return;
+        bgmSource.clip = clip;
         bgmSource.Play();
+    }
+
+    private void Update()
+    {
+        // WebGL may reject the first Play call until the user interacts with the page.
+        // Retry the already-selected clip on a later frame after that gesture unlocks audio.
+        if (bgmRequested && bgmSource != null && bgmSource.clip != null && !bgmSource.isPlaying)
+        {
+            bgmSource.Play();
+        }
     }
 
     public void Play(GameSound sound)
     {
-        if (sfxSource == null) Awake();
+        EnsureSources();
         if (!clips.TryGetValue(sound, out var clip) || clip == null)
         {
-            clip = CreateClipFor(sound);
+            clip = LoadSoundClip(sound) ?? CreateClipFor(sound);
             clips[sound] = clip;
         }
-        sfxSource.PlayOneShot(clip);
+        if (clip != null) sfxSource.PlayOneShot(clip);
+    }
+
+    public void PlaySkillSound(SkillType skillType)
+    {
+        GameSound sound = skillType switch
+        {
+            SkillType.Slash => GameSound.Slash,
+            SkillType.StunBlow => GameSound.HammerStun,
+            SkillType.Arrow => GameSound.Arrow,
+            SkillType.Gun => GameSound.Gun,
+            SkillType.Spear => GameSound.Spear,
+            SkillType.Stone => GameSound.Stone,
+            SkillType.Fireball => GameSound.Fireball,
+            SkillType.WoodPush => GameSound.WoodPush,
+            SkillType.WaterHeal or SkillType.Heal => GameSound.Heal,
+            SkillType.Soil => GameSound.TrapSet,
+            SkillType.HorseCharge => GameSound.Charge,
+            SkillType.BirdRetreat => GameSound.BirdRetreat,
+            SkillType.TigerTwinClaw => GameSound.ClawDouble,
+            SkillType.Shield => GameSound.ShieldReflect,
+            SkillType.Armor => GameSound.ArmorReduce,
+            SkillType.Wall => GameSound.WallCounter,
+            SkillType.Dragon => GameSound.DragonBreath,
+            _ => GameSound.Skill
+        };
+        Play(sound);
+    }
+
+    private AudioClip GetBgmClip(GameBgm bgm)
+    {
+        if (bgmClips.TryGetValue(bgm, out var cached)) return cached;
+        string fileName = bgm switch
+        {
+            GameBgm.Top => "bgm_top_loop",
+            GameBgm.Boss => "bgm_boss_loop",
+            _ => "battle_bgm_loop_01"
+        };
+        cached = Resources.Load<AudioClip>("Audio/BGM/" + fileName);
+        bgmClips[bgm] = cached;
+        return cached;
+    }
+
+    private static AudioClip LoadSoundClip(GameSound sound)
+    {
+        string fileName = sound switch
+        {
+            GameSound.Click => "sfx_ui_click",
+            GameSound.Attack => "sfx_normal_attack",
+            GameSound.Skill => "sfx_charge",
+            GameSound.Heal => "sfx_heal",
+            GameSound.Hit => "sfx_hit",
+            GameSound.Win => "sfx_victory",
+            GameSound.Lose => "sfx_defeat",
+            GameSound.Summon => "sfx_summon",
+            GameSound.Slash => "sfx_slash",
+            GameSound.HammerStun => "sfx_hammer_stun",
+            GameSound.Spear => "sfx_spear",
+            GameSound.Gun => "sfx_gun",
+            GameSound.Arrow => "sfx_arrow",
+            GameSound.Stone => "sfx_stone",
+            GameSound.Fireball => "sfx_fireball",
+            GameSound.WoodPush => "sfx_wood_push",
+            GameSound.TrapSet => "sfx_trap_set",
+            GameSound.Charge => "sfx_charge",
+            GameSound.BirdRetreat => "sfx_bird_retreat",
+            GameSound.ClawDouble => "sfx_claw_double",
+            GameSound.Defense => "sfx_defense",
+            GameSound.ShieldReflect => "sfx_shield_reflect",
+            GameSound.ArmorReduce => "sfx_armor_reduce",
+            GameSound.WallCounter => "sfx_wall_counter",
+            GameSound.DragonBreath => "sfx_dragon_breath",
+            GameSound.DragonRoar => "sfx_dragon_roar",
+            _ => null
+        };
+        return string.IsNullOrEmpty(fileName) ? null : Resources.Load<AudioClip>("Audio/SE/" + fileName);
+    }
+
+    private void EnsureSources()
+    {
+        if (sfxSource != null && bgmSource != null) return;
+        Awake();
     }
 
     private static AudioClip CreateClipFor(GameSound sound)
@@ -92,16 +192,13 @@ public sealed class GameAudio : MonoBehaviour
         var data = new float[totalSamples];
         int noteCount = Mathf.Max(1, notes.Length);
         int noteSamples = Mathf.Max(1, totalSamples / noteCount);
-
         for (int i = 0; i < totalSamples; i++)
         {
             int noteIndex = Mathf.Min(noteCount - 1, i / noteSamples);
-            float freq = notes[noteIndex];
             float t = i / (float)sampleRate;
             float envelope = Mathf.Clamp01(1f - (i / (float)totalSamples));
-            data[i] = Mathf.Sin(2f * Mathf.PI * freq * t) * volume * envelope;
+            data[i] = Mathf.Sin(2f * Mathf.PI * notes[noteIndex] * t) * volume * envelope;
         }
-
         var clip = AudioClip.Create(name, totalSamples, 1, sampleRate, false);
         clip.SetData(data, 0);
         return clip;

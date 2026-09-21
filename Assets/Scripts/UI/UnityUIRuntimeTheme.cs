@@ -12,6 +12,9 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
     private static UnityUIRuntimeTheme instance;
 
     private readonly Dictionary<string, Sprite> spriteCache = new();
+    private int lastScreenWidth = -1;
+    private int lastScreenHeight = -1;
+    private int lastScreenOrientation = -1;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Bootstrap()
@@ -54,7 +57,13 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         while (true)
         {
             yield return wait;
-            ApplyTheme();
+            // Dynamic entries apply their own styles; the periodic pass is only a resize fallback.
+            if (Screen.width != lastScreenWidth ||
+                Screen.height != lastScreenHeight ||
+                (int)Screen.orientation != lastScreenOrientation)
+            {
+                ApplyTheme();
+            }
         }
     }
 
@@ -108,6 +117,10 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             layout.childControlWidth = true;
             layout.childForceExpandWidth = true;
         }
+
+        lastScreenWidth = Screen.width;
+        lastScreenHeight = Screen.height;
+        lastScreenOrientation = (int)Screen.orientation;
     }
 
     private static bool IsFacilityOwnedGrid(GridLayoutGroup grid)

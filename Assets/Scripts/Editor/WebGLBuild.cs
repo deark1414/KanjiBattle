@@ -23,6 +23,9 @@ namespace KanjiBattle.Editor
                 throw new System.Exception("WebGL Build Support is not installed for this Unity editor.");
             }
 
+            // 透明な武器素材はWebGLの自動圧縮・タイトメッシュを通さない。
+            // 実行時のRawImage描画と対になるビルド前の再発防止策。
+            GeneratedVfxImporter.ConfigureWeaponMotionTextures();
             AssetDatabase.SaveAssets();
 
             PrepareOutputDirectory();
@@ -78,6 +81,21 @@ namespace KanjiBattle.Editor
             }
 
             string html = File.ReadAllText(indexPath);
+            html = html.Replace(
+                "var buildUrl = \"Build\";",
+                "var buildUrl = \"Build\";\n      var buildVersion = new URLSearchParams(window.location.search).get('v');\n      var buildCacheSuffix = buildVersion ? '?v=' + encodeURIComponent(buildVersion) : '';" );
+            html = html.Replace(
+                "var loaderUrl = buildUrl + \"/game.loader.js\";",
+                "var loaderUrl = buildUrl + \"/game.loader.js\" + buildCacheSuffix;");
+            html = html.Replace(
+                "dataUrl: buildUrl + \"/game.data\",",
+                "dataUrl: buildUrl + \"/game.data\" + buildCacheSuffix,");
+            html = html.Replace(
+                "frameworkUrl: buildUrl + \"/game.framework.js\",",
+                "frameworkUrl: buildUrl + \"/game.framework.js\" + buildCacheSuffix,");
+            html = html.Replace(
+                "codeUrl: buildUrl + \"/game.wasm\",",
+                "codeUrl: buildUrl + \"/game.wasm\" + buildCacheSuffix,");
             html = html.Replace(
                 "<canvas id=\"unity-canvas\" width=960 height=600 tabindex=\"-1\"></canvas>",
                 "<canvas id=\"unity-canvas\" tabindex=\"-1\"></canvas>");

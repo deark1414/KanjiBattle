@@ -1,0 +1,702 @@
+fileFormatVersion: 2
+guid: 533e0f71a80a74043a74af8222d1c5b5
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -868336974106414232
+    second: HorseChargeWakeTopdown_0
+  - first:
+      213: 2009510081627980069
+    second: HorseChargeWakeTopdown_1
+  - first:
+      213: -6867591149776348478
+    second: HorseChargeWakeTopdown_2
+  - first:
+      213: -6889560906210721128
+    second: HorseChargeWakeTopdown_3
+  - first:
+      213: 3141270939011477940
+    second: HorseChargeWakeTopdown_4
+  - first:
+      213: 5625444105183610830
+    second: HorseChargeWakeTopdown_5
+  - first:
+      213: 2479377977681437064
+    second: HorseChargeWakeTopdown_6
+  - first:
+      213: -9054066935704245174
+    second: HorseChargeWakeTopdown_7
+  - first:
+      213: -8182492370706825879
+    second: HorseChargeWakeTopdown_8
+  - first:
+      213: -3897248235775939181
+    second: HorseChargeWakeTopdown_9
+  - first:
+      213: -5043717280820950822
+    second: HorseChargeWakeTopdown_10
+  - first:
+      213: -1957794660301558320
+    second: HorseChargeWakeTopdown_11
+  - first:
+      213: -4472723696581623998
+    second: HorseChargeWakeTopdown_12
+  - first:
+      213: 5846276441904013777
+    second: HorseChargeWakeTopdown_13
+  - first:
+      213: 5070077673946795267
+    second: HorseChargeWakeTopdown_14
+  - first:
+      213: -1965339150091642300
+    second: HorseChargeWakeTopdown_15
+  - first:
+      213: -2469260112712308724
+    second: HorseChargeWakeTopdown_16
+  - first:
+      213: 1006960861755548706
+    second: HorseChargeWakeTopdown_17
+  - first:
+      213: 4126424004733272392
+    second: HorseChargeWakeTopdown_18
+  - first:
+      213: 7602516243426270024
+    second: HorseChargeWakeTopdown_19
+  - first:
+      213: 5406371210703702751
+    second: HorseChargeWakeTopdown_20
+  - first:
+      213: 2250177396699807390
+    second: HorseChargeWakeTopdown_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_0
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 703
+        width: 8
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 863bc096f1c03f3f0800000000000000
+      internalID: -868336974106414232
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_1
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 729
+        width: 56
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 521800cb5c633eb10800000000000000
+      internalID: 2009510081627980069
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_2
+      rect:
+        serializedVersion: 2
+        x: 407
+        y: 712
+        width: 7
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cad6fe3c3a61b0a0800000000000000
+      internalID: -6867591149776348478
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_3
+      rect:
+        serializedVersion: 2
+        x: 423
+        y: 688
+        width: 67
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89244e6bbdc5360a0800000000000000
+      internalID: -6889560906210721128
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_4
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 694
+        width: 87
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b1790f9649089b20800000000000000
+      internalID: 3141270939011477940
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_5
+      rect:
+        serializedVersion: 2
+        x: 659
+        y: 682
+        width: 98
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec7c849db97911e40800000000000000
+      internalID: 5625444105183610830
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_6
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 683
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 881e0a76225886220800000000000000
+      internalID: 2479377977681437064
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_7
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 679
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4c2dbca71e795280800000000000000
+      internalID: -9054066935704245174
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 757
+        height: 672
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96dfca2aa82f17e80800000000000000
+      internalID: -8182492370706825879
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_9
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 662
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39dae09c0613ae9c0800000000000000
+      internalID: -3897248235775939181
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_10
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 614
+        width: 7
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad80b291bdd110ab0800000000000000
+      internalID: -5043717280820950822
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_11
+      rect:
+        serializedVersion: 2
+        x: 727
+        y: 540
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dda199112484d4e0800000000000000
+      internalID: -1957794660301558320
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_12
+      rect:
+        serializedVersion: 2
+        x: 747
+        y: 442
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24fb7c6de71bde1c0800000000000000
+      internalID: -4472723696581623998
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_13
+      rect:
+        serializedVersion: 2
+        x: 27
+        y: 426
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d16c62f275222150800000000000000
+      internalID: 5846276441904013777
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_14
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 187
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30dcc3338c88c5640800000000000000
+      internalID: 5070077673946795267
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_15
+      rect:
+        serializedVersion: 2
+        x: 111
+        y: 90
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 44a9e9fa476b9b4e0800000000000000
+      internalID: -1965339150091642300
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_16
+      rect:
+        serializedVersion: 2
+        x: 597
+        y: 64
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c08edbb920d6bbdd0800000000000000
+      internalID: -2469260112712308724
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_17
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 53
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22429a3919179fd00800000000000000
+      internalID: 1006960861755548706
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_18
+      rect:
+        serializedVersion: 2
+        x: 573
+        y: 51
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84185c205c0044930800000000000000
+      internalID: 4126424004733272392
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_19
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 43
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84b5f885e30918960800000000000000
+      internalID: 7602516243426270024
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_20
+      rect:
+        serializedVersion: 2
+        x: 549
+        y: 33
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fda84e1d8f9470b40800000000000000
+      internalID: 5406371210703702751
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HorseChargeWakeTopdown_21
+      rect:
+        serializedVersion: 2
+        x: 628
+        y: 14
+        width: 17
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9eb7eb9b6c3a3f10800000000000000
+      internalID: 2250177396699807390
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID:
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      HorseChargeWakeTopdown_0: -868336974106414232
+      HorseChargeWakeTopdown_1: 2009510081627980069
+      HorseChargeWakeTopdown_10: -5043717280820950822
+      HorseChargeWakeTopdown_11: -1957794660301558320
+      HorseChargeWakeTopdown_12: -4472723696581623998
+      HorseChargeWakeTopdown_13: 5846276441904013777
+      HorseChargeWakeTopdown_14: 5070077673946795267
+      HorseChargeWakeTopdown_15: -1965339150091642300
+      HorseChargeWakeTopdown_16: -2469260112712308724
+      HorseChargeWakeTopdown_17: 1006960861755548706
+      HorseChargeWakeTopdown_18: 4126424004733272392
+      HorseChargeWakeTopdown_19: 7602516243426270024
+      HorseChargeWakeTopdown_2: -6867591149776348478
+      HorseChargeWakeTopdown_20: 5406371210703702751
+      HorseChargeWakeTopdown_21: 2250177396699807390
+      HorseChargeWakeTopdown_3: -6889560906210721128
+      HorseChargeWakeTopdown_4: 3141270939011477940
+      HorseChargeWakeTopdown_5: 5625444105183610830
+      HorseChargeWakeTopdown_6: 2479377977681437064
+      HorseChargeWakeTopdown_7: -9054066935704245174
+      HorseChargeWakeTopdown_8: -8182492370706825879
+      HorseChargeWakeTopdown_9: -3897248235775939181
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

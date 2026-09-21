@@ -53,6 +53,7 @@ public class UIManager : MonoBehaviour
         EnsureResetDataButton();
         HideAll();
         if (TopPanel != null) TopPanel.SetActive(true);
+        GameAudio.Instance.PlayBgm(GameBgm.Top);
         var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
         tabs?.HighlightTop();
     }
@@ -60,6 +61,7 @@ public class UIManager : MonoBehaviour
     public void ShowStageSelect()
     {
         HideAll();
+        GameAudio.Instance.PlayBgm(GameBgm.Top);
         if (StageSelectPanel != null)
         {
             StageSelectPanel.SetActive(true);
@@ -88,6 +90,7 @@ public class UIManager : MonoBehaviour
     public void ShowFacility()
     {
         HideAll();
+        GameAudio.Instance.PlayBgm(GameBgm.Top);
         if (FacilityPanel != null) FacilityPanel.SetActive(true);
         var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
         tabs?.HighlightFacility();
@@ -112,6 +115,7 @@ public class UIManager : MonoBehaviour
 
         if (battleManager != null)
         {
+            GameAudio.Instance.PlayBgm(stage != null && stage.isBossStage ? GameBgm.Boss : GameBgm.Battle);
             battleManager.StartBattle(allies, stage);
         }
         else
@@ -219,4 +223,5 @@ public class UIManager : MonoBehaviour
         resetDataButtonText.color = new Color(1f, 0.95f, 0.82f);
         resetDataButtonText.raycastTarget = false;
     }
+
 }
