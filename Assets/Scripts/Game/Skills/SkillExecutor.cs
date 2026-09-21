@@ -3,6 +3,11 @@ using UnityEngine;
 
 public static class SkillExecutor
 {
+    private const float SwordSideDamageMultiplier = 0.70f;
+
+    // Local VFX review mode. Enable only for an explicitly requested local review build.
+    public static bool ForceSkillActivationForVfxReview = false;
+
     public static bool TryExecute(BattleCharacter caster, BattleCharacter target, BattleManager bm)
     {
         if (caster == null || caster.data == null)
@@ -29,18 +34,37 @@ public static class SkillExecutor
         if (skillType != SkillType.Dragon)
         {
             int chance = GetSkillChance(caster.data, skillType);
-            if (Random.value > chance / 100f)
+            if (!RollSkillActivation(chance))
             {
                 return false;
             }
         }
 
         bool executed;
+        if (skillType == SkillType.Slash)
+        {
+            var context = new SkillContext(bm, caster, target);
+            if (!CanSwordSlashHit(context))
+            {
+                return false;
+            }
+
+            // 範囲内の複数体が倒れても演出の向きがぶれないよう、ダメージ前に開始する。
+            bm?.PlaySkillVfx(caster, target, skillType);
+            return ExecuteSwordSlash(context);
+        }
         if (skillType == SkillType.Spear)
         {
-            executed = ExecuteSpearPierce(new SkillContext(bm, caster, target));
-            if (executed) bm?.PlaySkillVfx(caster, target, skillType);
-            return executed;
+            var context = new SkillContext(bm, caster, target);
+            if (!CanSpearPierceHit(context))
+            {
+                return false;
+            }
+
+            // 槍は命中で対象が即座に破棄されることがあるため、座標を参照できる
+            // ダメージ処理前に演出を開始する。
+            bm?.PlaySkillVfx(caster, target, skillType);
+            return ExecuteSpearPierce(context);
         }
         if (skillType == SkillType.Gun)
         {
@@ -49,38 +73,68 @@ public static class SkillExecutor
         }
         if (skillType == SkillType.TigerTwinClaw)
         {
-            executed = ExecuteTigerTwinClaw(new SkillContext(bm, caster, target));
-            if (executed) bm?.PlaySkillVfx(caster, target, skillType);
-            return executed;
+            var context = new SkillContext(bm, caster, target);
+            if (target == null || target.isDead)
+            {
+                return false;
+            }
+
+            // 一撃目で倒した場合も爪痕が消えないよう、対象の座標を保てるうちに開始する。
+            bm?.PlaySkillVfx(caster, target, skillType);
+            return ExecuteTigerTwinClaw(context);
         }
         if (skillType == SkillType.Dragon)
         {
             executed = ExecuteDragon(new SkillContext(bm, caster, target));
-            if (executed) bm?.PlaySkillVfx(caster, target, skillType);
             return executed;
         }
 
         SkillData dataDriven = SkillCatalog.Get(skillType);
         if (dataDriven != null && dataDriven.effects != null && dataDriven.effects.Count > 0)
         {
+            bool playBeforeResolution = HasCombatImpact(dataDriven);
+            if (playBeforeResolution) bm?.PlaySkillVfx(caster, target, skillType);
             executed = ExecuteDataDriven(new SkillContext(bm, caster, target), dataDriven);
-            if (executed) bm?.PlaySkillVfx(caster, target, skillType);
+            if (executed && !playBeforeResolution) bm?.PlaySkillVfx(caster, target, skillType);
             return executed;
         }
 
+        bool legacyCombat = target != null && skillType is SkillType.Stone
+            or SkillType.Arrow
+            or SkillType.Fireball
+            or SkillType.WoodPush
+            or SkillType.HorseCharge
+            or SkillType.BirdRetreat;
+        if (legacyCombat) bm?.PlaySkillVfx(caster, target, skillType);
         executed = ExecuteLegacy(new SkillContext(bm, caster, target));
-        if (executed) bm?.PlaySkillVfx(caster, target, skillType);
+        if (executed && !legacyCombat) bm?.PlaySkillVfx(caster, target, skillType);
         return executed;
     }
 
-    private static int GetSkillChance(CharacterData data, SkillType skillType)
+    public static int GetSkillChance(CharacterData data, SkillType skillType)
     {
+        if (ForceSkillActivationForVfxReview)
+        {
+            return 100;
+        }
+
         SkillData skillData = SkillCatalog.Get(skillType);
         if (skillData != null && skillData.chanceOverride >= 0)
         {
             return skillData.chanceOverride;
         }
         return data.skillChance;
+    }
+
+    public static bool RollSkillActivation(int chance)
+    {
+        return ForceSkillActivationForVfxReview || Random.value < Mathf.Clamp(chance, 0, 100) / 100f;
+    }
+
+    private static bool IsCounterEligibleForVfxReview(SkillType skillType)
+    {
+        return ForceSkillActivationForVfxReview
+            && (skillType == SkillType.Slash || skillType == SkillType.StunBlow);
     }
 
     private static bool ExecuteDataDriven(SkillContext ctx, SkillData skillData)
@@ -111,7 +165,12 @@ public static class SkillExecutor
                     {
                         ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} の {ctx.Caster.data.skillType}！ {dmg} ダメージ");
                     }
-                    ctx.Target.TakeDamage(dmg, ctx.BattleManager, ctx.Caster, effect.ignoreDefense, isBasicAttack: false);
+                    ctx.Target.TakeDamage(
+                        dmg,
+                        ctx.BattleManager,
+                        ctx.Caster,
+                        effect.ignoreDefense,
+                        isBasicAttack: IsCounterEligibleForVfxReview(ctx.Caster.data.skillType));
                     ctx.Caster.UpdateDirection(ctx.Target.gridPos - ctx.Caster.gridPos);
                     break;
                 case SkillEffectType.Heal:
@@ -176,7 +235,12 @@ public static class SkillExecutor
                             * skillData.powerMultiplier
                             * effect.powerMultiplier);
                         ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} の連撃！ {ctx.Target.DisplayName} に {hitDamage} ダメージ");
-                        ctx.Target.TakeDamage(hitDamage, ctx.BattleManager, ctx.Caster, effect.ignoreDefense, isBasicAttack: false);
+                        ctx.Target.TakeDamage(
+                            hitDamage,
+                            ctx.BattleManager,
+                            ctx.Caster,
+                            effect.ignoreDefense,
+                            isBasicAttack: IsCounterEligibleForVfxReview(ctx.Caster.data.skillType));
                     }
                     break;
                 case SkillEffectType.Charge:
@@ -204,6 +268,22 @@ public static class SkillExecutor
                 effect.effectType == SkillEffectType.Stun ||
                 effect.effectType == SkillEffectType.PushBack ||
                 effect.effectType == SkillEffectType.Charge)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static bool HasCombatImpact(SkillData data)
+    {
+        foreach (SkillEffectData effect in data.effects)
+        {
+            if (effect.effectType is SkillEffectType.Damage
+                or SkillEffectType.MultiHit
+                or SkillEffectType.PushBack
+                or SkillEffectType.Charge
+                or SkillEffectType.Retreat)
             {
                 return true;
             }
@@ -329,6 +409,96 @@ public static class SkillExecutor
         }
 
         return didHit;
+    }
+
+    private static bool ExecuteSwordSlash(SkillContext ctx)
+    {
+        if (ctx.Caster == null || ctx.Target == null || ctx.BattleManager == null)
+        {
+            return false;
+        }
+
+        Vector2Int direction = TargetingService.GetSwordAttackDirection(ctx.Caster, ctx.Target);
+        List<BattleCharacter> targets = TargetingService.GetSwordWedgeTargets(ctx.BattleManager, ctx.Caster, direction);
+        if (targets.Count == 0)
+        {
+            return false;
+        }
+
+        SkillData skillData = SkillCatalog.Get(SkillType.Slash);
+        SkillEffectData damageEffect = skillData?.effects?.Find(effect => effect.effectType == SkillEffectType.Damage);
+        float skillMultiplier = skillData != null ? skillData.powerMultiplier : 1f;
+        float effectMultiplier = damageEffect != null ? damageEffect.powerMultiplier : 1f;
+        bool ignoreDefense = damageEffect != null && damageEffect.ignoreDefense;
+        int damage = Mathf.RoundToInt(ctx.Caster.GetEffectiveAttack(ctx.BattleManager)
+            * ctx.Caster.data.skillPower
+            * skillMultiplier
+            * effectMultiplier);
+
+        ctx.Caster.UpdateDirection(direction);
+        Vector2Int centerCell = ctx.Caster.gridPos + direction;
+        foreach (BattleCharacter victim in targets)
+        {
+            if (victim == null || victim.isDead)
+            {
+                continue;
+            }
+
+            bool isCenterHit = victim.gridPos == centerCell;
+            int targetDamage = isCenterHit
+                ? damage
+                : Mathf.Max(1, Mathf.RoundToInt(damage * SwordSideDamageMultiplier));
+            string message = !string.IsNullOrEmpty(skillData?.logMessage)
+                ? string.Format(skillData.logMessage, targetDamage)
+                : $"{targetDamage} ダメージを与えた！";
+            ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} の斬撃が {victim.DisplayName} に {message}");
+            victim.TakeDamage(
+                targetDamage,
+                ctx.BattleManager,
+                ctx.Caster,
+                ignoreDefense,
+                isBasicAttack: IsCounterEligibleForVfxReview(SkillType.Slash));
+        }
+
+        return true;
+    }
+
+    private static bool CanSwordSlashHit(SkillContext ctx)
+    {
+        if (ctx.Caster == null || ctx.Target == null || ctx.BattleManager == null)
+        {
+            return false;
+        }
+
+        Vector2Int direction = TargetingService.GetSwordAttackDirection(ctx.Caster, ctx.Target);
+        return TargetingService.GetSwordWedgeTargets(ctx.BattleManager, ctx.Caster, direction).Count > 0;
+    }
+
+    private static bool CanSpearPierceHit(SkillContext ctx)
+    {
+        if (ctx.Target == null || ctx.BattleManager == null)
+        {
+            return false;
+        }
+
+        Vector2Int delta = ctx.Target.gridPos - ctx.Caster.gridPos;
+        Vector2Int dir = new Vector2Int(Mathf.Clamp(delta.x, -1, 1), Mathf.Clamp(delta.y, -1, 1));
+        if (dir == Vector2Int.zero)
+        {
+            return false;
+        }
+
+        Vector2Int pos1 = ctx.Caster.gridPos + dir;
+        Vector2Int pos2 = ctx.Caster.gridPos + dir * 2;
+        return IsEnemyAt(ctx, pos1) || IsEnemyAt(ctx, pos2);
+    }
+
+    private static bool IsEnemyAt(SkillContext ctx, Vector2Int position)
+    {
+        return ctx.BattleManager.gridMap.TryGetValue(position, out BattleCharacter character)
+            && character != null
+            && !character.isDead
+            && character.isAlly != ctx.Caster.isAlly;
     }
 
     private static bool ExecuteGunLine(SkillContext ctx)
@@ -472,11 +642,7 @@ public static class SkillExecutor
     private static bool ExecuteDragon(SkillContext ctx)
     {
         SkillData skillData = SkillCatalog.Get(SkillType.Dragon);
-        int chance = ctx.Caster.data.skillChance;
-        if (skillData != null && skillData.chanceOverride >= 0)
-        {
-            chance = skillData.chanceOverride;
-        }
+        int chance = GetSkillChance(ctx.Caster.data, SkillType.Dragon);
 
         int range = 3;
         bool hasRoar = false;
@@ -495,7 +661,23 @@ public static class SkillExecutor
             }
         }
 
-        if (Random.value < chance / 100f)
+        // 演出確認ではブレスと咆哮を同じ頻度で選ぶ。咆哮対象がいない場合だけ、
+        // 行動が空振りにならないようブレスへフォールバックする。
+        if (ForceSkillActivationForVfxReview)
+        {
+            bool selectRoar = hasRoar && !ctx.Caster.isAlly && ctx.Caster.data.isBoss && Random.value < 0.5f;
+            if (selectRoar)
+            {
+                if (ctx.BattleManager.PerformDragonRoar(ctx.Caster)) return true;
+                return ctx.BattleManager.PerformDragonBreath(ctx.Caster, range);
+            }
+
+            if (ctx.BattleManager.PerformDragonBreath(ctx.Caster, range)) return true;
+            return hasRoar && !ctx.Caster.isAlly && ctx.Caster.data.isBoss
+                && ctx.BattleManager.PerformDragonRoar(ctx.Caster);
+        }
+
+        if (RollSkillActivation(chance))
         {
             bool success = ctx.BattleManager.PerformDragonBreath(ctx.Caster, range);
             if (success) return true;
@@ -508,7 +690,7 @@ public static class SkillExecutor
             {
                 roarChance = chance;
             }
-            if (Random.value < roarChance / 100f)
+            if (RollSkillActivation(roarChance))
             {
                 bool success = ctx.BattleManager.PerformDragonRoar(ctx.Caster);
                 if (success) return true;

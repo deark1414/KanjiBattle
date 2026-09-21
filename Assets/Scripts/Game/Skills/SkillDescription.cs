@@ -27,8 +27,7 @@ public static class SkillDescription
             builder.Append(characterSpecificDescription);
         }
 
-        SkillData skillData = SkillCatalog.Get(skillType);
-        int chance = skillData != null && skillData.chanceOverride >= 0 ? skillData.chanceOverride : data.skillChance;
+        int chance = SkillExecutor.GetSkillChance(data, skillType);
         if (UsesChance(skillType))
         {
             builder.Append($"\n発動率: {chance}%");
@@ -42,7 +41,7 @@ public static class SkillDescription
         string rangeDiagram = GetRangeDiagram(skillType);
         if (!string.IsNullOrEmpty(rangeDiagram))
         {
-            builder.Append("\n範囲:\n");
+            builder.Append("\n対象選択 / 効果範囲:\n");
             builder.Append(rangeDiagram);
         }
 
@@ -91,13 +90,13 @@ public static class SkillDescription
     {
         return skillType switch
         {
-            SkillType.Slash => "隣接した敵に強い近接攻撃を行う。",
+            SkillType.Slash => "隣接した敵を正面に取り、正面・左前・右前の3マスを同時に薙ぐ。正面は全威力、左右前は70%の威力。",
             SkillType.StunBlow => "隣接した敵を攻撃し、短時間スタンさせる。",
             SkillType.Counter => "通常攻撃を受けた時、一定確率で攻撃者へ反撃する。",
             SkillType.AreaCounter => "通常攻撃を受けた時、一定確率で周囲の敵へ反撃する。",
             SkillType.Armor => "受けるダメージをレベルに応じて軽減する。",
             SkillType.Heal => "味方を回復する。",
-            SkillType.NumberPassive => "編成内の数字の種類に応じて攻撃力が上がる。",
+            SkillType.NumberPassive => "自分以外の生存数字との組み合わせにより、ターン開始時に効果が決まる。",
             SkillType.Arrow => "離れた敵に矢を放つ。",
             SkillType.Gun => "直線上の敵を撃ち抜く。",
             SkillType.Spear => "8方向の敵を最大2マスまで貫通して攻撃する。",
@@ -124,9 +123,9 @@ public static class SkillDescription
         {
             return data.category switch
             {
-                CharacterCategory.Number1 => "初位数字: 数字の種類1つごとに攻撃力+3%、最大+9%。",
-                CharacterCategory.Number2 => "中位数字: 数字の種類1つごとに攻撃力+2%、最大+6%。通常攻撃時、自分周囲8マスの敵に攻撃力25%の追加ダメージ。",
-                CharacterCategory.Number3 => "上位数字: 数字の種類1つごとに攻撃力+6%、最大+18%。通常攻撃時35%で、主対象以外の低HP敵へ攻撃力60%の追撃。",
+                CharacterCategory.Number1 => "低位数字: 自分以外の生存数字の種類数により攻撃力+15% / +30% / +50%。一だけの編成は2体以上で発動し、4体・5体では大幅に上がる。",
+                CharacterCategory.Number2 => "中位数字: 自分以外の生存数字の種類数により、味方ターン開始時に最大HPの5% / 10% / 15%を自動回復。",
+                CharacterCategory.Number3 => "上位数字: 自分以外の生存数字の種類数により、経過ラウンドごとに攻撃力が1.03倍 / 1.05倍 / 1.10倍で増加。生存構成が変わると次の味方ターンに再計算。",
                 _ => ""
             };
         }
@@ -143,10 +142,13 @@ public static class SkillDescription
     {
         return skillType switch
         {
-            SkillType.AreaCounter => "攻 攻 攻\n攻 自 攻\n攻 攻 攻\n注被弾時に周囲へ反撃",
-            SkillType.Gun => "攻 ・ 攻 ・ 攻\n・ 攻 攻 攻 ・\n攻 攻 自 攻 攻\n・ 攻 攻 攻 ・\n攻 ・ 攻 ・ 攻\n注8方向の直線を端まで貫通",
-            SkillType.Spear => "攻 ・ 攻 ・ 攻\n・ 攻 攻 攻 ・\n攻 攻 自 攻 攻\n・ 攻 攻 攻 ・\n攻 ・ 攻 ・ 攻\n注8方向2マスまで貫通",
-            SkillType.Dragon => "・ ・ ・ ・ ・\n・ ・ 攻 攻 攻\n・ 自 攻 攻 攻\n・ ・ 攻 攻 攻\n・ ・ ・ ・ ・\n注方向を選び前方3x3ブレス",
+            SkillType.Slash => "選択: 隣接した敵1体を正面に取る\n効果: ・ 70 ・\n　　 70 自 100\n注 正面は全威力、左右前は70%",
+            SkillType.AreaCounter => "選択: 被弾時に自動\n効果: 攻 攻 攻\n　　 攻 自 攻\n　　 攻 攻 攻",
+            SkillType.Gun => "選択: 8方向の直線\n効果: 選択方向の直線上を貫通",
+            SkillType.Spear => "選択: 8方向 / 2マス\n効果: 選択方向の最大2マスを貫通",
+            SkillType.Stone => "選択: 自分中心5×5\n効果: 選択した対象1体",
+            SkillType.Fireball => "選択: 自分中心5×5\n効果: 選択した対象1体",
+            SkillType.Dragon => "選択: 4方向から1方向\n効果: 前方3×3ブレス",
             _ => ""
         };
     }
