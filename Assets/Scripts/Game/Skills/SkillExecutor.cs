@@ -10,25 +10,25 @@ public static class SkillExecutor
 
     public static bool TryExecute(BattleCharacter caster, BattleCharacter target, BattleManager bm)
     {
+        return TryExecuteDetailed(caster, target, bm).Succeeded;
+    }
+
+    public static SkillExecutionResult TryExecuteDetailed(BattleCharacter caster, BattleCharacter target, BattleManager bm)
+    {
         if (caster == null || caster.data == null)
         {
-            return false;
+            return SkillExecutionResult.Failed(SkillType.None, SkillExecutionFailure.InvalidCaster);
         }
 
         SkillType skillType = caster.data.skillType;
         if (skillType == SkillType.None)
         {
-            return false;
+            return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.NoSkill);
         }
 
-        if (skillType == SkillType.Counter || skillType == SkillType.AreaCounter)
+        if (skillType == SkillType.Counter || skillType == SkillType.AreaCounter || skillType == SkillType.NumberPassive)
         {
-            return false;
-        }
-
-        if (skillType == SkillType.NumberPassive)
-        {
-            return false;
+            return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.PassiveOrReactiveSkill);
         }
 
         if (skillType != SkillType.Dragon)
@@ -36,10 +36,24 @@ public static class SkillExecutor
             int chance = GetSkillChance(caster.data, skillType);
             if (!RollSkillActivation(chance))
             {
-                return false;
+                return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.ChanceFailed);
             }
         }
 
+        SkillData skillData = SkillCatalog.Get(skillType);
+        if (skillData != null && skillData.effects != null && skillData.effects.Count > 0 && HasUnsupportedEffect(skillData))
+        {
+            return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.UnsupportedEffect);
+        }
+
+        return TryExecuteResolved(caster, target, bm)
+            ? SkillExecutionResult.Success(skillType)
+            : SkillExecutionResult.Failed(skillType, SkillExecutionFailure.NoValidTarget);
+    }
+
+    private static bool TryExecuteResolved(BattleCharacter caster, BattleCharacter target, BattleManager bm)
+    {
+        SkillType skillType = caster.data.skillType;
         bool executed;
         if (skillType == SkillType.Slash)
         {
@@ -144,8 +158,15 @@ public static class SkillExecutor
             return false;
         }
 
+        bool appliedAnyEffect = false;
         foreach (var effect in skillData.effects)
         {
+            if (effect == null || !IsSupportedDataDrivenEffect(effect.effectType))
+            {
+                Debug.LogWarning($"[SkillExecutor] Unsupported effect: {effect?.effectType}");
+                return false;
+            }
+
             switch (effect.effectType)
             {
                 case SkillEffectType.Damage:
@@ -172,6 +193,7 @@ public static class SkillExecutor
                         effect.ignoreDefense,
                         isBasicAttack: IsCounterEligibleForVfxReview(ctx.Caster.data.skillType));
                     ctx.Caster.UpdateDirection(ctx.Target.gridPos - ctx.Caster.gridPos);
+                    appliedAnyEffect = true;
                     break;
                 case SkillEffectType.Heal:
                     if (ctx.Target == null)
@@ -195,6 +217,7 @@ public static class SkillExecutor
                     int actualHeal = ctx.Target.currentHP - beforeHP;
                     ctx.BattleManager.PlayDamageVfx(ctx.Target, actualHeal, isHealing: true);
                     ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} が {ctx.Target.DisplayName} を {actualHeal} 回復！");
+                    appliedAnyEffect = true;
                     break;
                 case SkillEffectType.Stun:
                     if (ctx.Target == null)
@@ -203,6 +226,7 @@ public static class SkillExecutor
                     }
                     ctx.Target.ApplyStun(effect.value);
                     ctx.BattleManager.AddLog($"{ctx.Target.DisplayName} はスタンした！");
+                    appliedAnyEffect = true;
                     break;
                 case SkillEffectType.PushBack:
                     if (ctx.Target == null)
@@ -210,13 +234,16 @@ public static class SkillExecutor
                         return false;
                     }
                     ctx.BattleManager.PushBackCharacter(ctx.Caster, ctx.Target);
+                    appliedAnyEffect = true;
                     break;
                 case SkillEffectType.SoilTrap:
                     ctx.BattleManager.GenerateSoilTraps(ctx.Caster.gridPos);
                     ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} が土のスキルを発動！周囲に罠を設置した！");
+                    appliedAnyEffect = true;
                     break;
                 case SkillEffectType.Retreat:
                     ctx.BattleManager.PerformBirdRetreat(ctx.Caster);
+                    appliedAnyEffect = true;
                     break;
                 case SkillEffectType.MultiHit:
                     if (ctx.Target == null)
@@ -241,6 +268,7 @@ public static class SkillExecutor
                             ctx.Caster,
                             effect.ignoreDefense,
                             isBasicAttack: IsCounterEligibleForVfxReview(ctx.Caster.data.skillType));
+                        appliedAnyEffect = true;
                     }
                     break;
                 case SkillEffectType.Charge:
@@ -249,14 +277,12 @@ public static class SkillExecutor
                         return false;
                     }
                     ctx.BattleManager.PerformHorseCharge(ctx.Caster, ctx.Target);
-                    break;
-                default:
-                    Debug.LogWarning($"[SkillExecutor] Unsupported effect: {effect.effectType}");
+                    appliedAnyEffect = true;
                     break;
             }
         }
 
-        return true;
+        return appliedAnyEffect;
     }
 
     private static bool RequiresTarget(SkillData data)
@@ -267,12 +293,34 @@ public static class SkillExecutor
                 effect.effectType == SkillEffectType.Heal ||
                 effect.effectType == SkillEffectType.Stun ||
                 effect.effectType == SkillEffectType.PushBack ||
-                effect.effectType == SkillEffectType.Charge)
+                effect.effectType == SkillEffectType.Charge ||
+                effect.effectType == SkillEffectType.MultiHit)
             {
                 return true;
             }
         }
         return false;
+    }
+
+    private static bool HasUnsupportedEffect(SkillData skillData)
+    {
+        foreach (SkillEffectData effect in skillData.effects)
+        {
+            if (effect == null || !IsSupportedDataDrivenEffect(effect.effectType)) return true;
+        }
+        return false;
+    }
+
+    private static bool IsSupportedDataDrivenEffect(SkillEffectType effectType)
+    {
+        return effectType is SkillEffectType.Damage
+            or SkillEffectType.Heal
+            or SkillEffectType.Stun
+            or SkillEffectType.PushBack
+            or SkillEffectType.SoilTrap
+            or SkillEffectType.Retreat
+            or SkillEffectType.MultiHit
+            or SkillEffectType.Charge;
     }
 
     private static bool HasCombatImpact(SkillData data)

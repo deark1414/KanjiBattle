@@ -46,7 +46,7 @@ public class BattleManager : MonoBehaviour
     private int battleSpeedIndex = 1;
     private Button speedButton;
     private TextMeshProUGUI speedButtonText;
-    private readonly List<GameObject> activeVfxObjects = new();
+    private readonly BattleVfxRegistry battleVfxRegistry = new();
     private Transform battleVfxOverlay;
     private Transform weaponVfxOverlay;
     private static readonly Dictionary<string, Sprite[]> animatedVfxSprites = new();
@@ -450,35 +450,41 @@ public class BattleManager : MonoBehaviour
         SkillData tuning = SkillCatalog.Get(SkillType.NumberPassive);
         bool isOneOnlyParty = livingSide.Count > 0 && livingSide.TrueForAll(character => character.data.characterName == "一");
         int onePartyCount = isOneOnlyParty ? livingSide.Count : 0;
-        int otherNumberTypeCount = Mathf.Max(0, CountNumberTypes(numberCharacters) - 1);
-        int standardStrength = GetNumberTierStrength(otherNumberTypeCount);
+        var numberNames = new List<string>();
+        foreach (BattleCharacter character in numberCharacters)
+        {
+            numberNames.Add(character.data.characterName);
+        }
+        int standardStrength = NumberPassiveRules.GetStandardStrength(numberNames);
         int lowStrength = isOneOnlyParty
-            ? GetNumberTierStrength(Mathf.Max(0, onePartyCount - 1))
+            ? NumberPassiveRules.GetStrengthFromCount(onePartyCount - 1)
             : standardStrength;
         int midStrength = standardStrength;
         int highStrength = standardStrength;
 
         int lowAttackBonus = isOneOnlyParty
             ? GetOnePartyAttackBonus(tuning, onePartyCount)
-            : GetNumberTierValue(lowStrength,
+            : NumberPassiveRules.GetTierValue(lowStrength,
                 tuning != null ? tuning.numberPassiveBonus1 : 15,
                 tuning != null ? tuning.numberPassiveBonus2 : 30,
                 tuning != null ? tuning.numberPassiveBonus3 : 50);
-        int midHealPercent = GetNumberTierValue(midStrength,
+        int midHealPercent = NumberPassiveRules.GetTierValue(midStrength,
             tuning != null ? tuning.numberPassiveMidHealWeak : 5,
             tuning != null ? tuning.numberPassiveMidHealMedium : 10,
             tuning != null ? tuning.numberPassiveMidHealStrong : 15);
-        int highBonusPerRound = GetNumberTierValue(highStrength,
+        int highBonusPerRound = NumberPassiveRules.GetTierValue(highStrength,
             tuning != null ? tuning.numberPassiveHighBonusPerRoundWeak : 3,
             tuning != null ? tuning.numberPassiveHighBonusPerRoundMedium : 5,
             tuning != null ? tuning.numberPassiveHighBonusPerRoundStrong : 10);
-        int highBonusCap = GetNumberTierValue(highStrength,
+        int highBonusCap = NumberPassiveRules.GetTierValue(highStrength,
             tuning != null ? tuning.numberPassiveHighBonusCapWeak : 100,
             tuning != null ? tuning.numberPassiveHighBonusCapMedium : 200,
             tuning != null ? tuning.numberPassiveHighBonusCapStrong : 300);
         int completedRounds = Mathf.Max(0, battleTurn - 1);
-        float highMultiplier = Mathf.Pow(1f + highBonusPerRound / 100f, completedRounds);
-        int highAttackBonus = Mathf.Min(highBonusCap, Mathf.RoundToInt((highMultiplier - 1f) * 100f));
+        int highAttackBonus = NumberPassiveRules.GetCompoundedAttackBonus(
+            highBonusPerRound,
+            completedRounds,
+            highBonusCap);
 
         var current = new NumberPassiveSnapshot
         {
@@ -532,46 +538,13 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private static int CountNumberTypes(List<BattleCharacter> characters)
-    {
-        HashSet<string> names = new();
-        foreach (BattleCharacter character in characters)
-        {
-            names.Add(character.data.characterName);
-        }
-        return names.Count;
-    }
-
-    private static int GetNumberTierStrength(int typeCount)
-    {
-        return Mathf.Clamp(typeCount, 0, 3);
-    }
-
-    private static int GetNumberTierValue(int strength, int weak, int medium, int strong)
-    {
-        return strength switch
-        {
-            1 => weak,
-            2 => medium,
-            3 => strong,
-            _ => 0
-        };
-    }
-
     private static int GetOnePartyAttackBonus(SkillData tuning, int oneCount)
     {
         int weak = tuning != null ? tuning.numberPassiveBonus1 : 15;
         int medium = tuning != null ? tuning.numberPassiveBonus2 : 30;
         int four = tuning != null ? tuning.numberPassiveOneBonus4 : 150;
         int fiveOrMore = tuning != null ? tuning.numberPassiveOneBonus5 : 300;
-        return oneCount switch
-        {
-            2 => weak,
-            3 => medium,
-            4 => four,
-            >= 5 => fiveOrMore,
-            _ => 0
-        };
+        return NumberPassiveRules.GetOneOnlyAttackBonus(oneCount, weak, medium, four, fiveOrMore);
     }
 
     private void ApplyNumberPassiveHeal(BattleCharacter character, int healPercent)
@@ -897,9 +870,10 @@ public class BattleManager : MonoBehaviour
 
     private static int GetMovementDestinationIndex(BattleCharacter character, List<Vector2Int> path, bool targetCellOccupied)
     {
-        int maxSteps = character != null && character.data != null && character.data.category == CharacterCategory.Animal ? 2 : 1;
-        int lastWalkableIndex = targetCellOccupied ? path.Count - 2 : path.Count - 1;
-        return Mathf.Clamp(maxSteps, 1, Mathf.Max(1, lastWalkableIndex));
+        CharacterCategory category = character != null && character.data != null
+            ? character.data.category
+            : CharacterCategory.None;
+        return BattleMovementRules.GetDestinationIndex(category, path, targetCellOccupied);
     }
 
     private bool IsCellFree(Vector2Int pos)
@@ -1217,7 +1191,7 @@ public class BattleManager : MonoBehaviour
 
         Color color = new Color(1f, 0.88f, 0.42f);
         caster.PlayCastEffect(color);
-        List<Vector2Int> cells = GetLineCellsFromDirection(caster.gridPos, dir, rows + cols);
+        List<Vector2Int> cells = BattleRangeService.GetLineWithinBoard(caster.gridPos, dir, rows + cols, cols, rows);
 
         RectTransform from = caster.transform as RectTransform;
         Vector2Int endPos = cells.Count > 0 ? cells[cells.Count - 1] : caster.gridPos + dir;
@@ -2092,148 +2066,16 @@ public class BattleManager : MonoBehaviour
 
     private List<Vector2Int> GetSkillSelectionCells(BattleCharacter caster, BattleCharacter target, SkillType skillType)
     {
-        var cells = new List<Vector2Int>();
-        if (caster == null) return cells;
-
-        switch (skillType)
-        {
-            case SkillType.Stone:
-            case SkillType.Fireball:
-            case SkillType.HorseCharge:
-            case SkillType.Soil:
-                AddBoxCells(cells, caster.gridPos, 2);
-                break;
-            case SkillType.Slash:
-                if (target != null)
-                {
-                    cells.AddRange(TargetingService.GetSwordWedgeCells(
-                        caster.gridPos,
-                        TargetingService.GetSwordAttackDirection(caster, target)));
-                }
-                break;
-            case SkillType.StunBlow:
-            case SkillType.TigerTwinClaw:
-            case SkillType.WaterHeal:
-            case SkillType.BirdRetreat:
-            case SkillType.WoodPush:
-                AddDirectionalCells(cells, caster.gridPos, 1, diagonals: true);
-                break;
-            case SkillType.Arrow:
-            case SkillType.Gun:
-                AddLineToTargetCells(cells, caster.gridPos, target != null ? target.gridPos : caster.gridPos, maxDistance: rows + cols);
-                break;
-            case SkillType.Spear:
-                if (target != null)
-                {
-                    Vector2Int delta = target.gridPos - caster.gridPos;
-                    Vector2Int dir = new Vector2Int(Mathf.Clamp(delta.x, -1, 1), Mathf.Clamp(delta.y, -1, 1));
-                    cells.Add(caster.gridPos + dir);
-                    cells.Add(caster.gridPos + dir * 2);
-                }
-                break;
-        }
-
-        cells.RemoveAll(pos => pos == caster.gridPos || pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows);
-        return cells;
+        return caster == null
+            ? new List<Vector2Int>()
+            : BattleRangeService.GetSelectionCells(skillType, caster.gridPos, target?.gridPos, cols, rows);
     }
 
     private List<Vector2Int> GetSkillEffectCells(BattleCharacter caster, BattleCharacter target, SkillType skillType)
     {
-        var cells = new List<Vector2Int>();
-        if (caster == null) return cells;
-
-        switch (skillType)
-        {
-            case SkillType.Slash:
-                if (target != null)
-                {
-                    cells.AddRange(TargetingService.GetSwordWedgeCells(
-                        caster.gridPos,
-                        TargetingService.GetSwordAttackDirection(caster, target)));
-                }
-                break;
-            case SkillType.StunBlow:
-            case SkillType.TigerTwinClaw:
-            case SkillType.Arrow:
-            case SkillType.Stone:
-            case SkillType.Fireball:
-            case SkillType.WaterHeal:
-            case SkillType.WoodPush:
-            case SkillType.HorseCharge:
-            case SkillType.BirdRetreat:
-                if (target != null) cells.Add(target.gridPos);
-                break;
-            case SkillType.Spear:
-                AddLineToTargetCells(cells, caster.gridPos, target != null ? target.gridPos : caster.gridPos, maxDistance: 2);
-                break;
-            case SkillType.Gun:
-                AddLineToTargetCells(cells, caster.gridPos, target != null ? target.gridPos : caster.gridPos, maxDistance: rows + cols);
-                break;
-        }
-
-        cells.RemoveAll(pos => pos == caster.gridPos || pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows);
-        return cells;
-    }
-
-    private void AddBoxCells(List<Vector2Int> cells, Vector2Int center, int radius)
-    {
-        for (int dx = -radius; dx <= radius; dx++)
-        {
-            for (int dy = -radius; dy <= radius; dy++)
-            {
-                if (dx == 0 && dy == 0) continue;
-                cells.Add(center + new Vector2Int(dx, dy));
-            }
-        }
-    }
-
-    private void AddDirectionalCells(List<Vector2Int> cells, Vector2Int center, int distance, bool diagonals)
-    {
-        Vector2Int[] dirs = diagonals
-            ? new[]
-            {
-                Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right,
-                new Vector2Int(1, 1), new Vector2Int(-1, 1), new Vector2Int(1, -1), new Vector2Int(-1, -1)
-            }
-            : new[] { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
-
-        foreach (var dir in dirs)
-        {
-            for (int d = 1; d <= distance; d++)
-            {
-                cells.Add(center + dir * d);
-            }
-        }
-    }
-
-    private void AddLineToTargetCells(List<Vector2Int> cells, Vector2Int from, Vector2Int to, int maxDistance)
-    {
-        Vector2Int delta = to - from;
-        if (delta == Vector2Int.zero) return;
-        Vector2Int dir = new Vector2Int(Mathf.Clamp(delta.x, -1, 1), Mathf.Clamp(delta.y, -1, 1));
-
-        for (int d = 1; d <= maxDistance; d++)
-        {
-            Vector2Int pos = from + dir * d;
-            if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) break;
-            cells.Add(pos);
-            if (pos == to) break;
-        }
-    }
-
-    private List<Vector2Int> GetLineCellsFromDirection(Vector2Int from, Vector2Int dir, int maxDistance)
-    {
-        var cells = new List<Vector2Int>();
-        if (dir == Vector2Int.zero) return cells;
-
-        for (int d = 1; d <= maxDistance; d++)
-        {
-            Vector2Int pos = from + dir * d;
-            if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) break;
-            cells.Add(pos);
-        }
-
-        return cells;
+        return caster == null
+            ? new List<Vector2Int>()
+            : BattleRangeService.GetEffectCells(skillType, caster.gridPos, target?.gridPos, cols, rows);
     }
 
     private IEnumerator HighlightCellsRoutine(List<Vector2Int> cells, Color highlightColor, float duration)
@@ -2758,10 +2600,7 @@ public class BattleManager : MonoBehaviour
 
     private void RegisterBattleVfx(GameObject obj)
     {
-        if (obj != null && !activeVfxObjects.Contains(obj))
-        {
-            activeVfxObjects.Add(obj);
-        }
+        battleVfxRegistry.Register(obj);
     }
 
     private Transform EnsureBattleVfxOverlay()
@@ -2833,23 +2672,12 @@ public class BattleManager : MonoBehaviour
 
     private void DestroyBattleVfx(GameObject obj)
     {
-        if (obj == null) return;
-        activeVfxObjects.Remove(obj);
-        Destroy(obj);
+        battleVfxRegistry.Destroy(obj);
     }
 
     private void CleanupBattleVfx()
     {
-        for (int i = activeVfxObjects.Count - 1; i >= 0; i--)
-        {
-            GameObject obj = activeVfxObjects[i];
-            if (obj != null)
-            {
-                Destroy(obj);
-            }
-        }
-
-        activeVfxObjects.Clear();
+        battleVfxRegistry.Cleanup();
     }
 
     public void ShowFloatingText(BattleCharacter target, string message, Color color)

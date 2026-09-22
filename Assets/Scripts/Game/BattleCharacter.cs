@@ -9,12 +9,12 @@ public class BattleCharacter : MonoBehaviour
     public CharacterData data;
     public Vector2Int gridPos;
     public bool isAlly;
-    public int level;
-
-    public int currentHP;
-    public int attack;
-    public int defense;
-    public bool isDead = false;
+    private readonly BattleCharacterState state = new();
+    public int level { get => state.Level; set => state.Level = value; }
+    public int currentHP { get => state.CurrentHP; set => state.CurrentHP = value; }
+    public int attack { get => state.Attack; set => state.Attack = value; }
+    public int defense { get => state.Defense; set => state.Defense = value; }
+    public bool isDead { get => state.IsDead; set => state.IsDead = value; }
 
     [Header("UI")]
     [SerializeField] private Image background;
@@ -26,13 +26,11 @@ public class BattleCharacter : MonoBehaviour
     private static int allyCounter = 0; // 味方インスタンス番号管理
     private static int enemyCounter = 0; // 敵インスタンス番号管理
     private int instanceId;
-    private int stunCounter = 0;
     private Color baseBackgroundColor = Color.white;
     private static readonly Color battleInfoTextColor = new Color(1f, 0.96f, 0.78f, 1f);
     private static readonly Color battleInfoShadowColor = new Color(0f, 0f, 0f, 0.85f);
     private Vector3 baseScale = Vector3.one;
     private Coroutine visualEffectRoutine;
-    private int numberPassiveAttackBonusPercent;
 
     public int InstanceId => instanceId;
 
@@ -43,10 +41,7 @@ public void Init(CharacterData data, Vector2Int pos, bool ally, int level = 1)
     this.isAlly = ally;
     this.level = level;
 
-    currentHP = data.GetMaxHP(level);
-    attack    = data.GetAttack(level);
-    defense   = data.GetDefense(level);
-    numberPassiveAttackBonusPercent = 0;
+    state.Initialize(data, level);
 
 Sprite displayIcon = ally || data.enemyIcon == null ? data.icon : data.enemyIcon;
 bool usesIcon = displayIcon != null;
@@ -350,25 +345,24 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
 
     public int GetEffectiveAttack(BattleManager bm)
     {
-        float buff = 1f + numberPassiveAttackBonusPercent / 100f;
-        return Mathf.RoundToInt(attack * buff);
+        return state.GetEffectiveAttack();
     }
 
     public void SetNumberPassiveAttackBonus(int percent)
     {
-        numberPassiveAttackBonusPercent = Mathf.Max(0, percent);
+        state.SetNumberPassiveAttackBonus(percent);
     }
 
-    public bool IsStunned() => stunCounter > 0;
+    public bool IsStunned() => state.StunTurns > 0;
 
     public void TickStun()
     {
-        if (stunCounter > 0) stunCounter--;
+        state.TickStun();
     }
 
     public void ApplyStun(int turns)
     {
-        stunCounter = Mathf.Max(stunCounter, turns);
+        state.ApplyStun(turns);
     }
 
     public void PerformAttack(BattleCharacter target, BattleManager bm, float powerMultiplier = 1f, string logMessage = null)

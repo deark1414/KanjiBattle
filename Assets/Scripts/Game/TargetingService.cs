@@ -111,30 +111,7 @@ public static class TargetingService
     // 斜めを正面にした場合も、隣接する横・縦の2マスで自然な扇形になる。
     public static List<Vector2Int> GetSwordWedgeCells(Vector2Int center, Vector2Int forward)
     {
-        forward = NormalizeDirection(forward);
-        if (forward == Vector2Int.zero)
-        {
-            return new List<Vector2Int>();
-        }
-
-        var cells = new List<Vector2Int> { center + forward };
-        if (forward.x == 0)
-        {
-            cells.Add(center + new Vector2Int(1, forward.y));
-            cells.Add(center + new Vector2Int(-1, forward.y));
-        }
-        else if (forward.y == 0)
-        {
-            cells.Add(center + new Vector2Int(forward.x, 1));
-            cells.Add(center + new Vector2Int(forward.x, -1));
-        }
-        else
-        {
-            cells.Add(center + new Vector2Int(forward.x, 0));
-            cells.Add(center + new Vector2Int(0, forward.y));
-        }
-
-        return cells;
+        return BattleRangeService.GetSwordWedgeCells(center, forward);
     }
 
     public static Vector2Int GetSwordAttackDirection(BattleCharacter self, BattleCharacter target)
@@ -143,7 +120,7 @@ public static class TargetingService
         {
             return Vector2Int.zero;
         }
-        return NormalizeDirection(target.gridPos - self.gridPos);
+        return BattleRangeService.NormalizeDirection(target.gridPos - self.gridPos);
     }
 
     public static List<BattleCharacter> GetSwordWedgeTargets(
@@ -168,11 +145,6 @@ public static class TargetingService
             }
         }
         return targets;
-    }
-
-    private static Vector2Int NormalizeDirection(Vector2Int direction)
-    {
-        return new Vector2Int(Mathf.Clamp(direction.x, -1, 1), Mathf.Clamp(direction.y, -1, 1));
     }
 
     public static BattleCharacter FindArrowTarget(BattleManager bm, BattleCharacter self)
