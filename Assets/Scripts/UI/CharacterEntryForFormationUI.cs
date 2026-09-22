@@ -10,15 +10,15 @@ public class CharacterEntryForFormationUI : MonoBehaviour
     private CharacterData characterData;
     private Image iconImage;
 
-    public void SetCharacter(CharacterData data, int level, int count)
+    public void SetCharacter(CharacterData data, int level)
     {
         characterData = data;
         ApplyLayout(data);
         EnsureSkillTooltip(data);
         string skillName = SkillDescription.GetShort(data.skillType);
         infoText.text = $"{data.characterName}  {skillName}\nHP {data.GetMaxHP(level)}  ATK {data.GetAttack(level)}  DEF {data.GetDefense(level)}";
-        levelText.text = $"Lv.{level}";
-        countText.text = $"所持 x{count}";
+        levelText.text = $"PLv.{level}";
+        countText.text = "加入済";
     }
 
     private void ApplyLayout(CharacterData data)

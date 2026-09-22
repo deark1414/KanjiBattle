@@ -113,6 +113,7 @@ public class FormationUI : MonoBehaviour
         }
 
         RestoreLastBattleFormation(false);
+        EnsureStarterFormation();
     }
 
     private void ClearSlotButtons()
@@ -214,11 +215,10 @@ public class FormationUI : MonoBehaviour
         }
 
         int slotIndex = 0;
-        var usedCounts = new Dictionary<CharacterData, int>();
         foreach (var character in lastBattleFormation)
         {
             if (character == null || slotIndex >= formationSlots.Length) break;
-            if (!CanUseCharacter(character, usedCounts)) continue;
+            if (!CanUseCharacter(character)) continue;
 
             while (slotIndex < formationSlots.Length && formationSlots[slotIndex] != null)
             {
@@ -227,18 +227,14 @@ public class FormationUI : MonoBehaviour
             if (slotIndex >= formationSlots.Length) break;
 
             SetCharacterToSlot(slotIndex, character);
-            usedCounts.TryGetValue(character, out int used);
-            usedCounts[character] = used + 1;
             slotIndex++;
         }
     }
 
-    private static bool CanUseCharacter(CharacterData character, Dictionary<CharacterData, int> usedCounts)
+    private static bool CanUseCharacter(CharacterData character)
     {
         if (PlayerInventory.Instance == null || character == null) return false;
-        if (!PlayerInventory.Instance.GetOwnedCharacters().TryGetValue(character, out var info)) return false;
-        usedCounts.TryGetValue(character, out int used);
-        return used < info.count;
+        return PlayerInventory.Instance.GetOwnedCharacters().ContainsKey(character);
     }
 
     private GameObject GetSlotObject(int index)
@@ -337,4 +333,39 @@ public class FormationUI : MonoBehaviour
     }
 
     public CharacterData[] GetFormation() => formationSlots;
+
+    public bool HasSelectedCharacter()
+    {
+        if (formationSlots == null)
+        {
+            return false;
+        }
+
+        foreach (CharacterData character in formationSlots)
+        {
+            if (character != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void EnsureStarterFormation()
+    {
+        if (HasSelectedCharacter() || PlayerInventory.Instance == null || formationSlots == null || formationSlots.Length == 0)
+        {
+            return;
+        }
+
+        foreach (CharacterData character in PlayerInventory.Instance.GetUnlockedCharacters())
+        {
+            if (character != null && character.characterId == 1)
+            {
+                SetCharacterToSlot(0, character);
+                return;
+            }
+        }
+    }
 }

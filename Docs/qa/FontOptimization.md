@@ -36,7 +36,7 @@ Use the collected glyph list as a starting point when updating the subset source
 git add -f Assets/Fonts/NotoSansJP-Medium\ SDF.asset Assets/Fonts/NotoSansJP-Medium\ SDF.asset.meta
 ```
 
-5. Verify Japanese text in Top, Battle, Formation, Facilities, summon category tabs, battle log, and result panels.
+5. Verify Japanese text in Top, Battle, Formation, Facilities, battle log, and result panels.
 6. Rebuild WebGL and compare `Docs/game/Build/game.data`.
 
 Do not manually edit the serialized SDF asset. Missing glyphs are easy to introduce and hard to notice without visual checks.

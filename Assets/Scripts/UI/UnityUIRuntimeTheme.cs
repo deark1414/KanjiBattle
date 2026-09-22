@@ -323,18 +323,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         var rect = button.transform as RectTransform;
         if (rect == null) return;
 
-        if (path.Contains("top") && path.Contains("summonbutton"))
-        {
-            if (IsPortraitNarrowScreen())
-            {
-                Stretch(rect, new Vector2(0.24f, 0.63f), new Vector2(0.76f, 0.70f));
-            }
-            else
-            {
-                Stretch(rect, new Vector2(0.36f, 0.70f), new Vector2(0.64f, 0.79f));
-            }
-        }
-        else if (path.Contains("formation") && path.Contains("startbattlebutton"))
+        if (path.Contains("formation") && path.Contains("startbattlebutton"))
         {
             Stretch(rect,
                 IsPortraitNarrowScreen() ? new Vector2(0.38f, 0.115f) : new Vector2(0.40f, 0.03f),

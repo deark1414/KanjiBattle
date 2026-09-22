@@ -33,9 +33,9 @@ Id | FileName | Name | Category | SkillType | BaseHP | HPGrowth | BaseAtk | AtkG
 9 | CharacterData_9 | 九 | Number3 | NumberPassive | 200 | 10 | 25 | 3 | 14 | 1.2 | 10 | 
 26 | CharacterData_Dragon | 竜 | Boss | Dragon | 1300 | 15 | 115 | 2 | 35 | 1.4 | 15 | Yes
 
-## Research Unlock Plan
+## Recruitment Availability
 
-初期召喚対象は `一` です。以降は研究所で、下記の必要ステージをクリアしたキャラクターから順に解放します。
+初期仲間は `一` です。以下のキャラクターを敵として初めて倒すと仲間候補になり、以後の勝利で縁が進行します。
 
 Character | Required Stage
 ---|---

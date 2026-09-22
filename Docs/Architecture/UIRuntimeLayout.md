@@ -26,7 +26,7 @@ KanjiBattle currently treats Unity prefabs as structural templates and applies m
   - Japanese-capable TMP font discovery and runtime fallback creation.
   - Keeps font selection separate from general theme styling.
 
-- Screen/list scripts such as `CharacterListUI`, `FormationUI`, `FacilityListUI`, and `SummonCategoryUI`
+- Screen/list scripts such as `CharacterListUI`, `FormationUI`, and `FacilityListUI`
   - Screen-specific list/card/dropdown placement and content sizing.
 
 ## Practical Rule

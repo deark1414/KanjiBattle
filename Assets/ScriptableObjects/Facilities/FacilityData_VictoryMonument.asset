@@ -17,18 +17,16 @@ MonoBehaviour:
   effectType: 3
   unlockType: 1
   requiredStageId: 15
-  unlockStagePointCost: 2
-  initialMaxLevel: 2
-  finalMaxLevel: 5
+  unlockStagePointCost: 0
+  initialMaxLevel: 1
+  finalMaxLevel: 3
   levelCapIncreasePerUnlock: 1
   facilityLevelCapUnlocks:
   - stageId: 20
-    requiredStagePoints: 3
-  - stageId: 25
-    requiredStagePoints: 3
-  baseCost: 120
-  growthFactor: 1.2
-  chapterUnlockRequirements: []
+    requiredStagePoints: 0
+  - stageId: 30
+    requiredStagePoints: 0
+  baseCost: 0
+  growthFactor: 1
+  upgradeStagePointCosts: 050000000c00000019000000
   effectPerLevel: 0.2
-  summonCategory: 0
-  summonRatePerLevel: 0

@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,10 +15,7 @@ public class CharacterListUI : MonoBehaviour
         {
             PlayerInventory.Instance.onInventoryChanged += RefreshList;
         }
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnCostModifiersChanged += RefreshList;
-        }
+        ResearchBondService.Instance.OnChanged += RefreshList;
     }
 
     private void OnEnable()
@@ -42,10 +40,7 @@ public class CharacterListUI : MonoBehaviour
         {
             PlayerInventory.Instance.onInventoryChanged -= RefreshList;
         }
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnCostModifiersChanged -= RefreshList;
-        }
+        ResearchBondService.Instance.OnChanged -= RefreshList;
     }
 
     public void RefreshList()
@@ -59,11 +54,19 @@ public class CharacterListUI : MonoBehaviour
 
         ClearEntries();
 
-        foreach (var kv in PlayerInventory.Instance.GetOwnedCharacters())
+        foreach (var kv in PlayerInventory.Instance.GetOwnedCharacters().OrderBy(entry => entry.Key.characterId))
         {
             var entry = Instantiate(characterEntryPrefab, content);
             var ui = entry.GetComponent<CharacterEntryUI>();
-            ui.SetCharacter(kv.Key, kv.Value.level, kv.Value.count);
+            ui.SetCharacter(kv.Key, PlayerInventory.Instance.PlayerLevel, PlayerInventory.Instance.PlayerExperience,
+                PlayerInventory.Instance.GetExperienceToNextPlayerLevel(), PlayerInventory.Instance.GetEffectiveLevelCap());
+        }
+
+        foreach (CharacterData candidate in ResearchBondService.Instance.GetDefeatedCandidates())
+        {
+            var entry = Instantiate(characterEntryPrefab, content);
+            var ui = entry.GetComponent<CharacterEntryUI>();
+            ui.SetBondCandidate(candidate, ResearchBondService.Instance.GetBond(candidate), ResearchBondService.Instance.GetBondThreshold(candidate));
         }
     }
 
@@ -84,7 +87,7 @@ public class CharacterListUI : MonoBehaviour
         if (listRect != null)
         {
             listRect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.27f) : new Vector2(0.04f, 0.10f);
-            listRect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.60f) : new Vector2(0.96f, 0.66f);
+            listRect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.73f) : new Vector2(0.96f, 0.80f);
             listRect.anchoredPosition = Vector2.zero;
             listRect.sizeDelta = Vector2.zero;
         }

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class BattleManager : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class BattleManager : MonoBehaviour
 
     private List<BattleCharacter> allies = new();
     private List<BattleCharacter> enemies = new();
+    private readonly List<CharacterData> deployedAllies = new();
 
     [SerializeField] private ScrollRect logScroll;
     [SerializeField] private Transform logContent;
@@ -31,6 +33,9 @@ public class BattleManager : MonoBehaviour
 
     [SerializeField] private GameObject resultPanel;
     [SerializeField] private TextMeshProUGUI resultText;
+    private Button resultBackButton;
+    private Button resultRetryButton;
+    private RectTransform resultActionContainer;
 
     private HashSet<Vector2Int> occupied = new();
     private int currentReward = 0;
@@ -42,8 +47,8 @@ public class BattleManager : MonoBehaviour
 
     private int trapDamage = 5;
     private bool isPaused = false;
-    private readonly float[] battleSpeeds = { 0.5f, 1f, 2f, 4f };
-    private int battleSpeedIndex = 1;
+    private readonly float[] battleSpeeds = { 1f, 2f, 4f };
+    private int battleSpeedIndex;
     private Button speedButton;
     private TextMeshProUGUI speedButtonText;
     private readonly BattleVfxRegistry battleVfxRegistry = new();
@@ -97,6 +102,7 @@ public class BattleManager : MonoBehaviour
     private void OnEnable()
     {
         EnsureSpeedButton();
+        SyncBattleSpeedFromProgress();
         ConfigureResponsiveLayout();
     }
 
@@ -128,11 +134,13 @@ public class BattleManager : MonoBehaviour
         reinforcementIndex = 0;
         reinforcementTotalSpawned = 0;
         currentStage = stage;
+        SyncBattleSpeedFromProgress();
 
         foreach (var ally in allies)
         {
             if (ally != null)
             {
+                deployedAllies.Add(ally);
                 var pos = GetRandomFreeCell();
                 SpawnCharacter(ally, pos, true);
             }
@@ -182,6 +190,7 @@ public class BattleManager : MonoBehaviour
         gridMap.Clear();
         allies.Clear();
         enemies.Clear();
+        deployedAllies.Clear();
         occupied.Clear();
         trapCells.Clear();
         soilTrapCells.Clear();
@@ -289,9 +298,9 @@ public class BattleManager : MonoBehaviour
         var bc = obj.GetComponent<BattleCharacter>();
 
         int level = 1;
-        if (ally && PlayerInventory.Instance != null && PlayerInventory.Instance.GetOwnedCharacters().TryGetValue(data, out var info))
+        if (ally && PlayerInventory.Instance != null && PlayerInventory.Instance.IsOwned(data))
         {
-            level = info.level;
+            level = PlayerInventory.Instance.PlayerLevel;
         }
         else if (!ally && currentStage != null)
         {
@@ -606,6 +615,14 @@ public class BattleManager : MonoBehaviour
 
     private float CurrentBattleSpeed => Mathf.Max(0.1f, battleSpeeds[battleSpeedIndex]);
 
+    private void SyncBattleSpeedFromProgress()
+    {
+        int unlockedTier = GameManager.Instance != null ? GameManager.Instance.BattleSpeedTier : 0;
+        int selectedIndex = GameManager.Instance != null ? GameManager.Instance.SelectedBattleSpeedIndex : 0;
+        battleSpeedIndex = Mathf.Clamp(selectedIndex, 0, Mathf.Min(unlockedTier, battleSpeeds.Length - 1));
+        UpdateSpeedButtonLabel();
+    }
+
     private void EnsureSpeedButton()
     {
         if (speedButton != null) return;
@@ -643,7 +660,10 @@ public class BattleManager : MonoBehaviour
     private void ToggleBattleSpeed()
     {
         GameAudio.Instance.EnsureBgm();
-        battleSpeedIndex = (battleSpeedIndex + 1) % battleSpeeds.Length;
+        int unlockedTier = GameManager.Instance != null ? GameManager.Instance.BattleSpeedTier : 0;
+        int maxIndex = Mathf.Clamp(unlockedTier, 0, battleSpeeds.Length - 1);
+        battleSpeedIndex = (battleSpeedIndex + 1) % (maxIndex + 1);
+        GameManager.Instance?.SetBattleSpeedIndex(battleSpeedIndex);
         GameAudio.Instance.Play(GameSound.Click);
         AddLog($"バトル速度 x{CurrentBattleSpeed:0.#}", Color.cyan);
         UpdateSpeedButtonLabel();
@@ -1006,12 +1026,33 @@ public class BattleManager : MonoBehaviour
     {
         GameAudio.Instance.Play(isWin ? GameSound.Win : GameSound.Lose);
         int effectiveReward = 0;
+        PlayerExperienceResult experienceResult = default;
+        List<string> bondSummaryLines = new();
+        int additionalBondResults = 0;
         if (isWin && GameManager.Instance != null && currentStage != null)
         {
             GameManager.Instance.RegisterClearedStage(currentStage.stageId);
+            experienceResult = PlayerInventory.Instance != null
+                ? PlayerInventory.Instance.GrantBattleExperience()
+                : default;
+            var recruitmentResults = ResearchBondService.Instance.ResolveVictory(currentStage);
             effectiveReward = GameManager.Instance.GetEffectiveStagePointReward(currentReward);
             GameManager.Instance.AddStagePoints(effectiveReward);
             AddLog($"報酬 {effectiveReward} ステージポイント を獲得！", Color.yellow);
+
+            foreach (RecruitmentResult result in recruitmentResults)
+            {
+                if (result.recruited)
+                {
+                    AddLog($"縁が結ばれた: {result.character.characterName}", new Color(0.55f, 1f, 0.72f));
+                    AddBondSummaryLine($"{result.character.characterName} が仲間に加わった", bondSummaryLines, ref additionalBondResults);
+                }
+                else if (result.bondGained > 0)
+                {
+                    AddLog($"{result.character.characterName} との縁 +{result.bondGained} ({result.bond}/{result.threshold})", new Color(0.72f, 0.88f, 1f));
+                    AddBondSummaryLine($"{result.character.characterName}  +{result.bondGained} ({result.bond}/{result.threshold})", bondSummaryLines, ref additionalBondResults);
+                }
+            }
         }
 
         if (resultPanel == null || resultText == null)
@@ -1022,20 +1063,203 @@ public class BattleManager : MonoBehaviour
 
         resultPanel.SetActive(true);
         resultPanel.transform.SetAsLastSibling();
+        ConfigureResultModal();
+        ConfigureResultActions();
 
         resultText.gameObject.SetActive(true);
         resultText.transform.SetAsLastSibling();
         UnityUIRuntimeTheme.EnsureJapaneseCapableFont(resultText);
-        resultText.text = isWin && effectiveReward > 0
-            ? $"{message}\n報酬 +{effectiveReward} StagePts"
-            : message;
+        string rewardSummary = isWin
+            ? $"\n\n獲得報酬\nSP +{effectiveReward}\nPlayer EXP +{experienceResult.experience}  (Lv.{experienceResult.previousLevel} → Lv.{experienceResult.level})"
+            : "\n\n今回の獲得報酬\nなし";
+        string bondSummary = bondSummaryLines.Count > 0
+            ? $"\n\n縁の進行\n{string.Join("\n", bondSummaryLines)}{(additionalBondResults > 0 ? $"\nほか {additionalBondResults}体" : string.Empty)}"
+            : string.Empty;
+        resultText.text = message + rewardSummary + bondSummary;
         resultText.color = color;
         resultText.alignment = TextAlignmentOptions.Center;
         resultText.enableAutoSizing = true;
-        resultText.fontSizeMin = 22f;
+        resultText.fontSizeMin = 16f;
         resultText.fontSizeMax = 48f;
 
         Canvas.ForceUpdateCanvases();
+    }
+
+    private static void AddBondSummaryLine(string line, List<string> lines, ref int additionalResultCount)
+    {
+        const int maxVisibleBondResults = 4;
+        if (lines.Count < maxVisibleBondResults)
+        {
+            lines.Add(line);
+        }
+        else
+        {
+            additionalResultCount++;
+        }
+    }
+
+    private void ConfigureResultModal()
+    {
+        if (resultPanel == null || resultText == null)
+        {
+            return;
+        }
+
+        if (resultPanel.transform is RectTransform panelRect)
+        {
+            panelRect.sizeDelta = new Vector2(640f, 430f);
+        }
+
+        RectTransform textRect = resultText.rectTransform;
+        textRect.anchorMin = new Vector2(0.08f, 0.28f);
+        textRect.anchorMax = new Vector2(0.92f, 0.90f);
+        textRect.offsetMin = Vector2.zero;
+        textRect.offsetMax = Vector2.zero;
+    }
+
+    private void ConfigureResultActions()
+    {
+        if (resultPanel == null)
+        {
+            return;
+        }
+
+        if (resultActionContainer == null)
+        {
+            Transform existing = resultPanel.transform.Find("ResultActions");
+            if (existing != null)
+            {
+                resultActionContainer = existing.GetComponent<RectTransform>();
+            }
+            else
+            {
+                var container = new GameObject("ResultActions", typeof(RectTransform), typeof(HorizontalLayoutGroup));
+                container.transform.SetParent(resultPanel.transform, false);
+                resultActionContainer = container.GetComponent<RectTransform>();
+                var layout = container.GetComponent<HorizontalLayoutGroup>();
+                layout.padding = new RectOffset(0, 0, 0, 0);
+                layout.spacing = 16f;
+                layout.childControlWidth = true;
+                layout.childControlHeight = true;
+                layout.childForceExpandWidth = true;
+                layout.childForceExpandHeight = true;
+            }
+
+            resultActionContainer.anchorMin = new Vector2(0.12f, 0.08f);
+            resultActionContainer.anchorMax = new Vector2(0.88f, 0.22f);
+            resultActionContainer.offsetMin = Vector2.zero;
+            resultActionContainer.offsetMax = Vector2.zero;
+        }
+
+        if (resultBackButton == null)
+        {
+            Transform existing = resultPanel.transform.Find("BackToMenu");
+            resultBackButton = existing != null ? existing.GetComponent<Button>() : null;
+            if (resultBackButton == null)
+            {
+                resultBackButton = CreateResultActionButton("ReturnToStageSelectButton", "ステージ選択へ");
+            }
+            else
+            {
+                resultBackButton.transform.SetParent(resultActionContainer, false);
+            }
+
+            resultBackButton.onClick.RemoveAllListeners();
+            resultBackButton.onClick.AddListener(ReturnToStageSelect);
+            SetResultActionLabel(resultBackButton, "ステージ選択へ");
+        }
+
+        if (resultRetryButton == null)
+        {
+            resultRetryButton = CreateResultActionButton("RetryStageButton", "もう一度");
+            resultRetryButton.onClick.AddListener(RetryCurrentStage);
+        }
+
+        bool canRetry = currentStage != null
+            && FacilityManager.Instance != null
+            && FacilityManager.Instance.IsStageRetryUnlocked();
+        resultRetryButton.gameObject.SetActive(canRetry);
+        resultBackButton.transform.SetAsLastSibling();
+        if (canRetry)
+        {
+            resultRetryButton.transform.SetAsFirstSibling();
+        }
+    }
+
+    private Button CreateResultActionButton(string name, string label)
+    {
+        var buttonObject = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button), typeof(LayoutElement));
+        buttonObject.transform.SetParent(resultActionContainer, false);
+
+        var image = buttonObject.GetComponent<Image>();
+        image.sprite = Resources.Load<Sprite>("Kenney/UIRPG/PNG/buttonLong_brown");
+        image.type = image.sprite != null ? Image.Type.Sliced : Image.Type.Simple;
+        image.color = image.sprite != null ? Color.white : new Color(0.58f, 0.41f, 0.24f, 1f);
+
+        var layoutElement = buttonObject.GetComponent<LayoutElement>();
+        layoutElement.minHeight = 52f;
+        layoutElement.flexibleWidth = 1f;
+
+        var button = buttonObject.GetComponent<Button>();
+        var colors = button.colors;
+        colors.normalColor = Color.white;
+        colors.highlightedColor = new Color(1f, 0.94f, 0.78f);
+        colors.pressedColor = new Color(0.82f, 0.74f, 0.62f);
+        colors.colorMultiplier = 1f;
+        button.colors = colors;
+
+        var textObject = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        textObject.transform.SetParent(buttonObject.transform, false);
+        var textRect = textObject.GetComponent<RectTransform>();
+        textRect.anchorMin = Vector2.zero;
+        textRect.anchorMax = Vector2.one;
+        textRect.offsetMin = new Vector2(8f, 2f);
+        textRect.offsetMax = new Vector2(-8f, -2f);
+        SetResultActionLabel(button, label);
+        return button;
+    }
+
+    private static void SetResultActionLabel(Button button, string label)
+    {
+        TextMeshProUGUI text = button != null ? button.GetComponentInChildren<TextMeshProUGUI>(true) : null;
+        if (text == null)
+        {
+            return;
+        }
+
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
+        text.text = label;
+        text.color = new Color(1f, 0.95f, 0.82f);
+        text.alignment = TextAlignmentOptions.Center;
+        text.enableAutoSizing = true;
+        text.fontSizeMin = 15f;
+        text.fontSizeMax = 22f;
+        text.raycastTarget = false;
+    }
+
+    private void RetryCurrentStage()
+    {
+        if (currentStage == null || FacilityManager.Instance == null || !FacilityManager.Instance.IsStageRetryUnlocked())
+        {
+            return;
+        }
+
+        List<CharacterData> retryParty = deployedAllies.Where(ally => ally != null).ToList();
+        if (retryParty.Count == 0)
+        {
+            return;
+        }
+
+        resultPanel.SetActive(false);
+        GameAudio.Instance.Play(GameSound.Click);
+        StartBattle(retryParty, currentStage);
+    }
+
+    private void ReturnToStageSelect()
+    {
+        GameAudio.Instance.Play(GameSound.Click);
+        resultPanel?.SetActive(false);
+        UIManager.Instance?.ShowStageSelect();
     }
 
     public void PlayAttackVfx(BattleCharacter attacker, BattleCharacter target, bool skill = false)
@@ -2735,6 +2959,11 @@ public class BattleManager : MonoBehaviour
         target.isDead = true;
 
         AddLog($"{target.data.characterName} は倒れた！", Color.gray);
+
+        if (!target.isAlly)
+        {
+            ResearchBondService.Instance.RegisterDefeated(target.data);
+        }
 
         gridMap.Remove(target.gridPos);
         if (target.isAlly) allies.Remove(target);

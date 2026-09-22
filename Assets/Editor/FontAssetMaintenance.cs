@@ -1,6 +1,7 @@
 using System.IO;
 using TMPro;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.TextCore.LowLevel;
 
@@ -11,6 +12,7 @@ namespace KanjiBattle.Editor
         private const string SourceFontPath = "Assets/Fonts/NotoSansJP-Medium.ttf";
         private const string TargetFontAssetPath = "Assets/Fonts/NotoSansJP-Medium SDF.asset";
         private const string GlyphListPath = "tmp/font/glyphs.txt";
+        private const int AtlasSize = 4096;
 
         public static void RebuildJapaneseTmpFontAsset()
         {
@@ -30,12 +32,13 @@ namespace KanjiBattle.Editor
                 90,
                 9,
                 GlyphRenderMode.SDFAA,
-                1024,
-                1024,
+                AtlasSize,
+                AtlasSize,
                 AtlasPopulationMode.Dynamic);
 
             fontAsset.name = "NotoSansJP-Medium SDF";
             fontAsset.atlasPopulationMode = AtlasPopulationMode.Dynamic;
+            fontAsset.isMultiAtlasTexturesEnabled = false;
 
             string projectRoot = Directory.GetParent(Application.dataPath)?.FullName ?? Directory.GetCurrentDirectory();
             string glyphListFullPath = Path.Combine(projectRoot, GlyphListPath);
@@ -80,6 +83,30 @@ namespace KanjiBattle.Editor
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        public static void RepairSceneJapaneseFontReferences()
+        {
+            TMP_FontAsset fontAsset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(TargetFontAssetPath);
+            if (fontAsset == null)
+            {
+                throw new FileNotFoundException($"Project TMP font not found: {TargetFontAssetPath}");
+            }
+
+            var scene = EditorSceneManager.OpenScene("Assets/Scenes/SampleScene.unity", OpenSceneMode.Single);
+            TextMeshProUGUI[] textComponents = Object.FindObjectsByType<TextMeshProUGUI>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
+
+            foreach (TextMeshProUGUI text in textComponents)
+            {
+                text.font = fontAsset;
+                text.fontSharedMaterial = fontAsset.material;
+                EditorUtility.SetDirty(text);
+            }
+
+            EditorSceneManager.SaveScene(scene);
+            AssetDatabase.SaveAssets();
         }
 
         private static void DisableClearDynamicDataOnBuild(TMP_FontAsset fontAsset)

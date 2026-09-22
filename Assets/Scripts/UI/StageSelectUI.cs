@@ -77,13 +77,13 @@ public class StageSelectUI : MonoBehaviour
         var rect = buttonObject.GetComponent<RectTransform>();
         if (rect != null)
         {
-            rect.sizeDelta = new Vector2(rect.sizeDelta.x, 58f);
+            rect.sizeDelta = new Vector2(rect.sizeDelta.x, 110f);
         }
 
         var layout = buttonObject.GetComponent<LayoutElement>();
         if (layout == null) layout = buttonObject.AddComponent<LayoutElement>();
-        layout.minHeight = 58f;
-        layout.preferredHeight = 58f;
+        layout.minHeight = 110f;
+        layout.preferredHeight = 110f;
         layout.flexibleHeight = 0f;
     }
 
@@ -92,7 +92,7 @@ public class StageSelectUI : MonoBehaviour
         var contentRect = content as RectTransform;
         if (contentRect == null || stageButtonPrefab == null || stageDatabase == null) return;
 
-        const float rowHeight = 58f;
+        const float rowHeight = 110f;
         const float spacing = 8f;
         int count = stageDatabase.stages != null ? stageDatabase.stages.Count(stage => stage != null) : 0;
         float height = count > 0 ? count * rowHeight + Mathf.Max(0, count - 1) * spacing + 10f : 0f;
