@@ -192,18 +192,18 @@ public class PlayerInventory : MonoBehaviour
     {
         if (isLoadingProgress) return;
 
-        PlayerPrefs.SetInt(LevelCapBonusKey, globalLevelCapBonus);
-        PlayerPrefs.SetString(OwnedKey, SerializeOwnedCharacters());
-        PlayerPrefs.SetString(SummonableKey, string.Join(",", summonableCharacters.FindAll(c => c != null).ConvertAll(c => c.characterId.ToString())));
-        PlayerPrefs.Save();
+        PlayerProgressStore.SetInt(LevelCapBonusKey, globalLevelCapBonus);
+        PlayerProgressStore.SetString(OwnedKey, SerializeOwnedCharacters());
+        PlayerProgressStore.SetString(SummonableKey, string.Join(",", summonableCharacters.FindAll(c => c != null).ConvertAll(c => c.characterId.ToString())));
+        PlayerProgressStore.Save();
     }
 
     public void LoadProgress()
     {
         isLoadingProgress = true;
-        globalLevelCapBonus = PlayerPrefs.GetInt(LevelCapBonusKey, globalLevelCapBonus);
-        DeserializeOwnedCharacters(PlayerPrefs.GetString(OwnedKey, ""));
-        DeserializeSummonableCharacters(PlayerPrefs.GetString(SummonableKey, ""));
+        globalLevelCapBonus = PlayerProgressStore.GetInt(LevelCapBonusKey, globalLevelCapBonus);
+        DeserializeOwnedCharacters(PlayerProgressStore.GetString(OwnedKey));
+        DeserializeSummonableCharacters(PlayerProgressStore.GetString(SummonableKey));
         isLoadingProgress = false;
         onInventoryChanged?.Invoke();
         OnSummonableChanged?.Invoke();
@@ -211,16 +211,16 @@ public class PlayerInventory : MonoBehaviour
 
     public void ResetProgress()
     {
-        PlayerPrefs.DeleteKey(OwnedKey);
-        PlayerPrefs.DeleteKey(SummonableKey);
-        PlayerPrefs.DeleteKey(LevelCapBonusKey);
+        PlayerProgressStore.Delete(OwnedKey);
+        PlayerProgressStore.Delete(SummonableKey);
+        PlayerProgressStore.Delete(LevelCapBonusKey);
         ownedCharacters.Clear();
         summonableCharacters.Clear();
         summonableCharacters.AddRange(initialSummonableCharacters.FindAll(c => c != null));
         globalLevelCapBonus = 0;
         onInventoryChanged?.Invoke();
         OnSummonableChanged?.Invoke();
-        PlayerPrefs.Save();
+        PlayerProgressStore.Save();
     }
 
     private string SerializeOwnedCharacters()

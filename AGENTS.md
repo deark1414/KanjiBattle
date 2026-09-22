@@ -85,6 +85,26 @@ ruby ~/.codex/skills/kanji-battle-balance/scripts/simulate_balance.rb --project 
 - Pay special attention to boss data. Bosses may be balanced at level 1, so high `enemyLevel` values can make them overpowered.
 - After a tuning change, rerun the simulator and summarize before/after values.
 
+## Battle Refactor Checks
+
+- Battle geometry and passive formulas live in `BattleRangeService`, `BattleMovementRules`, and `NumberPassiveRules`. Do not reintroduce independent range calculations in BattleManager, previews, or VFX code.
+- Before accepting battle-rule or data changes, run the two Unity batch checks below. They must both log `Passed.` and exit successfully:
+
+```bash
+/Applications/Unity/Hub/Editor/6000.4.4f1/Unity.app/Contents/MacOS/Unity \
+  -batchmode -quit -projectPath /Users/yuya/UnityProjects/KanjiBattle \
+  -executeMethod BattleRuleRegression.RunFromCommandLine \
+  -logFile /tmp/kanji-battle-rule-regression.log
+
+/Applications/Unity/Hub/Editor/6000.4.4f1/Unity.app/Contents/MacOS/Unity \
+  -batchmode -quit -projectPath /Users/yuya/UnityProjects/KanjiBattle \
+  -executeMethod GameDataValidator.ValidateFromCommandLine \
+  -logFile /tmp/kanji-battle-data-validation.log
+```
+
+- `SkillExecutor.TryExecute` remains the compatibility API. New callers that need failure diagnostics should use `TryExecuteDetailed`; do not treat unsupported data-driven effects as a successful activation.
+- `PlayerProgressStore` is the only PlayerPrefs gateway. Preserve current `KanjiBattle.*` save keys unless an explicit save migration is added.
+
 ## WebGL Visual QA
 
 - Use Playwright-managed Chromium for repeatable WebGL layout screenshots.

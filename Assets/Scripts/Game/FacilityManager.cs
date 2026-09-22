@@ -483,27 +483,27 @@ public class FacilityManager : MonoBehaviour
     {
         if (isLoadingProgress) return;
 
-        PlayerPrefs.SetString(UnlockedKey, string.Join(",", unlockedFacilities.Where(f => f != null).Select(f => f.facilityId.ToString())));
-        PlayerPrefs.SetString(LevelsKey, SerializeDictionary(facilityLevels));
-        PlayerPrefs.SetString(CapUnlocksKey, SerializeDictionary(facilityCapUnlockCount));
-        PlayerPrefs.Save();
+        PlayerProgressStore.SetString(UnlockedKey, string.Join(",", unlockedFacilities.Where(f => f != null).Select(f => f.facilityId.ToString())));
+        PlayerProgressStore.SetString(LevelsKey, SerializeDictionary(facilityLevels));
+        PlayerProgressStore.SetString(CapUnlocksKey, SerializeDictionary(facilityCapUnlockCount));
+        PlayerProgressStore.Save();
     }
 
     public void LoadProgress()
     {
         isLoadingProgress = true;
         var facilities = GetFacilities();
-        DeserializeUnlocked(PlayerPrefs.GetString(UnlockedKey, ""), facilities);
-        DeserializeDictionary(PlayerPrefs.GetString(LevelsKey, ""), facilities, facilityLevels);
-        DeserializeDictionary(PlayerPrefs.GetString(CapUnlocksKey, ""), facilities, facilityCapUnlockCount);
+        DeserializeUnlocked(PlayerProgressStore.GetString(UnlockedKey), facilities);
+        DeserializeDictionary(PlayerProgressStore.GetString(LevelsKey), facilities, facilityLevels);
+        DeserializeDictionary(PlayerProgressStore.GetString(CapUnlocksKey), facilities, facilityCapUnlockCount);
         isLoadingProgress = false;
     }
 
     public void ResetProgress()
     {
-        PlayerPrefs.DeleteKey(UnlockedKey);
-        PlayerPrefs.DeleteKey(LevelsKey);
-        PlayerPrefs.DeleteKey(CapUnlocksKey);
+        PlayerProgressStore.Delete(UnlockedKey);
+        PlayerProgressStore.Delete(LevelsKey);
+        PlayerProgressStore.Delete(CapUnlocksKey);
         facilityLevels.Clear();
         unlockedFacilities.Clear();
         facilityCapUnlockCount.Clear();
@@ -519,7 +519,7 @@ public class FacilityManager : MonoBehaviour
             }
         }
 
-        PlayerPrefs.Save();
+        PlayerProgressStore.Save();
     }
 
     private void ReapplyAllEffects()
