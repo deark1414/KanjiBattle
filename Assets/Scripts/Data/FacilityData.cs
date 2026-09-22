@@ -3,32 +3,18 @@ using System.Collections.Generic;
 
 public enum FacilityEffectType
 {
-    GoldProduction,        // ゴールド生産効率UP
-    SummonCostDown,        // 召喚コスト減少
-    UpgradeCostDown,       // 強化コスト減少
-    StagePointBoost,       // ステージポイント増加
-    FormationSlot,         // 編成枠解放
-    LevelCap,              // キャラのレベル上限解放
-    CharacterUnlock,       // 新キャラ解放
-    ChapterUnlock,         // 章解放
-    BossUnlock,
-    SummonRateUp  // 召喚確率上昇
+    StagePointBoost = 3,
+    FormationSlot = 4,
+    Recruitment = 10,
+    Training = 11,
+    BattleSpeed = 12,
+    StageRetry = 13
 }
 
 public enum FacilityUnlockType
 {
     Free,          // 最初から使用可能
     StagePoint,    // 特定ステージクリア後にステージポイントで解放
-}
-
-[System.Serializable]
-public class LevelCapUnlockRequirement
-{
-    [Tooltip("レベル上限解放が可能になるステージID")]
-    public int stageId = -1;
-
-    [Tooltip("レベル上限解放に必要なステージポイント")]
-    public int requiredStagePoints = 0;
 }
 
 [System.Serializable]
@@ -91,40 +77,27 @@ public class FacilityData : ScriptableObject
     /// </summary>
     public float growthFactor = 1.2f;
 
-    [Header("章解放用")]
-    [Tooltip("FacilityEffectTypeがChapterUnlockの場合に使用する章解放条件リスト")]
-    public List<FacilityLevelCapRequirement> chapterUnlockRequirements = new List<FacilityLevelCapRequirement>();
+    [Tooltip("各レベルへの強化に必要なStage Point。指定時はbaseCost/growthFactorより優先します。")]
+    public List<int> upgradeStagePointCosts = new List<int>();
 
     [Header("効果値")]
     [Tooltip("1レベルあたりの効果値")]
     public float effectPerLevel = 0.1f;
 
-
-    [Header("召喚確率施設")]
-    [Tooltip("召喚確率を上昇させるカテゴリ")]
-    public CharacterCategory summonCategory = CharacterCategory.None;
-
-    [Tooltip("1レベルあたりの召喚確率上昇値")]
-    public float summonRatePerLevel = 0.01f; // Lvごとに +1% など
-
     public int GetUpgradeCost(int currentLevel)
     {
+        if (upgradeStagePointCosts != null && currentLevel >= 0 && currentLevel < upgradeStagePointCosts.Count)
+        {
+            return Mathf.Max(0, upgradeStagePointCosts[currentLevel]);
+        }
+
         return Mathf.RoundToInt(baseCost * Mathf.Pow(growthFactor, currentLevel));
     }
 
     public float GetEffectValue(int level)
     {
-        switch (effectType)
-        {
-            case FacilityEffectType.FormationSlot:
-                return Mathf.RoundToInt(effectPerLevel * level);
-            case FacilityEffectType.LevelCap:
-                return levelCapIncreasePerUnlock * level;
-            case FacilityEffectType.CharacterUnlock:
-            case FacilityEffectType.ChapterUnlock:
-                return -1f;
-            default:
-                return effectPerLevel * level;
-        }
+        return effectType == FacilityEffectType.FormationSlot
+            ? Mathf.RoundToInt(effectPerLevel * level)
+            : effectPerLevel * level;
     }
 }

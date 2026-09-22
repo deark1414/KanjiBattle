@@ -43,19 +43,19 @@ Automation Notes:
 Exit Criteria:
 
 - 重点ステージでクリア不能級の詰まりがない。
-- 進行ロック、章解放、研究所解放が止まらない。
+- 進行ロック、章解放、縁による仲間加入が止まらない。
 
 ## Milestone 3: UI/表示の安定化
 
 Status: Done
 
-- 日本語フォント、召喚確率タブ、戦闘中 Lv/方向表示を確認する。
+- 日本語フォント、戦闘中 Lv/方向表示を確認する。
 - 画面幅やタブ切り替えで文字が消えないことを確認する。
 - 旧 `ApplyJapaneseFont` 系の再導入がないか確認する。
 
 Exit Criteria:
 
-- Top、Stage、Formation、Facility、Summon、Battle の主要表示に文字欠けがない。
+- Top、Stage、Formation、Facility、Battle の主要表示に文字欠けがない。
 - Console にリリース阻害の Error が残っていない。
 
 Verification:

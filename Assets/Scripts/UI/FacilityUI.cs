@@ -131,11 +131,6 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         nameText.text = facility.facilityName;
         levelText.text = GetLevelBadge(isUnlocked, level, maxLevel);
 
-        if (TryApplyResearchBlockedState(isUnlocked, level, maxLevel))
-        {
-            return;
-        }
-
         switch (state)
         {
             case FacilityActionState.UnlockReady:
@@ -149,12 +144,12 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 ApplyVisualState(LockedCardColor, LockedTextColor, new Color(0.26f, 0.26f, 0.26f, 1f), false, false);
                 break;
             case FacilityActionState.UpgradeReady:
-                costText.text = $"{GetEffectLabel()} / 強化可能  {FacilityManager.Instance.GetUpgradeCost(facility)}G";
+                costText.text = $"{GetEffectLabel()} / 強化可能  {FacilityManager.Instance.GetUpgradeCost(facility)}SP";
                 buttonText.text = "強化";
                 ApplyVisualState(UnlockedCardColor, ReadyTextColor, new Color(0.64f, 0.42f, 0.20f, 1f), true, true);
                 break;
             case FacilityActionState.UpgradeBlocked:
-                costText.text = $"{GetEffectLabel()} / Gold不足  {FacilityManager.Instance.GetUpgradeCost(facility)}G";
+                costText.text = $"{GetEffectLabel()} / SP不足  {FacilityManager.Instance.GetUpgradeCost(facility)}SP";
                 buttonText.text = "強化待ち";
                 ApplyVisualState(UnlockedCardColor, NeedTextColor, new Color(0.42f, 0.31f, 0.22f, 1f), false, false);
                 break;
@@ -169,8 +164,9 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 ApplyVisualState(MaxCardColor, NeedTextColor, new Color(0.38f, 0.30f, 0.23f, 1f), false, false);
                 break;
             default:
-                costText.text = IsUnlockStyleFacility() ? "開放効果 / 適用済み" : "最大強化済み";
-                buttonText.text = IsUnlockStyleFacility() ? "解放済" : "MAX";
+                bool isUnlockOnly = facility.effectType == FacilityEffectType.StageRetry;
+                costText.text = isUnlockOnly ? "戦闘後に同じステージへ再挑戦できます" : "最大強化済み";
+                buttonText.text = isUnlockOnly ? "解放済み" : "MAX";
                 ApplyVisualState(MaxCardColor, MaxTextColor, new Color(0.40f, 0.30f, 0.22f, 1f), false, false);
                 break;
         }
@@ -182,9 +178,9 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         return "未解放";
     }
 
-    if (IsUnlockStyleFacility() && level >= maxLevel && FacilityManager.Instance.GetNextFacilityLevelCapRequirement(facility) == null)
+    if (facility != null && facility.effectType == FacilityEffectType.StageRetry)
     {
-        return "解放済";
+        return "再戦機能 解放済み";
     }
 
     string capPrefix = level >= maxLevel ? "上限中 " : string.Empty;
@@ -200,73 +196,14 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     switch (facility.effectType)
     {
-        case FacilityEffectType.CharacterUnlock: return "キャラ解放";
-        case FacilityEffectType.ChapterUnlock: return "章解放";
-        case FacilityEffectType.BossUnlock: return "ボス解放";
-        case FacilityEffectType.SummonRateUp: return "召喚加護";
-        case FacilityEffectType.FormationSlot: return "編成拡張";
-        case FacilityEffectType.LevelCap: return "上限強化";
-        case FacilityEffectType.GoldProduction: return "収入強化";
-        case FacilityEffectType.SummonCostDown: return "召喚補助";
-        case FacilityEffectType.UpgradeCostDown: return "育成補助";
+        case FacilityEffectType.FormationSlot: return "編成枠";
         case FacilityEffectType.StagePointBoost: return "SP強化";
+        case FacilityEffectType.Recruitment: return "縁の進行";
+        case FacilityEffectType.Training: return "経験値強化";
+        case FacilityEffectType.BattleSpeed: return "戦闘速度";
+        case FacilityEffectType.StageRetry: return "再戦解放";
         default: return "施設";
     }
-}
-
-    private bool TryApplyResearchBlockedState(bool isUnlocked, int level, int maxLevel)
-    {
-        if (!isUnlocked || facility.effectType != FacilityEffectType.CharacterUnlock || FacilityManager.Instance == null)
-        {
-            return false;
-        }
-
-        if (!FacilityManager.Instance.TryGetNextResearchUnlockInfo(out CharacterData nextCharacter, out int requiredStageId, out bool requirementMet))
-        {
-            costText.text = "研究完了 / 解放候補なし";
-            buttonText.text = "完了";
-            ApplyVisualState(MaxCardColor, MaxTextColor, new Color(0.40f, 0.30f, 0.22f, 1f), false, false);
-            return true;
-        }
-
-        if (!requirementMet)
-        {
-            costText.text = $"次: {nextCharacter.characterName} / 要 {ShortStageName(GetStageName(requiredStageId))}";
-            buttonText.text = "研究待ち";
-            ApplyVisualState(UnlockedCardColor, NeedTextColor, new Color(0.38f, 0.30f, 0.23f, 1f), false, false);
-            return true;
-        }
-
-        if (level >= maxLevel)
-        {
-            return false;
-        }
-
-        int cost = FacilityManager.Instance.GetUpgradeCost(facility);
-        if (GameManager.Instance == null || GameManager.Instance.GetGold() < cost)
-        {
-            costText.text = $"次: {nextCharacter.characterName} / Gold不足  {cost}G";
-            buttonText.text = "研究待ち";
-            ApplyVisualState(UnlockedCardColor, NeedTextColor, new Color(0.42f, 0.31f, 0.22f, 1f), false, false);
-            return true;
-        }
-
-        costText.text = $"次: {nextCharacter.characterName} / 研究可能  {cost}G";
-        buttonText.text = "研究";
-        ApplyVisualState(UnlockedCardColor, ReadyTextColor, new Color(0.64f, 0.42f, 0.20f, 1f), true, true);
-        return true;
-    }
-
-    private bool IsUnlockStyleFacility()
-{
-    if (facility == null)
-    {
-        return false;
-    }
-
-    return facility.effectType == FacilityEffectType.CharacterUnlock
-        || facility.effectType == FacilityEffectType.ChapterUnlock
-        || facility.effectType == FacilityEffectType.BossUnlock;
 }
 
     private FacilityActionState GetActionState()
@@ -290,7 +227,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 : FacilityActionState.CapBlocked;
         }
 
-        return GameManager.Instance != null && GameManager.Instance.GetGold() >= FacilityManager.Instance.GetUpgradeCost(facility)
+        return GameManager.Instance != null && GameManager.Instance.GetStagePoints() >= FacilityManager.Instance.GetUpgradeCost(facility)
             ? FacilityActionState.UpgradeReady
             : FacilityActionState.UpgradeBlocked;
     }
@@ -350,13 +287,12 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
 
         int clearedStage = GameManager.Instance != null ? GameManager.Instance.GetClearedStageId() : 0;
-        int sp = GameManager.Instance != null ? GameManager.Instance.GetStagePoints() : 0;
         if (clearedStage < req.stageId)
         {
             return $"{prefix}  要 {ShortStageName(GetStageName(req.stageId))}";
         }
 
-        return $"{prefix}  {sp}/{req.requiredStagePoints}SP";
+        return $"{prefix}  {ShortStageName(GetStageName(req.stageId))} 到達済";
     }
 
     private static string GetStageName(int stageId)
@@ -526,16 +462,12 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (facility == null) return string.Empty;
         switch (facility.effectType)
         {
-            case FacilityEffectType.GoldProduction: return "Gold生産を伸ばします。長期的な強化資金を増やす施設です。";
-            case FacilityEffectType.SummonCostDown: return "召喚コストを下げます。序盤の召喚回数を増やしやすくなります。";
-            case FacilityEffectType.UpgradeCostDown: return "キャラクター強化コストを下げます。主力育成を進めやすくなります。";
             case FacilityEffectType.StagePointBoost: return "ステージ勝利時の獲得SPを増やします。施設解放を加速します。";
-            case FacilityEffectType.FormationSlot: return "編成枠を増やします。複数キャラで戦いやすくなります。";
-            case FacilityEffectType.LevelCap: return "キャラクターのLv上限を上げます。後半攻略の基盤です。";
-            case FacilityEffectType.CharacterUnlock: return "新キャラクターを召喚対象に追加します。";
-            case FacilityEffectType.ChapterUnlock: return "次の章を解放します。新しいステージへ進めます。";
-            case FacilityEffectType.SummonRateUp: return $"{facility.summonCategory} カテゴリの召喚率を上げます。召喚ボタン下のカテゴリ選択で対象を切り替えます。";
-            case FacilityEffectType.BossUnlock: return "ボス関連要素を解放します。";
+            case FacilityEffectType.FormationSlot: return "編成できる仲間の数を1枠ずつ増やします。";
+            case FacilityEffectType.Recruitment: return "勝利時に進む縁を早め、早期加入の可能性を高めます。";
+            case FacilityEffectType.Training: return "戦闘経験値を増やします。";
+            case FacilityEffectType.BattleSpeed: return "戦闘速度を2倍、4倍へ解放します。";
+            case FacilityEffectType.StageRetry: return "戦闘結果から、同じステージにすぐ再挑戦できるようにします。";
             default: return facility.effectType.ToString();
         }
     }

@@ -10,23 +10,18 @@ public class CharacterEntryUI : MonoBehaviour
     [SerializeField] private Button selfButton;
     [SerializeField] private TextMeshProUGUI costText;
 
-    private CharacterData characterData;
     private Image iconImage;
 
-    public void SetCharacter(CharacterData data, int level, int count)
+    public void SetCharacter(CharacterData data, int level, int experience = 0, int experienceToNextLevel = 0, int levelCap = 99)
     {
-        characterData = data;
         ApplyLayout(data);
         EnsureSkillTooltip(data);
 
         string skillName = SkillDescription.GetShort(data.skillType);
         string info = $"{data.characterName}  {skillName}\nHP {data.GetMaxHP(level)}  ATK {data.GetAttack(level)}  DEF {data.GetDefense(level)}";
-        string levelTextValue = $"Lv.{level}";
-        string countTextValue = $"所持 x{count}";
-
-        int baseCost = data.GetUpgradeCost(level);
-        int effectiveCost = GameManager.Instance.GetEffectiveUpgradeCost(baseCost);
-        string costTextValue = $"強化 {effectiveCost}G";
+        string levelTextValue = $"PLv.{level}";
+        string countTextValue = level >= levelCap ? "上限到達" : $"EXP {experience}/{experienceToNextLevel}";
+        string costTextValue = "全員共通で成長";
 
         if (infoText != null) infoText.text = info;
         if (levelText != null) levelText.text = levelTextValue;
@@ -34,7 +29,25 @@ public class CharacterEntryUI : MonoBehaviour
         if (costText != null) costText.text = costTextValue;
 
         selfButton.onClick.RemoveAllListeners();
-        selfButton.onClick.AddListener(OnClickUpgrade);
+        selfButton.interactable = false;
+    }
+
+    public void SetBondCandidate(CharacterData data, int bond, int threshold)
+    {
+        ApplyLayout(data);
+        EnsureSkillTooltip(data);
+
+        string skillName = SkillDescription.GetShort(data.skillType);
+        string info = $"{data.characterName}  {skillName}\n撃破済み / 縁 {bond} / {threshold}";
+        string progress = threshold > 0 ? $"{Mathf.FloorToInt((float)bond / threshold * 100f)}%" : "0%";
+
+        if (infoText != null) infoText.text = info;
+        if (levelText != null) levelText.text = "未加入";
+        if (countText != null) countText.text = progress;
+        if (costText != null) costText.text = "勝利で縁が進行";
+
+        selfButton.onClick.RemoveAllListeners();
+        selfButton.interactable = false;
     }
 
     private void ApplyLayout(CharacterData data)
@@ -152,8 +165,4 @@ public class CharacterEntryUI : MonoBehaviour
         tooltip.SetCharacter(data);
     }
 
-    private void OnClickUpgrade()
-    {
-        PlayerInventory.Instance.UpgradeCharacter(characterData);
-    }
 }

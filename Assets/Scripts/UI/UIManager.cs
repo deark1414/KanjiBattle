@@ -199,9 +199,9 @@ public class UIManager : MonoBehaviour
         resetConfirmUntil = -1f;
         PlayerInventory.Instance?.ResetProgress();
         FacilityManager.Instance?.ResetProgress();
+        ResearchBondService.Instance.ResetProgress();
         GameManager.Instance?.ResetProgress();
         GameManager.Instance?.ResetRuntimeFacilityEffects();
-        GameManager.Instance?.UpdateProduction();
         SetResetDataButtonText("削除しました");
         ShowTop();
         Debug.Log("[UIManager] 進行データを削除しました。");

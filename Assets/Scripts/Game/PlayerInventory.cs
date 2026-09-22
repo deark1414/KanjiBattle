@@ -1,6 +1,7 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -9,294 +10,231 @@ using UnityEditor;
 public class PlayerInventory : MonoBehaviour
 {
     public static PlayerInventory Instance;
+
     private const string SavePrefix = "KanjiBattle.Inventory.";
     private const string OwnedKey = SavePrefix + "Owned";
-    private const string SummonableKey = SavePrefix + "Summonable";
-    private const string LevelCapBonusKey = SavePrefix + "LevelCapBonus";
-    private bool isLoadingProgress;
+    private const string PlayerLevelKey = SavePrefix + "PlayerLevel";
+    private const string PlayerExperienceKey = SavePrefix + "PlayerExperience";
+    private const string StarterTrainingGrantedKey = SavePrefix + "PlayerTrainingGranted";
+    private const int LevelCap = 99;
+    public const int BaseBattleExperience = 10;
+    private const int StarterTrainingExperience = BaseBattleExperience * 2;
+    private const int ExperienceTierSize = 5;
+    private const int MaximumExperienceTier = 5;
 
     public event Action onInventoryChanged;
-    public event Action OnSummonableChanged;
 
-    [SerializeField]
-    private List<CharacterData> summonableCharacters = new List<CharacterData>();
-    [SerializeField]
-    private CharacterDatabase characterDatabase;
-    private List<CharacterData> initialSummonableCharacters = new List<CharacterData>();
-
-    [SerializeField] private int baseLevelCap = 5;
-    private int globalLevelCapBonus = 0;
-
-    // --- Facility effect fields removed ---
-
-    private Dictionary<CharacterData, CharacterInfo> ownedCharacters = new();
+    [SerializeField] private CharacterDatabase characterDatabase;
+    private readonly Dictionary<CharacterData, CharacterInfo> ownedCharacters = new();
+    private bool isLoadingProgress;
+    private int playerLevel = 1;
+    private int playerExperience;
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.OnCostModifiersChanged += HandleCostModifiersChanged;
-            }
-            initialSummonableCharacters = new List<CharacterData>(summonableCharacters);
-            DontDestroyOnLoad(gameObject);
-            LoadProgress();
-        }
-        else
+        if (Instance != null)
         {
             Destroy(gameObject);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnCostModifiersChanged -= HandleCostModifiersChanged;
-        }
-    }
-
-    private void HandleCostModifiersChanged()
-    {
-        // 通知: 強化コストや召喚コストが変化した際にUIを更新
-        onInventoryChanged?.Invoke();
-        OnSummonableChanged?.Invoke();
-    }
-
-    public Dictionary<CharacterData, CharacterInfo> GetOwnedCharacters()
-    {
-        return ownedCharacters;
-    }
-
-    public List<CharacterData> GetUnlockedCharacters()
-    {
-        return new List<CharacterData>(ownedCharacters.Keys);
-    }
-
-    public void AddCharacter(CharacterData data)
-    {
-        if (ownedCharacters.ContainsKey(data))
-        {
-            ownedCharacters[data].count++;
-        }
-        else
-        {
-            ownedCharacters[data] = new CharacterInfo { level = 1, count = 1 };
-        }
-        onInventoryChanged?.Invoke();
-        SaveProgress();
-    }
-
-    public List<CharacterData> GetSummonableCharacters()
-    {
-        return summonableCharacters;
-    }
-    
-    public int GetTotalProduction()
-    {
-        int total = 0;
-        foreach (var kvp in ownedCharacters)
-        {
-            var data = kvp.Key;
-            var info = kvp.Value;
-            total += data.production * info.count;
-        }
-        return total;
-    }
-
-    public void UpgradeCharacter(CharacterData data)
-    {
-        if (!ownedCharacters.ContainsKey(data)) return;
-
-        var entry = ownedCharacters[data];
-        if (entry.level >= GetEffectiveLevelCap())
-        {
-            Debug.Log($"{data.characterName} のレベルは上限({GetEffectiveLevelCap()})に達しています。");
             return;
         }
-        int baseCost = data.GetUpgradeCost(entry.level);
-        int effectiveCost = GameManager.Instance.GetEffectiveUpgradeCost(baseCost);
-        if (!GameManager.Instance.SpendGold(effectiveCost)) return;
-        entry.level++;
 
-        Debug.Log($"{data.characterName} のレベルが {entry.level} になった！");
-
-        // 🔑 UIへ通知
-        onInventoryChanged?.Invoke();
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+        PlayerProgressStore.EnsureCurrentFormat();
+        LoadProgress();
+        EnsureStarterCharacter();
+        GrantStarterTraining();
         SaveProgress();
     }
 
-    public int GetEffectiveLevelCap()
-    {
-        return baseLevelCap + globalLevelCapBonus;
-    }
+    public Dictionary<CharacterData, CharacterInfo> GetOwnedCharacters() => ownedCharacters;
+    public int PlayerLevel => playerLevel;
+    public int PlayerExperience => playerExperience;
 
-    public void AddLevelCapBonus(int value)
-    {
-        globalLevelCapBonus += value;
-        Debug.Log($"新しいレベル上限: {GetEffectiveLevelCap()}");
-        SaveProgress();
-    }
+    public List<CharacterData> GetUnlockedCharacters() => ownedCharacters.Keys.ToList();
 
-    public bool IsSummonable(CharacterData data)
-    {
-        return data != null && summonableCharacters.Contains(data);
-    }
+    public bool IsOwned(CharacterData data) => data != null && ownedCharacters.ContainsKey(data);
 
-    public bool UnlockCharacterForSummon(CharacterData data)
+    public bool AddCharacter(CharacterData data)
     {
-        if (data == null) return false;
-
-        if (summonableCharacters.Contains(data))
+        if (data == null || data.isBoss || ownedCharacters.ContainsKey(data))
         {
             return false;
         }
 
-        summonableCharacters.Add(data);
+        ownedCharacters[data] = new CharacterInfo();
         onInventoryChanged?.Invoke();
-        OnSummonableChanged?.Invoke();
-        Debug.Log($"[PlayerInventory] 召喚解放: {data.characterName}");
         SaveProgress();
         return true;
     }
 
-    // GameManager.AddCharacterUnlock(int id) から呼ばれる想定のオーバーロード
-    public bool UnlockCharacterForSummon(int characterId)
+    public int GetExperienceToNextPlayerLevel()
     {
-        var db = GetCharacterDatabase();
-#if UNITY_EDITOR
-        if (db == null)
+        return GetExperienceRequiredForLevel(playerLevel);
+    }
+
+    public PlayerExperienceResult GrantBattleExperience()
+    {
+        return GrantPlayerExperience(GetEffectiveBattleExperienceReward());
+    }
+
+    public PlayerExperienceResult GrantPlayerExperience(int amount)
+    {
+        int previousLevel = playerLevel;
+        if (amount <= 0 || playerLevel >= GetEffectiveLevelCap())
         {
-            db = AssetDatabase.LoadAssetAtPath<CharacterDatabase>("Assets/ScriptableObjects/Characters/CharacterDatabase.asset");
-        }
-#endif
-        if (db == null)
-        {
-            Debug.LogError("[PlayerInventory] CharacterDatabase が見つかりません");
-            return false;
+            return new PlayerExperienceResult(0, previousLevel, playerLevel, playerExperience);
         }
 
-        var data = db.GetById(characterId);
-        if (data == null)
+        playerExperience += amount;
+        int levelCap = GetEffectiveLevelCap();
+        while (playerLevel < levelCap && playerExperience >= GetExperienceRequiredForLevel(playerLevel))
         {
-            Debug.LogError($"[PlayerInventory] characterId={characterId} が見つかりません");
-            return false;
+            playerExperience -= GetExperienceRequiredForLevel(playerLevel);
+            playerLevel++;
         }
 
-        return UnlockCharacterForSummon(data);
+        if (playerLevel >= levelCap)
+        {
+            playerLevel = levelCap;
+            playerExperience = 0;
+        }
+
+        onInventoryChanged?.Invoke();
+        SaveProgress();
+        return new PlayerExperienceResult(amount, previousLevel, playerLevel, playerExperience);
+    }
+
+    public int GetEffectiveLevelCap()
+    {
+        int clearedStageId = GameManager.Instance != null ? GameManager.Instance.GetHighestClearedStageId() : 0;
+        int unlockedBands = Mathf.Max(0, clearedStageId / 5);
+        return Mathf.Clamp(5 + unlockedBands * 5, 5, LevelCap);
+    }
+
+    public void SetPlayerLevelForDebug(int level)
+    {
+        playerLevel = Mathf.Clamp(level, 1, GetEffectiveLevelCap());
+        playerExperience = 0;
+        onInventoryChanged?.Invoke();
+        SaveProgress();
+    }
+
+    public int GetEffectiveBattleExperienceReward()
+    {
+        float multiplier = FacilityManager.Instance != null ? FacilityManager.Instance.GetExperienceMultiplier() : 1f;
+        return Mathf.Max(1, Mathf.FloorToInt(BaseBattleExperience * multiplier));
     }
 
     public void SaveProgress()
     {
-        if (isLoadingProgress) return;
+        if (isLoadingProgress)
+        {
+            return;
+        }
 
-        PlayerProgressStore.SetInt(LevelCapBonusKey, globalLevelCapBonus);
         PlayerProgressStore.SetString(OwnedKey, SerializeOwnedCharacters());
-        PlayerProgressStore.SetString(SummonableKey, string.Join(",", summonableCharacters.FindAll(c => c != null).ConvertAll(c => c.characterId.ToString())));
+        PlayerProgressStore.SetInt(PlayerLevelKey, playerLevel);
+        PlayerProgressStore.SetInt(PlayerExperienceKey, playerExperience);
         PlayerProgressStore.Save();
     }
 
     public void LoadProgress()
     {
         isLoadingProgress = true;
-        globalLevelCapBonus = PlayerProgressStore.GetInt(LevelCapBonusKey, globalLevelCapBonus);
         DeserializeOwnedCharacters(PlayerProgressStore.GetString(OwnedKey));
-        DeserializeSummonableCharacters(PlayerProgressStore.GetString(SummonableKey));
+        playerLevel = Mathf.Clamp(PlayerProgressStore.GetInt(PlayerLevelKey, 1), 1, GetEffectiveLevelCap());
+        playerExperience = Mathf.Max(0, PlayerProgressStore.GetInt(PlayerExperienceKey, 0));
         isLoadingProgress = false;
         onInventoryChanged?.Invoke();
-        OnSummonableChanged?.Invoke();
     }
 
     public void ResetProgress()
     {
         PlayerProgressStore.Delete(OwnedKey);
-        PlayerProgressStore.Delete(SummonableKey);
-        PlayerProgressStore.Delete(LevelCapBonusKey);
+        PlayerProgressStore.Delete(PlayerLevelKey);
+        PlayerProgressStore.Delete(PlayerExperienceKey);
+        PlayerProgressStore.Delete(StarterTrainingGrantedKey);
         ownedCharacters.Clear();
-        summonableCharacters.Clear();
-        summonableCharacters.AddRange(initialSummonableCharacters.FindAll(c => c != null));
-        globalLevelCapBonus = 0;
+        playerLevel = 1;
+        playerExperience = 0;
+        EnsureStarterCharacter();
+        GrantStarterTraining();
         onInventoryChanged?.Invoke();
-        OnSummonableChanged?.Invoke();
-        PlayerProgressStore.Save();
+        SaveProgress();
+    }
+
+    private void EnsureStarterCharacter()
+    {
+        if (ownedCharacters.Count > 0)
+        {
+            return;
+        }
+
+        CharacterData starter = GetCharacterDatabase()?.GetById(1);
+        if (starter != null)
+        {
+            ownedCharacters[starter] = new CharacterInfo();
+        }
+    }
+
+    private void GrantStarterTraining()
+    {
+        if (PlayerProgressStore.GetInt(StarterTrainingGrantedKey, 0) != 0)
+        {
+            return;
+        }
+
+        if (ownedCharacters.Count == 0)
+        {
+            return;
+        }
+
+        GrantPlayerExperience(StarterTrainingExperience);
+        PlayerProgressStore.SetInt(StarterTrainingGrantedKey, 1);
+    }
+
+    private static int GetExperienceRequiredForLevel(int level)
+    {
+        // Five-level bands create clear growth milestones without overflowing the experience counter.
+        int tier = Mathf.Clamp((Mathf.Max(1, level) - 1) / ExperienceTierSize, 0, MaximumExperienceTier);
+        return BaseBattleExperience * (int)Mathf.Pow(10f, tier);
     }
 
     private string SerializeOwnedCharacters()
     {
-        var entries = new List<string>();
-        foreach (var kvp in ownedCharacters)
-        {
-            if (kvp.Key == null || kvp.Value == null) continue;
-            entries.Add($"{kvp.Key.characterId}:{kvp.Value.level}:{kvp.Value.count}");
-        }
-        return string.Join(",", entries);
+        return string.Join(",", ownedCharacters
+            .Where(entry => entry.Key != null && entry.Value != null)
+            .Select(entry => entry.Key.characterId.ToString()));
     }
 
     private void DeserializeOwnedCharacters(string saved)
     {
-        if (string.IsNullOrWhiteSpace(saved)) return;
+        if (string.IsNullOrWhiteSpace(saved))
+        {
+            return;
+        }
 
         ownedCharacters.Clear();
         foreach (string entry in saved.Split(','))
         {
             string[] parts = entry.Split(':');
-            if (parts.Length != 3) continue;
-            if (!int.TryParse(parts[0], out int id)) continue;
-            if (!int.TryParse(parts[1], out int level)) continue;
-            if (!int.TryParse(parts[2], out int count)) continue;
-
-            CharacterData data = FindCharacterById(id);
-            if (data == null)
+            if (parts.Length < 1 || !int.TryParse(parts[0], out int id))
             {
-                Debug.LogWarning($"[PlayerInventory] 保存済み所持キャラ characterId={id} を復元できませんでした。");
                 continue;
             }
-            ownedCharacters[data] = new CharacterInfo { level = Mathf.Max(1, level), count = Mathf.Max(0, count) };
-        }
-    }
 
-    private void DeserializeSummonableCharacters(string saved)
-    {
-        if (string.IsNullOrWhiteSpace(saved)) return;
-
-        summonableCharacters.Clear();
-        foreach (string part in saved.Split(','))
-        {
-            if (!int.TryParse(part, out int id)) continue;
             CharacterData data = FindCharacterById(id);
-            if (data != null && !summonableCharacters.Contains(data))
+            if (data == null || data.isBoss)
             {
-                summonableCharacters.Add(data);
+                continue;
             }
-            else if (data == null)
-            {
-                Debug.LogWarning($"[PlayerInventory] 保存済み召喚解放キャラ characterId={id} を復元できませんでした。");
-            }
+
+            ownedCharacters[data] = new CharacterInfo();
         }
     }
 
-    private CharacterData FindCharacterById(int id)
-    {
-        foreach (var character in summonableCharacters)
-        {
-            if (character != null && character.characterId == id) return character;
-        }
-        foreach (var character in ownedCharacters.Keys)
-        {
-            if (character != null && character.characterId == id) return character;
-        }
-
-        var db = GetCharacterDatabase();
-#if UNITY_EDITOR
-        if (db == null)
-        {
-            db = AssetDatabase.LoadAssetAtPath<CharacterDatabase>("Assets/ScriptableObjects/Characters/CharacterDatabase.asset");
-        }
-#endif
-        return db != null ? db.GetById(id) : null;
-    }
+    private CharacterData FindCharacterById(int id) => GetCharacterDatabase()?.GetById(id);
 
     private CharacterDatabase GetCharacterDatabase()
     {
@@ -305,13 +243,30 @@ public class PlayerInventory : MonoBehaviour
             return characterDatabase;
         }
 
-        return Resources.Load<CharacterDatabase>("CharacterDatabase");
+#if UNITY_EDITOR
+        characterDatabase = AssetDatabase.LoadAssetAtPath<CharacterDatabase>("Assets/ScriptableObjects/Characters/CharacterDatabase.asset");
+#endif
+        return characterDatabase != null ? characterDatabase : Resources.Load<CharacterDatabase>("CharacterDatabase");
     }
 }
 
-[System.Serializable]
+[Serializable]
 public class CharacterInfo
 {
-    public int level;
-    public int count;
+}
+
+public readonly struct PlayerExperienceResult
+{
+    public readonly int experience;
+    public readonly int previousLevel;
+    public readonly int level;
+    public readonly int experienceIntoLevel;
+
+    public PlayerExperienceResult(int experience, int previousLevel, int level, int experienceIntoLevel)
+    {
+        this.experience = experience;
+        this.previousLevel = previousLevel;
+        this.level = level;
+        this.experienceIntoLevel = experienceIntoLevel;
+    }
 }

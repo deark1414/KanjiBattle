@@ -5,7 +5,7 @@ public enum GameBgm { Top, Battle, Boss }
 
 public enum GameSound
 {
-    Click, Attack, Skill, Heal, Hit, Win, Lose, Summon, Slash, HammerStun,
+    Click, Attack, Skill, Heal, Hit, Win, Lose, Slash, HammerStun,
     Spear, Gun, Arrow, Stone, Fireball, WoodPush, TrapSet, Charge,
     BirdRetreat, ClawDouble, Defense, ShieldReflect, ArmorReduce, WallCounter,
     DragonBreath, DragonRoar
@@ -140,7 +140,6 @@ public sealed class GameAudio : MonoBehaviour
             GameSound.Hit => "sfx_hit",
             GameSound.Win => "sfx_victory",
             GameSound.Lose => "sfx_defeat",
-            GameSound.Summon => "sfx_summon",
             GameSound.Slash => "sfx_slash",
             GameSound.HammerStun => "sfx_hammer_stun",
             GameSound.Spear => "sfx_spear",

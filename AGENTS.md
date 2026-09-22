@@ -142,9 +142,10 @@ npm run qa:visual
 - Do not replace `Assets/Fonts/NotoSansJP-Medium.ttf` with a subset font unless the resulting WebGL build has been visually verified in the actual browser game screen.
 - A previous subset font caused incorrect TMP rendering in WebGL: `HP` appeared as `GP`, `ATK` appeared as `ASK`, some digits such as `0` looked wrong or disappeared, and some character-list status text was missing.
 - If that kind of one-character shift, missing digit, or strange bold digit appears, suspect the font file / TMP atlas first, not the UI text strings.
-- The current safe fallback is to restore the original `NotoSansJP-VF.otf` contents into `Assets/Fonts/NotoSansJP-Medium.ttf`, preserving the Unity asset GUID/path, then rebuild the TMP SDF asset and WebGL output.
+- The current safe fallback is the official static `NotoSansJP-Medium.ttf` contents at `Assets/Fonts/NotoSansJP-Medium.ttf`, preserving the Unity asset GUID/path, then rebuild the TMP SDF asset and WebGL output. Do not restore the previous variable-font copy whose default weight was Thin.
 - `JapaneseFontProvider` should prefer `TMP_Settings.defaultFontAsset` when it is a `NotoSansJP` asset. Avoid preferring stale scene-embedded `NotoSansJP-Medium Runtime SDF` assets over the project font asset.
 - `NotoSansJP-Medium SDF.asset` must keep required glyphs in the asset for WebGL. The font rebuild method should read `tmp/font/glyphs.txt`, call `TryAddCharacters`, and keep `m_ClearDynamicDataOnBuild: 0`; otherwise Unity/TMP may clear dynamic glyph data during build or editor quit.
+- Keep the Japanese SDF asset as one 4096px atlas with multi-atlas disabled. Multiple dynamic atlas textures caused WebGL glyphs to be read from the wrong atlas. Scene text must reference the project SDF asset rather than the obsolete embedded `NotoSansJP-Medium Runtime SDF`; repair existing references with `KanjiBattle.Editor.FontAssetMaintenance.RepairSceneJapaneseFontReferences`.
 - Before regenerating the TMP font asset, collect the in-project glyph set:
 
 ```bash

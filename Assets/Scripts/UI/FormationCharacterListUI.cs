@@ -44,7 +44,7 @@ public class FormationCharacterListUI : MonoBehaviour
         {
             var entry = Instantiate(characterEntryPrefab, content);
             var ui = entry.GetComponent<CharacterEntryForFormationUI>();
-            ui.SetCharacter(kv.Key, kv.Value.level, kv.Value.count);
+            ui.SetCharacter(kv.Key, PlayerInventory.Instance.PlayerLevel);
         }
     }
 
@@ -61,24 +61,9 @@ public class FormationCharacterListUI : MonoBehaviour
 
     public void SelectCharacter(CharacterData character)
     {
-        if (!PlayerInventory.Instance.GetOwnedCharacters().TryGetValue(character, out var info) || info.count <= 0)
+        if (!PlayerInventory.Instance.GetOwnedCharacters().ContainsKey(character))
         {
             Debug.Log($"{character.characterName} を所持していません");
-            return;
-        }
-
-        int used = 0;
-        foreach (var selected in FormationUI.Instance.GetFormation())
-        {
-            if (selected == character)
-            {
-                used++;
-            }
-        }
-
-        if (used >= info.count)
-        {
-            Debug.Log($"{character.characterName} は所持数以上に編成できません");
             return;
         }
 

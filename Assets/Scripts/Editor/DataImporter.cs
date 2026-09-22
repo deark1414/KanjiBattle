@@ -74,8 +74,7 @@ public class DataImporter : EditorWindow
         public float growthFactor;
         public float effectPerLevel;
         public int levelCapIncreasePerUnlock;
-        public string summonCategory;
-        public float summonRatePerLevel;
+        public List<int> upgradeStagePointCosts;
         public List<FacilityLevelCapRequirementJson> facilityLevelCapUnlocks;
     }
 
@@ -173,8 +172,7 @@ public class DataImporter : EditorWindow
             data.growthFactor = f.growthFactor;
             data.effectPerLevel = f.effectPerLevel;
             data.levelCapIncreasePerUnlock = f.levelCapIncreasePerUnlock;
-            data.summonCategory = (CharacterCategory)System.Enum.Parse(typeof(CharacterCategory), f.summonCategory);
-            data.summonRatePerLevel = f.summonRatePerLevel;
+            data.upgradeStagePointCosts = f.upgradeStagePointCosts ?? new List<int>();
 
             data.facilityLevelCapUnlocks.Clear();
             if (f.facilityLevelCapUnlocks != null)

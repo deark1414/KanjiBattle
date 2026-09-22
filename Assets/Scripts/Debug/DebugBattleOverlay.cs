@@ -171,10 +171,9 @@ if (GUILayout.Button("Start Battle", GUILayout.Height(34)))
 
 private void DrawGamePlaytestControls()
 {
-    int gold = GameManager.Instance != null ? GameManager.Instance.GetGold() : 0;
     int sp = GameManager.Instance != null ? GameManager.Instance.GetStagePoints() : 0;
     int cleared = GameManager.Instance != null ? GameManager.Instance.GetClearedStageId() : 0;
-    GUILayout.Label($"Game Playtest   Gold:{gold}  SP:{sp}  Cleared:{cleared}");
+    GUILayout.Label($"Game Playtest   SP:{sp}  Cleared:{cleared}");
 
     GUILayout.BeginHorizontal();
     if (GUILayout.Button("Top", GUILayout.Height(28))) UIManager.Instance?.ShowTop();
@@ -184,16 +183,13 @@ private void DrawGamePlaytestControls()
     GUILayout.EndHorizontal();
 
     GUILayout.BeginHorizontal();
-    if (GUILayout.Button("+1000G", GUILayout.Height(28))) GameManager.Instance?.AddGold(1000);
+    if (GUILayout.Button("+100SP", GUILayout.Height(28))) GameManager.Instance?.AddStagePoints(100);
     if (GUILayout.Button("+1SP", GUILayout.Height(28))) GameManager.Instance?.AddStagePoints(1);
-    if (GUILayout.Button("Summon x1", GUILayout.Height(28))) SummonTimes(1);
-    if (GUILayout.Button("Summon x5", GUILayout.Height(28))) SummonTimes(5);
     GUILayout.EndHorizontal();
 
     GUILayout.BeginHorizontal();
     if (GUILayout.Button("Unlock Affordable", GUILayout.Height(28))) UnlockAffordableFacilities();
     if (GUILayout.Button("Upgrade Facilities", GUILayout.Height(28))) UpgradeAffordableFacilitiesOnce();
-    if (GUILayout.Button("Upgrade Owned", GUILayout.Height(28))) UpgradeOwnedCharactersOnce();
     GUILayout.EndHorizontal();
 
     GUILayout.BeginHorizontal();
@@ -230,21 +226,6 @@ private void ShowFormationForSelectedStage()
     UIManager.Instance?.ShowFormation();
 }
 
-private void SummonTimes(int times)
-{
-    var summonManager = FindDebugObject<SummonManager>();
-    if (summonManager == null)
-    {
-        Debug.LogWarning("[DebugBattleOverlay] SummonManager が見つかりません。");
-        return;
-    }
-
-    for (int i = 0; i < times; i++)
-    {
-        summonManager.Summon();
-    }
-}
-
 private void UnlockAffordableFacilities()
 {
     if (FacilityManager.Instance == null) return;
@@ -268,14 +249,6 @@ private int GetDebugUnlockPriority(FacilityData facility)
     {
         case FacilityEffectType.FormationSlot:
             return 0;
-        case FacilityEffectType.CharacterUnlock:
-            return 1;
-        case FacilityEffectType.LevelCap:
-            return 2;
-        case FacilityEffectType.SummonCostDown:
-        case FacilityEffectType.UpgradeCostDown:
-        case FacilityEffectType.GoldProduction:
-            return 3;
         default:
             return 10;
     }
@@ -299,19 +272,6 @@ private void UpgradeAffordableFacilitiesOnce
         }
     }
     Debug.Log($"[DebugBattleOverlay] Affordable facility upgrades: {count}");
-}
-
-private void UpgradeOwnedCharactersOnce()
-{
-    if (PlayerInventory.Instance == null) return;
-    var owned = new List<CharacterData>(PlayerInventory.Instance.GetOwnedCharacters().Keys);
-    int beforeGold = GameManager.Instance != null ? GameManager.Instance.GetGold() : 0;
-    foreach (var character in owned)
-    {
-        PlayerInventory.Instance.UpgradeCharacter(character);
-    }
-    int afterGold = GameManager.Instance != null ? GameManager.Instance.GetGold() : beforeGold;
-    Debug.Log($"[DebugBattleOverlay] Upgrade owned attempted: {owned.Count}, gold {beforeGold}->{afterGold}");
 }
 
 private void AutoFillFormation()
@@ -341,7 +301,7 @@ var owned = PlayerInventory.Instance.GetOwnedCharacters();
 var candidates = new List<CharacterData>();
 foreach (var kvp in owned)
 {
-    if (kvp.Key != null && kvp.Value != null && kvp.Value.count > 0)
+    if (kvp.Key != null && kvp.Value != null)
     {
         candidates.Add(kvp.Key);
     }
@@ -349,25 +309,9 @@ foreach (var kvp in owned)
 candidates.Sort((a, b) => GetDebugCombatScore(b).CompareTo(GetDebugCombatScore(a)));
 
 int slotIndex = 0;
-foreach (var character in candidates)
+for (; slotIndex < slots && candidates.Count > 0; slotIndex++)
 {
-    formation.SetCharacterToSlot(slotIndex, character);
-    slotIndex++;
-    if (slotIndex >= slots) break;
-}
-if (slotIndex < slots)
-{
-    foreach (var character in candidates)
-    {
-        if (!owned.TryGetValue(character, out var info)) continue;
-        int remainingCopies = Mathf.Max(0, info.count - 1);
-        for (int i = 0; i < remainingCopies && slotIndex < slots; i++)
-        {
-            formation.SetCharacterToSlot(slotIndex, character);
-            slotIndex++;
-        }
-        if (slotIndex >= slots) break;
-    }
+    formation.SetCharacterToSlot(slotIndex, candidates[slotIndex % candidates.Count]);
 }
 var names = new List<string>();
 foreach (var character in formation.GetFormation())
@@ -380,13 +324,7 @@ Debug.Log($"[DebugBattleOverlay] Auto formation filled {slotIndex}/{slots}: {str
 private int GetDebugCombatScore(CharacterData character)
 {
     if (character == null) return 0;
-    int level = 1;
-    if (PlayerInventory.Instance != null &&
-        PlayerInventory.Instance.GetOwnedCharacters().TryGetValue(character, out var info) &&
-        info != null)
-    {
-        level = info.level;
-    }
+    int level = PlayerInventory.Instance != null ? PlayerInventory.Instance.PlayerLevel : 1;
     return character.GetMaxHP(level) + character.GetAttack(level) * 4 + character.GetDefense(level) * 3;
 }
 
@@ -530,22 +468,22 @@ private void DrawScenarioControls()
 
 private void DrawProgressControls()
 {
-    GUILayout.Label("Progress / Economy");
+    GUILayout.Label("Progress / Research");
     GUILayout.BeginHorizontal();
-    if (GUILayout.Button("Early", GUILayout.Height(28))) ApplyProgressPreset(1, 500, 5);
-    if (GUILayout.Button("Mid", GUILayout.Height(28))) ApplyProgressPreset(5, 5000, 50);
-    if (GUILayout.Button("Late", GUILayout.Height(28))) ApplyProgressPreset(20, 50000, 500);
+    if (GUILayout.Button("Early", GUILayout.Height(28))) ApplyProgressPreset(1, 5);
+    if (GUILayout.Button("Mid", GUILayout.Height(28))) ApplyProgressPreset(5, 50);
+    if (GUILayout.Button("Late", GUILayout.Height(28))) ApplyProgressPreset(20, 500);
     GUILayout.EndHorizontal();
 
     GUILayout.Label("Balance Presets");
     GUILayout.BeginHorizontal();
-    if (GUILayout.Button("Ch1 End", GUILayout.Height(28))) ApplyBalancePreset(5, 5, 2000, 12, 6);
-    if (GUILayout.Button("Ch2 Mid", GUILayout.Height(28))) ApplyBalancePreset(7, 5, 6000, 24, 8);
-    if (GUILayout.Button("Ch4 Mid", GUILayout.Height(28))) ApplyBalancePreset(18, 8, 30000, 120, 19);
+    if (GUILayout.Button("Ch1 End", GUILayout.Height(28))) ApplyBalancePreset(5, 5, 12, 6);
+    if (GUILayout.Button("Ch2 Mid", GUILayout.Height(28))) ApplyBalancePreset(7, 5, 24, 8);
+    if (GUILayout.Button("Ch4 Mid", GUILayout.Height(28))) ApplyBalancePreset(18, 8, 120, 19);
     GUILayout.EndHorizontal();
 
     GUILayout.BeginHorizontal();
-    if (GUILayout.Button("Ch6 Mid", GUILayout.Height(28))) ApplyBalancePreset(28, 11, 80000, 300, 29);
+    if (GUILayout.Button("Ch6 Mid", GUILayout.Height(28))) ApplyBalancePreset(28, 11, 300, 29);
     if (GUILayout.Button("Roster Lv5", GUILayout.Height(28))) GrantRoster(5);
     if (GUILayout.Button("Roster Lv20", GUILayout.Height(28))) GrantRoster(20);
     GUILayout.EndHorizontal();
@@ -645,23 +583,22 @@ private void ConfigureStage2Baseline(int allyLevel)
     showManualBattle = false;
 }
 
-private void ApplyProgressPreset(int clearedStageId, int gold, int stagePoints)
+private void ApplyProgressPreset(int clearedStageId, int stagePoints)
 {
     if (GameManager.Instance != null)
     {
-        GameManager.Instance.SetGold(gold);
         int delta = stagePoints - GameManager.Instance.GetStagePoints();
-        GameManager.Instance.AddStagePoints(delta);
+        if (delta > 0) GameManager.Instance.AddStagePoints(delta);
         GameManager.Instance.RegisterClearedStage(clearedStageId);
-        Debug.Log($"[DebugBattleOverlay] Progress preset: cleared={clearedStageId}, gold={gold}, sp={stagePoints}");
+        Debug.Log($"[DebugBattleOverlay] Progress preset: cleared={clearedStageId}, sp={stagePoints}");
     }
 }
 
-private void ApplyBalancePreset(int clearedStageId, int characterLevel, int gold, int stagePoints, int selectedStageId)
+private void ApplyBalancePreset(int clearedStageId, int characterLevel, int stagePoints, int selectedStageId)
 {
-    ApplyProgressPreset(clearedStageId, gold, stagePoints);
+    ApplyProgressPreset(clearedStageId, stagePoints);
     UnlockCharactersAvailableByStage(clearedStageId, characterLevel);
-    PrepareFacilitiesForBalance(clearedStageId, characterLevel);
+    PrepareFacilitiesForBalance(clearedStageId);
     SetStageById(selectedStageId);
 
     StageData stage = GetSelectedDebugStage();
@@ -710,24 +647,21 @@ private void UnlockCharactersAvailableByStage(int clearedStageId, int level)
         CharacterData character = FindCharacterById(unlockIds[i]);
         if (character == null || character.isBoss) continue;
 
-        PlayerInventory.Instance.UnlockCharacterForSummon(character);
         if (!owned.ContainsKey(character))
         {
             PlayerInventory.Instance.AddCharacter(character);
         }
 
-        owned[character].level = Mathf.Max(1, level);
-        owned[character].count = Mathf.Max(owned[character].count, 3);
     }
+
+    PlayerInventory.Instance.SetPlayerLevelForDebug(level);
 }
 
-private void PrepareFacilitiesForBalance(int clearedStageId, int targetLevelCap)
+private void PrepareFacilitiesForBalance(int clearedStageId)
 {
     if (FacilityManager.Instance == null || GameManager.Instance == null) return;
 
-    int savedGold = GameManager.Instance.GetGold();
     int savedStagePoints = GameManager.Instance.GetStagePoints();
-    GameManager.Instance.SetGold(1000000);
     GameManager.Instance.AddStagePoints(1000000 - savedStagePoints);
 
     foreach (var facility in FacilityManager.Instance.GetFacilities())
@@ -739,29 +673,23 @@ private void PrepareFacilitiesForBalance(int clearedStageId, int targetLevelCap)
     int guard = 0;
     while (GameManager.Instance.GetFacilityFormationSlots() < GetExpectedFormationSlots(clearedStageId) && guard++ < 10)
     {
-        FacilityData training = FindFacility(FacilityEffectType.FormationSlot);
-        if (training == null || !FacilityManager.Instance.Upgrade(training)) break;
-    }
-
-    guard = 0;
-    while (PlayerInventory.Instance != null && PlayerInventory.Instance.GetEffectiveLevelCap() < targetLevelCap && guard++ < 20)
-    {
-        FacilityData library = FindFacility(FacilityEffectType.LevelCap);
-        if (library == null) break;
-
-        if (FacilityManager.Instance.IsMaxLevel(library))
+        FacilityData barracks = FindFacility(FacilityEffectType.FormationSlot);
+        if (barracks == null)
         {
-            if (!FacilityManager.Instance.UpgradeLevelCap(library)) break;
+            break;
         }
-        else if (!FacilityManager.Instance.Upgrade(library))
+
+        if (FacilityManager.Instance.IsMaxLevel(barracks))
+        {
+            if (!FacilityManager.Instance.UpgradeLevelCap(barracks)) break;
+        }
+        else if (!FacilityManager.Instance.Upgrade(barracks))
         {
             break;
         }
     }
 
-    GameManager.Instance.SetGold(savedGold);
-    int restoreDelta = savedStagePoints - GameManager.Instance.GetStagePoints();
-    GameManager.Instance.AddStagePoints(restoreDelta);
+    GameManager.Instance.AddStagePoints(savedStagePoints - GameManager.Instance.GetStagePoints());
 }
 
 private int GetExpectedFormationSlots(int clearedStageId)
@@ -794,7 +722,7 @@ private FacilityData FindFacility(FacilityEffectType effectType)
 
 private void UnlockAvailableFacilities()
 {
-    ApplyProgressPreset(999, 100000, 10000);
+    ApplyProgressPreset(999, 10000);
     if (FacilityManager.Instance == null) return;
     int count = 0;
     foreach (var facility in FacilityManager.Instance.GetFacilities())
@@ -809,7 +737,7 @@ private void UnlockAvailableFacilities()
 
 private void UpgradeFacilitiesOnce()
 {
-    ApplyProgressPreset(999, 100000, 10000);
+    ApplyProgressPreset(999, 10000);
     if (FacilityManager.Instance == null) return;
     int count = 0;
     foreach (var facility in FacilityManager.Instance.GetFacilities())
@@ -824,20 +752,18 @@ private void UpgradeFacilitiesOnce()
 
 private void GrantRoster(int level)
 {
-    ApplyProgressPreset(999, 100000, 10000);
+    ApplyProgressPreset(999, 10000);
     if (PlayerInventory.Instance == null) return;
     foreach (var character in sortedCharacters)
     {
         if (character == null || character.isBoss) continue;
-        PlayerInventory.Instance.UnlockCharacterForSummon(character);
         var owned = PlayerInventory.Instance.GetOwnedCharacters();
         if (!owned.ContainsKey(character))
         {
             PlayerInventory.Instance.AddCharacter(character);
         }
-        owned[character].level = Mathf.Max(1, level);
-        owned[character].count = Mathf.Max(owned[character].count, 1);
     }
+    PlayerInventory.Instance.SetPlayerLevelForDebug(level);
     Debug.Log($"[DebugBattleOverlay] Granted roster at Lv{level}");
 }
 
