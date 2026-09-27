@@ -72,24 +72,22 @@ public class FormationUI : MonoBehaviour
             return;
         }
 
-        if (UnityUIRuntimeTheme.IsPortraitNarrowScreen())
-        {
-            slotRect.anchorMin = new Vector2(0.04f, 0.47f);
-            slotRect.anchorMax = new Vector2(0.96f, 0.645f);
-        }
-        else
-        {
-            slotRect.anchorMin = new Vector2(0.04f, 0.47f);
-            slotRect.anchorMax = new Vector2(0.96f, 0.645f);
-        }
+        // Keep the active formation visually separate from both the deploy band
+        // above and the owned-piece list below. The old fixed 146px tiles leaked
+        // into neighboring regions on short landscape viewports.
+        slotRect.anchorMin = new Vector2(0.04f, 0.505f);
+        slotRect.anchorMax = new Vector2(0.96f, 0.645f);
         slotRect.offsetMin = Vector2.zero;
         slotRect.offsetMax = Vector2.zero;
+
+        Canvas.ForceUpdateCanvases();
+        float cellHeight = Mathf.Clamp(slotRect.rect.height - 8f, 82f, 112f);
 
         var grid = slotRect.GetComponent<GridLayoutGroup>();
         if (grid != null)
         {
             grid.enabled = true;
-            grid.cellSize = new Vector2(190f, 146f);
+            grid.cellSize = new Vector2(164f, cellHeight);
             grid.spacing = new Vector2(12f, 10f);
             grid.padding = new RectOffset(4, 4, 4, 4);
             grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
@@ -310,7 +308,6 @@ public class FormationUI : MonoBehaviour
 
     private void EnsureUtilityButtons()
     {
-        if (clearAllButton != null) return;
         if (slotParent == null || slotParent.parent == null) return;
 
         var host = slotParent.parent.Find("FormationUtilityButtons") as RectTransform;
@@ -321,8 +318,8 @@ public class FormationUI : MonoBehaviour
             host = hostObject.GetComponent<RectTransform>();
         }
 
-        host.anchorMin = new Vector2(0.39f, 0.46f);
-        host.anchorMax = new Vector2(0.61f, 0.49f);
+        host.anchorMin = new Vector2(0.40f, 0.455f);
+        host.anchorMax = new Vector2(0.60f, 0.492f);
         host.offsetMin = Vector2.zero;
         host.offsetMax = Vector2.zero;
         var layout = host.GetComponent<HorizontalLayoutGroup>();
@@ -356,8 +353,8 @@ public class FormationUI : MonoBehaviour
             host = hostObject.GetComponent<RectTransform>();
         }
 
-        host.anchorMin = new Vector2(0.08f, 0.665f);
-        host.anchorMax = new Vector2(0.92f, 0.725f);
+        host.anchorMin = new Vector2(0.08f, 0.670f);
+        host.anchorMax = new Vector2(0.92f, 0.730f);
         host.offsetMin = Vector2.zero;
         host.offsetMax = Vector2.zero;
         host.SetAsLastSibling();
@@ -529,9 +526,9 @@ public class FormationUI : MonoBehaviour
 
         var layout = slot.GetComponent<LayoutElement>() ?? slot.AddComponent<LayoutElement>();
         layout.minWidth = 190f;
-        layout.minHeight = 160f;
+        layout.minHeight = 96f;
         layout.preferredWidth = 190f;
-        layout.preferredHeight = 160f;
+        layout.preferredHeight = 96f;
     }
 
     private static void SetSlotPieceIcon(GameObject slot, CharacterData character)

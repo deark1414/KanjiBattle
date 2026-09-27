@@ -87,8 +87,10 @@ public class FormationCharacterListUI : MonoBehaviour
         var listRect = GetComponent<RectTransform>();
         if (listRect != null)
         {
-            listRect.anchorMin = new Vector2(0.03f, 0.075f);
-            listRect.anchorMax = new Vector2(0.97f, 0.445f);
+            // The owned-piece list is a dedicated lower region. It must not rise
+            // into the formation tray when the viewport is short and wide.
+            listRect.anchorMin = new Vector2(0.04f, 0.085f);
+            listRect.anchorMax = new Vector2(0.96f, 0.425f);
             listRect.anchoredPosition = Vector2.zero;
             listRect.sizeDelta = Vector2.zero;
         }
@@ -96,7 +98,7 @@ public class FormationCharacterListUI : MonoBehaviour
         var grid = content != null ? content.GetComponent<GridLayoutGroup>() : null;
         if (grid != null)
         {
-            grid.cellSize = new Vector2(GetListCellWidth(), UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 98f : 104f);
+            grid.cellSize = new Vector2(GetListCellWidth(), UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 98f : 96f);
             grid.spacing = new Vector2(0f, 8f);
             grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             grid.constraintCount = 1;

@@ -11,9 +11,33 @@ const baseUrl = `http://127.0.0.1:${port}`;
 
 const viewports = [
   {
+    name: "desktop-roster",
+    url: "/game/index.html",
+    viewport: { width: 1280, height: 720 },
+    userAgent:
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
+    flow: "top"
+  },
+  {
+    name: "desktop-roster-compact",
+    url: "/game/index.html",
+    viewport: { width: 1024, height: 576 },
+    userAgent:
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
+    flow: "top"
+  },
+  {
     name: "mobile-game",
     url: "/game/index.html",
     viewport: { width: 390, height: 844 },
+    userAgent:
+      "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+    flow: "top"
+  },
+  {
+    name: "mobile-game-landscape",
+    url: "/game/index.html",
+    viewport: { width: 844, height: 390 },
     userAgent:
       "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
     flow: "top"

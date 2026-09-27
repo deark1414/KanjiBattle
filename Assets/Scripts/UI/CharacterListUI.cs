@@ -270,18 +270,14 @@ public class CharacterListUI : MonoBehaviour
         var listRect = GetComponent<RectTransform>();
         if (listRect != null)
         {
+            bool compactLandscape = IsCompactLandscape();
             listRect.anchorMin = new Vector2(0.04f, 0.05f);
-            listRect.anchorMax = new Vector2(0.96f, 0.56f);
+            listRect.anchorMax = new Vector2(0.96f, compactLandscape ? 0.49f : 0.56f);
             listRect.anchoredPosition = Vector2.zero;
             listRect.sizeDelta = Vector2.zero;
         }
 
         var grid = content != null ? content.GetComponent<GridLayoutGroup>() : null;
-        if (grid == null && content != null)
-        {
-            grid = content.gameObject.AddComponent<GridLayoutGroup>();
-        }
-
         if (grid != null)
         {
             grid.enabled = false;
@@ -313,10 +309,11 @@ public class CharacterListUI : MonoBehaviour
     private void EnsureInformationRegion()
     {
         Transform host = transform.parent != null ? transform.parent : transform;
+        bool compactLandscape = IsCompactLandscape();
         informationRegion = ScreenInfoRegion.Ensure(
             host,
             "RosterInformationRegion",
-            new Vector2(0.04f, 0.81f),
+            new Vector2(0.04f, compactLandscape ? 0.75f : 0.81f),
             new Vector2(0.96f, 0.92f));
         informationRegion.ReserveLowerContent(false);
         EnsurePracticeRegion(host);
@@ -337,11 +334,20 @@ public class CharacterListUI : MonoBehaviour
             practiceRegion = region.GetComponent<RectTransform>();
         }
 
-        practiceRegion.anchorMin = new Vector2(0.04f, 0.60f);
-        practiceRegion.anchorMax = new Vector2(0.96f, 0.80f);
+        bool compactLandscape = IsCompactLandscape();
+        practiceRegion.anchorMin = new Vector2(0.04f, compactLandscape ? 0.52f : 0.60f);
+        practiceRegion.anchorMax = new Vector2(0.96f, compactLandscape ? 0.73f : 0.80f);
         practiceRegion.offsetMin = Vector2.zero;
         practiceRegion.offsetMax = Vector2.zero;
         practiceRegion.SetAsLastSibling();
+    }
+
+    private static bool IsCompactLandscape()
+    {
+        // Unity WebGL reports device pixels on high-density phones, so a raw
+        // height threshold cannot distinguish a short landscape viewport.
+        // The landscape roster always needs this denser vertical allocation.
+        return !UnityUIRuntimeTheme.IsPortraitNarrowScreen();
     }
 
     private void ShowRosterSummary(int ownedCount, int candidateCount)

@@ -166,7 +166,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         int maxLevel = FacilityManager.Instance.GetCurrentFacilityMaxLevel(facility);
 
         EnsureDescription();
-        descriptionText.text = GetInlineDescription(isUnlocked, level, maxLevel);
+        descriptionText.text = GetInlineDescription();
         HideLegacyText();
 
         switch (state)
@@ -638,14 +638,18 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (buttonText != null) buttonText.gameObject.SetActive(false);
     }
 
-    private string GetInlineDescription(bool isUnlocked, int level, int maxLevel)
+    private string GetInlineDescription()
     {
-        string levelLabel = $"Lv.{level}/{maxLevel}";
+        int level = FacilityManager.Instance != null
+            ? FacilityManager.Instance.GetLevel(facility)
+            : 0;
         string effect = facility.effectType switch
         {
             FacilityEffectType.FormationSlot => $"編成枠 +{level}",
             FacilityEffectType.Recruitment => $"縁の獲得 {FacilityManager.Instance.GetRecruitmentBondGain()}倍",
-            FacilityEffectType.Training => $"戦闘経験値 {FacilityManager.Instance.GetBattleExperienceRate() * 100f:0}% / 勝利\n稽古経験値 {FacilityManager.Instance.GetMockTrainingExperienceRate() * 100f:0.##}% / 回",
+            // Cards are scanned at a glance. Keep the two experience gains short
+            // enough to remain legible in either column on landscape screens.
+            FacilityEffectType.Training => $"戦闘経験 +{FacilityManager.Instance.GetBattleExperienceRate() * 100f:0}%\n稽古経験 +{FacilityManager.Instance.GetMockTrainingExperienceRate() * 100f:0.##}%",
             FacilityEffectType.TrainingFrequency => $"稽古の間隔 {FacilityManager.Instance.GetMockTrainingCooldownSeconds()}秒",
             FacilityEffectType.AttackBoost => $"味方ATK x{FacilityManager.Instance.GetAttackMultiplier():0.##}",
             FacilityEffectType.SkillPowerBoost => $"技能威力 x{FacilityManager.Instance.GetSkillPowerMultiplier():0.##}",
@@ -656,8 +660,10 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             FacilityEffectType.StageRetry => "同じ局へ即再挑戦",
             _ => string.Empty
         };
-        string access = isUnlocked ? levelLabel : "未解放";
-        return $"{facility.facilityName}\n{effect}\n{access}";
+        // The building card itself already conveys the name and lock state. Keep
+        // the caption to the effect only so the card never turns into four lines
+        // on a narrow screen; the information region holds level/cost details.
+        return effect;
     }
 
     private string GetCompactDetailStatus()

@@ -155,12 +155,14 @@ public class FacilityListUI : MonoBehaviour
 
         foreach (var vertical in target.GetComponents<VerticalLayoutGroup>())
         {
-            vertical.enabled = false;
+            // A GridLayoutGroup is used below. Unity refuses to add it while any
+            // other layout group remains on the same generated content object.
+            DestroyImmediate(vertical);
         }
 
         foreach (var horizontal in target.GetComponents<HorizontalLayoutGroup>())
         {
-            horizontal.enabled = false;
+            DestroyImmediate(horizontal);
         }
 
         foreach (var fitter in target.GetComponents<ResponsiveGridFitter>())

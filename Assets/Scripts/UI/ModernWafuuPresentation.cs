@@ -565,6 +565,7 @@ public static class ModernWafuuPresentation
 
     private static void CreateStatusButton(Transform parent, string name, string label, string value, Vector2 min, Vector2 max, System.Action<RectTransform> action, float fontSizeMin = 21f, float fontSizeMax = 24f)
     {
+        bool portrait = UnityUIRuntimeTheme.IsPortraitNarrowScreen();
         Transform existing = parent.Find(name);
         Button button;
         if (existing != null && existing.TryGetComponent(out button))
@@ -598,32 +599,68 @@ public static class ModernWafuuPresentation
 
         TextMeshProUGUI iconText = EnsureText(button.transform, "Icon");
         bool hasLabel = !string.IsNullOrEmpty(label);
-        iconText.gameObject.SetActive(true);
-        iconText.text = hasLabel ? $"{label}  {value}" : string.Empty;
-        iconText.gameObject.SetActive(hasLabel);
-        iconText.fontStyle = FontStyles.Bold;
-        iconText.enableAutoSizing = true;
-        iconText.fontSizeMin = fontSizeMin;
-        iconText.fontSizeMax = fontSizeMax;
-        iconText.alignment = TextAlignmentOptions.Center;
-        iconText.color = new Color(1f, 0.90f, 0.63f);
-        Place(iconText.rectTransform, new Vector2(0.04f, 0.14f), new Vector2(0.96f, 0.86f));
+        iconText.gameObject.SetActive(false);
 
         TextMeshProUGUI valueText = EnsureText(button.transform, "Value");
         valueText.gameObject.SetActive(false);
 
         TextMeshProUGUI statusValueText = EnsureText(button.transform, "StatusValue");
-        statusValueText.gameObject.SetActive(!hasLabel);
-        statusValueText.text = value;
-        statusValueText.fontStyle = FontStyles.Bold;
-        statusValueText.enableAutoSizing = true;
-        statusValueText.fontSizeMin = fontSizeMin;
-        statusValueText.fontSizeMax = fontSizeMax;
-        statusValueText.alignment = TextAlignmentOptions.Center;
-        statusValueText.color = new Color(1f, 0.95f, 0.80f);
-        Place(statusValueText.rectTransform,
-            new Vector2(0.04f, 0.14f),
-            new Vector2(0.96f, 0.86f));
+        statusValueText.gameObject.SetActive(false);
+
+        // Keep the visual label as a sibling of the Button. On WebGL, TMP meshes
+        // created beneath generated Button images can be dropped by batching.
+        TextMeshProUGUI displayText = EnsureText(parent, $"{name}Display");
+        displayText.gameObject.SetActive(true);
+        displayText.text = hasLabel ? $"{label}  {value}" : value;
+        displayText.fontStyle = FontStyles.Bold;
+        ConfigureGlobalStatusText(displayText, portrait, fontSizeMin, fontSizeMax);
+        displayText.alignment = TextAlignmentOptions.Center;
+        displayText.color = hasLabel
+            ? new Color(1f, 0.90f, 0.63f)
+            : new Color(1f, 0.95f, 0.80f);
+        displayText.outlineWidth = 0f;
+        displayText.raycastTarget = false;
+        Place(displayText.rectTransform, min, max);
+        displayText.transform.SetAsLastSibling();
+        EnsureStatusTextVisible(displayText);
+    }
+
+    private static void ConfigureGlobalStatusText(TextMeshProUGUI text, bool portrait, float fontSizeMin, float fontSizeMax)
+    {
+        // TMP auto-sizing plus an outline can produce an empty mesh for runtime-created
+        // header labels in WebGL. The compact header has known bounds, so use one stable line.
+        text.enableAutoSizing = false;
+        text.fontSize = portrait ? fontSizeMin : Mathf.Min(fontSizeMax, 20f);
+        text.textWrappingMode = TextWrappingModes.NoWrap;
+        text.overflowMode = TextOverflowModes.Ellipsis;
+        text.margin = new Vector4(2f, 0f, 2f, 0f);
+    }
+
+    private static void EnsureStatusTextVisible(TextMeshProUGUI text)
+    {
+        if (text == null)
+        {
+            return;
+        }
+
+        // The status buttons are generated at runtime. Explicitly refreshing their
+        // material avoids a WebGL/TMP timing edge case where the button surface is
+        // drawn but a newly added Japanese text mesh remains empty until a resize.
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
+        text.enabled = true;
+        text.alpha = 1f;
+        text.canvasRenderer.SetAlpha(1f);
+        text.SetAllDirty();
+        text.ForceMeshUpdate(true, true);
+
+        // Keep dynamically created header text in its own canvas. This prevents the
+        // containing Button image from swallowing the TMP mesh in WebGL batching.
+        if (!text.TryGetComponent(out Canvas canvas))
+        {
+            canvas = text.gameObject.AddComponent<Canvas>();
+        }
+        canvas.overrideSorting = true;
+        canvas.sortingOrder = 40;
     }
 
     private static void EnsureTopNextStageAction(Transform topPanel)

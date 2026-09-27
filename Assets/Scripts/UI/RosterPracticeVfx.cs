@@ -129,6 +129,12 @@ public sealed class RosterPracticeVfx : MonoBehaviour
         var surface = trainingField.GetComponent<Image>();
         ModernWafuuPresentation.ApplyFlatSurface(surface, new Color(0.07f, 0.12f, 0.09f, 0.80f));
         surface.raycastTarget = false;
+        // Practice VFX are intentionally lively, but they must never trespass into
+        // the shared status bar or the roster list on compact landscape displays.
+        if (trainingField.GetComponent<RectMask2D>() == null)
+        {
+            trainingField.gameObject.AddComponent<RectMask2D>();
+        }
         var outline = trainingField.GetComponent<Outline>();
         outline.effectColor = new Color(0.62f, 0.50f, 0.28f, 0.60f);
         outline.effectDistance = new Vector2(1f, -1f);
@@ -154,8 +160,8 @@ public sealed class RosterPracticeVfx : MonoBehaviour
             trainingStatus.outlineWidth = 0.18f;
             trainingStatus.raycastTarget = false;
             var labelRect = trainingStatus.rectTransform;
-            labelRect.anchorMin = new Vector2(0.04f, 0.82f);
-            labelRect.anchorMax = new Vector2(0.96f, 0.98f);
+            labelRect.anchorMin = new Vector2(0.04f, 0.03f);
+            labelRect.anchorMax = new Vector2(0.96f, 0.17f);
             labelRect.offsetMin = Vector2.zero;
             labelRect.offsetMax = Vector2.zero;
             trainingStatus.gameObject.SetActive(true);
@@ -195,9 +201,10 @@ public sealed class RosterPracticeVfx : MonoBehaviour
         for (int index = 0; index < characters.Count; index++)
         {
             CharacterData character = characters[index];
-            GetTrainingPairPosition(index, characters.Count, out float sourceX, out float targetX, out float y);
-            RectTransform source = CreateTrainingPiece("Trainee_" + character.characterName, character.icon, sourceX, y, 1.96f, 0.98f);
-            RectTransform target = CreateTrainingPiece("Scarecrow_" + index, targetSprite, targetX, 0.62f, 1.90f, 1f);
+            GetTrainingPairPosition(index, characters.Count, out float sourceX, out float targetX, out float sourceY, out float targetY);
+            float pieceSize = GetPracticePieceSize(characters.Count);
+            RectTransform source = CreateTrainingPiece("Trainee_" + character.characterName, character.icon, sourceX, sourceY, pieceSize, 0.98f);
+            RectTransform target = CreateTrainingPiece("Scarecrow_" + index, targetSprite, targetX, targetY, pieceSize * 0.92f, 1f);
             if (source != null && target != null)
             {
                 members.Add(new PracticeMember { character = character, source = source, target = target });
@@ -205,15 +212,30 @@ public sealed class RosterPracticeVfx : MonoBehaviour
         }
     }
 
-    private static void GetTrainingPairPosition(int index, int pairCount, out float sourceX, out float targetX, out float y)
+    private static void GetTrainingPairPosition(int index, int pairCount, out float sourceX, out float targetX, out float sourceY, out float targetY)
     {
         float spacing = pairCount <= 1 ? 0f : 0.68f / (pairCount - 1);
         sourceX = 0.16f + spacing * index;
         targetX = sourceX;
-        y = 0.28f;
+        // Bottom-to-top drills leave a dedicated lower strip for the experience
+        // readout and prevent the scarecrows from colliding with the upper info area.
+        sourceY = 0.37f;
+        targetY = 0.68f;
     }
 
-    private RectTransform CreateTrainingPiece(string name, Sprite sprite, float x, float y, float sizeScale, float alpha)
+    private float GetPracticePieceSize(int pairCount)
+    {
+        if (trainingField == null)
+        {
+            return 54f;
+        }
+
+        float byHeight = trainingField.rect.height * 0.46f;
+        float byWidth = trainingField.rect.width / Mathf.Max(2.8f, pairCount * 1.65f);
+        return Mathf.Clamp(Mathf.Min(byHeight, byWidth), 46f, 76f);
+    }
+
+    private RectTransform CreateTrainingPiece(string name, Sprite sprite, float x, float y, float size, float alpha)
     {
         if (sprite == null || trainingField == null)
         {
@@ -232,7 +254,7 @@ public sealed class RosterPracticeVfx : MonoBehaviour
         unitRect.anchorMax = new Vector2(x, y);
         unitRect.pivot = new Vector2(0.5f, 0.5f);
         unitRect.anchoredPosition = Vector2.zero;
-        unitRect.sizeDelta = Vector2.one * (56f * sizeScale);
+        unitRect.sizeDelta = Vector2.one * size;
         return unitRect;
     }
 
@@ -590,19 +612,22 @@ public sealed class RosterPracticeVfx : MonoBehaviour
 
     private void EnsureOverlay()
     {
-        if (overlay != null)
+        if (trainingField == null)
         {
             return;
         }
 
-        Canvas canvas = GetComponentInParent<Canvas>();
-        if (canvas == null)
+        if (overlay != null)
         {
+            if (overlay.parent != trainingField)
+            {
+                overlay.SetParent(trainingField, false);
+            }
             return;
         }
 
         var overlayObject = new GameObject("RosterVfxOverlay", typeof(RectTransform));
-        overlayObject.transform.SetParent(canvas.transform, false);
+        overlayObject.transform.SetParent(trainingField, false);
         overlay = overlayObject.GetComponent<RectTransform>();
         overlay.anchorMin = Vector2.zero;
         overlay.anchorMax = Vector2.one;
