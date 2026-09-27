@@ -24,6 +24,7 @@ public class BattleManager : MonoBehaviour
     private List<BattleCharacter> allies = new();
     private List<BattleCharacter> enemies = new();
     private readonly List<CharacterData> deployedAllies = new();
+    private readonly HashSet<int> encounteredEnemyCharacterIds = new();
 
     [SerializeField] private ScrollRect logScroll;
     [SerializeField] private Transform logContent;
@@ -36,26 +37,29 @@ public class BattleManager : MonoBehaviour
     private Button resultBackButton;
     private Button resultRetryButton;
     private RectTransform resultActionContainer;
+    private RectTransform resultBondContainer;
 
     private HashSet<Vector2Int> occupied = new();
     private int currentReward = 0;
 
     private HashSet<Vector2Int> trapCells = new HashSet<Vector2Int>();
     private HashSet<Vector2Int> soilTrapCells = new HashSet<Vector2Int>();
+    private readonly HashSet<Vector2Int> impassableCells = new();
+    private readonly Dictionary<Vector2Int, int> soilTrapDamageByCell = new();
     private readonly Dictionary<Vector2Int, GameObject> soilTrapVfxObjects = new();
     private readonly Dictionary<Vector2Int, GameObject> soilTrapTintObjects = new();
 
     private int trapDamage = 5;
     private bool isPaused = false;
-    private readonly float[] battleSpeeds = { 1f, 2f, 4f };
+    private readonly float[] battleSpeeds = { 1f, 1.1f, 1.25f, 1.45f, 1.7f, 2f, 2.35f, 2.7f, 3f };
     private int battleSpeedIndex;
     private Button speedButton;
     private TextMeshProUGUI speedButtonText;
     private readonly BattleVfxRegistry battleVfxRegistry = new();
     private Transform battleVfxOverlay;
     private Transform weaponVfxOverlay;
-    private static readonly Dictionary<string, Sprite[]> animatedVfxSprites = new();
-    private static readonly Dictionary<string, Texture2D> weaponMotionTextures = new();
+    // 連番アニメーションは廃止し、生成済みの代表スプライトだけを共有する。
+    private static readonly Dictionary<string, Sprite> staticVfxSprites = new();
     private readonly Dictionary<BattleCharacter, float> pendingDeathRemovalTimes = new();
     private const float skillCinematicScale = 1.85f;
     private float skillCinematicUntil = 0f;
@@ -125,6 +129,9 @@ public class BattleManager : MonoBehaviour
     {
         GameAudio.Instance.EnsureBgm();
         ResetBattle();
+        currentStage = stage;
+        ModernWafuuPresentation.ApplyBattleEnvironment(transform, stage != null ? stage.chapterId : 1);
+        BattleUILayout.SetStageContext(stage);
         ConfigureResponsiveLayout();
         GenerateField(stage);
 
@@ -133,7 +140,6 @@ public class BattleManager : MonoBehaviour
         // Initialize reinforcement fields
         reinforcementIndex = 0;
         reinforcementTotalSpawned = 0;
-        currentStage = stage;
         SyncBattleSpeedFromProgress();
 
         foreach (var ally in allies)
@@ -151,6 +157,9 @@ public class BattleManager : MonoBehaviour
             var pos = GetRandomFreeCell();
             SpawnCharacter(enemy, pos, false);
         }
+
+        GenerateStageTerrain(stage);
+        GenerateStageTraps(stage);
 
         StartCoroutine(StartBattleAfterSetup());
     }
@@ -191,9 +200,12 @@ public class BattleManager : MonoBehaviour
         allies.Clear();
         enemies.Clear();
         deployedAllies.Clear();
+        encounteredEnemyCharacterIds.Clear();
         occupied.Clear();
         trapCells.Clear();
         soilTrapCells.Clear();
+        impassableCells.Clear();
+        soilTrapDamageByCell.Clear();
         soilTrapVfxObjects.Clear();
         soilTrapTintObjects.Clear();
         pendingDeathRemovalTimes.Clear();
@@ -210,6 +222,8 @@ public class BattleManager : MonoBehaviour
         gridCells = new Transform[cols, rows];
         trapCells.Clear();
         soilTrapCells.Clear();
+        impassableCells.Clear();
+        soilTrapDamageByCell.Clear();
 
         var grid = battleField.GetComponent<GridLayoutGroup>();
         if (grid != null)
@@ -248,26 +262,141 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        // 罠ダメージをステージから取得
-        trapDamage = (stage != null) ? stage.trapDamage : 5;
-        int trapCount = (stage != null) ? stage.trapCount : 3;
+    }
 
-        // 罠をランダム配置
-        int placed = 0;
-        while (placed < trapCount)
+    private void GenerateStageTerrain(StageData stage)
+    {
+        int desiredCount = BattleMovementRules.GetStageObstacleCount(stage);
+        if (desiredCount <= 0) return;
+
+        int stageSeed = (stage != null ? stage.stageId : 0) * 7919 + rows * 31 + cols;
+        impassableCells.UnionWith(BattleMovementRules.GenerateImpassableCells(
+            cols,
+            rows,
+            desiredCount,
+            new HashSet<Vector2Int>(gridMap.Keys),
+            stageSeed));
+
+        foreach (Vector2Int cell in impassableCells)
         {
-            Vector2Int pos = new Vector2Int(Random.Range(0, cols), Random.Range(0, rows));
-            if (trapCells.Contains(pos)) continue;
-            trapCells.Add(pos);
-
-            Transform cell = gridCells[pos.x, pos.y].parent; // ← 親Cellを参照
-            var img = cell.GetComponent<Image>();
-            if (img != null)
-                img.color = new Color(0.6f, 0.6f, 0.6f);
-
-            Debug.Log($"[Trap] 配置 {pos}");
-            placed++;
+            CreateImpassableCellMarker(cell);
         }
+
+    }
+
+    private void GenerateStageTraps(StageData stage)
+    {
+        trapDamage = stage != null ? Mathf.Max(0, stage.trapDamage) : 5;
+        int trapCount = stage != null ? Mathf.Max(0, stage.trapCount) : 3;
+        if (trapDamage <= 0 || trapCount <= 0) return;
+
+        var candidates = new List<Vector2Int>();
+        for (int y = 0; y < rows; y++)
+        {
+            for (int x = 0; x < cols; x++)
+            {
+                var cell = new Vector2Int(x, y);
+                if (gridMap.ContainsKey(cell) || impassableCells.Contains(cell)) continue;
+                candidates.Add(cell);
+            }
+        }
+
+        for (int index = candidates.Count - 1; index > 0; index--)
+        {
+            int swapIndex = Random.Range(0, index + 1);
+            (candidates[index], candidates[swapIndex]) = (candidates[swapIndex], candidates[index]);
+        }
+
+        int placedCount = Mathf.Min(trapCount, candidates.Count);
+        for (int index = 0; index < placedCount; index++)
+        {
+            Vector2Int pos = candidates[index];
+            trapCells.Add(pos);
+            CreateBuriedTrapMarker(pos);
+        }
+    }
+
+    private void CreateImpassableCellMarker(Vector2Int pos)
+    {
+        if (gridCells == null || pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) return;
+
+        Transform cell = gridCells[pos.x, pos.y].parent;
+        if (cell == null || cell.Find("ImpassableTerrain") != null) return;
+
+        var marker = new GameObject("ImpassableTerrain", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        var rect = marker.GetComponent<RectTransform>();
+        rect.SetParent(cell, false);
+        // Keep a narrow border of the terrain visible so water reads as a distinct
+        // impassable tile rather than spilling to the grid boundary.
+        rect.anchorMin = new Vector2(0.06f, 0.06f);
+        rect.anchorMax = new Vector2(0.94f, 0.94f);
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+        rect.SetSiblingIndex(0);
+
+        Image image = marker.GetComponent<Image>();
+        image.color = Color.clear;
+        image.raycastTarget = false;
+        CreateTerrainTexture(
+            marker.transform,
+            "WaterTexture",
+            BattleUILayout.ImpassableTerrainTexturePath,
+            GetBoardTextureUv(pos));
+    }
+
+    private void CreateBuriedTrapMarker(Vector2Int pos)
+    {
+        if (gridCells == null || pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) return;
+
+        Transform cell = gridCells[pos.x, pos.y].parent;
+        if (cell == null || cell.Find("BuriedTrapTerrain") != null) return;
+
+        var marker = new GameObject("BuriedTrapTerrain", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        marker.transform.SetParent(cell, false);
+        var rect = marker.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0.12f, 0.12f);
+        rect.anchorMax = new Vector2(0.88f, 0.88f);
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+        rect.SetSiblingIndex(0);
+
+        var image = marker.GetComponent<Image>();
+        image.color = Color.clear;
+        image.raycastTarget = false;
+        CreateTerrainTexture(
+            marker.transform,
+            "SoilTexture",
+            BattleUILayout.TrapTerrainTexturePath,
+            tint: new Color(1f, 0.62f, 0.28f, 0.92f));
+    }
+
+    private void CreateTerrainTexture(
+        Transform parent,
+        string name,
+        string resourcePath,
+        Rect? uvRect = null,
+        Color? tint = null)
+    {
+        var textureObject = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(RawImage));
+        textureObject.transform.SetParent(parent, false);
+        var texture = textureObject.GetComponent<RawImage>();
+        texture.texture = Resources.Load<Texture2D>(resourcePath);
+        texture.color = tint ?? Color.white;
+        texture.uvRect = uvRect ?? new Rect(0f, 0f, 1f, 1f);
+        texture.raycastTarget = false;
+        var rect = texture.rectTransform;
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+        texture.transform.SetAsFirstSibling();
+    }
+
+    private Rect GetBoardTextureUv(Vector2Int cell)
+    {
+        float width = 1f / Mathf.Max(1, cols);
+        float height = 1f / Mathf.Max(1, rows);
+        return new Rect(cell.x * width, 1f - (cell.y + 1) * height, width, height);
     }
 
     private void ConfigureResponsiveLayout()
@@ -283,7 +412,7 @@ public class BattleManager : MonoBehaviour
             int x = Random.Range(0, cols);
             int y = Random.Range(0, rows);
             pos = new Vector2Int(x, y);
-        } while (occupied.Contains(pos));
+        } while (occupied.Contains(pos) || impassableCells.Contains(pos));
 
         occupied.Add(pos);
         return pos;
@@ -309,6 +438,11 @@ public class BattleManager : MonoBehaviour
 
         bc.Init(data, pos, ally, level);
 
+        if (!ally && data != null)
+        {
+            encounteredEnemyCharacterIds.Add(data.characterId);
+        }
+
         RectTransform rect = obj.GetComponent<RectTransform>();
         rect.anchoredPosition = Vector2.zero;
         BattleUILayout.ApplyCharacterVisualSize(rect, currentBattleCellSize);
@@ -320,10 +454,10 @@ public class BattleManager : MonoBehaviour
         // ボス召喚演出はラスボスステージの登場時だけ。通常ステージや通常の敵生成では出さない。
         if (!ally && data.isBoss && currentStage != null && currentStage.isBossStage)
         {
-            Sprite[] summonFrames = LoadAnimatedVfxSprites("BossSummon");
-            if (summonFrames.Length > 0)
+            Sprite summonSprite = LoadRepresentativeVfxSprite("BossSummon");
+            if (summonSprite != null)
             {
-                StartCoroutine(AnimatedVfxRoutine(rect, summonFrames, "BossSummon"));
+                StartCoroutine(BossSummonSpriteVfxRoutine(rect, summonSprite));
             }
         }
     }
@@ -364,16 +498,14 @@ public class BattleManager : MonoBehaviour
             {
                 if (bc != null && soilTrapCells.Contains(bc.gridPos) && bc.data.skillType != SkillType.Soil)
                 {
-                    AddLog($"{bc.data.characterName} は土の罠でダメージを受けた！", Color.yellow);
-                    bc.TakeDamage(trapDamage, this, isBasicAttack: false);
+                    ResolveSoilTrapDamage(bc, "土の罠が沈み込んだ！");
                 }
             }
             foreach (var bc in new List<BattleCharacter>(enemies))
             {
                 if (bc != null && soilTrapCells.Contains(bc.gridPos) && bc.data.skillType != SkillType.Soil)
                 {
-                    AddLog($"{bc.data.characterName} は土の罠でダメージを受けた！", Color.yellow);
-                    bc.TakeDamage(trapDamage, this, isBasicAttack: false);
+                    ResolveSoilTrapDamage(bc, "土の罠が沈み込んだ！");
                 }
             }
 
@@ -388,9 +520,9 @@ public class BattleManager : MonoBehaviour
                 {
                     if (Random.value < 0.3f) // 30% の確率
                     {
-                        int heal = Mathf.RoundToInt(enemy.data.GetMaxHP(enemy.level) * 0.1f); // 最大HPの10%
+                        int heal = Mathf.RoundToInt(enemy.maxHP * 0.1f); // 最大HPの10%
                         int beforeHP = enemy.currentHP;
-                        enemy.currentHP = Mathf.Min(enemy.currentHP + heal, enemy.data.GetMaxHP(enemy.level));
+                        enemy.currentHP = Mathf.Min(enemy.currentHP + heal, enemy.maxHP);
                         enemy.UpdateHPBar();
                         AddLog($"[ボス効果] {enemy.data.characterName} は体力を {enemy.currentHP - beforeHP} 回復した！", Color.green);
                     }
@@ -510,7 +642,6 @@ public class BattleManager : MonoBehaviour
         NumberPassiveSnapshot previous = isAlly ? allyNumberPassiveSnapshot : enemyNumberPassiveSnapshot;
         if (!current.Matches(previous))
         {
-            LogNumberPassiveState(side, current, isOneOnlyParty);
             if (isAlly) allyNumberPassiveSnapshot = current;
             else enemyNumberPassiveSnapshot = current;
         }
@@ -560,7 +691,7 @@ public class BattleManager : MonoBehaviour
     {
         if (character == null || healPercent <= 0) return;
 
-        int maxHp = character.data.GetMaxHP(character.level);
+        int maxHp = character.maxHP;
         int heal = Mathf.CeilToInt(maxHp * healPercent / 100f);
         int before = character.currentHP;
         character.currentHP = Mathf.Min(maxHp, character.currentHP + heal);
@@ -570,24 +701,6 @@ public class BattleManager : MonoBehaviour
         character.UpdateHPBar();
         PlayDamageVfx(character, actualHeal, isHealing: true);
         AddLog($"{character.DisplayName} の中位数字効果: HPを {actualHeal} 回復", new Color(0.45f, 1f, 0.65f));
-    }
-
-    private void LogNumberPassiveState(string side, NumberPassiveSnapshot state, bool isOneOnlyParty)
-    {
-        Color color = new Color(0.78f, 0.92f, 1f);
-        if (state.lowStrength > 0)
-        {
-            string label = isOneOnlyParty ? $"一染め {state.onePartyCount}体" : $"他数字 {state.lowStrength}種";
-            AddLog($"{side} 数字結束: {label}で攻撃力+{state.lowAttackBonus}%", color);
-        }
-        if (state.midStrength > 0)
-        {
-            AddLog($"{side} 数字結束: 中位 / 他数字 {state.midStrength}種でターン開始時HP+{state.midHealPercent}%", color);
-        }
-        if (state.highStrength > 0)
-        {
-            AddLog($"{side} 数字結束: 上位 / 他数字 {state.highStrength}種 / 経過{state.completedRounds}ラウンドで攻撃力+{state.highAttackBonus}%", color);
-        }
     }
 
     private IEnumerator PlayNumberAuraAfterDelay(BattleCharacter target, int strength, bool onePartyPeak, float delay)
@@ -706,7 +819,10 @@ public class BattleManager : MonoBehaviour
                     int x = Random.Range(0, cols);
                     int y = Random.Range(0, rows);
                     pos = new Vector2Int(x, y);
-                    if (!gridMap.ContainsKey(pos) && !trapCells.Contains(pos) && !soilTrapCells.Contains(pos))
+                    if (!gridMap.ContainsKey(pos)
+                        && !trapCells.Contains(pos)
+                        && !soilTrapCells.Contains(pos)
+                        && !impassableCells.Contains(pos))
                     {
                         found = true;
                         break;
@@ -770,6 +886,7 @@ public class BattleManager : MonoBehaviour
         if (nearest != null)
         {
             var blocked = new HashSet<Vector2Int>(gridMap.Keys);
+            blocked.UnionWith(impassableCells);
             blocked.Remove(character.gridPos);
             blocked.Remove(nearest.gridPos);
 
@@ -796,7 +913,7 @@ public class BattleManager : MonoBehaviour
                         if (dx == 0 && dy == 0) continue;
                         Vector2Int pos = nearest.gridPos + new Vector2Int(dx, dy);
                         if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) continue;
-                        if (!gridMap.ContainsKey(pos))
+                        if (IsCellFree(pos))
                         {
                             candidates.Add(pos);
                         }
@@ -808,6 +925,7 @@ public class BattleManager : MonoBehaviour
                 foreach (var candidate in candidates)
                 {
                     var blocked2 = new HashSet<Vector2Int>(gridMap.Keys);
+                    blocked2.UnionWith(impassableCells);
                     blocked2.Remove(character.gridPos);
                     // candidateは空きマスなのでblocked2に含まれていない
                     List<Vector2Int> candidatePath = Pathfinding.FindPath(character.gridPos, candidate, rows, cols, blocked2);
@@ -898,7 +1016,12 @@ public class BattleManager : MonoBehaviour
 
     private bool IsCellFree(Vector2Int pos)
     {
-        return pos.x >= 0 && pos.x < cols && pos.y >= 0 && pos.y < rows && !gridMap.ContainsKey(pos);
+        return pos.x >= 0
+            && pos.x < cols
+            && pos.y >= 0
+            && pos.y < rows
+            && !gridMap.ContainsKey(pos)
+            && !impassableCells.Contains(pos);
     }
 
     private void MoveCharacter(BattleCharacter character, Vector2Int newPos, string side)
@@ -910,14 +1033,13 @@ public class BattleManager : MonoBehaviour
     {
         Vector2Int oldPos = character.gridPos;
         Vector2Int newPos = path[destinationIndex];
+        if (!IsCellFree(newPos)) return;
         gridMap.Remove(oldPos);
         character.gridPos = newPos;
         gridMap[newPos] = character;
 
         StartCoroutine(SmoothMoveAlongPath(character, path, destinationIndex));
         GameAudio.Instance.Play(GameSound.Click);
-        AddLog($"{side} {character.data.characterName} が移動！", Color.white);
-
         // 移動方向を更新
         Vector2Int dir = newPos - oldPos;
         character.UpdateDirection(dir);
@@ -932,7 +1054,7 @@ public class BattleManager : MonoBehaviour
         {
             if (character.data.skillType != SkillType.Soil)
             {
-                AddLog($"{side} {character.data.characterName} は土の罠の上に立っている！", Color.yellow);
+                StartCoroutine(ResolveSoilTrapAfterMovement(character, newPos, destinationIndex));
             }
         }
     }
@@ -942,8 +1064,31 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(0.14f * Mathf.Max(1, stepCount));
         if (character == null || character.isDead || character.gridPos != landingPos) yield break;
 
-        AddLog($"{side} {character.data.characterName} は罠にかかった！", Color.magenta);
-        character.TakeDamage(trapDamage, this, isBasicAttack: false);
+        character.TakeDamage(
+            trapDamage,
+            this,
+            isBasicAttack: false,
+            actionLabel: $"{side} {character.data.characterName} は罠を踏んだ！");
+    }
+
+    private void ResolveSoilTrapDamage(BattleCharacter character, string message)
+    {
+        if (character == null || character.isDead || character.data == null) return;
+        if (!soilTrapDamageByCell.TryGetValue(character.gridPos, out int damage)) return;
+
+        character.TakeDamage(
+            damage,
+            this,
+            isBasicAttack: false,
+            actionLabel: $"{character.data.characterName} は{message}");
+    }
+
+    private IEnumerator ResolveSoilTrapAfterMovement(BattleCharacter character, Vector2Int landingPos, int stepCount)
+    {
+        yield return new WaitForSeconds(0.14f * Mathf.Max(1, stepCount));
+        if (character == null || character.isDead || character.gridPos != landingPos) yield break;
+
+        ResolveSoilTrapDamage(character, "土の罠を踏み抜いた！");
     }
 
     public IEnumerator SmoothMoveAlongPath(BattleCharacter character, List<Vector2Int> path, int destinationIndex)
@@ -1027,30 +1172,30 @@ public class BattleManager : MonoBehaviour
         GameAudio.Instance.Play(isWin ? GameSound.Win : GameSound.Lose);
         int effectiveReward = 0;
         PlayerExperienceResult experienceResult = default;
-        List<string> bondSummaryLines = new();
-        int additionalBondResults = 0;
+        List<RecruitmentResult> bondResults = new();
         if (isWin && GameManager.Instance != null && currentStage != null)
         {
             GameManager.Instance.RegisterClearedStage(currentStage.stageId);
             experienceResult = PlayerInventory.Instance != null
                 ? PlayerInventory.Instance.GrantBattleExperience()
                 : default;
-            var recruitmentResults = ResearchBondService.Instance.ResolveVictory(currentStage);
+            var recruitmentResults = ResearchBondService.Instance.ResolveVictory(encounteredEnemyCharacterIds);
             effectiveReward = GameManager.Instance.GetEffectiveStagePointReward(currentReward);
             GameManager.Instance.AddStagePoints(effectiveReward);
-            AddLog($"報酬 {effectiveReward} ステージポイント を獲得！", Color.yellow);
+            AddLog($"報酬: 戦果 {effectiveReward} を獲得！", Color.yellow);
 
             foreach (RecruitmentResult result in recruitmentResults)
             {
-                if (result.recruited)
+                if (result.readyToRecruit)
                 {
-                    AddLog($"縁が結ばれた: {result.character.characterName}", new Color(0.55f, 1f, 0.72f));
-                    AddBondSummaryLine($"{result.character.characterName} が仲間に加わった", bondSummaryLines, ref additionalBondResults);
+                    string prefix = result.luckyCompletion ? "幸運: " : string.Empty;
+                    AddLog($"{prefix}縁が満ちた: {result.character.characterName}", new Color(0.55f, 1f, 0.72f));
+                    bondResults.Add(result);
                 }
                 else if (result.bondGained > 0)
                 {
                     AddLog($"{result.character.characterName} との縁 +{result.bondGained} ({result.bond}/{result.threshold})", new Color(0.72f, 0.88f, 1f));
-                    AddBondSummaryLine($"{result.character.characterName}  +{result.bondGained} ({result.bond}/{result.threshold})", bondSummaryLines, ref additionalBondResults);
+                    bondResults.Add(result);
                 }
             }
         }
@@ -1061,44 +1206,41 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
+        ModernWafuuPresentation.RefreshGlobalStatus();
         resultPanel.SetActive(true);
         resultPanel.transform.SetAsLastSibling();
-        ConfigureResultModal();
-        ConfigureResultActions();
-
         resultText.gameObject.SetActive(true);
-        resultText.transform.SetAsLastSibling();
         UnityUIRuntimeTheme.EnsureJapaneseCapableFont(resultText);
+        ConfigureResultModal(bondResults.Count > 0);
+        ConfigureResultActions();
+        ConfigureResultBondIndicators(bondResults);
+
+        resultText.transform.SetAsLastSibling();
+        int totalStagePoints = GameManager.Instance != null ? GameManager.Instance.StagePoints : 0;
+        int playerExperience = PlayerInventory.Instance != null ? PlayerInventory.Instance.PlayerExperience : 0;
+        int nextPlayerExperience = PlayerInventory.Instance != null ? PlayerInventory.Instance.GetExperienceToNextPlayerLevel() : 0;
+        bool leveledUp = experienceResult.level > experienceResult.previousLevel;
+        string experienceProgress = leveledUp
+            ? $"Lv.{experienceResult.previousLevel} → Lv.{experienceResult.level}　{playerExperience}/{nextPlayerExperience}"
+            : $"{playerExperience}/{nextPlayerExperience}";
         string rewardSummary = isWin
-            ? $"\n\n獲得報酬\nSP +{effectiveReward}\nPlayer EXP +{experienceResult.experience}  (Lv.{experienceResult.previousLevel} → Lv.{experienceResult.level})"
-            : "\n\n今回の獲得報酬\nなし";
-        string bondSummary = bondSummaryLines.Count > 0
-            ? $"\n\n縁の進行\n{string.Join("\n", bondSummaryLines)}{(additionalBondResults > 0 ? $"\nほか {additionalBondResults}体" : string.Empty)}"
-            : string.Empty;
-        resultText.text = message + rewardSummary + bondSummary;
-        resultText.color = color;
+            ? $"\n\n戦果 +{effectiveReward}　合計 {totalStagePoints}\n軍師経験 +{experienceResult.experience}　{experienceProgress}"
+            : "\n\n今回の獲得なし";
+        resultText.text = message + rewardSummary;
+        resultText.color = isWin
+            ? new Color(1f, 0.88f, 0.46f)
+            : message == "敗北…"
+                ? new Color(1f, 0.62f, 0.58f)
+                : new Color(0.92f, 0.92f, 0.84f);
         resultText.alignment = TextAlignmentOptions.Center;
         resultText.enableAutoSizing = true;
-        resultText.fontSizeMin = 16f;
+        resultText.fontSizeMin = 20f;
         resultText.fontSizeMax = 48f;
 
         Canvas.ForceUpdateCanvases();
     }
 
-    private static void AddBondSummaryLine(string line, List<string> lines, ref int additionalResultCount)
-    {
-        const int maxVisibleBondResults = 4;
-        if (lines.Count < maxVisibleBondResults)
-        {
-            lines.Add(line);
-        }
-        else
-        {
-            additionalResultCount++;
-        }
-    }
-
-    private void ConfigureResultModal()
+    private void ConfigureResultModal(bool hasBondResults)
     {
         if (resultPanel == null || resultText == null)
         {
@@ -1107,14 +1249,151 @@ public class BattleManager : MonoBehaviour
 
         if (resultPanel.transform is RectTransform panelRect)
         {
-            panelRect.sizeDelta = new Vector2(640f, 430f);
+            bool portrait = UnityUIRuntimeTheme.IsPortraitNarrowScreen();
+            // Keep the battle log visible below the result card. The log occupies
+            // the lower quarter of the battle view on both screen layouts.
+            panelRect.anchorMin = portrait ? new Vector2(0.05f, 0.30f) : new Vector2(0.25f, 0.28f);
+            panelRect.anchorMax = portrait ? new Vector2(0.95f, 0.92f) : new Vector2(0.75f, 0.90f);
+            panelRect.offsetMin = Vector2.zero;
+            panelRect.offsetMax = Vector2.zero;
+        }
+
+        var panelImage = resultPanel.GetComponent<Image>();
+        if (panelImage != null)
+        {
+            ModernWafuuPresentation.ApplyFlatSurface(panelImage, new Color(0.11f, 0.08f, 0.045f, 1f));
+            panelImage.raycastTarget = true;
+            var outline = resultPanel.GetComponent<Outline>() ?? resultPanel.AddComponent<Outline>();
+            outline.effectColor = new Color(0.90f, 0.67f, 0.30f, 0.88f);
+            outline.effectDistance = new Vector2(2f, -2f);
         }
 
         RectTransform textRect = resultText.rectTransform;
-        textRect.anchorMin = new Vector2(0.08f, 0.28f);
-        textRect.anchorMax = new Vector2(0.92f, 0.90f);
+        textRect.anchorMin = new Vector2(0.08f, hasBondResults ? 0.43f : 0.31f);
+        textRect.anchorMax = new Vector2(0.92f, 0.88f);
         textRect.offsetMin = Vector2.zero;
         textRect.offsetMax = Vector2.zero;
+    }
+
+    private void ConfigureResultBondIndicators(IReadOnlyList<RecruitmentResult> results)
+    {
+        if (resultPanel == null)
+        {
+            return;
+        }
+
+        if (resultBondContainer == null)
+        {
+            var container = new GameObject("ResultBondIndicators", typeof(RectTransform), typeof(VerticalLayoutGroup));
+            container.transform.SetParent(resultPanel.transform, false);
+            resultBondContainer = container.GetComponent<RectTransform>();
+
+            var layout = container.GetComponent<VerticalLayoutGroup>();
+            layout.padding = new RectOffset(0, 0, 0, 0);
+            layout.spacing = 5f;
+            layout.childControlWidth = true;
+            layout.childControlHeight = true;
+            layout.childForceExpandWidth = true;
+            layout.childForceExpandHeight = false;
+        }
+
+        bool hasResults = results != null && results.Count > 0;
+        resultBondContainer.gameObject.SetActive(hasResults);
+        if (!hasResults)
+        {
+            return;
+        }
+
+        resultBondContainer.anchorMin = new Vector2(0.12f, 0.21f);
+        resultBondContainer.anchorMax = new Vector2(0.88f, 0.41f);
+        resultBondContainer.offsetMin = Vector2.zero;
+        resultBondContainer.offsetMax = Vector2.zero;
+
+        for (int i = resultBondContainer.childCount - 1; i >= 0; i--)
+        {
+            Destroy(resultBondContainer.GetChild(i).gameObject);
+        }
+
+        const int maxVisibleBondResults = 3;
+        int visibleCount = Mathf.Min(maxVisibleBondResults, results.Count);
+        for (int i = 0; i < visibleCount; i++)
+        {
+            CreateResultBondIndicator(results[i]);
+        }
+
+        resultBondContainer.transform.SetAsLastSibling();
+    }
+
+    private void CreateResultBondIndicator(RecruitmentResult result)
+    {
+        var row = new GameObject("BondIndicator", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(LayoutElement));
+        row.transform.SetParent(resultBondContainer, false);
+        var rowImage = row.GetComponent<Image>();
+        ModernWafuuPresentation.ApplyFlatSurface(rowImage, new Color(1f, 0.92f, 0.72f, 0.06f));
+        rowImage.raycastTarget = false;
+        row.GetComponent<LayoutElement>().preferredHeight = 76f;
+
+        int previousBond = Mathf.Max(0, result.bond - result.bondGained);
+        float previousProgress = result.threshold > 0 ? Mathf.Clamp01((float)previousBond / result.threshold) : 0f;
+        float progress = result.threshold > 0 ? Mathf.Clamp01((float)result.bond / result.threshold) : 0f;
+        bool complete = result.readyToRecruit || result.bond >= result.threshold;
+        // 下段を戦闘前、上段を戦闘後として同じ始点から比較する。
+        // 横方向に小さな矩形を継ぎ足さないため、増加量が途切れて見えない。
+        CreateResultBondProgressBar(row.transform, "PreviousBond", 0.27f, 0.29f, 0.98f, 0.46f, previousProgress,
+            new Color(0.74f, 0.50f, 0.19f, 0.88f));
+        CreateResultBondProgressBar(row.transform, "UpdatedBond", 0.27f, 0.54f, 0.98f, 0.71f, progress,
+            complete ? new Color(0.28f, 0.96f, 0.48f, 1f) : new Color(0.40f, 0.86f, 0.95f, 1f));
+
+        var pieceObject = new GameObject("PieceIcon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        pieceObject.transform.SetParent(row.transform, false);
+        var piece = pieceObject.GetComponent<Image>();
+        piece.sprite = result.character.icon;
+        piece.preserveAspect = true;
+        piece.raycastTarget = false;
+        piece.color = piece.sprite != null ? Color.white : new Color(1f, 1f, 1f, 0f);
+        RectTransform pieceRect = piece.rectTransform;
+        pieceRect.anchorMin = new Vector2(0.13f, 0.5f);
+        pieceRect.anchorMax = new Vector2(0.13f, 0.5f);
+        pieceRect.pivot = new Vector2(0.5f, 0.5f);
+        pieceRect.anchoredPosition = Vector2.zero;
+        pieceRect.sizeDelta = new Vector2(72f, 72f);
+        piece.transform.SetAsLastSibling();
+    }
+
+    private static void CreateResultBondProgressBar(
+        Transform parent,
+        string name,
+        float minX,
+        float minY,
+        float maxX,
+        float maxY,
+        float progress,
+        Color fillColor)
+    {
+        var trackObject = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        trackObject.transform.SetParent(parent, false);
+        var track = trackObject.GetComponent<Image>();
+        ModernWafuuPresentation.ApplyFlatSurface(track, new Color(0.04f, 0.035f, 0.025f, 0.86f));
+        track.raycastTarget = false;
+        RectTransform trackRect = track.rectTransform;
+        trackRect.anchorMin = new Vector2(minX, minY);
+        trackRect.anchorMax = new Vector2(maxX, maxY);
+        trackRect.offsetMin = Vector2.zero;
+        trackRect.offsetMax = Vector2.zero;
+
+        var fillObject = new GameObject("Fill", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        fillObject.transform.SetParent(trackObject.transform, false);
+        var fill = fillObject.GetComponent<Image>();
+        fill.sprite = track.sprite;
+        fill.type = track.type;
+        fill.raycastTarget = false;
+        fill.color = fillColor;
+        RectTransform fillRect = fill.rectTransform;
+        fillRect.anchorMin = Vector2.zero;
+        fillRect.anchorMax = new Vector2(progress, 1f);
+        fillRect.offsetMin = new Vector2(1f, 1f);
+        fillRect.offsetMax = new Vector2(-1f, -1f);
+        trackObject.transform.SetAsFirstSibling();
     }
 
     private void ConfigureResultActions()
@@ -1145,11 +1424,12 @@ public class BattleManager : MonoBehaviour
                 layout.childForceExpandHeight = true;
             }
 
-            resultActionContainer.anchorMin = new Vector2(0.12f, 0.08f);
-            resultActionContainer.anchorMax = new Vector2(0.88f, 0.22f);
-            resultActionContainer.offsetMin = Vector2.zero;
-            resultActionContainer.offsetMax = Vector2.zero;
         }
+
+        resultActionContainer.anchorMin = new Vector2(0.12f, 0.08f);
+        resultActionContainer.anchorMax = new Vector2(0.88f, 0.22f);
+        resultActionContainer.offsetMin = Vector2.zero;
+        resultActionContainer.offsetMax = Vector2.zero;
 
         if (resultBackButton == null)
         {
@@ -1296,6 +1576,7 @@ public class BattleManager : MonoBehaviour
         StartSkillCinematic(0.5f);
         BeginSkillImpactWindow(0.50f);
         KeepDefeatedCharacterVisibleForSkillVfx(target, skillType);
+        HighlightSkillRange(caster, target, skillType, GetSkillImpactRangeColor(skillType));
 
         Color color = skillType switch
         {
@@ -1315,8 +1596,6 @@ public class BattleManager : MonoBehaviour
         {
             target.PlaySkillTargetCue(color);
         }
-        // 実行時のマス塗りは、着弾後も残って見えるため使わない。
-        // 対象範囲は演出図鑑で確認し、盤面では素材そのものを主役にする。
         if (skillType == SkillType.Slash || skillType == SkillType.StunBlow)
         {
             PlayWeaponMotionVfx(caster, target, skillType);
@@ -1416,6 +1695,7 @@ public class BattleManager : MonoBehaviour
         Color color = new Color(1f, 0.88f, 0.42f);
         caster.PlayCastEffect(color);
         List<Vector2Int> cells = BattleRangeService.GetLineWithinBoard(caster.gridPos, dir, rows + cols, cols, rows);
+        StartCoroutine(HighlightCellsRoutine(cells, GetSkillImpactRangeColor(SkillType.Gun), 0.30f));
 
         RectTransform from = caster.transform as RectTransform;
         Vector2Int endPos = cells.Count > 0 ? cells[cells.Count - 1] : caster.gridPos + dir;
@@ -1447,9 +1727,7 @@ public class BattleManager : MonoBehaviour
             SkillType.Arrow => "Arrow",
             SkillType.Spear => "Spear",
             SkillType.Gun => "Gun",
-            SkillType.StunBlow => "StunBlow",
             SkillType.Soil => "Soil",
-            SkillType.Slash => "Slash",
             SkillType.TigerTwinClaw => "TigerTwinClaw",
             SkillType.WoodPush => "WoodPush",
             SkillType.WaterHeal => "WaterHeal",
@@ -1464,13 +1742,7 @@ public class BattleManager : MonoBehaviour
             _ => null
         };
 
-        // 剣と槌は右向きの連番素材を基準にしている。発動者より左の標的へ
-        // 攻撃する時だけ反転し、振りの向きが攻撃方向と一致するようにする。
-        bool mirrorHorizontal = caster != null
-            && target != caster
-            && target.transform.position.x < caster.transform.position.x
-            && (skillType == SkillType.Slash || skillType == SkillType.StunBlow);
-        PlayAnimatedFolderVfx(target, folder, mirrorHorizontal);
+        PlaySpriteFolderVfx(target, folder);
     }
 
     private void PlaySpearThrustVfx(BattleCharacter caster, BattleCharacter target)
@@ -1495,238 +1767,42 @@ public class BattleManager : MonoBehaviour
         if (caster == null || target == null) return;
 
         string weapon = skillType == SkillType.Slash ? "SwordMotion" : "HammerMotion";
-        Texture2D texture = LoadWeaponMotionTexture(weapon);
-        if (texture == null)
+        if (SkillVfxMotion.GetWeaponTexture(weapon) == null)
         {
             Debug.LogWarning($"[VFX] {weapon} の素材を読み込めませんでした。");
             return;
         }
 
+        RectTransform casterRect = caster.transform as RectTransform;
+        if (casterRect == null) return;
+
         if (skillType == SkillType.StunBlow)
         {
-            StartCoroutine(HammerSwingVfxRoutine(caster, target, texture));
+            Vector2Int hammerDirection = target.gridPos - caster.gridPos;
+            if (hammerDirection == Vector2Int.zero) return;
+            StartCoroutine(SkillVfxMotion.PlayHammerMotion(
+                EnsureWeaponVfxOverlay(),
+                casterRect.position,
+                SkillVfxMotion.GridDirectionToVisual(hammerDirection),
+                currentBattleCellSize * 1.62f,
+                SkillVfxDuration(0.22f),
+                RegisterBattleVfx,
+                DestroyBattleVfx));
             return;
         }
 
-        StartCoroutine(WeaponMotionVfxRoutine(
-            caster,
-            target,
-            texture,
-            skillType));
-    }
-
-    private static Texture2D LoadWeaponMotionTexture(string weapon)
-    {
-        if (weaponMotionTextures.TryGetValue(weapon, out Texture2D cached)) return cached;
-
-        Texture2D texture = Resources.Load<Texture2D>($"VFX/Weapons/{weapon}");
-        if (texture == null) return null;
-
-        weaponMotionTextures[weapon] = texture;
-        return texture;
-    }
-
-    private IEnumerator WeaponMotionVfxRoutine(
-        BattleCharacter caster,
-        BattleCharacter target,
-        Texture2D texture,
-        SkillType skillType)
-    {
-        if (caster == null || target == null || texture == null) yield break;
-
-        // 武器はSpriteのタイトメッシュやWebGLのスプライト圧縮を経由させない。
-        // RawImageで元PNGをそのまま描くことで、確認ページと同じ不透明度を保つ。
-        // 発動者コマの子にすると、後続セルが伸びた刃を覆ってしまう。そのため
-        // BattlePanel直下の最前面レイヤーで、盤面と同じCanvas座標へ直接描画する。
-        var obj = new GameObject($"WeaponMotion_{skillType}", typeof(RectTransform));
-        RegisterBattleVfx(obj);
-        var rect = obj.GetComponent<RectTransform>();
-        RectTransform casterRect = caster.transform as RectTransform;
-        RectTransform targetRect = target.transform as RectTransform;
-        if (casterRect == null || targetRect == null) yield break;
-        rect.SetParent(EnsureWeaponVfxOverlay(), false);
-        rect.anchorMin = new Vector2(0.5f, 0.5f);
-        rect.anchorMax = new Vector2(0.5f, 0.5f);
-        rect.position = casterRect.position;
-        rect.pivot = new Vector2(0.13f, 0.16f);
-        rect.SetAsLastSibling();
-
-        RawImage[] imageLayers = CreateWeaponVfxLayers(rect, texture);
-
-        Vector2Int gridDelta = TargetingService.GetSwordAttackDirection(caster, target);
-        if (gridDelta == Vector2Int.zero) yield break;
-
-        // 画面上の位置差はレイアウト更新中に丸められる場合があり、斜め方向が上下左右と
-        // 同じ角度になることがある。演出の向きは判定そのものに使った盤面方向から決める。
-        float attackAngle = GetWeaponVfxAttackAngle(gridDelta);
-        int distance = Mathf.Max(1, Mathf.Max(Mathf.Abs(gridDelta.x), Mathf.Abs(gridDelta.y)));
-        // 発動者中心を支点にしても対象マスまで刃先が届くよう、素材の見た目を
-        // 元の約1.5倍にする。到達範囲は武器画像の
-        // 大きさではなくスキル判定で決まるため、前方3マスの効果範囲は変わらない。
-        float size = currentBattleCellSize * 1.59f;
-        rect.sizeDelta = Vector2.one * size;
-
-        // 素材は柄尻から鋒へ右上に伸びる。剣は対象方向を中心に、前方3マスを
-        // 上側から下側へ薙ぐ。右攻撃なら右上から右下、左攻撃なら左上から左下になる。
-        const float swordTipAngle = 45f;
-        const float visibleSweepHalfAngle = 45f;
-        const float preWindAngle = 30f;
-        const float preWindEnd = 0.10f;
-        const float sweepEnd = 0.35f;
-        float sweepSign = gridDelta.x < 0 ? -1f : 1f;
-        float fullStartAngle = attackAngle + sweepSign * visibleSweepHalfAngle - swordTipAngle;
-        float fullEndAngle = attackAngle - sweepSign * visibleSweepHalfAngle - swordTipAngle;
-        // 見える刀身は前方3マスを90度で横切る。手元の短い30度の振りかぶりを加え、
-        // 全体では120度の勢いを保つ。
-        float preWindStartAngle = fullStartAngle + sweepSign * preWindAngle;
-        // 近接武器はスキル用のスローモーション中でも切れ味を失わないよう、
-        // 槍より短い一振りで終える。
-        float duration = SkillVfxDuration(0.18f);
-        float elapsed = 0f;
-
-        while (elapsed < duration && obj != null)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            float progress = Mathf.Clamp01(elapsed / duration);
-            float preWindProgress = Mathf.InverseLerp(0f, preWindEnd, progress);
-            float sweepProgress = Mathf.InverseLerp(preWindEnd, sweepEnd, progress);
-            if (progress < preWindEnd)
-            {
-                rect.rotation = Quaternion.Euler(0f, 0f, Mathf.Lerp(
-                    preWindStartAngle,
-                    fullStartAngle,
-                    Mathf.SmoothStep(0f, 1f, preWindProgress)));
-            }
-            else
-            {
-                // 薙ぎ払いは終盤ほど速度が上がる。開始時の角速度を抑え、下側の
-                // 効果マスへ一気に振り抜くことで重い剣らしい加速感を出す。
-                float acceleratedSweep = sweepProgress * sweepProgress * sweepProgress;
-                rect.rotation = Quaternion.Euler(0f, 0f, Mathf.Lerp(
-                    fullStartAngle,
-                    fullEndAngle,
-                    acceleratedSweep));
-            }
-
-            // 振りかぶりの30度だけは発動者マス内に留め、前方へ刃先を向けた時点で
-            // 全長へ伸ばす。対象外のマスを攻撃しているようには見せない。
-            float reach = Mathf.Lerp(0.28f, 1f, Mathf.SmoothStep(0f, 1f, preWindProgress));
-            float scale = Mathf.Lerp(0.96f, 1.04f, Mathf.Sin(progress * Mathf.PI)) * reach;
-            rect.localScale = Vector3.one * scale;
-
-            SetWeaponVfxAlpha(imageLayers, GetWeaponVfxAlpha(progress));
-            yield return null;
-        }
-
-        if (obj != null) DestroyBattleVfx(obj);
-    }
-
-    private IEnumerator HammerSwingVfxRoutine(BattleCharacter caster, BattleCharacter target, Texture2D texture)
-    {
-        if (caster == null || target == null || texture == null) yield break;
-        RectTransform casterRect = caster.transform as RectTransform;
-        RectTransform targetRect = target.transform as RectTransform;
-        if (casterRect == null || targetRect == null) yield break;
-
-        // 剣と同じく、元PNGを直接描画してWebGL側のSpriteメッシュ差をなくす。
-        // 盤面セルに覆われない最前面の通常UIレイヤーへ置く。
-        var obj = new GameObject("HammerSwing", typeof(RectTransform));
-        RegisterBattleVfx(obj);
-        var rect = obj.GetComponent<RectTransform>();
-        rect.SetParent(EnsureWeaponVfxOverlay(), false);
-        rect.anchorMin = new Vector2(0.5f, 0.5f);
-        rect.anchorMax = new Vector2(0.5f, 0.5f);
-        // 槌頭を支点にすると柄だけが回って見えるため、実際の柄尻を固定点にする。
-        // 支点は対象側へ動かさず、発動者マスの中心に固定する。
-        rect.pivot = new Vector2(0.18f, 0.19f);
-        // 発動者中心の柄尻を固定したまま槌頭が対象マスまで届くよう、素材だけを
-        // 元の約1.5倍にする。支点・回転量・判定範囲は変えない。
-        rect.sizeDelta = Vector2.one * currentBattleCellSize * 1.62f;
-        rect.SetAsLastSibling();
-
-        RawImage[] imageLayers = CreateWeaponVfxLayers(rect, texture);
-
-        Vector2Int gridDelta = target.gridPos - caster.gridPos;
-        if (gridDelta == Vector2Int.zero) yield break;
-
-        // 素材は柄尻から槌頭へ右上へ伸びる。発動者の柄尻を固定したまま、
-        // 槌頭が対象方向の上側から約70度で振り下ろされる角度を作る。
-        const float sourceHeadAngle = 40f;
-        const float swingDegrees = 70f;
-        float attackAngle = GetWeaponVfxAttackAngle(gridDelta);
-        float swingSign = gridDelta.x < 0 ? -1f : 1f;
-        float startAngle = attackAngle + swingSign * swingDegrees - sourceHeadAngle;
-        float impactAngle = attackAngle - sourceHeadAngle;
-        float duration = SkillVfxDuration(0.22f);
-        float elapsed = 0f;
-        while (elapsed < duration && obj != null)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            float progress = Mathf.Clamp01(elapsed / duration);
-            // 槌は重力に引かれるように終盤ほど速く振り下ろし、着弾後は短く保持する。
-            float fallProgress = Mathf.Clamp01(progress / 0.62f);
-            float gravityFall = fallProgress * fallProgress;
-            rect.position = casterRect.position;
-            rect.rotation = Quaternion.Euler(0f, 0f, Mathf.Lerp(startAngle, impactAngle, gravityFall));
-            rect.localScale = Vector3.one * Mathf.Lerp(0.88f, 0.98f, gravityFall);
-
-            SetWeaponVfxAlpha(imageLayers, GetWeaponVfxAlpha(progress));
-            yield return null;
-        }
-
-        if (obj != null) DestroyBattleVfx(obj);
-    }
-
-    private static RawImage[] CreateWeaponVfxLayers(RectTransform parent, Texture2D texture)
-    {
-        // 生成物の柔らかいアルファ境界がWebGLのUI合成で薄く見えないよう、
-        // 同じPNGを重ねて最終的な不透明度を安定させる。
-        const int layerCount = 3;
-        var layers = new RawImage[layerCount];
-        for (int index = 0; index < layerCount; index++)
-        {
-            var layer = new GameObject($"WeaponVisualLayer_{index + 1:00}", typeof(RectTransform), typeof(CanvasRenderer), typeof(RawImage));
-            var layerRect = layer.GetComponent<RectTransform>();
-            layerRect.SetParent(parent, false);
-            layerRect.anchorMin = Vector2.zero;
-            layerRect.anchorMax = Vector2.one;
-            layerRect.offsetMin = Vector2.zero;
-            layerRect.offsetMax = Vector2.zero;
-
-            var image = layer.GetComponent<RawImage>();
-            image.texture = texture;
-            image.raycastTarget = false;
-            image.color = Color.white;
-            layers[index] = image;
-        }
-
-        return layers;
-    }
-
-    private static void SetWeaponVfxAlpha(RawImage[] layers, float alpha)
-    {
-        if (layers == null) return;
-        foreach (RawImage layer in layers)
-        {
-            if (layer == null) continue;
-            Color color = layer.color;
-            color.a = alpha;
-            layer.color = color;
-        }
-    }
-
-    private static float GetWeaponVfxAttackAngle(Vector2Int gridDirection)
-    {
-        // GridLayoutGroupではYが上から下へ増える。一方UIの回転では上が正のYなので反転する。
-        Vector2 visualDirection = new Vector2(gridDirection.x, -gridDirection.y).normalized;
-        return Mathf.Atan2(visualDirection.y, visualDirection.x) * Mathf.Rad2Deg;
-    }
-
-    private static float GetWeaponVfxAlpha(float progress)
-    {
-        // 攻撃の途中から薄くなると、もっとも見せたい着弾姿勢が影のように見える。
-        // 消滅はごく最後だけに留め、通常速度でも次手へ残らない短さを維持する。
-        return FadeOutVfxAlpha(1f, progress, 0.94f);
+        Vector2Int swordDirection = TargetingService.GetSwordAttackDirection(caster, target);
+        if (swordDirection == Vector2Int.zero) return;
+        StartCoroutine(SkillVfxMotion.PlaySwordMotion(
+            EnsureWeaponVfxOverlay(),
+            casterRect.position,
+            SkillVfxMotion.GridDirectionToVisual(swordDirection),
+            currentBattleCellSize * 1.59f,
+            SkillVfxDuration(0.18f),
+            0.10f,
+            0.35f,
+            RegisterBattleVfx,
+            DestroyBattleVfx));
     }
 
     private static float FadeOutVfxAlpha(float initialAlpha, float progress, float fadeStart)
@@ -1746,16 +1822,16 @@ public class BattleManager : MonoBehaviour
     private static Sprite LoadSpearStaticSprite()
     {
         const string cacheKey = "SpearStaticHorizontalAirWisp";
-        if (animatedVfxSprites.TryGetValue(cacheKey, out Sprite[] cached))
+        if (staticVfxSprites.TryGetValue(cacheKey, out Sprite cached))
         {
-            return cached.Length > 0 ? cached[0] : null;
+            return cached;
         }
 
         Texture2D texture = Resources.Load<Texture2D>("VFX/Animated/Spear/frame_03");
         if (texture == null)
         {
             Debug.LogWarning("[VFX] 槍の代表画像がResourcesから見つかりません。");
-            animatedVfxSprites[cacheKey] = System.Array.Empty<Sprite>();
+            staticVfxSprites[cacheKey] = null;
             return null;
         }
 
@@ -1765,53 +1841,53 @@ public class BattleManager : MonoBehaviour
         float width = texture.width * 0.72f;
         Rect spriteRect = new Rect(cropX, (texture.height - height) * 0.5f, width, height);
         Sprite sprite = Sprite.Create(texture, spriteRect, new Vector2(0.025f, 0.5f), 100f);
-        animatedVfxSprites[cacheKey] = new[] { sprite };
+        staticVfxSprites[cacheKey] = sprite;
         return sprite;
     }
 
     private static Sprite LoadHorseStaticSprite()
     {
         const string cacheKey = "HorseStaticForkedWind";
-        if (animatedVfxSprites.TryGetValue(cacheKey, out Sprite[] cached))
+        if (staticVfxSprites.TryGetValue(cacheKey, out Sprite cached))
         {
-            return cached.Length > 0 ? cached[0] : null;
+            return cached;
         }
 
         Texture2D texture = Resources.Load<Texture2D>("VFX/Static/HorseChargeForkedWind");
         if (texture == null)
         {
             Debug.LogWarning("[VFX] 馬の代表画像がResourcesから見つかりません。");
-            animatedVfxSprites[cacheKey] = System.Array.Empty<Sprite>();
+            staticVfxSprites[cacheKey] = null;
             return null;
         }
 
         // 馬の前方で左右に分かれる、真上視点の風圧と砂埃を使う。
         Rect spriteRect = new Rect(0f, 0f, texture.width, texture.height);
         Sprite sprite = Sprite.Create(texture, spriteRect, new Vector2(0.5f, 0.5f), 100f);
-        animatedVfxSprites[cacheKey] = new[] { sprite };
+        staticVfxSprites[cacheKey] = sprite;
         return sprite;
     }
 
     private static Sprite LoadBirdStaticSprite()
     {
         const string cacheKey = "BirdStaticCleanFeathers";
-        if (animatedVfxSprites.TryGetValue(cacheKey, out Sprite[] cached))
+        if (staticVfxSprites.TryGetValue(cacheKey, out Sprite cached))
         {
-            return cached.Length > 0 ? cached[0] : null;
+            return cached;
         }
 
         Texture2D texture = Resources.Load<Texture2D>("VFX/Static/BirdFeathersOnly");
         if (texture == null)
         {
             Debug.LogWarning("[VFX] 鳥の代表画像がResourcesから見つかりません。");
-            animatedVfxSprites[cacheKey] = System.Array.Empty<Sprite>();
+            staticVfxSprites[cacheKey] = null;
             return null;
         }
 
         // 鳥専用の羽だけを使う。地面の土埃やワープ軌跡を含む旧シートは参照しない。
         Rect spriteRect = new Rect(0f, 0f, texture.width, texture.height);
         Sprite sprite = Sprite.Create(texture, spriteRect, new Vector2(0.5f, 0.5f), 100f);
-        animatedVfxSprites[cacheKey] = new[] { sprite };
+        staticVfxSprites[cacheKey] = sprite;
         return sprite;
     }
 
@@ -1836,7 +1912,9 @@ public class BattleManager : MonoBehaviour
         float aspect = sprite.rect.width / sprite.rect.height;
         rect.pivot = new Vector2(0.025f, 0.5f);
         rect.position = caster.position;
-        rect.rotation = Quaternion.Euler(0f, 0f, GetWeaponVfxAttackAngle(gridDelta));
+        rect.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(
+            SkillVfxMotion.GridDirectionToVisual(gridDelta).y,
+            SkillVfxMotion.GridDirectionToVisual(gridDelta).x) * Mathf.Rad2Deg);
         rect.sizeDelta = new Vector2(width, width / aspect);
         rect.SetAsLastSibling();
 
@@ -1885,7 +1963,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void PlayAnimatedFolderVfx(BattleCharacter target, string folder, bool mirrorHorizontal = false)
+    private void PlaySpriteFolderVfx(BattleCharacter target, string folder, bool mirrorHorizontal = false)
     {
         if (target == null || string.IsNullOrEmpty(folder)) return;
         Sprite sprite = LoadRepresentativeVfxSprite(folder);
@@ -1902,42 +1980,7 @@ public class BattleManager : MonoBehaviour
 
     private Sprite LoadRepresentativeVfxSprite(string folder)
     {
-        Sprite[] frames = LoadAnimatedVfxSprites(folder);
-        if (frames.Length == 0) return null;
-
-        if (folder == "NumberAura_High_Strong")
-        {
-            return CreateSafeHighStrongAuraSprite(frames[Mathf.Min(7, frames.Length - 1)]);
-        }
-
-        int keyFrame = folder switch
-        {
-            "Arrow" or "Gun" => 2,
-            "Stone" => 0,
-            "Fireball" => 2,
-            "WoodPush" => 3,
-            "WaterHeal" => 3,
-            "Soil" => 3,
-            "HorseCharge" or "BirdRetreat" => 2,
-            "TigerTwinClaw" => 3,
-            "Shield" or "Armor" or "Wall" => 2,
-            "DragonBreath" or "DragonRoar" => 3,
-            _ => 1
-        };
-        return frames[Mathf.Clamp(keyFrame, 0, frames.Length - 1)];
-    }
-
-    private static Sprite CreateSafeHighStrongAuraSprite(Sprite source)
-    {
-        if (source == null) return null;
-
-        // 隣接コマの混入がない代表フレームを使い、端だけを安全に除外する。
-        const float inset = 16f;
-        Rect sourceRect = source.rect;
-        float width = Mathf.Max(1f, sourceRect.width - inset * 2f);
-        float height = Mathf.Max(1f, sourceRect.height - inset * 2f);
-        Rect safeRect = new Rect(sourceRect.x + inset, sourceRect.y + inset, width, height);
-        return Sprite.Create(source.texture, safeRect, new Vector2(0.5f, 0.5f), source.pixelsPerUnit, 0, SpriteMeshType.FullRect);
+        return SkillVfxMotion.GetRepresentativeSprite(folder);
     }
 
     private Image CreateSingleSpriteVfx(string objectName, Transform parent, Sprite sprite, out RectTransform rect)
@@ -2042,231 +2085,49 @@ public class BattleManager : MonoBehaviour
         if (rect != null) DestroyBattleVfx(rect.gameObject);
     }
 
-    private IEnumerator NumberAuraSpriteVfxRoutine(BattleCharacter target, Sprite sprite, string folder, bool onePartyPeak)
+    private IEnumerator BossSummonSpriteVfxRoutine(RectTransform target, Sprite sprite)
     {
         if (target == null || sprite == null) yield break;
 
-        Image image = CreateSingleSpriteVfx("SingleVfx_NumberAura", target.transform, sprite, out RectTransform rect);
-        rect.anchoredPosition = Vector2.zero;
-        float sizeScale = folder == "NumberAura_High_Strong" ? 1.04f : 1.18f;
-        if (onePartyPeak) sizeScale *= 1.14f;
-        rect.sizeDelta = Vector2.one * currentBattleCellSize * sizeScale;
+        Image image = CreateSingleSpriteVfx("SingleVfx_BossSummon", target, sprite, out RectTransform rect);
+        rect.anchoredPosition = Vector2.up * currentBattleCellSize * 0.62f;
+        rect.sizeDelta = Vector2.one * currentBattleCellSize * 1.35f;
         rect.SetAsLastSibling();
 
-        float duration = SkillVfxDuration(onePartyPeak ? 0.84f : 0.72f);
+        float duration = SkillVfxDuration(0.72f);
         float elapsed = 0f;
         while (elapsed < duration && image != null)
         {
             elapsed += Time.unscaledDeltaTime;
             float progress = Mathf.Clamp01(elapsed / duration);
-            float scale = Mathf.Lerp(0.82f, 1.1f, Mathf.Sin(progress * Mathf.PI * 0.5f));
+            float scale = Mathf.Lerp(0.48f, 1.08f, Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(progress * 1.7f)));
             rect.localScale = Vector3.one * scale;
-            rect.localRotation = Quaternion.Euler(0f, 0f, progress * 110f);
-            Color current = image.color;
-            current.a = FadeOutVfxAlpha(1f, progress, 0.78f);
-            image.color = current;
+            Color color = image.color;
+            color.a = FadeOutVfxAlpha(FadeInVfxAlpha(1f, progress, 0.16f), progress, 0.70f);
+            image.color = color;
             yield return null;
         }
 
         if (rect != null) DestroyBattleVfx(rect.gameObject);
     }
 
-    private void PlayStableVfxFrame(BattleCharacter target, Sprite[] frames, string folder, bool mirrorHorizontal = false)
+    private IEnumerator NumberAuraSpriteVfxRoutine(BattleCharacter target, Sprite sprite, string folder, bool onePartyPeak)
     {
-        int frameIndex = 0;
-        var obj = new GameObject($"StableVfx_{folder}", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        RegisterBattleVfx(obj);
-        var rect = obj.GetComponent<RectTransform>();
-        bool defensiveVfx = folder is "Shield" or "Armor" or "Wall";
-        // 防御系は対象コマの直接の子にして必ずキャラの前面へ出す。一方で盤面全体の
-        // 攻撃オーバーレイや武器の後ろに留まるため、発動中の攻撃を覆わない。
-        rect.SetParent(defensiveVfx ? target.transform : EnsureBattleVfxOverlay(), false);
-        rect.anchorMin = new Vector2(0.5f, 0.5f);
-        rect.anchorMax = new Vector2(0.5f, 0.5f);
-        if (defensiveVfx)
-        {
-            rect.anchoredPosition = Vector2.zero;
-        }
-        else
-        {
-            rect.position = target.transform.position;
-            obj.AddComponent<BattleVfxFollowTarget>().Initialize(target.transform as RectTransform);
-        }
-        rect.localScale = new Vector3(mirrorHorizontal ? -1f : 1f, 1f, 1f);
-        if (folder == "BossSummon")
-        {
-            rect.position += Vector3.up * currentBattleCellSize * 0.62f;
-        }
-        float scale = folder switch
-        {
-            "Slash" or "Shield" or "Armor" => 1.0f,
-            "DragonBreath" => 1.0f,
-            "Wall" => 1.25f,
-            _ => 1.0f
-        };
-        rect.sizeDelta = Vector2.one * currentBattleCellSize * scale;
-        rect.SetAsLastSibling();
-        var image = obj.GetComponent<Image>();
-        image.sprite = frames[frameIndex];
-        image.preserveAspect = true;
-        image.raycastTarget = false;
-        image.color = Color.white;
-        var animator = obj.AddComponent<BattleVfxAnimator>();
-        float baseDuration = folder switch
-        {
-            "Slash" => 0.25f,
-            "Shield" or "Armor" or "Wall" => 0.24f,
-            "DragonBreath" => 0.56f,
-            _ => 0.36f
-        };
-        float duration = SkillVfxDuration(baseDuration);
-        // 多くの素材は末尾2コマが消え際の薄い残像。そこまでを均等再生すると
-        // 本体より残像の時間が長く見えるため、戦闘では見える6コマを基準にする。
-        int visibleFrameCount = Mathf.Min(6, frames.Length);
-        animator.Play(frames, duration, visibleFrameCount, false);
-    }
+        if (target == null || sprite == null) yield break;
 
-    private static Sprite[] LoadAnimatedVfxSprites(string folder)
-    {
-        if (animatedVfxSprites.TryGetValue(folder, out Sprite[] cached)) return cached;
-
-        var frames = new List<Sprite>();
-        for (int index = 0; index < 32; index++)
-        {
-            string path = $"VFX/Animated/{folder}/frame_{index:00}";
-            // 各PNGはUnity上で複数スプライトに分割されている場合があるため、
-            // Spriteではなく元のTexture全体から中央pivotのフレームを作る。
-            // これによりフレームごとの切り出し矩形差による位置ずれや背景混入を防ぐ。
-            Texture2D texture = Resources.Load<Texture2D>(path);
-            if (texture != null)
-            {
-                frames.Add(Sprite.Create(
-                    texture,
-                    new Rect(0f, 0f, texture.width, texture.height),
-                    new Vector2(0.5f, 0.5f),
-                    100f));
-                continue;
-            }
-
-            Sprite sprite = Resources.Load<Sprite>(path);
-            if (sprite == null) break;
-            frames.Add(sprite);
-        }
-
-        cached = frames.ToArray();
-        animatedVfxSprites[folder] = cached;
-        return cached;
-    }
-
-    private IEnumerator AnimatedVfxRoutine(RectTransform target, Sprite[] frames, string folder)
-    {
-        if (target == null || frames == null || frames.Length == 0) yield break;
-
-        // バトルVFXはトップ画面と同じImage経路で描画する。
-        var obj = new GameObject($"AnimatedVfx_{folder}", typeof(RectTransform));
-        RegisterBattleVfx(obj);
-        var rect = obj.GetComponent<RectTransform>();
-        // 対象キャラクターと同じ盤面枝に置く。BattlePanel直下の別レイヤーでは
-        // WebGLのUIバッチ順により、VFXが盤面の奥へ隠れることがあった。
-        rect.SetParent(target, false);
-        rect.anchorMin = new Vector2(0.5f, 0.5f);
-        rect.anchorMax = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = Vector2.zero;
-        float sizeScale = folder switch
-        {
-            "DragonBreath" => 2.4f,
-            "Slash" or "Shield" or "Armor" => 1.0f,
-            "BossSummon" => 1.35f,
-            "Wall" => 1.25f,
-            "NumberAura_Low_Weak" or "NumberAura_Low_Medium" or "NumberAura_Low_Strong"
-                or "NumberAura_Mid_Weak" or "NumberAura_Mid_Medium" or "NumberAura_Mid_Strong"
-                or "NumberAura_High_Weak" or "NumberAura_High_Medium" or "NumberAura_High_Strong" => 1.2f,
-            _ => 1.1f
-        };
-        rect.sizeDelta = Vector2.one * currentBattleCellSize * sizeScale;
-        if (folder == "BossSummon")
-        {
-            // 素材の地面がセル画像の下端にあるため、亀裂・召喚地点をキャラの足元へ合わせる。
-            rect.anchoredPosition += Vector2.up * currentBattleCellSize * 0.62f;
-        }
-        rect.SetAsLastSibling();
-
-        // WebGLでは同一Imageのspriteを毎フレーム差し替えると、素材本体ではなく
-        // 透明な残像だけが残る端末があった。各コマを独立Imageとして一度だけ設定し、
-        // 表示状態だけを切り替えることで、静止検証と同じ確実な描画経路に統一する。
-        var frameImages = new Image[frames.Length];
-        int visibleFrame = folder == "Slash" ? Mathf.Min(3, frames.Length - 1) : 0;
-        for (int index = 0; index < frames.Length; index++)
-        {
-            var frameObject = new GameObject($"Frame_{index:00}", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            RegisterBattleVfx(frameObject);
-            var frameRect = frameObject.GetComponent<RectTransform>();
-            // 中間の空RectTransformを挟むと、WebGLのUIバッチで画像が落ちることがある。
-            // 静止検証と同じく、各コマを対象の直接の子として描画する。
-            frameRect.SetParent(target, false);
-            frameRect.anchorMin = new Vector2(0.5f, 0.5f);
-            frameRect.anchorMax = new Vector2(0.5f, 0.5f);
-            frameRect.anchoredPosition = rect.anchoredPosition;
-            frameRect.sizeDelta = rect.sizeDelta;
-            frameRect.SetAsLastSibling();
-
-            var frameImage = frameObject.GetComponent<Image>();
-            frameImage.sprite = frames[index];
-            frameImage.raycastTarget = false;
-            frameImage.preserveAspect = true;
-            frameImage.color = Color.white;
-            frameObject.SetActive(index == visibleFrame);
-            frameImages[index] = frameImage;
-        }
-
-        float initialAlpha = 1f;
-        yield return null;
-
-        float baseDuration = folder switch
-        {
-            "Slash" => 0.25f,
-            "Shield" or "Armor" => 0.24f,
-            _ => 0.72f
-        };
-        float duration = SkillVfxDuration(baseDuration);
-        float elapsed = 0f;
-        while (elapsed < duration && obj != null)
-        {
-            elapsed += Mathf.Min(Time.unscaledDeltaTime, 1f / 30f);
-            float progress = Mathf.Clamp01(elapsed / duration);
-            float animationProgress = progress;
-            int frame;
-            if (folder == "Slash")
-            {
-                // 末尾の土煙だけのフレームが長いと、半透明で消えたように見える。
-                // 剣が見える0～5を長めに使い、残煙の6～7は最後だけ再生する。
-                frame = animationProgress < 0.80f
-                    ? Mathf.Min(5, Mathf.FloorToInt(animationProgress / 0.80f * 6f))
-                    : Mathf.Min(frames.Length - 1, 6 + Mathf.FloorToInt((animationProgress - 0.80f) / 0.20f * 2f));
-            }
-            else
-            {
-                frame = Mathf.Min(frames.Length - 1, Mathf.FloorToInt(progress * frames.Length));
-            }
-            if (frame != visibleFrame)
-            {
-                frameImages[visibleFrame].gameObject.SetActive(false);
-                frameImages[frame].gameObject.SetActive(true);
-                visibleFrame = frame;
-            }
-
-            Color current = frameImages[visibleFrame].color;
-            float fadeStart = folder == "Slash" ? 0.96f : 0.65f;
-            current.a = FadeOutVfxAlpha(initialAlpha, progress, fadeStart);
-            frameImages[visibleFrame].color = current;
-            yield return null;
-        }
-
-        foreach (Image frameImage in frameImages)
-        {
-            if (frameImage != null) DestroyBattleVfx(frameImage.gameObject);
-        }
-        if (obj != null) DestroyBattleVfx(obj);
+        float sizeScale = folder == "NumberAura_High_Strong" ? 1.04f : 1.18f;
+        if (onePartyPeak) sizeScale *= 1.14f;
+        float duration = SkillVfxDuration(onePartyPeak ? 0.84f : 0.72f);
+        yield return SkillVfxMotion.PlayNumberAura(
+            target.transform,
+            sprite,
+            Vector3.zero,
+            currentBattleCellSize * sizeScale,
+            duration,
+            110f,
+            useAnchoredPosition: true,
+            onCreated: RegisterBattleVfx,
+            onFinished: DestroyBattleVfx);
     }
 
     private void HighlightSkillRange(BattleCharacter caster, BattleCharacter target, SkillType skillType, Color color)
@@ -2284,7 +2145,7 @@ public class BattleManager : MonoBehaviour
                 SkillType.Spear => 0.24f,
                 _ => 0.34f
             };
-            StartCoroutine(HighlightSkillRangesRoutine(selectionCells, effectCells, duration));
+            StartCoroutine(HighlightSkillRangesRoutine(selectionCells, effectCells, color, duration));
         }
     }
 
@@ -2332,11 +2193,10 @@ public class BattleManager : MonoBehaviour
     private IEnumerator HighlightSkillRangesRoutine(
         List<Vector2Int> selectionCells,
         List<Vector2Int> effectCells,
+        Color effectColor,
         float duration)
     {
         var originals = new Dictionary<Image, Color>();
-        var selectionColor = new Color(0.22f, 0.65f, 1f, 0.58f);
-        var effectColor = new Color(1f, 0.48f, 0.12f, 0.78f);
 
         void Apply(List<Vector2Int> cells, Color color)
         {
@@ -2351,7 +2211,8 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        Apply(selectionCells, selectionColor);
+        // Candidate cells deliberately stay unpainted. Only the resolved impact
+        // area is shown, so the ground texture remains legible during combat.
         Apply(effectCells, effectColor);
         yield return new WaitForSeconds(SkillVfxDuration(duration));
 
@@ -2359,6 +2220,16 @@ public class BattleManager : MonoBehaviour
         {
             if (pair.Key != null) pair.Key.color = pair.Value;
         }
+    }
+
+    private static Color GetSkillImpactRangeColor(SkillType skillType)
+    {
+        return skillType switch
+        {
+            SkillType.Heal or SkillType.WaterHeal => new Color(0.12f, 0.78f, 0.82f, 0.42f),
+            SkillType.Soil => new Color(0.74f, 0.22f, 0.08f, 0.46f),
+            _ => new Color(0.92f, 0.22f, 0.11f, 0.44f)
+        };
     }
 
     private static string GetProjectileSymbol(SkillType skillType)
@@ -2678,14 +2549,14 @@ public class BattleManager : MonoBehaviour
         Sprite sprite = LoadRepresentativeVfxSprite("DragonBreath");
         if (sprite == null) return;
 
-        StartCoroutine(DragonBreathAnimatedVfxRoutine(
+        StartCoroutine(DragonBreathSpriteVfxRoutine(
             dragon.transform as RectTransform,
             direction,
             range,
             sprite));
     }
 
-    private IEnumerator DragonBreathAnimatedVfxRoutine(
+    private IEnumerator DragonBreathSpriteVfxRoutine(
         RectTransform dragon,
         Vector2Int direction,
         int range,
@@ -3045,7 +2916,7 @@ public class BattleManager : MonoBehaviour
         }
         foreach (var bc in affected)
         {
-            int dmg = Mathf.RoundToInt(self.GetEffectiveAttack(this) * self.data.skillPower);
+            int dmg = Mathf.RoundToInt(self.GetEffectiveAttack(this) * self.GetEffectiveSkillPower());
             string type = (bc.isAlly == self.isAlly) ? "味方" : "敵";
             AddLog($"{self.data.characterName} の銃が{type} {bc.data.characterName} を撃った！({dmg}ダメージ)", bc.isAlly == self.isAlly ? Color.cyan : Color.red);
             bc.TakeDamage(dmg, this, isBasicAttack: false);
@@ -3056,7 +2927,18 @@ public class BattleManager : MonoBehaviour
             self.UpdateDirection(dir);
         }
     }
+    public void GenerateSoilTraps(BattleCharacter caster)
+    {
+        if (caster == null) return;
+        GenerateSoilTraps(caster.gridPos, caster.GetEffectiveAttack(this));
+    }
+
     public void GenerateSoilTraps(Vector2Int center)
+    {
+        GenerateSoilTraps(center, BattleTrapRules.MinimumSoilTrapDamage);
+    }
+
+    private void GenerateSoilTraps(Vector2Int center, int casterAttack)
     {
         // 候補マスを収集
         List<Vector2Int> candidates = new List<Vector2Int>();
@@ -3068,7 +2950,7 @@ public class BattleManager : MonoBehaviour
                 Vector2Int pos = new Vector2Int(center.x + dx, center.y + dy);
                 if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) continue;
                 // 既に土罠 or 通常罠がある場合はスキップ
-                if (soilTrapCells.Contains(pos) || trapCells.Contains(pos)) continue;
+                if (soilTrapCells.Contains(pos) || trapCells.Contains(pos) || impassableCells.Contains(pos)) continue;
                 candidates.Add(pos);
             }
         }
@@ -3080,14 +2962,25 @@ public class BattleManager : MonoBehaviour
             (candidates[i], candidates[j]) = (candidates[j], candidates[i]);
         }
 
-        // 最大2個
-        int trapsToPlace = Mathf.Min(2, candidates.Count);
+        int trapDamage = BattleTrapRules.GetSoilTrapDamage(casterAttack);
+        int trapsToPlace = Mathf.Min(BattleTrapRules.SoilTrapCountPerSkill, candidates.Count);
+        var placedCells = new List<Vector2Int>(trapsToPlace);
         for (int i = 0; i < trapsToPlace; i++)
         {
             Vector2Int pos = candidates[i];
             soilTrapCells.Add(pos);
+            soilTrapDamageByCell[pos] = trapDamage;
+            placedCells.Add(pos);
             CreateSoilTrapCellTint(pos);
             CreateSoilTrapVfx(pos);
+        }
+
+        if (placedCells.Count > 0)
+        {
+            StartCoroutine(HighlightCellsRoutine(
+                placedCells,
+                new Color(0.74f, 0.22f, 0.08f, 0.46f),
+                0.58f));
         }
     }
 
@@ -3110,8 +3003,12 @@ public class BattleManager : MonoBehaviour
         rect.SetSiblingIndex(0);
 
         Image image = marker.GetComponent<Image>();
-        image.color = new Color(0.44f, 0.25f, 0.08f, 0.46f);
+        image.color = new Color(0.60f, 0.18f, 0.06f, 0.48f);
         image.raycastTarget = false;
+        var outline = marker.AddComponent<Outline>();
+        outline.effectColor = new Color(1f, 0.55f, 0.22f, 0.86f);
+        outline.effectDistance = new Vector2(2f, -2f);
+        outline.useGraphicAlpha = false;
         soilTrapTintObjects[pos] = marker;
     }
 
@@ -3182,7 +3079,7 @@ public class BattleManager : MonoBehaviour
         }
 
         // 占有マスチェック
-        if (gridMap.ContainsKey(newPos))
+        if (gridMap.ContainsKey(newPos) || impassableCells.Contains(newPos))
         {
             AddLog($"{target.data.characterName} は押し出されたが進めず足止めされた！", Color.gray);
             target.ApplyStun(1);
@@ -3207,33 +3104,39 @@ public class BattleManager : MonoBehaviour
         Vector2Int pos1 = self.gridPos + dir;
         Vector2Int pos2 = self.gridPos + dir * 2;
 
+        if (impassableCells.Contains(pos1))
+        {
+            AddLog($"{self.data.characterName} の突進は障害地形に阻まれた！", Color.gray);
+            return;
+        }
+
         bool pos1HasEnemy = gridMap.ContainsKey(pos1) && gridMap[pos1].isAlly != self.isAlly;
-        bool pos2HasEnemy = gridMap.ContainsKey(pos2) && gridMap[pos2].isAlly != self.isAlly;
-        bool pos1Free = !gridMap.ContainsKey(pos1);
-        bool pos2Free = !gridMap.ContainsKey(pos2);
+        bool pos2HasEnemy = !impassableCells.Contains(pos2) && gridMap.ContainsKey(pos2) && gridMap[pos2].isAlly != self.isAlly;
+        bool pos1Free = IsCellFree(pos1);
+        bool pos2Free = IsCellFree(pos2);
 
         if (pos1HasEnemy)
         {
-            self.PerformAttack(gridMap[pos1], this, self.data.skillPower, $"{self.data.characterName} の突進攻撃！ {{0}} ダメージ");
+            self.PerformAttack(gridMap[pos1], this, self.GetEffectiveSkillPower(), $"{self.data.characterName} の突進攻撃！ {{0}} ダメージ");
             if (!pos2HasEnemy && pos2Free) MoveCharacterNoTrap(self, pos2);
             return;
         }
         if (pos2HasEnemy && pos1Free)
         {
             MoveCharacterNoTrap(self, pos1);
-            self.PerformAttack(gridMap[pos2], this, self.data.skillPower, $"{self.data.characterName} の突進攻撃！ {{0}} ダメージ");
+            self.PerformAttack(gridMap[pos2], this, self.GetEffectiveSkillPower(), $"{self.data.characterName} の突進攻撃！ {{0}} ダメージ");
             return;
         }
 
         // 移動できない場合でも、突進方向に敵がいれば攻撃だけ行う
         if (pos1HasEnemy)
         {
-            self.PerformAttack(gridMap[pos1], this, self.data.skillPower, $"{self.data.characterName} の突進攻撃！ {{0}} ダメージ");
+            self.PerformAttack(gridMap[pos1], this, self.GetEffectiveSkillPower(), $"{self.data.characterName} の突進攻撃！ {{0}} ダメージ");
             return;
         }
         if (pos2HasEnemy)
         {
-            self.PerformAttack(gridMap[pos2], this, self.data.skillPower, $"{self.data.characterName} の突進攻撃！ {{0}} ダメージ");
+            self.PerformAttack(gridMap[pos2], this, self.GetEffectiveSkillPower(), $"{self.data.characterName} の突進攻撃！ {{0}} ダメージ");
             return;
         }
 
@@ -3244,7 +3147,7 @@ public class BattleManager : MonoBehaviour
     private void MoveCharacterNoTrap(BattleCharacter character, Vector2Int newPos)
     {
         // 盤面外チェック
-        if (newPos.x < 0 || newPos.x >= cols || newPos.y < 0 || newPos.y >= rows)
+        if (newPos.x < 0 || newPos.x >= cols || newPos.y < 0 || newPos.y >= rows || impassableCells.Contains(newPos))
         {
             AddLog($"{character.data.characterName} の突進は壁に阻まれた！", Color.gray);
             return;
@@ -3279,7 +3182,7 @@ public class BattleManager : MonoBehaviour
                 if (dx == 0 && dy == 0) continue;
                 Vector2Int pos = bird.gridPos + new Vector2Int(dx, dy);
                 if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) continue;
-                if (!gridMap.ContainsKey(pos)) candidates.Add(pos);
+                if (IsCellFree(pos)) candidates.Add(pos);
             }
         }
 
@@ -3299,7 +3202,7 @@ public class BattleManager : MonoBehaviour
         StartCoroutine(BirdRetreatSpriteVfxRoutine(departurePosition, arriving: false, delay: 0f));
         yield return new WaitForSecondsRealtime(SkillVfxDuration(0.13f));
 
-        if (bird == null || bird.isDead || gridMap.ContainsKey(newPos)) yield break;
+        if (bird == null || bird.isDead || !IsCellFree(newPos)) yield break;
         gridMap.Remove(bird.gridPos);
         bird.gridPos = newPos;
         gridMap[newPos] = bird;
@@ -3316,17 +3219,17 @@ public class BattleManager : MonoBehaviour
         if (tiger == null || tiger.isDead || firstTarget == null) return;
 
         // 1回目
-        tiger.PerformAttack(firstTarget, this, tiger.data.skillPower, $"{tiger.data.characterName} のツインクロー1撃目！ {{0}} ダメージ");
+        tiger.PerformAttack(firstTarget, this, tiger.GetEffectiveSkillPower(), $"{tiger.data.characterName} のツインクロー1撃目！ {{0}} ダメージ");
 
         // 2回目
         var secondTarget = TargetingService.FindAdjacentEnemy(this, tiger);
         if (secondTarget != null && secondTarget != firstTarget)
         {
-            tiger.PerformAttack(secondTarget, this, tiger.data.skillPower, $"{tiger.data.characterName} のツインクロー2撃目！ {{0}} ダメージ");
+            tiger.PerformAttack(secondTarget, this, tiger.GetEffectiveSkillPower(), $"{tiger.data.characterName} のツインクロー2撃目！ {{0}} ダメージ");
         }
         else if (firstTarget != null && !firstTarget.isDead)
         {
-            tiger.PerformAttack(firstTarget, this, tiger.data.skillPower, $"{tiger.data.characterName} のツインクロー2撃目！ {{0}} ダメージ");
+            tiger.PerformAttack(firstTarget, this, tiger.GetEffectiveSkillPower(), $"{tiger.data.characterName} のツインクロー2撃目！ {{0}} ダメージ");
         }
     }
 
@@ -3359,14 +3262,16 @@ public class BattleManager : MonoBehaviour
         Vector2Int chosenDir = validDirs[Random.Range(0, validDirs.Count)];
         BeginSkillImpactWindow(0.90f);
         List<BattleCharacter> affectedTargets = new();
+        List<Vector2Int> breathCells = GetDragonBreathCells(dragon.gridPos, chosenDir, range);
+        StartCoroutine(HighlightCellsRoutine(breathCells, GetSkillImpactRangeColor(SkillType.Dragon), 0.54f));
 
         // 攻撃処理：chosenDir 方向の前方3x3全員にダメージ
-        foreach (Vector2Int pos in GetDragonBreathCells(dragon.gridPos, chosenDir, range))
+        foreach (Vector2Int pos in breathCells)
         {
             if (gridMap.TryGetValue(pos, out var bc) && bc.isAlly != dragon.isAlly && !bc.isDead)
             {
                 affectedTargets.Add(bc);
-                int dmg = Mathf.RoundToInt(dragon.GetEffectiveAttack(this) * dragon.data.skillPower);
+                int dmg = Mathf.RoundToInt(dragon.GetEffectiveAttack(this) * dragon.GetEffectiveSkillPower());
                 AddLog($"{dragon.data.characterName} のブレスが {bc.data.characterName} に命中！ {dmg} ダメージ", Color.red);
                 bc.TakeDamage(dmg, this, dragon, isBasicAttack: false);
             }
@@ -3428,8 +3333,14 @@ public class BattleManager : MonoBehaviour
 
         if (targets.Count > 0)
         {
+            var targetCells = new List<Vector2Int>(targets.Count);
+            foreach (BattleCharacter target in targets)
+            {
+                if (target != null) targetCells.Add(target.gridPos);
+            }
+            StartCoroutine(HighlightCellsRoutine(targetCells, GetSkillImpactRangeColor(SkillType.Dragon), 0.38f));
             AddLog($"{dragon.data.characterName} が咆哮した！", Color.magenta);
-            PlayAnimatedFolderVfx(dragon, "DragonRoar");
+            PlaySpriteFolderVfx(dragon, "DragonRoar");
             StartSkillCinematic(0.50f);
             GameAudio.Instance.Play(GameSound.DragonRoar);
             var targetsCopy = new List<BattleCharacter>(targets);

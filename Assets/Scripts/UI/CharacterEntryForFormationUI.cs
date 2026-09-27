@@ -9,6 +9,7 @@ public class CharacterEntryForFormationUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI countText;
     private CharacterData characterData;
     private Image iconImage;
+    private TextMeshProUGUI statsText;
 
     public void SetCharacter(CharacterData data, int level)
     {
@@ -16,13 +17,27 @@ public class CharacterEntryForFormationUI : MonoBehaviour
         ApplyLayout(data);
         EnsureSkillTooltip(data);
         string skillName = SkillDescription.GetShort(data.skillType);
-        infoText.text = $"{data.characterName}  {skillName}\nHP {data.GetMaxHP(level)}  ATK {data.GetAttack(level)}  DEF {data.GetDefense(level)}";
-        levelText.text = $"PLv.{level}";
-        countText.text = "加入済";
+        infoText.text = $"{data.characterName}　{skillName}";
+        int maxHP = PlayerInventory.Instance != null
+            ? PlayerInventory.Instance.GetPlayerMaxHP(data, level)
+            : data.GetMaxHP(level);
+        statsText.text = $"PLv.{level}　HP {maxHP}　攻 {data.GetAttack(level)}　守 {data.GetDefense(level)}";
+        if (levelText != null)
+        {
+            levelText.gameObject.SetActive(false);
+        }
+        if (countText != null)
+        {
+            countText.gameObject.SetActive(false);
+        }
     }
 
     private void ApplyLayout(CharacterData data)
     {
+        ModernWafuuPresentation.ApplyListCardSurface(
+            GetComponent<Image>(),
+            new Color(0.19f, 0.17f, 0.13f, 0.97f));
+
         var rect = GetComponent<RectTransform>();
         if (rect != null)
         {
@@ -30,8 +45,8 @@ public class CharacterEntryForFormationUI : MonoBehaviour
         }
 
         ConfigureText(infoText, 22f, 16f, TextAlignmentOptions.Left);
-        ConfigureText(levelText, 21f, 16f, TextAlignmentOptions.Center);
-        ConfigureText(countText, 21f, 16f, TextAlignmentOptions.Center);
+        EnsureStatsText();
+        ConfigureText(statsText, 20f, 16f, TextAlignmentOptions.Left);
 
         RectTransform infoRect = infoText != null ? infoText.GetComponent<RectTransform>() : null;
         if (infoRect != null)
@@ -39,14 +54,36 @@ public class CharacterEntryForFormationUI : MonoBehaviour
             infoRect.anchorMin = new Vector2(0f, 1f);
             infoRect.anchorMax = new Vector2(1f, 1f);
             infoRect.pivot = new Vector2(0.5f, 1f);
-            infoRect.anchoredPosition = new Vector2(56f, -8f);
-            infoRect.sizeDelta = new Vector2(-152f, 56f);
+            infoRect.anchoredPosition = new Vector2(88f, -8f);
+            infoRect.sizeDelta = new Vector2(-104f, 38f);
         }
 
-        ConfigureBottomTextRect(levelText, 0f, 104f);
-        ConfigureBottomTextRect(countText, 1f, 112f);
+        ConfigureStatTextRect(statsText);
 
         EnsureIcon(data);
+    }
+
+    private void EnsureStatsText()
+    {
+        if (statsText != null)
+        {
+            return;
+        }
+
+        Transform existing = transform.Find("FormationStatsText");
+        if (existing != null)
+        {
+            statsText = existing.GetComponent<TextMeshProUGUI>();
+        }
+
+        if (statsText == null)
+        {
+            var go = new GameObject("FormationStatsText", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+            go.transform.SetParent(transform, false);
+            statsText = go.GetComponent<TextMeshProUGUI>();
+        }
+
+        statsText.raycastTarget = false;
     }
 
     private void EnsureIcon(CharacterData data)
@@ -76,16 +113,16 @@ public class CharacterEntryForFormationUI : MonoBehaviour
         iconRect.sizeDelta = new Vector2(72f, 72f);
     }
 
-    private static void ConfigureBottomTextRect(TextMeshProUGUI text, float anchorX, float width)
-{
-    if (text == null) return;
-    RectTransform rect = text.GetComponent<RectTransform>();
-    rect.anchorMin = new Vector2(anchorX, 0f);
-    rect.anchorMax = new Vector2(anchorX, 0f);
-    rect.pivot = new Vector2(anchorX, 0f);
-    rect.anchoredPosition = anchorX == 0f ? new Vector2(92f, 10f) : new Vector2(-12f, 10f);
-    rect.sizeDelta = new Vector2(width, 34f);
-}
+    private static void ConfigureStatTextRect(TextMeshProUGUI text)
+    {
+        if (text == null) return;
+        RectTransform rect = text.GetComponent<RectTransform>();
+        rect.anchorMin = new Vector2(0f, 0f);
+        rect.anchorMax = new Vector2(1f, 0f);
+        rect.pivot = new Vector2(0f, 0f);
+        rect.anchoredPosition = new Vector2(88f, 8f);
+        rect.sizeDelta = new Vector2(-104f, 30f);
+    }
 
 private static void ConfigureText(TextMeshProUGUI text, float max, float min, TextAlignmentOptions alignment)
     {
@@ -93,7 +130,7 @@ private static void ConfigureText(TextMeshProUGUI text, float max, float min, Te
         UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
         text.enableAutoSizing = true;
         text.fontSizeMax = max;
-        text.fontSizeMin = min;
+        text.fontSizeMin = Mathf.Max(UnityUIRuntimeTheme.MinimumTextSize, min);
         text.fontStyle = FontStyles.Normal;
         text.alignment = alignment;
         text.textWrappingMode = TextWrappingModes.Normal;

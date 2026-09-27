@@ -5,16 +5,21 @@ public sealed class BattleCharacterState
 {
     public int Level { get; set; }
     public int CurrentHP { get; set; }
+    public int MaxHP { get; private set; }
     public int Attack { get; set; }
     public int Defense { get; set; }
     public bool IsDead { get; set; }
     public int NumberPassiveAttackBonusPercent { get; private set; }
     public int StunTurns { get; private set; }
 
-    public void Initialize(CharacterData data, int level)
+    public void Initialize(CharacterData data, int level, bool isAlly)
     {
         Level = level;
-        CurrentHP = data.GetMaxHP(level);
+        float healthMultiplier = isAlly && FacilityManager.Instance != null
+            ? FacilityManager.Instance.GetHealthMultiplier()
+            : 1f;
+        MaxHP = Mathf.Max(1, Mathf.RoundToInt(data.GetMaxHP(level) * healthMultiplier));
+        CurrentHP = MaxHP;
         Attack = data.GetAttack(level);
         Defense = data.GetDefense(level);
         IsDead = false;

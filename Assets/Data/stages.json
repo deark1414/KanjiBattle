@@ -11,9 +11,7 @@
     "slotCount": 1,
     "trapDamage": 0,
     "trapCount": 0,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
@@ -33,14 +31,12 @@
     "slotCount": 1,
     "trapDamage": 0,
     "trapCount": 0,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 1,
+    "enemyLevel": 2,
     "prerequisiteStageId": 1
   },
   {
@@ -55,14 +51,12 @@
     "slotCount": 2,
     "trapDamage": 0,
     "trapCount": 0,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 2,
+    "enemyLevel": 3,
     "prerequisiteStageId": 2
   },
   {
@@ -76,16 +70,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 2,
-    "trapDamage": 2,
+    "trapDamage": 8,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 2,
+    "enemyLevel": 5,
     "prerequisiteStageId": 3
   },
   {
@@ -99,16 +91,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 2,
-    "trapDamage": 3,
+    "trapDamage": 12,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 3,
+    "enemyLevel": 4,
     "prerequisiteStageId": 4
   },
   {
@@ -122,16 +112,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 3,
-    "trapDamage": 2,
+    "trapDamage": 8,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 3,
+    "enemyLevel": 7,
     "prerequisiteStageId": 5
   },
   {
@@ -146,16 +134,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 3,
-    "trapDamage": 3,
+    "trapDamage": 12,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 3,
+    "enemyLevel": 8,
     "prerequisiteStageId": 6
   },
   {
@@ -170,16 +156,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 3,
-    "trapDamage": 4,
+    "trapDamage": 16,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 3,
+    "enemyLevel": 10,
     "prerequisiteStageId": 7
   },
   {
@@ -194,16 +178,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 3,
-    "trapDamage": 4,
+    "trapDamage": 16,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 4,
+    "enemyLevel": 11,
     "prerequisiteStageId": 8
   },
   {
@@ -218,16 +200,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 3,
-    "trapDamage": 5,
+    "trapDamage": 20,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 5,
+    "enemyLevel": 10,
     "prerequisiteStageId": 9
   },
   {
@@ -242,16 +222,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 3,
-    "trapDamage": 4,
+    "trapDamage": 16,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 5,
+    "enemyLevel": 13,
     "prerequisiteStageId": 10
   },
   {
@@ -266,16 +244,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 3,
-    "trapDamage": 4,
+    "trapDamage": 16,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 5,
+    "enemyLevel": 15,
     "prerequisiteStageId": 11
   },
   {
@@ -291,16 +267,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 4,
-    "trapDamage": 5,
+    "trapDamage": 20,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 6,
+    "enemyLevel": 16,
     "prerequisiteStageId": 12
   },
   {
@@ -316,16 +290,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 4,
-    "trapDamage": 5,
+    "trapDamage": 20,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 6,
+    "enemyLevel": 17,
     "prerequisiteStageId": 13
   },
   {
@@ -341,16 +313,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 4,
-    "trapDamage": 6,
+    "trapDamage": 24,
     "trapCount": 2,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 7,
+    "enemyLevel": 18,
     "prerequisiteStageId": 14
   },
   {
@@ -366,16 +336,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 4,
-    "trapDamage": 5,
+    "trapDamage": 20,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 7,
+    "enemyLevel": 20,
     "prerequisiteStageId": 15
   },
   {
@@ -391,16 +359,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 4,
-    "trapDamage": 5,
+    "trapDamage": 20,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 7,
+    "enemyLevel": 21,
     "prerequisiteStageId": 16
   },
   {
@@ -416,16 +382,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 4,
-    "trapDamage": 6,
+    "trapDamage": 24,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 8,
+    "enemyLevel": 22,
     "prerequisiteStageId": 17
   },
   {
@@ -442,16 +406,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 4,
-    "trapDamage": 6,
+    "trapDamage": 24,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 8,
+    "enemyLevel": 23,
     "prerequisiteStageId": 18
   },
   {
@@ -468,16 +430,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 4,
-    "trapDamage": 7,
+    "trapDamage": 28,
     "trapCount": 2,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 9,
+    "enemyLevel": 25,
     "prerequisiteStageId": 19
   },
   {
@@ -493,16 +453,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 4,
-    "trapDamage": 6,
+    "trapDamage": 24,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 8,
+    "enemyLevel": 26,
     "prerequisiteStageId": 20
   },
   {
@@ -518,16 +476,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 4,
-    "trapDamage": 6,
+    "trapDamage": 24,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 8,
+    "enemyLevel": 27,
     "prerequisiteStageId": 21
   },
   {
@@ -544,16 +500,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 4,
-    "trapDamage": 7,
+    "trapDamage": 28,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 8,
+    "enemyLevel": 28,
     "prerequisiteStageId": 22
   },
   {
@@ -570,16 +524,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 4,
-    "trapDamage": 7,
+    "trapDamage": 28,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 9,
+    "enemyLevel": 30,
     "prerequisiteStageId": 23
   },
   {
@@ -596,16 +548,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 4,
-    "trapDamage": 8,
+    "trapDamage": 32,
     "trapCount": 2,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 10,
+    "enemyLevel": 28,
     "prerequisiteStageId": 24
   },
   {
@@ -622,16 +572,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 5,
-    "trapDamage": 7,
+    "trapDamage": 28,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 10,
+    "enemyLevel": 32,
     "prerequisiteStageId": 25
   },
   {
@@ -648,16 +596,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 5,
-    "trapDamage": 7,
+    "trapDamage": 28,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 10,
+    "enemyLevel": 33,
     "prerequisiteStageId": 26
   },
   {
@@ -675,16 +621,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 5,
-    "trapDamage": 8,
+    "trapDamage": 32,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 10,
+    "enemyLevel": 35,
     "prerequisiteStageId": 27
   },
   {
@@ -702,16 +646,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 5,
-    "trapDamage": 8,
+    "trapDamage": 32,
     "trapCount": 2,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 11,
+    "enemyLevel": 36,
     "prerequisiteStageId": 28
   },
   {
@@ -729,16 +671,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 5,
-    "trapDamage": 9,
+    "trapDamage": 36,
     "trapCount": 2,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 11,
+    "enemyLevel": 37,
     "prerequisiteStageId": 29
   },
   {
@@ -755,16 +695,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 5,
-    "trapDamage": 8,
+    "trapDamage": 32,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 11,
+    "enemyLevel": 38,
     "prerequisiteStageId": 30
   },
   {
@@ -781,16 +719,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 5,
-    "trapDamage": 8,
+    "trapDamage": 32,
     "trapCount": 1,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 11,
+    "enemyLevel": 40,
     "prerequisiteStageId": 31
   },
   {
@@ -807,16 +743,14 @@
     ],
     "rewardStagePoints": 2,
     "slotCount": 5,
-    "trapDamage": 9,
+    "trapDamage": 36,
     "trapCount": 2,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 12,
+    "enemyLevel": 41,
     "prerequisiteStageId": 32
   },
   {
@@ -833,16 +767,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 5,
-    "trapDamage": 9,
+    "trapDamage": 36,
     "trapCount": 2,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 11,
+    "enemyLevel": 42,
     "prerequisiteStageId": 33
   },
   {
@@ -859,16 +791,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 5,
-    "trapDamage": 10,
+    "trapDamage": 40,
     "trapCount": 2,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 12,
+    "enemyLevel": 43,
     "prerequisiteStageId": 34
   },
   {
@@ -886,16 +816,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 6,
-    "trapDamage": 9,
+    "trapDamage": 36,
     "trapCount": 2,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 13,
+    "enemyLevel": 45,
     "prerequisiteStageId": 35
   },
   {
@@ -913,16 +841,14 @@
     ],
     "rewardStagePoints": 3,
     "slotCount": 6,
-    "trapDamage": 9,
+    "trapDamage": 36,
     "trapCount": 2,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 13,
+    "enemyLevel": 46,
     "prerequisiteStageId": 36
   },
   {
@@ -940,16 +866,14 @@
     ],
     "rewardStagePoints": 4,
     "slotCount": 6,
-    "trapDamage": 10,
+    "trapDamage": 40,
     "trapCount": 2,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 14,
+    "enemyLevel": 47,
     "prerequisiteStageId": 37
   },
   {
@@ -967,16 +891,14 @@
     ],
     "rewardStagePoints": 4,
     "slotCount": 6,
-    "trapDamage": 10,
+    "trapDamage": 40,
     "trapCount": 2,
-    "reinforcementEnemyIds": [
-
-    ],
+    "reinforcementEnemyIds": [],
     "reinforcementInterval": 0,
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": false,
-    "enemyLevel": 14,
+    "enemyLevel": 48,
     "prerequisiteStageId": 38
   },
   {
@@ -989,7 +911,7 @@
     ],
     "rewardStagePoints": 6,
     "slotCount": 6,
-    "trapDamage": 12,
+    "trapDamage": 48,
     "trapCount": 2,
     "reinforcementEnemyIds": [
       25,
@@ -1002,7 +924,7 @@
     "reinforcementCount": 1,
     "reinforcementLimit": 5,
     "isBossStage": true,
-    "enemyLevel": 15,
+    "enemyLevel": 50,
     "prerequisiteStageId": 39
   }
 ]

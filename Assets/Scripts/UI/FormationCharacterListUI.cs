@@ -67,6 +67,8 @@ public class FormationCharacterListUI : MonoBehaviour
             return;
         }
 
+        FormationUI.Instance.ShowCharacterDetails(character);
+
         var formation = FormationUI.Instance.GetFormation();
         for (int i = 0; i < formation.Length; i++)
         {
@@ -85,8 +87,8 @@ public class FormationCharacterListUI : MonoBehaviour
         var listRect = GetComponent<RectTransform>();
         if (listRect != null)
         {
-            listRect.anchorMin = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.19f) : new Vector2(0.04f, 0.10f);
-            listRect.anchorMax = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.72f) : new Vector2(0.96f, 0.74f);
+            listRect.anchorMin = new Vector2(0.03f, 0.075f);
+            listRect.anchorMax = new Vector2(0.97f, 0.445f);
             listRect.anchoredPosition = Vector2.zero;
             listRect.sizeDelta = Vector2.zero;
         }
@@ -94,8 +96,8 @@ public class FormationCharacterListUI : MonoBehaviour
         var grid = content != null ? content.GetComponent<GridLayoutGroup>() : null;
         if (grid != null)
         {
-            grid.cellSize = new Vector2(GetListCellWidth(), UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 92f : 104f);
-            grid.spacing = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(10f, 8f) : new Vector2(12f, 10f);
+            grid.cellSize = new Vector2(GetListCellWidth(), UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 98f : 104f);
+            grid.spacing = new Vector2(0f, 8f);
             grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             grid.constraintCount = 1;
             grid.childAlignment = TextAnchor.UpperCenter;
@@ -113,7 +115,7 @@ public class FormationCharacterListUI : MonoBehaviour
         var listRect = GetComponent<RectTransform>();
         if (listRect != null && listRect.rect.width > 0f)
         {
-            return Mathf.Clamp(listRect.rect.width - 24f, 280f, 520f);
+            return Mathf.Clamp(listRect.rect.width, 280f, 620f);
         }
 
         return UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 320f : 520f;

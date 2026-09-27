@@ -26,7 +26,11 @@ public class StagePointUI : MonoBehaviour
     {
         if (stagePointText != null)
         {
-            stagePointText.text = $"StagePts: {points}";
+            // The active screen header owns this value in the modern layout.
+            // Hiding the legacy label prevents it from competing with the page title.
+            stagePointText.gameObject.SetActive(false);
         }
+
+        ModernWafuuPresentation.ApplyScreenChrome();
     }
 }

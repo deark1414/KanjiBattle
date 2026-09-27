@@ -26,6 +26,6 @@ MonoBehaviour:
   reinforcementCount: 0
   reinforcementLimit: 0
   isBossStage: 0
-  enemyLevel: 2
+  enemyLevel: 3
   prerequisite: {fileID: 11400000, guid: 0e9cfd8f9853e469aaa467db0f447622, type: 2}
   isCleared: 0

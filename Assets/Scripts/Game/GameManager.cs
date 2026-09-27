@@ -101,6 +101,8 @@ public class GameManager : MonoBehaviour
             UnlockChapter(Mathf.Min(8, (stageId / 5) + 1));
         }
 
+        FacilityManager.Instance?.RefreshAutomaticLevelCaps();
+        OnProgressionChanged?.Invoke();
         SaveProgress();
     }
 
@@ -137,7 +139,7 @@ public class GameManager : MonoBehaviour
     public void ApplyFormationSlotIncrease(int slots) => facilityFormationSlots = Mathf.Max(facilityFormationSlots, 1 + Mathf.Max(0, slots));
     public int GetFacilityFormationSlots() => facilityFormationSlots;
 
-    public void ApplyBattleSpeedTier(int tier) => battleSpeedTier = Mathf.Max(battleSpeedTier, Mathf.Clamp(tier, 0, 2));
+    public void ApplyBattleSpeedTier(int tier) => battleSpeedTier = Mathf.Max(battleSpeedTier, Mathf.Clamp(tier, 0, 8));
 
     public void SetBattleSpeedIndex(int speedIndex)
     {

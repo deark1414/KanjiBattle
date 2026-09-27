@@ -81,46 +81,73 @@ public sealed class ResearchBondService
         };
     }
 
-    public IReadOnlyList<RecruitmentResult> ResolveVictory(StageData stage)
+    /// <summary>
+    /// A completed bond is intentionally not an automatic recruitment. The player
+    /// confirms the new ally from the roster, just like a facility unlock.
+    /// </summary>
+    public bool CanRecruit(CharacterData data)
     {
         EnsureLoaded();
-        if (stage == null || defeatedCharacterIds.Count == 0)
+        return data != null
+            && !data.isBoss
+            && !IsOwned(data)
+            && defeatedCharacterIds.Contains(data.characterId)
+            && GetBondThreshold(data) > 0
+            && GetBond(data) >= GetBondThreshold(data);
+    }
+
+    public bool Recruit(CharacterData data)
+    {
+        EnsureLoaded();
+        if (!CanRecruit(data) || PlayerInventory.Instance == null || !PlayerInventory.Instance.AddCharacter(data))
+        {
+            return false;
+        }
+
+        bondByCharacterId.Remove(data.characterId);
+        Save();
+        OnChanged?.Invoke();
+        return true;
+    }
+
+    public IReadOnlyList<RecruitmentResult> ResolveVictory(IReadOnlyCollection<int> encounteredCharacterIds)
+    {
+        EnsureLoaded();
+        if (encounteredCharacterIds == null || encounteredCharacterIds.Count == 0)
         {
             return Array.Empty<RecruitmentResult>();
         }
 
         int bondGain = FacilityManager.Instance != null ? FacilityManager.Instance.GetRecruitmentBondGain() : 1;
-        float earlyChance = FacilityManager.Instance != null ? FacilityManager.Instance.GetEarlyRecruitmentChance() : 0.005f;
+        float luckyCompletionChance = FacilityManager.Instance != null
+            ? FacilityManager.Instance.GetLuckyBondCompletionChance()
+            : 0.005f;
         List<RecruitmentResult> results = new();
 
-        foreach (int characterId in defeatedCharacterIds.OrderBy(id => id).ToList())
+        // A bond belongs to the enemy met in this victorious battle. Keeping this
+        // set battle-local prevents earlier encounters from progressing elsewhere.
+        foreach (int characterId in encounteredCharacterIds.OrderBy(id => id))
         {
+            if (!defeatedCharacterIds.Contains(characterId))
+            {
+                continue;
+            }
+
             CharacterData data = GetCharacter(characterId);
             if (data == null || IsOwned(data))
             {
                 continue;
             }
 
-            int chapter = GetCharacterChapter(data);
-            if (stage.chapterId < chapter || stage.chapterId > chapter + 1)
-            {
-                continue;
-            }
-
             int previousBond = GetBond(data);
-            int updatedBond = Mathf.Min(GetBondThreshold(data), previousBond + bondGain);
+            int threshold = GetBondThreshold(data);
+            bool luckyCompletion = previousBond < threshold && UnityEngine.Random.value < luckyCompletionChance;
+            int updatedBond = luckyCompletion
+                ? threshold
+                : Mathf.Min(threshold, previousBond + bondGain);
             bondByCharacterId[characterId] = updatedBond;
-            bool earlyRecruitment = UnityEngine.Random.value < earlyChance;
-            bool guaranteedRecruitment = updatedBond >= GetBondThreshold(data);
-            bool recruited = earlyRecruitment || guaranteedRecruitment;
-
-            if (recruited)
-            {
-                PlayerInventory.Instance?.AddCharacter(data);
-                bondByCharacterId.Remove(characterId);
-            }
-
-            results.Add(new RecruitmentResult(data, updatedBond - previousBond, updatedBond, GetBondThreshold(data), recruited, earlyRecruitment));
+            bool readyToRecruit = previousBond < threshold && updatedBond >= threshold;
+            results.Add(new RecruitmentResult(data, updatedBond - previousBond, updatedBond, threshold, readyToRecruit, luckyCompletion));
         }
 
         Save();
@@ -218,16 +245,16 @@ public readonly struct RecruitmentResult
     public readonly int bondGained;
     public readonly int bond;
     public readonly int threshold;
-    public readonly bool recruited;
-    public readonly bool earlyRecruitment;
+    public readonly bool readyToRecruit;
+    public readonly bool luckyCompletion;
 
-    public RecruitmentResult(CharacterData character, int bondGained, int bond, int threshold, bool recruited, bool earlyRecruitment)
+    public RecruitmentResult(CharacterData character, int bondGained, int bond, int threshold, bool readyToRecruit, bool luckyCompletion)
     {
         this.character = character;
         this.bondGained = bondGained;
         this.bond = bond;
         this.threshold = threshold;
-        this.recruited = recruited;
-        this.earlyRecruitment = earlyRecruitment;
+        this.readyToRecruit = readyToRecruit;
+        this.luckyCompletion = luckyCompletion;
     }
 }

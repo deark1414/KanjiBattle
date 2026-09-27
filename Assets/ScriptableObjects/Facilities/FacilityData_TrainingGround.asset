@@ -24,11 +24,11 @@ MonoBehaviour:
   facilityLevelCapUnlocks:
   - stageId: 5
     requiredStagePoints: 0
-  - stageId: 12
+  - stageId: 10
     requiredStagePoints: 0
-  - stageId: 25
+  - stageId: 15
     requiredStagePoints: 0
-  - stageId: 35
+  - stageId: 20
     requiredStagePoints: 0
   baseCost: 0
   growthFactor: 1

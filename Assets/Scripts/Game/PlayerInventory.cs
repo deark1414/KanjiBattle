@@ -16,19 +16,25 @@ public class PlayerInventory : MonoBehaviour
     private const string PlayerLevelKey = SavePrefix + "PlayerLevel";
     private const string PlayerExperienceKey = SavePrefix + "PlayerExperience";
     private const string StarterTrainingGrantedKey = SavePrefix + "PlayerTrainingGranted";
-    private const int LevelCap = 99;
+    private const string LastMockTrainingUtcKey = SavePrefix + "LastMockTrainingUtc";
     public const int BaseBattleExperience = 10;
+    public const int BaseMockTrainingExperience = 1;
     private const int StarterTrainingExperience = BaseBattleExperience * 2;
     private const int ExperienceTierSize = 5;
-    private const int MaximumExperienceTier = 5;
+    private const int MaximumExperienceTier = 9;
+    private const int ExperienceTierMultiplier = 3;
+    private const float MockTrainingPollIntervalSeconds = 1f;
+    private const int MaximumOfflineTrainingCycles = 80;
 
     public event Action onInventoryChanged;
+    public event Action<PlayerExperienceResult> onMockTrainingCompleted;
 
     [SerializeField] private CharacterDatabase characterDatabase;
     private readonly Dictionary<CharacterData, CharacterInfo> ownedCharacters = new();
     private bool isLoadingProgress;
     private int playerLevel = 1;
     private int playerExperience;
+    private float nextMockTrainingPollAt;
 
     private void Awake()
     {
@@ -47,9 +53,34 @@ public class PlayerInventory : MonoBehaviour
         SaveProgress();
     }
 
+    private void Start()
+    {
+        ApplyOfflineMockTraining();
+        nextMockTrainingPollAt = Time.unscaledTime + MockTrainingPollIntervalSeconds;
+    }
+
+    private void Update()
+    {
+        // Mock training belongs to the player's progression, not to the roster
+        // screen. Poll from this persistent owner so it continues while marching,
+        // forming a party, or browsing facilities. The persisted cooldown keeps
+        // the visual drill and this background check from ever awarding twice.
+        if (Time.unscaledTime < nextMockTrainingPollAt)
+        {
+            return;
+        }
+
+        nextMockTrainingPollAt = Time.unscaledTime + MockTrainingPollIntervalSeconds;
+        GrantMockTrainingExperience();
+        // The shared header owns the countdown display, so refresh it on the
+        // same one-second cadence that advances mock training.
+        ModernWafuuPresentation.RefreshGlobalStatus();
+    }
+
     public Dictionary<CharacterData, CharacterInfo> GetOwnedCharacters() => ownedCharacters;
     public int PlayerLevel => playerLevel;
     public int PlayerExperience => playerExperience;
+    public bool IsAtEffectiveLevelCap => playerLevel >= GetEffectiveLevelCap();
 
     public List<CharacterData> GetUnlockedCharacters() => ownedCharacters.Keys.ToList();
 
@@ -73,12 +104,84 @@ public class PlayerInventory : MonoBehaviour
         return GetExperienceRequiredForLevel(playerLevel);
     }
 
+    public int GetMockTrainingIntervalSeconds()
+    {
+        return FacilityManager.Instance != null
+            ? FacilityManager.Instance.GetMockTrainingCooldownSeconds()
+            : 45;
+    }
+
+    public int GetMockTrainingExperienceReward()
+    {
+        return IsAtEffectiveLevelCap ? 0 : GetEffectiveMockTrainingExperienceReward();
+    }
+
+    public int GetSecondsUntilNextMockTraining()
+    {
+        long previous = PlayerProgressStore.GetInt(LastMockTrainingUtcKey, 0);
+        if (previous <= 0)
+        {
+            return GetMockTrainingIntervalSeconds();
+        }
+
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        long elapsed = Math.Max(0, now - previous);
+        return Mathf.Max(0, GetMockTrainingIntervalSeconds() - (int)elapsed);
+    }
+
+    public int GetPlayerMaxHP(CharacterData character, int level)
+    {
+        if (character == null)
+        {
+            return 0;
+        }
+
+        float multiplier = FacilityManager.Instance != null
+            ? FacilityManager.Instance.GetHealthMultiplier()
+            : 1f;
+        return Mathf.Max(1, Mathf.RoundToInt(character.GetMaxHP(level) * multiplier));
+    }
+
     public PlayerExperienceResult GrantBattleExperience()
     {
         return GrantPlayerExperience(GetEffectiveBattleExperienceReward());
     }
 
+    public PlayerExperienceResult GrantMockTrainingExperience()
+    {
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        long previous = PlayerProgressStore.GetInt(LastMockTrainingUtcKey, 0);
+        // A completed drill may award a tiny amount, but a screen toggle must not
+        // become a faster progression route than actually clearing a stage.
+        int cooldownSeconds = GetMockTrainingIntervalSeconds();
+        if (previous <= 0)
+        {
+            PlayerProgressStore.SetInt(LastMockTrainingUtcKey, (int)Math.Min(now, int.MaxValue));
+            PlayerProgressStore.Save();
+            return new PlayerExperienceResult(0, playerLevel, playerLevel, playerExperience);
+        }
+
+        if (now - previous < cooldownSeconds)
+        {
+            return new PlayerExperienceResult(0, playerLevel, playerLevel, playerExperience);
+        }
+
+        PlayerExperienceResult result = GrantPlayerExperience(GetEffectiveMockTrainingExperienceReward());
+        // Reaching the player-level cap still consumes this training interval.
+        // Otherwise the status would remain at "0 seconds" forever until a cap
+        // becomes available again.
+        PlayerProgressStore.SetInt(LastMockTrainingUtcKey, (int)Math.Min(now, int.MaxValue));
+        PlayerProgressStore.Save();
+        onMockTrainingCompleted?.Invoke(result);
+        return result;
+    }
+
     public PlayerExperienceResult GrantPlayerExperience(int amount)
+    {
+        return GrantPlayerExperienceInternal(amount, true);
+    }
+
+    private PlayerExperienceResult GrantPlayerExperienceInternal(int amount, bool saveProgress)
     {
         int previousLevel = playerLevel;
         if (amount <= 0 || playerLevel >= GetEffectiveLevelCap())
@@ -100,16 +203,55 @@ public class PlayerInventory : MonoBehaviour
             playerExperience = 0;
         }
 
-        onInventoryChanged?.Invoke();
-        SaveProgress();
+        // Incremental experience should not rebuild the roster while its practice
+        // animation is active. A level-up still refreshes every shared stat display.
+        if (playerLevel != previousLevel)
+        {
+            onInventoryChanged?.Invoke();
+        }
+        if (saveProgress)
+        {
+            SaveProgress();
+        }
+        ModernWafuuPresentation.RefreshGlobalStatus();
         return new PlayerExperienceResult(amount, previousLevel, playerLevel, playerExperience);
+    }
+
+    private void ApplyOfflineMockTraining()
+    {
+        long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        long previous = PlayerProgressStore.GetInt(LastMockTrainingUtcKey, 0);
+        if (previous <= 0)
+        {
+            PlayerProgressStore.SetInt(LastMockTrainingUtcKey, (int)Math.Min(now, int.MaxValue));
+            PlayerProgressStore.Save();
+            return;
+        }
+
+        int cooldown = GetMockTrainingIntervalSeconds();
+        int completedCycles = Mathf.Min(MaximumOfflineTrainingCycles, Mathf.Max(0, (int)((now - previous) / cooldown)));
+        if (completedCycles <= 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < completedCycles; i++)
+        {
+            GrantPlayerExperienceInternal(GetEffectiveMockTrainingExperienceReward(), false);
+        }
+
+        // Consuming the elapsed period here prevents reopening the game from
+        // repeatedly claiming the same offline interval.
+        PlayerProgressStore.SetInt(LastMockTrainingUtcKey, (int)Math.Min(now, int.MaxValue));
+        SaveProgress();
+        ModernWafuuPresentation.RefreshGlobalStatus();
     }
 
     public int GetEffectiveLevelCap()
     {
         int clearedStageId = GameManager.Instance != null ? GameManager.Instance.GetHighestClearedStageId() : 0;
         int unlockedBands = Mathf.Max(0, clearedStageId / 5);
-        return Mathf.Clamp(5 + unlockedBands * 5, 5, LevelCap);
+        return Mathf.Clamp(5 + unlockedBands * 6, 5, 50);
     }
 
     public void SetPlayerLevelForDebug(int level)
@@ -122,8 +264,18 @@ public class PlayerInventory : MonoBehaviour
 
     public int GetEffectiveBattleExperienceReward()
     {
-        float multiplier = FacilityManager.Instance != null ? FacilityManager.Instance.GetExperienceMultiplier() : 1f;
-        return Mathf.Max(1, Mathf.FloorToInt(BaseBattleExperience * multiplier));
+        float rate = FacilityManager.Instance != null
+            ? FacilityManager.Instance.GetBattleExperienceRate()
+            : FacilityManager.BaseBattleExperienceRate;
+        return GetExperienceRewardFromCurrentRequirement(rate);
+    }
+
+    private int GetEffectiveMockTrainingExperienceReward()
+    {
+        float rate = FacilityManager.Instance != null
+            ? FacilityManager.Instance.GetMockTrainingExperienceRate()
+            : FacilityManager.BaseMockTrainingExperienceRate;
+        return GetExperienceRewardFromCurrentRequirement(rate);
     }
 
     public void SaveProgress()
@@ -155,6 +307,7 @@ public class PlayerInventory : MonoBehaviour
         PlayerProgressStore.Delete(PlayerLevelKey);
         PlayerProgressStore.Delete(PlayerExperienceKey);
         PlayerProgressStore.Delete(StarterTrainingGrantedKey);
+        PlayerProgressStore.Delete(LastMockTrainingUtcKey);
         ownedCharacters.Clear();
         playerLevel = 1;
         playerExperience = 0;
@@ -196,9 +349,14 @@ public class PlayerInventory : MonoBehaviour
 
     private static int GetExperienceRequiredForLevel(int level)
     {
-        // Five-level bands create clear growth milestones without overflowing the experience counter.
+        // Every five levels is a clear milestone: 10, 30, 90, 270, ...
         int tier = Mathf.Clamp((Mathf.Max(1, level) - 1) / ExperienceTierSize, 0, MaximumExperienceTier);
-        return BaseBattleExperience * (int)Mathf.Pow(10f, tier);
+        return BaseBattleExperience * (int)Mathf.Pow(ExperienceTierMultiplier, tier);
+    }
+
+    private int GetExperienceRewardFromCurrentRequirement(float rate)
+    {
+        return Mathf.Max(1, Mathf.CeilToInt(GetExperienceRequiredForLevel(playerLevel) * rate));
     }
 
     private string SerializeOwnedCharacters()

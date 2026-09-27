@@ -103,7 +103,7 @@ public static class SkillDescription
             SkillType.Stone => "離れた敵へ石を投げる。",
             SkillType.Shield => "防御寄りの能力を持つ。",
             SkillType.Wall => "高い耐久で前線を支える。",
-            SkillType.Soil => "周囲5x5の候補から最大2マスに土の罠を設置する。土以外が土罠の上にいると、ターンごとにダメージを受ける。",
+            SkillType.Soil => "周囲5x5の候補から最大2マスに土の罠を設置する。土以外が踏むと設置者の攻撃力に応じたダメージを受け、立ち続けるとターンごとに再びダメージを受ける。",
             SkillType.Fireball => "敵に防御無視の火球を放つ。",
             SkillType.WoodPush => "敵を攻撃し、後方へ押し出す。",
             SkillType.WaterHeal => "隣接した味方を回復する。",
