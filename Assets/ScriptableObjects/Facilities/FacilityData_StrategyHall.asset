@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99212dd6e0e414c77af6918ba9aa188e, type: 3}
+  m_Name: FacilityData_StrategyHall
+  m_EditorClassIdentifier: Assembly-CSharp::FacilityData
+  facilityId: 9
+  facilityName: "\u8ECD\u7565\u6240"
+  effectType: 16
+  unlockType: 1
+  requiredStageId: 9
+  unlockStagePointCost: 6
+  initialMaxLevel: 1
+  finalMaxLevel: 5
+  levelCapIncreasePerUnlock: 1
+  facilityLevelCapUnlocks:
+  - stageId: 15
+    requiredStagePoints: 0
+  - stageId: 23
+    requiredStagePoints: 0
+  - stageId: 32
+    requiredStagePoints: 0
+  - stageId: 40
+    requiredStagePoints: 0
+  baseCost: 0
+  growthFactor: 1
+  upgradeStagePointCosts: 050000000a000000110000001b00000028000000
+  effectPerLevel: 0

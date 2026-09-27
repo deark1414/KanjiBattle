@@ -26,12 +26,17 @@ namespace KanjiBattle.Editor
             // 透明な武器素材はWebGLの自動圧縮・タイトメッシュを通さない。
             // 実行時のRawImage描画と対になるビルド前の再発防止策。
             GeneratedVfxImporter.ConfigureWeaponMotionTextures();
+            ConfigureModernWafuuUiTextures();
             AssetDatabase.SaveAssets();
 
             PrepareOutputDirectory();
             WriteGitHubPagesFiles();
 
-            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Disabled;
+            // GitHub Pages does not reliably attach Content-Encoding to Unity's
+            // compressed build files. The fallback keeps the archive portable while
+            // reducing the tracked release payload below GitHub's file-size limit.
+            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Gzip;
+            PlayerSettings.WebGL.decompressionFallback = true;
             PlayerSettings.WebGL.dataCaching = false;
 
             var options = new BuildPlayerOptions
@@ -63,6 +68,29 @@ namespace KanjiBattle.Editor
 
             Directory.CreateDirectory(GameBuildPath);
             Directory.CreateDirectory(BuildRoot);
+        }
+
+        private static void ConfigureModernWafuuUiTextures()
+        {
+            const string root = "Assets/Resources/UI/ModernWafuu";
+            string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { root });
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+                if (importer == null) continue;
+
+                var settings = importer.GetPlatformTextureSettings("WebGL");
+                settings.name = "WebGL";
+                settings.overridden = true;
+                settings.maxTextureSize = path.EndsWith("MarchMapCampaignForestSoft.png") ? 2048 : 1024;
+                settings.format = TextureImporterFormat.Automatic;
+                settings.textureCompression = TextureImporterCompression.Compressed;
+                settings.compressionQuality = 50;
+                settings.crunchedCompression = true;
+                importer.SetPlatformTextureSettings(settings);
+                AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+            }
         }
 
         private static void WriteGitHubPagesFiles()
@@ -104,7 +132,7 @@ namespace KanjiBattle.Editor
                 "if (window.matchMedia('(max-width: 720px), (max-height: 520px)').matches || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {");
             html = html.Replace(
                 "canvas.style.width = \"960px\";\n        canvas.style.height = \"600px\";",
-                "canvas.style.width = \"min(960px, 100vw)\";\n        canvas.style.height = \"min(600px, 100vh)\";");
+                "canvas.style.width = \"100vw\";\n        canvas.style.height = \"100vh\";");
             File.WriteAllText(indexPath, html);
 
             string stylePath = Path.Combine(GameBuildPath, "TemplateData", "style.css");
@@ -200,8 +228,8 @@ namespace KanjiBattle.Editor
 }
 #unity-canvas {
   display: block;
-  width: min(960px, 100vw);
-  height: min(600px, 100vh);
+  width: 100vw;
+  height: 100vh;
   background: #231F20;
 }
 .unity-mobile #unity-canvas {
@@ -238,7 +266,7 @@ namespace KanjiBattle.Editor
   position: absolute;
   left: 50%;
   bottom: 8px;
-  width: min(960px, 100vw);
+  width: 100%;
   transform: translateX(-50%);
   color: #fff2d7;
 }

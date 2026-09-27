@@ -19,7 +19,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b91030a4105e24210a202a0bd1427d0d, type: 2}
   rewardStagePoints: 6
   slotCount: 6
-  trapDamage: 12
+  trapDamage: 48
   trapCount: 2
   reinforcementEnemy:
   - {fileID: 11400000, guid: 76349d043ec8445949168a7c39201e9e, type: 2}
@@ -31,6 +31,6 @@ MonoBehaviour:
   reinforcementCount: 1
   reinforcementLimit: 5
   isBossStage: 1
-  enemyLevel: 15
+  enemyLevel: 50
   prerequisite: {fileID: 11400000, guid: 39dff9893f1ef4e309e19005c59a4c7d, type: 2}
   isCleared: 0

@@ -20,13 +20,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 743f49379950446e8a751fbd6e7d1e94, type: 2}
   rewardStagePoints: 3
   slotCount: 2
-  trapDamage: 3
+  trapDamage: 12
   trapCount: 1
   reinforcementEnemy: []
   reinforcementInterval: 0
   reinforcementCount: 0
   reinforcementLimit: 0
   isBossStage: 0
-  enemyLevel: 3
+  enemyLevel: 4
   prerequisite: {fileID: 11400000, guid: 453b4c50019364547a1755940bd648c2, type: 2}
   isCleared: 0

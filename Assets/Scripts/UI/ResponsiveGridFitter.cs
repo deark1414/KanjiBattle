@@ -36,7 +36,7 @@ public sealed class ResponsiveGridFitter : MonoBehaviour
         if (lowerName.Contains("facility") || HasFacilityListOwner(transform) || HasFacilityChildren(transform))
         {
             minimumCellWidth = 250f;
-            cellHeight = 132f;
+            cellHeight = 180f;
             maximumColumns = 2;
         }
         else if (lowerName.Contains("stagelist") || lowerName.Contains("stageselect"))
@@ -67,7 +67,7 @@ public sealed class ResponsiveGridFitter : MonoBehaviour
         if (IsFacilityGrid())
         {
             minimumCellWidth = 250f;
-            cellHeight = 132f;
+            cellHeight = 180f;
             maximumColumns = 2;
             spacing = 16f;
         }

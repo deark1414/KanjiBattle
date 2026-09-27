@@ -17,13 +17,11 @@ public class FacilityManager : MonoBehaviour
     private const string SavePrefix = "KanjiBattle.Facilities.";
     private const string UnlockedKey = SavePrefix + "Unlocked";
     private const string LevelsKey = SavePrefix + "Levels";
-    private const string CapUnlocksKey = SavePrefix + "CapUnlocks";
     private const string MigrationVersionKey = SavePrefix + "ProgressionMigrationVersion";
     private const int CurrentMigrationVersion = 3;
 
     [SerializeField] private FacilityDatabase facilityDatabase;
     private readonly Dictionary<FacilityData, int> facilityLevels = new();
-    private readonly Dictionary<FacilityData, int> facilityCapUnlockCounts = new();
     private readonly HashSet<FacilityData> unlockedFacilities = new();
     private bool isLoadingProgress;
 
@@ -50,7 +48,6 @@ public class FacilityManager : MonoBehaviour
         {
             if (facility == null) continue;
             facilityLevels[facility] = 0;
-            facilityCapUnlockCounts[facility] = 0;
             if (facility.unlockType == FacilityUnlockType.Free)
             {
                 unlockedFacilities.Add(facility);
@@ -73,7 +70,7 @@ public class FacilityManager : MonoBehaviour
         }
 
         int initialCap = Mathf.Clamp(facility.initialMaxLevel, 0, facility.finalMaxLevel);
-        int unlockCount = facilityCapUnlockCounts.TryGetValue(facility, out int count) ? count : 0;
+        int unlockCount = GetAutomaticCapUnlockCount(facility);
         int capIncrease = Mathf.Max(1, facility.levelCapIncreasePerUnlock);
         return Mathf.Min(facility.finalMaxLevel, initialCap + unlockCount * capIncrease);
     }
@@ -159,7 +156,9 @@ public class FacilityManager : MonoBehaviour
         };
     }
 
-    public float GetEarlyRecruitmentChance()
+    // A lucky victory completes one unfinished bond. It never recruits automatically;
+    // the player still confirms the ally from the roster.
+    public float GetLuckyBondCompletionChance()
     {
         FacilityData recruitmentHall = FindFacility(FacilityEffectType.Recruitment);
         int level = recruitmentHall != null && IsUnlocked(recruitmentHall) ? GetLevel(recruitmentHall) : 0;
@@ -172,25 +171,86 @@ public class FacilityManager : MonoBehaviour
         };
     }
 
-    public float GetExperienceMultiplier()
+    public const float BaseBattleExperienceRate = 0.04f;
+    public const float BaseMockTrainingExperienceRate = 0.0004f;
+
+    public float GetBattleExperienceRate()
     {
         FacilityData trainingGround = FindFacility(FacilityEffectType.Training);
         int level = trainingGround != null && IsUnlocked(trainingGround) ? GetLevel(trainingGround) : 0;
         return level switch
         {
-            1 => 1.15f,
-            2 => 1.30f,
-            3 => 1.50f,
-            4 => 1.75f,
-            >= 5 => 2f,
-            _ => 1f
+            1 => 0.06f,
+            2 => 0.08f,
+            3 => 0.10f,
+            4 => 0.12f,
+            >= 5 => 0.15f,
+            _ => BaseBattleExperienceRate
         };
+    }
+
+    public float GetMockTrainingExperienceRate()
+    {
+        FacilityData trainingGround = FindFacility(FacilityEffectType.Training);
+        int level = trainingGround != null && IsUnlocked(trainingGround) ? GetLevel(trainingGround) : 0;
+        return level switch
+        {
+            1 => 0.0005f,
+            2 => 0.0006f,
+            3 => 0.00075f,
+            4 => 0.0009f,
+            >= 5 => 0.001f,
+            _ => BaseMockTrainingExperienceRate
+        };
+    }
+
+    public int GetMockTrainingCooldownSeconds()
+    {
+        FacilityData drillTower = FindFacility(FacilityEffectType.TrainingFrequency);
+        int level = drillTower != null && IsUnlocked(drillTower) ? GetLevel(drillTower) : 0;
+        return level switch
+        {
+            1 => 36,
+            2 => 29,
+            3 => 23,
+            4 => 18,
+            >= 5 => 14,
+            _ => 45
+        };
+    }
+
+    public float GetAttackMultiplier()
+    {
+        FacilityData martialHall = FindFacility(FacilityEffectType.AttackBoost);
+        int level = martialHall != null && IsUnlocked(martialHall) ? GetLevel(martialHall) : 0;
+        return 1f + Mathf.Clamp(level, 0, 5) * 0.04f;
+    }
+
+    public float GetSkillPowerMultiplier()
+    {
+        FacilityData strategyHall = FindFacility(FacilityEffectType.SkillPowerBoost);
+        int level = strategyHall != null && IsUnlocked(strategyHall) ? GetLevel(strategyHall) : 0;
+        return 1f + Mathf.Clamp(level, 0, 5) * 0.05f;
+    }
+
+    public float GetSkillChanceMultiplier()
+    {
+        FacilityData shrine = FindFacility(FacilityEffectType.SkillChanceBoost);
+        int level = shrine != null && IsUnlocked(shrine) ? GetLevel(shrine) : 0;
+        return 1f + Mathf.Clamp(level, 0, 5) * 0.2f;
+    }
+
+    public float GetHealthMultiplier()
+    {
+        FacilityData infirmary = FindFacility(FacilityEffectType.HealthBoost);
+        int level = infirmary != null && IsUnlocked(infirmary) ? GetLevel(infirmary) : 0;
+        return 1f + Mathf.Clamp(level, 0, 5) * 0.05f;
     }
 
     public int GetBattleSpeedTier()
     {
         FacilityData archive = FindFacility(FacilityEffectType.BattleSpeed);
-        return archive != null && IsUnlocked(archive) ? Mathf.Clamp(GetLevel(archive), 0, 2) : 0;
+        return archive != null && IsUnlocked(archive) ? Mathf.Clamp(GetLevel(archive), 0, 8) : 0;
     }
 
     public bool IsStageRetryUnlocked()
@@ -201,27 +261,19 @@ public class FacilityManager : MonoBehaviour
 
     public bool CanUpgradeLevelCap(FacilityData facility)
     {
-        FacilityLevelCapRequirement requirement = GetNextFacilityLevelCapRequirement(facility);
-        return facility != null
-            && IsUnlocked(facility)
-            && IsMaxLevel(facility)
-            && requirement != null
-            && GameManager.Instance != null
-            && GameManager.Instance.GetClearedStageId() >= requirement.stageId;
+        return false;
     }
 
     public bool UpgradeLevelCap(FacilityData facility)
     {
-        FacilityLevelCapRequirement requirement = GetNextFacilityLevelCapRequirement(facility);
-        if (!CanUpgradeLevelCap(facility) || requirement == null)
-        {
-            return false;
-        }
+        // Kept as a compatibility entry point for debug callers. Level caps are
+        // determined exclusively from cleared stages and cannot be purchased.
+        return false;
+    }
 
-        facilityCapUnlockCounts[facility] = facilityCapUnlockCounts.TryGetValue(facility, out int count) ? count + 1 : 1;
-        SaveProgress();
+    public void RefreshAutomaticLevelCaps()
+    {
         OnFacilitiesChanged?.Invoke();
-        return true;
     }
 
     public FacilityLevelCapRequirement GetNextFacilityLevelCapRequirement(FacilityData facility)
@@ -231,10 +283,11 @@ public class FacilityManager : MonoBehaviour
             return null;
         }
 
-        int unlockCount = facilityCapUnlockCounts.TryGetValue(facility, out int count) ? count : 0;
-        return facility.facilityLevelCapUnlocks != null && unlockCount < facility.facilityLevelCapUnlocks.Count
-            ? facility.facilityLevelCapUnlocks[unlockCount]
-            : null;
+        int clearedStageId = GameManager.Instance != null ? GameManager.Instance.GetClearedStageId() : 0;
+        return facility.facilityLevelCapUnlocks?
+            .Where(requirement => requirement != null && requirement.stageId > clearedStageId)
+            .OrderBy(requirement => requirement.stageId)
+            .FirstOrDefault();
     }
 
     public int GetLevelCapUnlockCost(FacilityData facility)
@@ -248,7 +301,6 @@ public class FacilityManager : MonoBehaviour
         PlayerProgressStore.SetInt(MigrationVersionKey, CurrentMigrationVersion);
         PlayerProgressStore.SetString(UnlockedKey, string.Join(",", unlockedFacilities.Where(facility => facility != null).Select(facility => facility.facilityId)));
         PlayerProgressStore.SetString(LevelsKey, string.Join(",", facilityLevels.Where(entry => entry.Key != null).Select(entry => $"{entry.Key.facilityId}:{entry.Value}")));
-        PlayerProgressStore.SetString(CapUnlocksKey, string.Join(",", facilityCapUnlockCounts.Where(entry => entry.Key != null).Select(entry => $"{entry.Key.facilityId}:{entry.Value}")));
         PlayerProgressStore.Save();
     }
 
@@ -259,7 +311,6 @@ public class FacilityManager : MonoBehaviour
         if (!isLegacySave)
         {
             DeserializeUnlocked(PlayerProgressStore.GetString(UnlockedKey));
-            DeserializeCapUnlocks(PlayerProgressStore.GetString(CapUnlocksKey));
             DeserializeLevels(PlayerProgressStore.GetString(LevelsKey));
         }
         isLoadingProgress = false;
@@ -270,10 +321,8 @@ public class FacilityManager : MonoBehaviour
     {
         PlayerProgressStore.Delete(UnlockedKey);
         PlayerProgressStore.Delete(LevelsKey);
-        PlayerProgressStore.Delete(CapUnlocksKey);
         PlayerProgressStore.Delete(MigrationVersionKey);
         facilityLevels.Clear();
-        facilityCapUnlockCounts.Clear();
         unlockedFacilities.Clear();
         InitializeFacilities();
         ReapplyAllEffects();
@@ -307,29 +356,15 @@ public class FacilityManager : MonoBehaviour
         return GetFacilities().FirstOrDefault(facility => facility != null && facility.effectType == effectType);
     }
 
-    private void DeserializeCapUnlocks(string serialized)
+    private static int GetAutomaticCapUnlockCount(FacilityData facility)
     {
-        if (string.IsNullOrWhiteSpace(serialized))
+        if (facility == null || facility.facilityLevelCapUnlocks == null)
         {
-            return;
+            return 0;
         }
 
-        foreach (string entry in serialized.Split(','))
-        {
-            string[] parts = entry.Split(':');
-            if (parts.Length != 2
-                || !int.TryParse(parts[0], out int facilityId)
-                || !int.TryParse(parts[1], out int unlockCount))
-            {
-                continue;
-            }
-
-            FacilityData facility = GetFacilities().FirstOrDefault(candidate => candidate != null && candidate.facilityId == facilityId);
-            if (facility != null)
-            {
-                facilityCapUnlockCounts[facility] = Mathf.Clamp(unlockCount, 0, facility.facilityLevelCapUnlocks?.Count ?? 0);
-            }
-        }
+        int clearedStageId = GameManager.Instance != null ? GameManager.Instance.GetClearedStageId() : 0;
+        return facility.facilityLevelCapUnlocks.Count(requirement => requirement != null && requirement.stageId <= clearedStageId);
     }
 
     private void DeserializeUnlocked(string serialized)

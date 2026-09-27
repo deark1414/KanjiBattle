@@ -9,6 +9,8 @@ using UnityEngine.UI;
 [DefaultExecutionOrder(-500)]
 public sealed class UnityUIRuntimeTheme : MonoBehaviour
 {
+    // Descriptive text must remain comfortable to read over illustrated backgrounds.
+    public const float MinimumTextSize = 21f;
     private static UnityUIRuntimeTheme instance;
 
     private readonly Dictionary<string, Sprite> spriteCache = new();
@@ -64,6 +66,10 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             {
                 ApplyTheme();
             }
+
+            // Dynamic list entries and modal text are often created after the first theme pass.
+            // Keep their accessibility floor consistent without waiting for a screen resize.
+            EnforceTextSizeFloor();
         }
     }
 
@@ -73,6 +79,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         {
             ConfigureCanvas(canvas);
             EnsureBackdrop(canvas);
+            ModernWafuuPresentation.ApplyCanvasBackdrop(canvas);
         }
 
         foreach (var image in FindObjectsByType<Image>(FindObjectsInactive.Include))
@@ -103,7 +110,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         foreach (var grid in FindObjectsByType<GridLayoutGroup>(FindObjectsInactive.Include))
         {
             string path = GetPath(grid.transform).ToLowerInvariant();
-            if (path.Contains("battlefield") || path.Contains("facility") || IsFacilityOwnedGrid(grid)) continue;
+            if (path.Contains("battlefield") || path.Contains("facility") || IsFacilityOwnedGrid(grid) || IsRosterOwnedGrid(grid)) continue;
 
             var fitter = grid.GetComponent<ResponsiveGridFitter>();
             if (fitter == null) fitter = grid.gameObject.AddComponent<ResponsiveGridFitter>();
@@ -117,6 +124,8 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             layout.childControlWidth = true;
             layout.childForceExpandWidth = true;
         }
+
+        ModernWafuuPresentation.ApplyScreenChrome();
 
         lastScreenWidth = Screen.width;
         lastScreenHeight = Screen.height;
@@ -138,6 +147,21 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         foreach (Transform child in grid.transform)
         {
             if (child.GetComponent<FacilityUI>() != null)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool IsRosterOwnedGrid(GridLayoutGroup grid)
+    {
+        if (grid == null) return false;
+
+        foreach (var list in FindObjectsByType<CharacterListUI>(FindObjectsInactive.Include))
+        {
+            if (list != null && list.OwnsContent(grid.transform))
             {
                 return true;
             }
@@ -179,19 +203,22 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
 
     private void StyleImage(Image image)
     {
-        if (image == null || image.name == "AutoTheme_Backdrop") return;
+        if (image == null || image.name == "AutoTheme_Backdrop" || image.name == "WafuuBattleEnvironment") return;
 
         string objectName = image.gameObject.name.ToLowerInvariant();
         bool isButton = image.GetComponent<Button>() != null;
-        bool isPanel = objectName.Contains("panel") || image.GetComponent<ScrollRect>() != null || image.GetComponent<Mask>() != null;
+        bool isPanel = objectName.Contains("panel") || objectName.Contains("viewport") ||
+                       image.GetComponent<ScrollRect>() != null || image.GetComponent<Mask>() != null;
 
         if (isButton) return;
 
         if (isPanel)
         {
-            image.sprite = GetSprite(objectName.Contains("inset") || objectName.Contains("viewport") ? "panelInset_blue" : "panel_blue", new Vector4(12f, 12f, 12f, 12f));
-            image.type = Image.Type.Sliced;
-            image.color = Color.white;
+            image.sprite = CreateSolidSprite("WashiPanel", Color.white);
+            image.type = Image.Type.Simple;
+            image.color = objectName.Contains("inset") || objectName.Contains("viewport")
+                ? new Color(1f, 0.97f, 0.88f, 0.025f)
+                : new Color(1f, 0.97f, 0.88f, 0.04f);
         }
     }
 
@@ -206,34 +233,34 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         if (path.Contains("facility"))
         {
             Stretch(rect,
-                IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.12f) : new Vector2(0.54f, 0.14f),
-                IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.88f) : new Vector2(0.98f, 0.94f));
+                new Vector2(0.04f, 0.10f),
+                new Vector2(0.96f, 0.68f));
         }
         else if (path.Contains("stage"))
         {
             Stretch(rect,
-                IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.13f) : new Vector2(0.06f, 0.16f),
-                IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.88f) : new Vector2(0.94f, 0.90f));
+                new Vector2(0.04f, 0.10f),
+                new Vector2(0.96f, 0.68f));
         }
         else if (path.Contains("formation") || path.Contains("character"))
         {
             if (path.Contains("toppanel") && path.Contains("character"))
             {
                 Stretch(rect,
-                    IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.27f) : new Vector2(0.04f, 0.10f),
-                    IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.60f) : new Vector2(0.96f, 0.66f));
+                    IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.25f) : new Vector2(0.04f, 0.16f),
+                    IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.59f) : new Vector2(0.60f, 0.80f));
             }
             else if (path.Contains("formation"))
             {
                 Stretch(rect,
-                    IsPortraitNarrowScreen() ? new Vector2(0.03f, 0.19f) : new Vector2(0.04f, 0.10f),
-                    IsPortraitNarrowScreen() ? new Vector2(0.97f, 0.72f) : new Vector2(0.96f, 0.74f));
+                    new Vector2(0.04f, 0.10f),
+                    new Vector2(0.96f, 0.38f));
             }
             else
             {
                 Stretch(rect,
-                    IsPortraitNarrowScreen() ? new Vector2(0.04f, 0.08f) : new Vector2(0.06f, 0.12f),
-                    IsPortraitNarrowScreen() ? new Vector2(0.96f, 0.62f) : new Vector2(0.94f, 0.64f));
+                    new Vector2(0.04f, 0.10f),
+                    new Vector2(0.96f, 0.68f));
             }
         }
 
@@ -282,23 +309,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         if (button == null) return;
         ApplyResponsiveButtonPlacement(button);
 
-        var image = button.targetGraphic as Image ?? button.GetComponent<Image>();
-        if (image != null)
-        {
-            bool compact = ((RectTransform)button.transform).rect.width < 90f || button.name.ToLowerInvariant().Contains("tab");
-            image.sprite = GetSprite(compact ? "buttonSquare_brown" : "buttonLong_brown", new Vector4(10f, 10f, 10f, 10f));
-            image.type = Image.Type.Sliced;
-            image.color = Color.white;
-        }
-
-        var colors = button.colors;
-        colors.normalColor = Color.white;
-        colors.highlightedColor = new Color(1f, 0.94f, 0.78f);
-        colors.pressedColor = new Color(0.82f, 0.74f, 0.62f);
-        colors.selectedColor = new Color(1f, 0.91f, 0.62f);
-        colors.disabledColor = new Color(0.45f, 0.45f, 0.45f, 0.7f);
-        colors.colorMultiplier = 1f;
-        button.colors = colors;
+        ModernWafuuPresentation.ApplyButtonTreatment(button);
 
         var rectTransform = button.transform as RectTransform;
         if (rectTransform != null && rectTransform.rect.height > 0f && rectTransform.rect.height < 42f)
@@ -358,8 +369,8 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             text.color = new Color(1f, 0.95f, 0.82f);
             text.raycastTarget = false;
             text.enableAutoSizing = true;
-            text.fontSizeMin = compact ? 8f : 10f;
-            text.fontSizeMax = compact ? 16f : 21f;
+            text.fontSizeMin = MinimumTextSize;
+            text.fontSizeMax = compact ? 21f : 24f;
             text.margin = compact ? new Vector4(4f, 1f, 4f, 1f) : new Vector4(8f, 2f, 8f, 2f);
         }
         else
@@ -370,15 +381,15 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         if (path.Contains("entry") || path.Contains("facility") || path.Contains("stagebutton"))
         {
             text.enableAutoSizing = true;
-            text.fontSizeMin = 9f;
-            text.fontSizeMax = Mathf.Min(text.fontSizeMax <= 0f ? 20f : text.fontSizeMax, 20f);
+            text.fontSizeMin = MinimumTextSize;
+            text.fontSizeMax = Mathf.Max(MinimumTextSize, text.fontSizeMax <= 0f ? 24f : text.fontSizeMax);
             text.margin = new Vector4(6f, 2f, 6f, 2f);
         }
 
         if (path.Contains("slot"))
         {
             text.enableAutoSizing = true;
-            text.fontSizeMin = 12f;
+            text.fontSizeMin = MinimumTextSize;
             text.fontSizeMax = 22f;
             text.margin = new Vector4(4f, 2f, 4f, 2f);
             text.alignment = TextAlignmentOptions.Center;
@@ -388,11 +399,37 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         {
             text.fontSize = 18f;
         }
+
+        EnforceTextSizeFloor(text);
     }
 
     public static void EnsureJapaneseCapableFont(TextMeshProUGUI text)
     {
         JapaneseFontProvider.EnsureJapaneseCapableFont(text);
+        EnforceTextSizeFloor(text);
+    }
+
+    public static void EnforceTextSizeFloor(TextMeshProUGUI text)
+    {
+        if (text == null)
+        {
+            return;
+        }
+
+        text.fontSizeMin = Mathf.Max(MinimumTextSize, text.fontSizeMin);
+        text.fontSizeMax = Mathf.Max(MinimumTextSize, text.fontSizeMax);
+        if (!text.enableAutoSizing)
+        {
+            text.fontSize = Mathf.Max(MinimumTextSize, text.fontSize);
+        }
+    }
+
+    private static void EnforceTextSizeFloor()
+    {
+        foreach (var text in FindObjectsByType<TextMeshProUGUI>(FindObjectsInactive.Include))
+        {
+            EnforceTextSizeFloor(text);
+        }
     }
 
     private Sprite GetSprite(string name, Vector4 border)
