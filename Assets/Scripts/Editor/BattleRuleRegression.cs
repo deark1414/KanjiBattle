@@ -23,6 +23,8 @@ public static class BattleRuleRegression
         VerifySwordWedge();
         VerifyLineRanges();
         VerifyMovement();
+        VerifyStageTerrain();
+        VerifyTrapDamage();
         VerifyNumberPassives();
     }
 
@@ -62,6 +64,61 @@ public static class BattleRuleRegression
         AssertEqual(1, BattleMovementRules.GetDestinationIndex(CharacterCategory.Weapon, path, targetCellOccupied: true), "weapon movement");
         AssertEqual(2, BattleMovementRules.GetDestinationIndex(CharacterCategory.Animal, path, targetCellOccupied: true), "animal movement");
         AssertEqual(1, BattleMovementRules.GetDestinationIndex(CharacterCategory.Animal, path.GetRange(0, 3), targetCellOccupied: true), "animal cannot enter occupied target");
+    }
+
+    private static void VerifyStageTerrain()
+    {
+        var reserved = new HashSet<Vector2Int>
+        {
+            new Vector2Int(0, 0), new Vector2Int(7, 4), new Vector2Int(3, 2)
+        };
+        HashSet<Vector2Int> generated = BattleMovementRules.GenerateImpassableCells(8, 5, 3, reserved, 2917);
+        AssertEqual(3, generated.Count, "generated obstacle count");
+        foreach (Vector2Int cell in reserved)
+        {
+            if (generated.Contains(cell)) throw new InvalidOperationException("Obstacle overlaps an initial position.");
+        }
+        if (!BattleMovementRules.AreAllWalkableCellsConnected(8, 5, generated))
+        {
+            throw new InvalidOperationException("Obstacle generation created unreachable cells.");
+        }
+        AssertEdgeConnected(generated, "generated water terrain");
+    }
+
+    private static void VerifyTrapDamage()
+    {
+        AssertEqual(23, BattleTrapRules.GetSoilTrapDamage(18), "soil trap level 1 damage");
+        AssertEqual(60, BattleTrapRules.GetSoilTrapDamage(48), "soil trap scaled damage");
+    }
+
+    private static void AssertEdgeConnected(HashSet<Vector2Int> cells, string label)
+    {
+        if (cells == null || cells.Count <= 1) return;
+
+        var visited = new HashSet<Vector2Int>();
+        var open = new Queue<Vector2Int>();
+        foreach (Vector2Int first in cells)
+        {
+            visited.Add(first);
+            open.Enqueue(first);
+            break;
+        }
+
+        Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+        while (open.Count > 0)
+        {
+            Vector2Int current = open.Dequeue();
+            foreach (Vector2Int direction in directions)
+            {
+                Vector2Int next = current + direction;
+                if (cells.Contains(next) && visited.Add(next)) open.Enqueue(next);
+            }
+        }
+
+        if (visited.Count != cells.Count)
+        {
+            throw new InvalidOperationException($"{label}: expected one edge-connected group.");
+        }
     }
 
     private static void VerifyNumberPassives()

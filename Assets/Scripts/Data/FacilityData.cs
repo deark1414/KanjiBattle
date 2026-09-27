@@ -8,7 +8,12 @@ public enum FacilityEffectType
     Recruitment = 10,
     Training = 11,
     BattleSpeed = 12,
-    StageRetry = 13
+    StageRetry = 13,
+    TrainingFrequency = 14,
+    AttackBoost = 15,
+    SkillPowerBoost = 16,
+    SkillChanceBoost = 17,
+    HealthBoost = 18
 }
 
 public enum FacilityUnlockType
@@ -20,10 +25,10 @@ public enum FacilityUnlockType
 [System.Serializable]
 public class FacilityLevelCapRequirement
 {
-    [Tooltip("レベル上限解放が可能になるステージID")]
+    [Tooltip("到達すると施設レベル上限が自動で上がるステージID")]
     public int stageId = -1;
 
-    [Tooltip("レベル上限解放に必要なステージポイント")]
+    [Tooltip("互換用の旧データ。上限解放では消費しません")]
     public int requiredStagePoints = 0;
 }
 
@@ -59,11 +64,11 @@ public class FacilityData : ScriptableObject
     public int finalMaxLevel = 10;
 
     [Header("施設レベル上限設定")]
-    [Tooltip("1回の解放で増加するレベル上限の値（固定）")]
+    [Tooltip("到達ステージごとに増加するレベル上限の値（固定）")]
     public int levelCapIncreasePerUnlock = 5;
 
     [Header("レベル上限解放条件")]
-    [Tooltip("ステージクリアとステージポイント消費で施設レベル上限を解放する条件リスト")]
+    [Tooltip("ステージクリアで自動的に施設レベル上限を解放する条件リスト")]
     public List<FacilityLevelCapRequirement> facilityLevelCapUnlocks = new List<FacilityLevelCapRequirement>();
 
     [Header("コスト成長")]

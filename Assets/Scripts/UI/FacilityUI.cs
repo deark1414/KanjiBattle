@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -9,11 +10,12 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI costText;
     [SerializeField] private TextMeshProUGUI buttonText;
+    private TextMeshProUGUI descriptionText;
+    private Image descriptionPlate;
 
     private static readonly Color UnlockedCardColor = Color.white;
     private static readonly Color LockedCardColor = new Color(0.45f, 0.45f, 0.45f, 0.7f);
     private static readonly Color MaxCardColor = Color.white;
-    private static readonly Color ReadyOutlineColor = new Color(1f, 0.78f, 0.30f, 0.95f);
     private static readonly Color IdleOutlineColor = new Color(0.18f, 0.14f, 0.10f, 0.55f);
     private static readonly Color TitleColor = new Color(1f, 0.96f, 0.82f, 1f);
     private static readonly Color BodyColor = new Color(0.96f, 0.91f, 0.76f, 1f);
@@ -24,11 +26,19 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private FacilityData facility;
     private Image backgroundImage;
+    private Image landscapeImage;
+    private Image landscapeShade;
+    private Image actionSeal;
+    private TextMeshProUGUI actionSealText;
+    private Outline buildingOutline;
     private Button button;
     private Outline stateOutline;
     private float nextRefreshTime;
     private static GameObject tooltip;
     private static TextMeshProUGUI tooltipText;
+    private static readonly Dictionary<string, Sprite> landscapeSprites = new();
+    private System.Action<FacilityUI> selectionHandler;
+    private bool actionAvailable;
 
     private enum FacilityActionState
     {
@@ -36,7 +46,6 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         UnlockBlocked,
         UpgradeReady,
         UpgradeBlocked,
-        CapReady,
         CapBlocked,
         Maxed
     }
@@ -63,6 +72,23 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         Refresh();
     }
 
+    public FacilityData Facility => facility;
+    public string DetailDescription => GetDescription(facility);
+    public string DetailStatus => GetCompactDetailStatus();
+    public string DetailActionLabel => actionAvailable && buttonText != null ? buttonText.text : string.Empty;
+    public bool CanExecuteAction => actionAvailable;
+
+    public void SetSelectionHandler(System.Action<FacilityUI> handler)
+    {
+        selectionHandler = handler;
+        Refresh();
+    }
+
+    public void ExecuteActionFromDetail()
+    {
+        ExecuteAction();
+    }
+
     private void Update()
     {
         if (Time.unscaledTime < nextRefreshTime)
@@ -76,12 +102,13 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        ShowTooltip(GetDescription(facility));
+        // Details live in the fixed information region so they cannot cover
+        // neighboring facilities or consume a tap.
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        HideTooltip();
+        // See OnPointerEnter.
     }
 
     private void OnDisable()
@@ -90,6 +117,17 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
 
     private void OnClickAction()
+    {
+        if (selectionHandler != null)
+        {
+            selectionHandler(this);
+            return;
+        }
+
+        ExecuteAction();
+    }
+
+    private void ExecuteAction()
     {
         if (facility == null || FacilityManager.Instance == null)
         {
@@ -105,10 +143,9 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
         else if (FacilityManager.Instance.IsMaxLevel(facility))
         {
-            if (FacilityManager.Instance.CanUpgradeLevelCap(facility) && FacilityManager.Instance.UpgradeLevelCap(facility))
-            {
-                Refresh();
-            }
+            // Facility level caps advance automatically when the required stage is cleared.
+            // There is intentionally no player action at this state.
+            Refresh();
         }
         else if (FacilityManager.Instance.Upgrade(facility))
         {
@@ -128,13 +165,14 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         int level = FacilityManager.Instance.GetLevel(facility);
         int maxLevel = FacilityManager.Instance.GetCurrentFacilityMaxLevel(facility);
 
-        nameText.text = facility.facilityName;
-        levelText.text = GetLevelBadge(isUnlocked, level, maxLevel);
+        EnsureDescription();
+        descriptionText.text = GetInlineDescription(isUnlocked, level, maxLevel);
+        HideLegacyText();
 
         switch (state)
         {
             case FacilityActionState.UnlockReady:
-                costText.text = $"未解放 / 解放可能  {FacilityManager.Instance.GetUnlockCost(facility)}SP";
+                costText.text = $"未解放 / 解放可能  戦果 {FacilityManager.Instance.GetUnlockCost(facility)}";
                 buttonText.text = "解放する";
                 ApplyVisualState(LockedCardColor, ReadyTextColor, new Color(0.54f, 0.38f, 0.20f, 1f), true, true);
                 break;
@@ -144,23 +182,18 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 ApplyVisualState(LockedCardColor, LockedTextColor, new Color(0.26f, 0.26f, 0.26f, 1f), false, false);
                 break;
             case FacilityActionState.UpgradeReady:
-                costText.text = $"{GetEffectLabel()} / 強化可能  {FacilityManager.Instance.GetUpgradeCost(facility)}SP";
+                costText.text = $"{GetEffectLabel()} / 強化可能  戦果 {FacilityManager.Instance.GetUpgradeCost(facility)}";
                 buttonText.text = "強化";
                 ApplyVisualState(UnlockedCardColor, ReadyTextColor, new Color(0.64f, 0.42f, 0.20f, 1f), true, true);
                 break;
             case FacilityActionState.UpgradeBlocked:
-                costText.text = $"{GetEffectLabel()} / SP不足  {FacilityManager.Instance.GetUpgradeCost(facility)}SP";
+                costText.text = $"{GetEffectLabel()} / 戦果不足  {FacilityManager.Instance.GetUpgradeCost(facility)}";
                 buttonText.text = "強化待ち";
                 ApplyVisualState(UnlockedCardColor, NeedTextColor, new Color(0.42f, 0.31f, 0.22f, 1f), false, false);
                 break;
-            case FacilityActionState.CapReady:
-                costText.text = GetCapRequirementText("上限到達 / 解放可能");
-                buttonText.text = "上限解放";
-                ApplyVisualState(MaxCardColor, ReadyTextColor, new Color(0.58f, 0.38f, 0.20f, 1f), true, true);
-                break;
             case FacilityActionState.CapBlocked:
-                costText.text = GetCapRequirementText("上限解放条件不足");
-                buttonText.text = "条件不足";
+                costText.text = GetCapRequirementText("上限到達 / 次の上限");
+                buttonText.text = string.Empty;
                 ApplyVisualState(MaxCardColor, NeedTextColor, new Color(0.38f, 0.30f, 0.23f, 1f), false, false);
                 break;
             default:
@@ -170,6 +203,8 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 ApplyVisualState(MaxCardColor, MaxTextColor, new Color(0.40f, 0.30f, 0.22f, 1f), false, false);
                 break;
         }
+
+        UpdateActionSeal(state);
     }
     private string GetLevelBadge(bool isUnlocked, int level, int maxLevel)
 {
@@ -197,11 +232,16 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     switch (facility.effectType)
     {
         case FacilityEffectType.FormationSlot: return "編成枠";
-        case FacilityEffectType.StagePointBoost: return "SP強化";
+        case FacilityEffectType.StagePointBoost: return "戦果増加";
         case FacilityEffectType.Recruitment: return "縁の進行";
         case FacilityEffectType.Training: return "経験値強化";
         case FacilityEffectType.BattleSpeed: return "戦闘速度";
         case FacilityEffectType.StageRetry: return "再戦解放";
+        case FacilityEffectType.TrainingFrequency: return "稽古頻度";
+        case FacilityEffectType.AttackBoost: return "攻勢強化";
+        case FacilityEffectType.SkillPowerBoost: return "技能威力";
+        case FacilityEffectType.SkillChanceBoost: return "技能発動";
+        case FacilityEffectType.HealthBoost: return "体力強化";
         default: return "施設";
     }
 }
@@ -222,9 +262,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 return FacilityActionState.Maxed;
             }
 
-            return FacilityManager.Instance.CanUpgradeLevelCap(facility)
-                ? FacilityActionState.CapReady
-                : FacilityActionState.CapBlocked;
+            return FacilityActionState.CapBlocked;
         }
 
         return GameManager.Instance != null && GameManager.Instance.GetStagePoints() >= FacilityManager.Instance.GetUpgradeCost(facility)
@@ -234,34 +272,203 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void ApplyVisualState(Color cardColor, Color costColor, Color buttonColor, bool interactable, bool highlightOutline)
     {
+        actionAvailable = interactable;
         if (backgroundImage != null)
         {
-            backgroundImage.color = cardColor;
+            ModernWafuuPresentation.ApplyFlatSurface(backgroundImage, new Color(1f, 1f, 1f, 0f));
+            backgroundImage.raycastTarget = false;
+            if (backgroundImage.TryGetComponent(out Outline backgroundOutline))
+            {
+                backgroundOutline.enabled = false;
+            }
         }
+
+        Transform legacyActionBand = transform.Find("FacilityActionBand");
+        if (legacyActionBand != null)
+        {
+            legacyActionBand.gameObject.SetActive(false);
+        }
+
+        EnsureLandscape(interactable);
 
         if (stateOutline != null)
         {
-            stateOutline.effectColor = highlightOutline ? ReadyOutlineColor : IdleOutlineColor;
-            stateOutline.enabled = true;
+            stateOutline.enabled = false;
         }
 
         nameText.color = TitleColor;
         levelText.color = BodyColor;
         costText.color = costColor;
-        buttonText.color = TitleColor;
+        if (descriptionText != null) descriptionText.color = BodyColor;
+        buttonText.color = interactable ? new Color(1f, 0.86f, 0.43f, 1f) : TitleColor;
 
         if (button != null)
         {
-            button.interactable = interactable;
+            button.targetGraphic = landscapeImage;
+            button.interactable = selectionHandler != null || interactable;
             var colors = button.colors;
             colors.normalColor = Color.white;
             colors.highlightedColor = new Color(1f, 0.94f, 0.78f);
             colors.pressedColor = new Color(0.82f, 0.74f, 0.62f);
             colors.selectedColor = new Color(1f, 0.91f, 0.62f);
-            colors.disabledColor = cardColor;
+            colors.disabledColor = new Color(0.46f, 0.46f, 0.46f, 0.62f);
             colors.colorMultiplier = 1f;
             button.colors = colors;
         }
+    }
+
+    private void EnsureLandscape(bool interactable)
+    {
+        if (facility == null)
+        {
+            return;
+        }
+
+        if (landscapeImage == null)
+        {
+            var go = new GameObject("FacilityBuilding", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            go.transform.SetParent(transform, false);
+            landscapeImage = go.GetComponent<Image>();
+        }
+
+        landscapeImage.sprite = GetLandscapeSprite();
+        landscapeImage.type = Image.Type.Simple;
+        landscapeImage.preserveAspect = true;
+        landscapeImage.raycastTarget = true;
+        bool locked = !FacilityManager.Instance.IsUnlocked(facility);
+        landscapeImage.color = locked
+            ? new Color(0.34f, 0.34f, 0.34f, 0.58f)
+            : Color.white;
+        Stretch(landscapeImage.rectTransform, new Vector2(0.03f, 0.18f), new Vector2(0.42f, 0.95f));
+        landscapeImage.rectTransform.localScale = ShouldMirrorLandscape()
+            ? new Vector3(-1f, 1f, 1f)
+            : Vector3.one;
+        landscapeImage.transform.SetAsFirstSibling();
+
+        if (landscapeImage.TryGetComponent(out buildingOutline))
+        {
+            buildingOutline.effectColor = IdleOutlineColor;
+            buildingOutline.effectDistance = new Vector2(1.5f, -1.5f);
+            buildingOutline.enabled = !interactable;
+        }
+        else
+        {
+            buildingOutline = landscapeImage.gameObject.AddComponent<Outline>();
+            buildingOutline.effectColor = IdleOutlineColor;
+            buildingOutline.effectDistance = new Vector2(1.5f, -1.5f);
+            buildingOutline.enabled = !interactable;
+        }
+
+        if (landscapeShade != null)
+        {
+            landscapeShade.gameObject.SetActive(false);
+        }
+    }
+
+    private void UpdateActionSeal(FacilityActionState state)
+    {
+        bool visible = state == FacilityActionState.UnlockReady
+            || state == FacilityActionState.UpgradeReady;
+        if (actionSeal == null)
+        {
+            var sealObject = new GameObject("FacilityActionSeal", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            sealObject.transform.SetParent(transform, false);
+            actionSeal = sealObject.GetComponent<Image>();
+            ModernWafuuPresentation.ApplyFlatSurface(actionSeal, new Color(0.74f, 0.08f, 0.05f, 0.96f));
+            actionSeal.raycastTarget = false;
+            var outline = sealObject.AddComponent<Outline>();
+            outline.effectColor = new Color(1f, 0.90f, 0.72f, 0.92f);
+            outline.effectDistance = new Vector2(1.5f, -1.5f);
+
+            var sealRect = actionSeal.rectTransform;
+            sealRect.anchorMin = new Vector2(0.72f, 0.70f);
+            sealRect.anchorMax = new Vector2(0.92f, 0.91f);
+            sealRect.offsetMin = Vector2.zero;
+            sealRect.offsetMax = Vector2.zero;
+
+            var labelObject = new GameObject("Label", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+            labelObject.transform.SetParent(sealObject.transform, false);
+            actionSealText = labelObject.GetComponent<TextMeshProUGUI>();
+            UnityUIRuntimeTheme.EnsureJapaneseCapableFont(actionSealText);
+            actionSealText.enableAutoSizing = true;
+            actionSealText.fontSizeMax = 16f;
+            actionSealText.fontSizeMin = UnityUIRuntimeTheme.MinimumTextSize;
+            actionSealText.alignment = TextAlignmentOptions.Center;
+            actionSealText.color = new Color(1f, 0.96f, 0.80f, 1f);
+            actionSealText.raycastTarget = false;
+            var labelRect = actionSealText.rectTransform;
+            labelRect.anchorMin = Vector2.zero;
+            labelRect.anchorMax = Vector2.one;
+            labelRect.offsetMin = new Vector2(2f, 2f);
+            labelRect.offsetMax = new Vector2(-2f, -2f);
+        }
+
+        actionSeal.gameObject.SetActive(visible);
+        if (!visible)
+        {
+            return;
+        }
+
+        // The seal is the sole ready-state signal. Keeping it still avoids competing
+        // color tweens and lets the building art remain visually calm.
+        actionSeal.rectTransform.localScale = Vector3.one;
+
+        actionSealText.text = state switch
+        {
+            FacilityActionState.UnlockReady => "解放",
+            FacilityActionState.UpgradeReady => "強化",
+            _ => string.Empty
+        };
+        actionSeal.transform.SetAsLastSibling();
+    }
+
+    private Sprite GetLandscapeSprite()
+    {
+        string path = facility.effectType switch
+        {
+            FacilityEffectType.FormationSlot => "UI/ModernWafuu/Buildings/FacilityBarracks",
+            FacilityEffectType.StagePointBoost => "UI/ModernWafuu/Buildings/FacilityStorehouse",
+            FacilityEffectType.Recruitment => "UI/ModernWafuu/Buildings/FacilityBondShrine",
+            FacilityEffectType.Training => "UI/ModernWafuu/Buildings/FacilityDojo",
+            FacilityEffectType.BattleSpeed => "UI/ModernWafuu/Buildings/FacilityBattleArchive",
+            FacilityEffectType.StageRetry => "UI/ModernWafuu/Buildings/FacilityCouncilPavilion",
+            FacilityEffectType.TrainingFrequency => "UI/ModernWafuu/Buildings/FacilityDrillTower",
+            FacilityEffectType.AttackBoost => "UI/ModernWafuu/Buildings/FacilityMartialHall",
+            FacilityEffectType.SkillPowerBoost => "UI/ModernWafuu/Buildings/FacilityStrategyHall",
+            FacilityEffectType.SkillChanceBoost => "UI/ModernWafuu/Buildings/FacilityShrine",
+            FacilityEffectType.HealthBoost => "UI/ModernWafuu/Buildings/FacilityInfirmary",
+            _ => "UI/ModernWafuu/Buildings/FacilityBarracks",
+        };
+
+        if (landscapeSprites.TryGetValue(path, out Sprite sprite))
+        {
+            return sprite;
+        }
+
+        Texture2D texture = Resources.Load<Texture2D>(path);
+        if (texture == null)
+        {
+            return null;
+        }
+
+        sprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f);
+        landscapeSprites[path] = sprite;
+        return sprite;
+    }
+
+    private bool ShouldMirrorLandscape()
+    {
+        return facility.effectType is FacilityEffectType.StagePointBoost
+            or FacilityEffectType.Recruitment
+            or FacilityEffectType.StageRetry;
+    }
+
+    private static void Stretch(RectTransform rect, Vector2 min, Vector2 max)
+    {
+        rect.anchorMin = min;
+        rect.anchorMax = max;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
     }
 
     private string GetUnlockRequirementText()
@@ -275,7 +482,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             return $"要 {ShortStageName(GetStageName(facility.requiredStageId))}";
         }
 
-        return $"SP不足  {sp}/{cost}";
+        return $"戦果不足  {sp}/{cost}";
     }
 
     private string GetCapRequirementText(string prefix)
@@ -312,13 +519,13 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         var rect = GetComponent<RectTransform>();
         if (rect != null)
         {
-            rect.sizeDelta = new Vector2(Mathf.Max(rect.sizeDelta.x, 250f), 132f);
+            rect.sizeDelta = new Vector2(Mathf.Max(rect.sizeDelta.x, 250f), 216f);
         }
 
-        ConfigureText(nameText, 21f, 16f, TextAlignmentOptions.Left);
-        ConfigureText(levelText, 16f, 12f, TextAlignmentOptions.Right);
-        ConfigureText(costText, 18f, 13f, TextAlignmentOptions.Left);
-        ConfigureText(buttonText, 18f, 13f, TextAlignmentOptions.Center);
+        ConfigureText(nameText, 28f, 24f, TextAlignmentOptions.Left);
+        ConfigureText(levelText, 24f, 21f, TextAlignmentOptions.Right);
+        ConfigureText(costText, 22f, 21f, TextAlignmentOptions.Left);
+        ConfigureText(buttonText, 24f, 21f, TextAlignmentOptions.Center);
 
         ConfigureNameRect(nameText);
         ConfigureLevelRect(levelText);
@@ -330,44 +537,44 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         if (text == null) return;
         var rect = text.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(0f, 1f);
-        rect.anchorMax = new Vector2(1f, 1f);
-        rect.pivot = new Vector2(0.5f, 1f);
-        rect.anchoredPosition = new Vector2(0f, -10f);
-        rect.sizeDelta = new Vector2(-96f, 32f);
+        rect.anchorMin = new Vector2(0.46f, 0.73f);
+        rect.anchorMax = new Vector2(0.92f, 0.91f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = Vector2.zero;
+        rect.sizeDelta = Vector2.zero;
     }
 
     private static void ConfigureLevelRect(TextMeshProUGUI text)
     {
         if (text == null) return;
         var rect = text.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(1f, 1f);
-        rect.anchorMax = new Vector2(1f, 1f);
-        rect.pivot = new Vector2(1f, 1f);
-        rect.anchoredPosition = new Vector2(-12f, -12f);
-        rect.sizeDelta = new Vector2(78f, 28f);
+        rect.anchorMin = new Vector2(0.46f, 0.60f);
+        rect.anchorMax = new Vector2(0.92f, 0.73f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = Vector2.zero;
+        rect.sizeDelta = Vector2.zero;
     }
 
     private static void ConfigureCostRect(TextMeshProUGUI text)
     {
         if (text == null) return;
         var rect = text.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(0f, 0.5f);
-        rect.anchorMax = new Vector2(1f, 0.5f);
+        rect.anchorMin = new Vector2(0.46f, 0.16f);
+        rect.anchorMax = new Vector2(0.92f, 0.30f);
         rect.pivot = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = new Vector2(0f, 0f);
-        rect.sizeDelta = new Vector2(-24f, 34f);
+        rect.anchoredPosition = Vector2.zero;
+        rect.sizeDelta = Vector2.zero;
     }
 
     private static void ConfigureBottomButtonRect(TextMeshProUGUI text)
     {
         if (text == null) return;
         var rect = text.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(0f, 0f);
-        rect.anchorMax = new Vector2(1f, 0f);
-        rect.pivot = new Vector2(0.5f, 0f);
-        rect.anchoredPosition = new Vector2(0f, 10f);
-        rect.sizeDelta = new Vector2(-24f, 30f);
+        rect.anchorMin = new Vector2(0.46f, 0.04f);
+        rect.anchorMax = new Vector2(0.92f, 0.16f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = Vector2.zero;
+        rect.sizeDelta = Vector2.zero;
     }
 
     private static void ConfigureText(TextMeshProUGUI text, float max, float min, TextAlignmentOptions alignment)
@@ -376,11 +583,115 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
         text.enableAutoSizing = true;
         text.fontSizeMax = max;
-        text.fontSizeMin = min;
+        text.fontSizeMin = Mathf.Max(UnityUIRuntimeTheme.MinimumTextSize, min);
         text.alignment = alignment;
+        text.fontStyle = FontStyles.Bold;
+        text.faceColor = Color.white;
+        text.outlineColor = new Color(0.07f, 0.04f, 0.02f, 0.98f);
+        text.outlineWidth = 0.20f;
         text.textWrappingMode = TextWrappingModes.NoWrap;
         text.overflowMode = TextOverflowModes.Ellipsis;
         text.raycastTarget = false;
+    }
+
+    private void EnsureDescription()
+    {
+        if (descriptionText != null)
+        {
+            return;
+        }
+
+        var plateObject = new GameObject("FacilityInfoPlate", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        plateObject.transform.SetParent(transform, false);
+        descriptionPlate = plateObject.GetComponent<Image>();
+        ModernWafuuPresentation.ApplyFlatSurface(descriptionPlate, new Color(0.10f, 0.08f, 0.05f, 0.78f));
+        // The building silhouette and its written explanation describe one facility.
+        // Let either surface reach the parent Button so the generous card target does
+        // not force players to tap the narrow artwork alone.
+        descriptionPlate.raycastTarget = true;
+        RectTransform plateRect = descriptionPlate.rectTransform;
+        plateRect.anchorMin = new Vector2(0.44f, 0.10f);
+        plateRect.anchorMax = new Vector2(0.96f, 0.94f);
+        plateRect.offsetMin = Vector2.zero;
+        plateRect.offsetMax = Vector2.zero;
+
+        var descriptionObject = new GameObject("Description", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+        descriptionObject.transform.SetParent(plateObject.transform, false);
+        descriptionText = descriptionObject.GetComponent<TextMeshProUGUI>();
+        ConfigureText(descriptionText, 23f, 18f, TextAlignmentOptions.TopLeft);
+        descriptionText.fontStyle = FontStyles.Bold;
+        descriptionText.textWrappingMode = TextWrappingModes.Normal;
+        descriptionText.overflowMode = TextOverflowModes.Ellipsis;
+        RectTransform rect = descriptionText.rectTransform;
+        rect.anchorMin = new Vector2(0.07f, 0.10f);
+        rect.anchorMax = new Vector2(0.93f, 0.90f);
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+        plateObject.transform.SetAsLastSibling();
+    }
+
+    private void HideLegacyText()
+    {
+        if (nameText != null) nameText.gameObject.SetActive(false);
+        if (levelText != null) levelText.gameObject.SetActive(false);
+        if (costText != null) costText.gameObject.SetActive(false);
+        if (buttonText != null) buttonText.gameObject.SetActive(false);
+    }
+
+    private string GetInlineDescription(bool isUnlocked, int level, int maxLevel)
+    {
+        string levelLabel = $"Lv.{level}/{maxLevel}";
+        string effect = facility.effectType switch
+        {
+            FacilityEffectType.FormationSlot => $"編成枠 +{level}",
+            FacilityEffectType.Recruitment => $"縁の獲得 {FacilityManager.Instance.GetRecruitmentBondGain()}倍",
+            FacilityEffectType.Training => $"戦闘経験値 {FacilityManager.Instance.GetBattleExperienceRate() * 100f:0}% / 勝利\n稽古経験値 {FacilityManager.Instance.GetMockTrainingExperienceRate() * 100f:0.##}% / 回",
+            FacilityEffectType.TrainingFrequency => $"稽古の間隔 {FacilityManager.Instance.GetMockTrainingCooldownSeconds()}秒",
+            FacilityEffectType.AttackBoost => $"味方ATK x{FacilityManager.Instance.GetAttackMultiplier():0.##}",
+            FacilityEffectType.SkillPowerBoost => $"技能威力 x{FacilityManager.Instance.GetSkillPowerMultiplier():0.##}",
+            FacilityEffectType.SkillChanceBoost => $"技能発動 x{FacilityManager.Instance.GetSkillChanceMultiplier():0.##}",
+            FacilityEffectType.HealthBoost => $"味方HP x{FacilityManager.Instance.GetHealthMultiplier():0.##}",
+            FacilityEffectType.BattleSpeed => $"最高速度 x{GetSpeedForLevel(level):0.##}",
+            FacilityEffectType.StagePointBoost => $"戦果獲得 +{facility.GetEffectValue(level) * 100f:0}%",
+            FacilityEffectType.StageRetry => "同じ局へ即再挑戦",
+            _ => string.Empty
+        };
+        string access = isUnlocked ? levelLabel : "未解放";
+        return $"{facility.facilityName}\n{effect}\n{access}";
+    }
+
+    private string GetCompactDetailStatus()
+    {
+        if (facility == null || FacilityManager.Instance == null)
+        {
+            return string.Empty;
+        }
+
+        if (!FacilityManager.Instance.IsUnlocked(facility))
+        {
+            return $"解放: 第{facility.requiredStageId:00}局 / 戦果 {FacilityManager.Instance.GetUnlockCost(facility)}";
+        }
+
+        if (facility.effectType == FacilityEffectType.StageRetry)
+        {
+            return "同じ局へ再挑戦可能";
+        }
+
+        int level = FacilityManager.Instance.GetLevel(facility);
+        int cap = FacilityManager.Instance.GetCurrentFacilityMaxLevel(facility);
+        if (FacilityManager.Instance.IsMaxLevel(facility))
+        {
+            FacilityLevelCapRequirement next = FacilityManager.Instance.GetNextFacilityLevelCapRequirement(facility);
+            return next != null ? $"Lv.{level}/{cap}　次の上限: 第{next.stageId:00}局" : $"Lv.{level}/{cap}　強化済み";
+        }
+
+        return $"Lv.{level}/{cap}　強化: 戦果 {FacilityManager.Instance.GetUpgradeCost(facility)}";
+    }
+
+    private static float GetSpeedForLevel(int level)
+    {
+        float[] speeds = { 1f, 1.1f, 1.25f, 1.45f, 1.7f, 2f, 2.35f, 2.7f, 3f };
+        return speeds[Mathf.Clamp(level, 0, speeds.Length - 1)];
     }
     private void ShowTooltip(string text)
 {
@@ -446,7 +757,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         tooltipText.raycastTarget = false;
         tooltipText.enableAutoSizing = true;
         tooltipText.fontSizeMax = 18f;
-        tooltipText.fontSizeMin = 13f;
+        tooltipText.fontSizeMin = UnityUIRuntimeTheme.MinimumTextSize;
         tooltipText.alignment = TextAlignmentOptions.Center;
         tooltipText.textWrappingMode = TextWrappingModes.Normal;
 
@@ -462,13 +773,18 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (facility == null) return string.Empty;
         switch (facility.effectType)
         {
-            case FacilityEffectType.StagePointBoost: return "ステージ勝利時の獲得SPを増やします。施設解放を加速します。";
+            case FacilityEffectType.StagePointBoost: return "局の勝利時に得る戦果を増やし、施設解放を早めます。";
             case FacilityEffectType.FormationSlot: return "編成できる仲間の数を1枠ずつ増やします。";
-            case FacilityEffectType.Recruitment: return "勝利時に進む縁を早め、早期加入の可能性を高めます。";
-            case FacilityEffectType.Training: return "戦闘経験値を増やします。";
-            case FacilityEffectType.BattleSpeed: return "戦闘速度を2倍、4倍へ解放します。";
+            case FacilityEffectType.Recruitment: return "勝利した局で出会った敵との縁を早め、低確率で縁を一気に満たします。満ちた仲間は軍勢から迎え入れます。";
+            case FacilityEffectType.Training: return "現在の必要経験値に対する戦闘・稽古の獲得割合を増やします。";
+            case FacilityEffectType.BattleSpeed: return "戦闘速度を小刻みに上げ、最高3倍まで解放します。";
             case FacilityEffectType.StageRetry: return "戦闘結果から、同じステージにすぐ再挑戦できるようにします。";
-            default: return facility.effectType.ToString();
+            case FacilityEffectType.TrainingFrequency: return "稽古の間隔を短くし、経験値を得る頻度を高めます。";
+            case FacilityEffectType.AttackBoost: return "味方の攻撃力を高めます。";
+            case FacilityEffectType.SkillPowerBoost: return "味方の技能の威力を高めます。";
+            case FacilityEffectType.SkillChanceBoost: return "味方の技能発動率を倍率で高めます。";
+            case FacilityEffectType.HealthBoost: return "味方の最大HPを高め、長く戦える軍勢にします。";
+            default: return "施設の効果を高めます。";
         }
     }
 }

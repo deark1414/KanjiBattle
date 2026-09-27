@@ -76,6 +76,10 @@ public static class BattleRangeService
             case SkillType.Spear:
                 if (target.HasValue) cells.AddRange(GetLineToTarget(caster, target.Value, 2));
                 break;
+            case SkillType.Soil:
+                // The resolved trap cells are highlighted separately because their
+                // positions are chosen during skill resolution.
+                break;
             case SkillType.Gun:
                 if (target.HasValue) cells.AddRange(GetLineToTarget(caster, target.Value, rows + cols));
                 break;

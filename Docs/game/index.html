@@ -57,9 +57,9 @@
       var loaderUrl = buildUrl + "/game.loader.js" + buildCacheSuffix;
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/game.data" + buildCacheSuffix,
-        frameworkUrl: buildUrl + "/game.framework.js" + buildCacheSuffix,
-        codeUrl: buildUrl + "/game.wasm" + buildCacheSuffix,
+        dataUrl: buildUrl + "/game.data.unityweb",
+        frameworkUrl: buildUrl + "/game.framework.js.unityweb",
+        codeUrl: buildUrl + "/game.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "DefaultCompany",
         productName: "KanjiBattle",
@@ -106,8 +106,8 @@
 
       } else {
         // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "min(960px, 100vw)";
-        canvas.style.height = "min(600px, 100vh)";
+        canvas.style.width = "100vw";
+        canvas.style.height = "100vh";
       }
 
       document.querySelector("#unity-loading-bar").style.display = "block";

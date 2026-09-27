@@ -19,12 +19,24 @@ MonoBehaviour:
   requiredStageId: 3
   unlockStagePointCost: 0
   initialMaxLevel: 1
-  finalMaxLevel: 2
+  finalMaxLevel: 8
   levelCapIncreasePerUnlock: 1
   facilityLevelCapUnlocks:
+  - stageId: 5
+    requiredStagePoints: 0
+  - stageId: 8
+    requiredStagePoints: 0
   - stageId: 12
+    requiredStagePoints: 0
+  - stageId: 17
+    requiredStagePoints: 0
+  - stageId: 23
+    requiredStagePoints: 0
+  - stageId: 30
+    requiredStagePoints: 0
+  - stageId: 36
     requiredStagePoints: 0
   baseCost: 0
   growthFactor: 1
-  upgradeStagePointCosts: 050000000f000000
+  upgradeStagePointCosts: 010000000200000004000000070000000b00000010000000160000001e000000
   effectPerLevel: 0

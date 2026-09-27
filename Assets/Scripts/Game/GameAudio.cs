@@ -13,12 +13,17 @@ public enum GameSound
 
 public sealed class GameAudio : MonoBehaviour
 {
+    private const string BgmEnabledKey = "KanjiBattle.Settings.BgmEnabled";
+    private const string SfxEnabledKey = "KanjiBattle.Settings.SfxEnabled";
     private static GameAudio instance;
     private AudioSource sfxSource;
     private AudioSource bgmSource;
     private readonly Dictionary<GameSound, AudioClip> clips = new();
     private readonly Dictionary<GameBgm, AudioClip> bgmClips = new();
     private bool bgmRequested;
+
+    public bool BgmEnabled { get; private set; } = true;
+    public bool SfxEnabled { get; private set; } = true;
 
     public static GameAudio Instance
     {
@@ -50,6 +55,9 @@ public sealed class GameAudio : MonoBehaviour
         bgmSource.playOnAwake = false;
         bgmSource.loop = true;
         bgmSource.volume = 0.12f;
+        BgmEnabled = PlayerProgressStore.GetInt(BgmEnabledKey, 1) != 0;
+        SfxEnabled = PlayerProgressStore.GetInt(SfxEnabledKey, 1) != 0;
+        ApplyAudioSettings();
     }
 
     public void EnsureBgm() => PlayBgm(GameBgm.Battle, true);
@@ -81,12 +89,37 @@ public sealed class GameAudio : MonoBehaviour
     public void Play(GameSound sound)
     {
         EnsureSources();
+        if (!SfxEnabled) return;
         if (!clips.TryGetValue(sound, out var clip) || clip == null)
         {
             clip = LoadSoundClip(sound) ?? CreateClipFor(sound);
             clips[sound] = clip;
         }
         if (clip != null) sfxSource.PlayOneShot(clip);
+    }
+
+    public void SetBgmEnabled(bool enabled)
+    {
+        EnsureSources();
+        BgmEnabled = enabled;
+        PlayerProgressStore.SetInt(BgmEnabledKey, enabled ? 1 : 0);
+        PlayerProgressStore.Save();
+        ApplyAudioSettings();
+    }
+
+    public void SetSfxEnabled(bool enabled)
+    {
+        EnsureSources();
+        SfxEnabled = enabled;
+        PlayerProgressStore.SetInt(SfxEnabledKey, enabled ? 1 : 0);
+        PlayerProgressStore.Save();
+        ApplyAudioSettings();
+    }
+
+    private void ApplyAudioSettings()
+    {
+        if (bgmSource != null) bgmSource.mute = !BgmEnabled;
+        if (sfxSource != null) sfxSource.mute = !SfxEnabled;
     }
 
     public void PlaySkillSound(SkillType skillType)

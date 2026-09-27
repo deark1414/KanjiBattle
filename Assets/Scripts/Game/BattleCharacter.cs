@@ -14,6 +14,7 @@ public class BattleCharacter : MonoBehaviour
     public int currentHP { get => state.CurrentHP; set => state.CurrentHP = value; }
     public int attack { get => state.Attack; set => state.Attack = value; }
     public int defense { get => state.Defense; set => state.Defense = value; }
+    public int maxHP => state.MaxHP;
     public bool isDead { get => state.IsDead; set => state.IsDead = value; }
 
     [Header("UI")]
@@ -41,7 +42,7 @@ public void Init(CharacterData data, Vector2Int pos, bool ally, int level = 1)
     this.isAlly = ally;
     this.level = level;
 
-    state.Initialize(data, level);
+    state.Initialize(data, level, ally);
 
 Sprite displayIcon = ally || data.enemyIcon == null ? data.icon : data.enemyIcon;
 bool usesIcon = displayIcon != null;
@@ -95,11 +96,17 @@ if (background != null)
         }
     }
 
-    public void TakeDamage(int dmg, BattleManager bm, BattleCharacter attacker = null, bool ignoreDefense = false, bool isBasicAttack = false)
+    public void TakeDamage(
+        int dmg,
+        BattleManager bm,
+        BattleCharacter attacker = null,
+        bool ignoreDefense = false,
+        bool isBasicAttack = false,
+        string actionLabel = null)
     {
         if (isDead) return;
 
-        int originalDmg = dmg;
+        bool armorReducedDamage = false;
         // Defense-based reduction (unless Armor skill or ignoreDefense is true)
         if (!ignoreDefense && (data == null || data.skillType != SkillType.Armor)) {
             float effectiveDefense = Mathf.Max(0, defense / 4f);
@@ -125,12 +132,16 @@ if (background != null)
 
             int reduction = level * Mathf.Max(0, reductionPerLevel);
             int reduced = Mathf.Max(1, dmg - reduction);
-            bm.AddLog($"{DisplayName} のアーマーでダメージが {dmg} → {reduced} に軽減！（Lv{level}×{reductionPerLevel}={reduction} 減少）");
             bm?.PlayDefensiveVfx(this, SkillType.Armor);
+            armorReducedDamage = reduced < dmg;
             dmg = reduced;
         }
 
-        bm.AddLog($"{DisplayName} が {originalDmg} → {dmg} ダメージ (DEF {defense})");
+        if (!string.IsNullOrEmpty(actionLabel))
+        {
+            string mitigation = armorReducedDamage ? "（鎧で軽減）" : string.Empty;
+            bm?.AddLog($"{actionLabel} {dmg} ダメージ{mitigation}");
+        }
 
         currentHP -= dmg;
         UpdateHPBar();
@@ -239,7 +250,7 @@ if (background != null)
     public void UpdateHPBar()
     {
         if (hpBar != null)
-            hpBar.fillAmount = Mathf.Clamp01((float)currentHP / data.GetMaxHP(level));
+            hpBar.fillAmount = Mathf.Clamp01((float)currentHP / Mathf.Max(1, maxHP));
     }
 
 public void UpdateDirection(Vector2Int dir)
@@ -345,7 +356,21 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
 
     public int GetEffectiveAttack(BattleManager bm)
     {
-        return state.GetEffectiveAttack();
+        int attack = state.GetEffectiveAttack();
+        if (!isAlly || FacilityManager.Instance == null)
+        {
+            return attack;
+        }
+
+        return Mathf.RoundToInt(attack * FacilityManager.Instance.GetAttackMultiplier());
+    }
+
+    public float GetEffectiveSkillPower()
+    {
+        float power = data != null ? data.skillPower : 1f;
+        return isAlly && FacilityManager.Instance != null
+            ? power * FacilityManager.Instance.GetSkillPowerMultiplier()
+            : power;
     }
 
     public void SetNumberPassiveAttackBonus(int percent)
@@ -372,15 +397,10 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
         bm?.PlayAttackVfx(this, target, powerMultiplier > 1f || !string.IsNullOrEmpty(logMessage));
 
         int dmg = Mathf.RoundToInt(GetEffectiveAttack(bm) * powerMultiplier);
-        if (string.IsNullOrEmpty(logMessage))
-        {
-            bm.AddLog($"{DisplayName} は通常攻撃を行った！ {dmg} ダメージ");
-        }
-        else
-        {
-            bm.AddLog(string.Format(logMessage, dmg));
-        }
-        target.TakeDamage(dmg, bm, this, false, isBasicAttack: true);
+        string actionLabel = string.IsNullOrEmpty(logMessage)
+            ? $"{DisplayName} の攻撃 → {target.DisplayName}"
+            : $"{logMessage.Replace("{0} ダメージ", string.Empty).Trim()} → {target.DisplayName}";
+        target.TakeDamage(dmg, bm, this, false, isBasicAttack: true, actionLabel: actionLabel);
         UpdateDirection(target.gridPos - this.gridPos);
     }
 
@@ -513,9 +533,7 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
     public void SetLevelForDebug(int newLevel)
     {
         level = Mathf.Max(1, newLevel);
-        currentHP = data.GetMaxHP(level);
-        attack = data.GetAttack(level);
-        defense = data.GetDefense(level);
+        state.Initialize(data, level, isAlly);
 if (levelText != null)
 {
     levelText.text = data != null && data.icon != null ? $"Lv{level}" : $"Lv.{level} #{instanceId}";

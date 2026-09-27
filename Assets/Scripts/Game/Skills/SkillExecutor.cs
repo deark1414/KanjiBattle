@@ -33,7 +33,7 @@ public static class SkillExecutor
 
         if (skillType != SkillType.Dragon)
         {
-            int chance = GetSkillChance(caster.data, skillType);
+            int chance = GetSkillChance(caster.data, skillType, caster.isAlly);
             if (!RollSkillActivation(chance))
             {
                 return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.ChanceFailed);
@@ -125,7 +125,7 @@ public static class SkillExecutor
         return executed;
     }
 
-    public static int GetSkillChance(CharacterData data, SkillType skillType)
+    public static int GetSkillChance(CharacterData data, SkillType skillType, bool isAlly = false)
     {
         if (ForceSkillActivationForVfxReview)
         {
@@ -133,11 +133,14 @@ public static class SkillExecutor
         }
 
         SkillData skillData = SkillCatalog.Get(skillType);
-        if (skillData != null && skillData.chanceOverride >= 0)
+        int chance = skillData != null && skillData.chanceOverride >= 0
+            ? skillData.chanceOverride
+            : data.skillChance;
+        if (isAlly && FacilityManager.Instance != null)
         {
-            return skillData.chanceOverride;
+            chance = Mathf.RoundToInt(chance * FacilityManager.Instance.GetSkillChanceMultiplier());
         }
-        return data.skillChance;
+        return Mathf.Clamp(chance, 0, 95);
     }
 
     public static bool RollSkillActivation(int chance)
@@ -175,7 +178,7 @@ public static class SkillExecutor
                         return false;
                     }
                     int dmg = Mathf.RoundToInt(ctx.Caster.GetEffectiveAttack(ctx.BattleManager)
-                        * ctx.Caster.data.skillPower
+                        * ctx.Caster.GetEffectiveSkillPower()
                         * skillData.powerMultiplier
                         * effect.powerMultiplier);
                     if (!string.IsNullOrEmpty(skillData.logMessage))
@@ -200,7 +203,7 @@ public static class SkillExecutor
                     {
                         return false;
                     }
-                    int maxHP = ctx.Target.data.GetMaxHP(ctx.Target.level);
+                    int maxHP = ctx.Target.maxHP;
                     int missing = maxHP - ctx.Target.currentHP;
                     if (missing <= 0)
                     {
@@ -208,7 +211,7 @@ public static class SkillExecutor
                     }
 
                     int heal = Mathf.RoundToInt(maxHP
-                        * ctx.Caster.data.skillPower
+                        * ctx.Caster.GetEffectiveSkillPower()
                         * skillData.powerMultiplier
                         * effect.powerMultiplier);
                     int beforeHP = ctx.Target.currentHP;
@@ -237,7 +240,7 @@ public static class SkillExecutor
                     appliedAnyEffect = true;
                     break;
                 case SkillEffectType.SoilTrap:
-                    ctx.BattleManager.GenerateSoilTraps(ctx.Caster.gridPos);
+                    ctx.BattleManager.GenerateSoilTraps(ctx.Caster);
                     ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} が土のスキルを発動！周囲に罠を設置した！");
                     appliedAnyEffect = true;
                     break;
@@ -258,7 +261,7 @@ public static class SkillExecutor
                             break;
                         }
                         int hitDamage = Mathf.RoundToInt(ctx.Caster.GetEffectiveAttack(ctx.BattleManager)
-                            * ctx.Caster.data.skillPower
+                            * ctx.Caster.GetEffectiveSkillPower()
                             * skillData.powerMultiplier
                             * effect.powerMultiplier);
                         ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} の連撃！ {ctx.Target.DisplayName} に {hitDamage} ダメージ");
@@ -349,32 +352,32 @@ public static class SkillExecutor
             case SkillType.Stone:
                 if (ctx.Target != null)
                 {
-                    ctx.Caster.PerformAttack(ctx.Target, ctx.BattleManager, ctx.Caster.data.skillPower, $"{ctx.Caster.DisplayName} が石を投げた！ {{0}} ダメージ");
+                    ctx.Caster.PerformAttack(ctx.Target, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} が石を投げた！ {{0}} ダメージ");
                     return true;
                 }
                 break;
             case SkillType.Gun:
                 if (ctx.Target != null)
                 {
-                    ctx.Caster.PerformAttack(ctx.Target, ctx.BattleManager, ctx.Caster.data.skillPower, $"{ctx.Caster.DisplayName} が銃を放った！ {{0}} ダメージ");
+                    ctx.Caster.PerformAttack(ctx.Target, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} が銃を放った！ {{0}} ダメージ");
                     return true;
                 }
                 break;
             case SkillType.Arrow:
                 if (ctx.Target != null)
                 {
-                    ctx.Caster.PerformAttack(ctx.Target, ctx.BattleManager, ctx.Caster.data.skillPower, $"{ctx.Caster.DisplayName} が矢を放った！ {{0}} ダメージ");
+                    ctx.Caster.PerformAttack(ctx.Target, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} が矢を放った！ {{0}} ダメージ");
                     return true;
                 }
                 break;
             case SkillType.Soil:
-                ctx.BattleManager.GenerateSoilTraps(ctx.Caster.gridPos);
+                ctx.BattleManager.GenerateSoilTraps(ctx.Caster);
                 ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} が土のスキルを発動！周囲に罠を設置した！");
                 return true;
             case SkillType.Fireball:
                 if (ctx.Target != null)
                 {
-                    int dmg = Mathf.RoundToInt(ctx.Caster.GetEffectiveAttack(ctx.BattleManager) * ctx.Caster.data.skillPower);
+                    int dmg = Mathf.RoundToInt(ctx.Caster.GetEffectiveAttack(ctx.BattleManager) * ctx.Caster.GetEffectiveSkillPower());
                     ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} がファイアボールを放った！ {dmg} ダメージ (防御無視)");
                     ctx.Target.TakeDamage(dmg, ctx.BattleManager, ctx.Caster, ignoreDefense: true, isBasicAttack: false);
                     return true;
@@ -383,7 +386,7 @@ public static class SkillExecutor
             case SkillType.WoodPush:
                 if (ctx.Target != null)
                 {
-                    ctx.Caster.PerformAttack(ctx.Target, ctx.BattleManager, ctx.Caster.data.skillPower, $"{ctx.Caster.DisplayName} が木の力で押し出した！ {{0}} ダメージ");
+                    ctx.Caster.PerformAttack(ctx.Target, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} が木の力で押し出した！ {{0}} ダメージ");
                     ctx.BattleManager.PushBackCharacter(ctx.Caster, ctx.Target);
                     return true;
                 }
@@ -398,7 +401,7 @@ public static class SkillExecutor
             case SkillType.BirdRetreat:
                 if (ctx.Target != null)
                 {
-                    ctx.Caster.PerformAttack(ctx.Target, ctx.BattleManager, ctx.Caster.data.skillPower, $"{ctx.Caster.DisplayName} がバードリトリートを放った！ {{0}} ダメージ");
+                    ctx.Caster.PerformAttack(ctx.Target, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} がバードリトリートを放った！ {{0}} ダメージ");
                     ctx.BattleManager.PerformBirdRetreat(ctx.Caster);
                     return true;
                 }
@@ -406,11 +409,11 @@ public static class SkillExecutor
             case SkillType.TigerTwinClaw:
                 if (ctx.Target != null)
                 {
-                    ctx.Caster.PerformAttack(ctx.Target, ctx.BattleManager, ctx.Caster.data.skillPower, $"{ctx.Caster.DisplayName} のツインクロー1撃目！ {{0}} ダメージ");
+                    ctx.Caster.PerformAttack(ctx.Target, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} のツインクロー1撃目！ {{0}} ダメージ");
                     BattleCharacter secondTarget = TargetingService.FindAdjacentEnemy(ctx.BattleManager, ctx.Caster);
                     if (secondTarget != null && !secondTarget.isDead)
                     {
-                        ctx.Caster.PerformAttack(secondTarget, ctx.BattleManager, ctx.Caster.data.skillPower, $"{ctx.Caster.DisplayName} のツインクロー2撃目！ {{0}} ダメージ");
+                        ctx.Caster.PerformAttack(secondTarget, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} のツインクロー2撃目！ {{0}} ダメージ");
                     }
                     return true;
                 }
@@ -446,13 +449,13 @@ public static class SkillExecutor
         bool didHit = false;
         if (firstHit != null && !firstHit.isDead && firstHit.isAlly != ctx.Caster.isAlly)
         {
-            ctx.Caster.PerformAttack(firstHit, ctx.BattleManager, ctx.Caster.data.skillPower, $"{ctx.Caster.DisplayName} が槍を突き出した！ {{0}} ダメージ");
+            ctx.Caster.PerformAttack(firstHit, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} が槍を突き出した！ {{0}} ダメージ");
             didHit = true;
         }
 
         if (secondHit != null && !secondHit.isDead && secondHit.isAlly != ctx.Caster.isAlly)
         {
-            ctx.Caster.PerformAttack(secondHit, ctx.BattleManager, ctx.Caster.data.skillPower, $"{ctx.Caster.DisplayName} の貫通が命中！ {{0}} ダメージ");
+            ctx.Caster.PerformAttack(secondHit, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} の貫通が命中！ {{0}} ダメージ");
             didHit = true;
         }
 
@@ -479,7 +482,7 @@ public static class SkillExecutor
         float effectMultiplier = damageEffect != null ? damageEffect.powerMultiplier : 1f;
         bool ignoreDefense = damageEffect != null && damageEffect.ignoreDefense;
         int damage = Mathf.RoundToInt(ctx.Caster.GetEffectiveAttack(ctx.BattleManager)
-            * ctx.Caster.data.skillPower
+            * ctx.Caster.GetEffectiveSkillPower()
             * skillMultiplier
             * effectMultiplier);
 
@@ -621,7 +624,7 @@ public static class SkillExecutor
             float effectMultiplier = damageEffect != null ? damageEffect.powerMultiplier : 1f;
             bool ignoreDefense = damageEffect != null && damageEffect.ignoreDefense;
             int dmg = Mathf.RoundToInt(ctx.Caster.GetEffectiveAttack(ctx.BattleManager)
-                * ctx.Caster.data.skillPower
+                * ctx.Caster.GetEffectiveSkillPower()
                 * powerMultiplier
                 * effectMultiplier);
             ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} の銃撃！ {target.DisplayName} に {dmg} ダメージ");
@@ -665,7 +668,7 @@ public static class SkillExecutor
                 break;
             }
             int hitDamage = Mathf.RoundToInt(ctx.Caster.GetEffectiveAttack(ctx.BattleManager)
-                * ctx.Caster.data.skillPower
+                * ctx.Caster.GetEffectiveSkillPower()
                 * powerMultiplier
                 * (multiHit != null ? multiHit.powerMultiplier : 1f));
             ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} のツインクロー！ {ctx.Target.DisplayName} に {hitDamage} ダメージ");
@@ -677,7 +680,7 @@ public static class SkillExecutor
         if (secondTarget != null && !secondTarget.isDead && secondTarget != ctx.Target)
         {
             int secondHitDamage = Mathf.RoundToInt(ctx.Caster.GetEffectiveAttack(ctx.BattleManager)
-                * ctx.Caster.data.skillPower
+                * ctx.Caster.GetEffectiveSkillPower()
                 * powerMultiplier);
             ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} のツインクロー2撃目！ {secondTarget.DisplayName} に {secondHitDamage} ダメージ");
             secondTarget.TakeDamage(secondHitDamage, ctx.BattleManager, ctx.Caster, false, isBasicAttack: false);
@@ -690,7 +693,7 @@ public static class SkillExecutor
     private static bool ExecuteDragon(SkillContext ctx)
     {
         SkillData skillData = SkillCatalog.Get(SkillType.Dragon);
-        int chance = GetSkillChance(ctx.Caster.data, SkillType.Dragon);
+        int chance = GetSkillChance(ctx.Caster.data, SkillType.Dragon, ctx.Caster.isAlly);
 
         int range = 3;
         bool hasRoar = false;
