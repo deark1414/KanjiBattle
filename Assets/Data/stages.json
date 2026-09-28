@@ -7,7 +7,7 @@
     "enemyIds": [
       1
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 4,
     "slotCount": 1,
     "trapDamage": 0,
     "trapCount": 0,
@@ -27,7 +27,7 @@
     "enemyIds": [
       2
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 4,
     "slotCount": 1,
     "trapDamage": 0,
     "trapCount": 0,
@@ -47,7 +47,7 @@
     "enemyIds": [
       3
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 5,
     "slotCount": 2,
     "trapDamage": 0,
     "trapCount": 0,
@@ -68,7 +68,7 @@
       1,
       2
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 5,
     "slotCount": 2,
     "trapDamage": 8,
     "trapCount": 1,
@@ -89,7 +89,7 @@
       2,
       3
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 14,
     "slotCount": 2,
     "trapDamage": 12,
     "trapCount": 1,
@@ -110,7 +110,7 @@
       10,
       10
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 5,
     "slotCount": 3,
     "trapDamage": 8,
     "trapCount": 1,
@@ -132,7 +132,7 @@
       10,
       11
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 5,
     "slotCount": 3,
     "trapDamage": 12,
     "trapCount": 1,
@@ -154,7 +154,7 @@
       10,
       12
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 6,
     "slotCount": 3,
     "trapDamage": 16,
     "trapCount": 1,
@@ -176,7 +176,7 @@
       11,
       10
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 6,
     "slotCount": 3,
     "trapDamage": 16,
     "trapCount": 1,
@@ -198,7 +198,7 @@
       10,
       11
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 18,
     "slotCount": 3,
     "trapDamage": 20,
     "trapCount": 1,
@@ -220,7 +220,7 @@
       13,
       10
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 6,
     "slotCount": 3,
     "trapDamage": 16,
     "trapCount": 1,
@@ -242,7 +242,7 @@
       13,
       14
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 6,
     "slotCount": 3,
     "trapDamage": 16,
     "trapCount": 1,
@@ -265,7 +265,7 @@
       15,
       14
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 7,
     "slotCount": 4,
     "trapDamage": 20,
     "trapCount": 1,
@@ -288,7 +288,7 @@
       13,
       14
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 7,
     "slotCount": 4,
     "trapDamage": 20,
     "trapCount": 1,
@@ -311,7 +311,7 @@
       14,
       15
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 22,
     "slotCount": 4,
     "trapDamage": 24,
     "trapCount": 2,
@@ -334,7 +334,7 @@
       1,
       2
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 7,
     "slotCount": 4,
     "trapDamage": 20,
     "trapCount": 1,
@@ -357,7 +357,7 @@
       4,
       1
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 7,
     "slotCount": 4,
     "trapDamage": 20,
     "trapCount": 1,
@@ -380,7 +380,7 @@
       5,
       4
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 8,
     "slotCount": 4,
     "trapDamage": 24,
     "trapCount": 1,
@@ -404,7 +404,7 @@
       4,
       5
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 8,
     "slotCount": 4,
     "trapDamage": 24,
     "trapCount": 1,
@@ -428,7 +428,7 @@
       4,
       5
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 26,
     "slotCount": 4,
     "trapDamage": 28,
     "trapCount": 2,
@@ -451,7 +451,7 @@
       16,
       16
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 8,
     "slotCount": 4,
     "trapDamage": 24,
     "trapCount": 1,
@@ -474,7 +474,7 @@
       17,
       16
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 8,
     "slotCount": 4,
     "trapDamage": 24,
     "trapCount": 1,
@@ -498,7 +498,7 @@
       18,
       17
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 9,
     "slotCount": 4,
     "trapDamage": 28,
     "trapCount": 1,
@@ -522,7 +522,7 @@
       16,
       17
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 9,
     "slotCount": 4,
     "trapDamage": 28,
     "trapCount": 1,
@@ -546,7 +546,7 @@
       16,
       18
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 30,
     "slotCount": 4,
     "trapDamage": 32,
     "trapCount": 2,
@@ -570,7 +570,7 @@
       19,
       19
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 9,
     "slotCount": 5,
     "trapDamage": 28,
     "trapCount": 1,
@@ -594,7 +594,7 @@
       19,
       20
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 9,
     "slotCount": 5,
     "trapDamage": 28,
     "trapCount": 1,
@@ -619,7 +619,7 @@
       20,
       19
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 10,
     "slotCount": 5,
     "trapDamage": 32,
     "trapCount": 1,
@@ -644,7 +644,7 @@
       21,
       20
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 10,
     "slotCount": 5,
     "trapDamage": 32,
     "trapCount": 2,
@@ -669,7 +669,7 @@
       19,
       20
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 34,
     "slotCount": 5,
     "trapDamage": 36,
     "trapCount": 2,
@@ -693,7 +693,7 @@
       23,
       23
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 10,
     "slotCount": 5,
     "trapDamage": 32,
     "trapCount": 1,
@@ -717,7 +717,7 @@
       23,
       24
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 10,
     "slotCount": 5,
     "trapDamage": 32,
     "trapCount": 1,
@@ -741,7 +741,7 @@
       25,
       24
     ],
-    "rewardStagePoints": 2,
+    "rewardStagePoints": 11,
     "slotCount": 5,
     "trapDamage": 36,
     "trapCount": 2,
@@ -765,7 +765,7 @@
       23,
       24
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 11,
     "slotCount": 5,
     "trapDamage": 36,
     "trapCount": 2,
@@ -789,7 +789,7 @@
       24,
       25
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 38,
     "slotCount": 5,
     "trapDamage": 40,
     "trapCount": 2,
@@ -814,7 +814,7 @@
       6,
       25
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 12,
     "slotCount": 6,
     "trapDamage": 36,
     "trapCount": 2,
@@ -839,7 +839,7 @@
       5,
       24
     ],
-    "rewardStagePoints": 3,
+    "rewardStagePoints": 12,
     "slotCount": 6,
     "trapDamage": 36,
     "trapCount": 2,
@@ -864,7 +864,7 @@
       6,
       25
     ],
-    "rewardStagePoints": 4,
+    "rewardStagePoints": 14,
     "slotCount": 6,
     "trapDamage": 40,
     "trapCount": 2,
@@ -889,7 +889,7 @@
       8,
       9
     ],
-    "rewardStagePoints": 4,
+    "rewardStagePoints": 14,
     "slotCount": 6,
     "trapDamage": 40,
     "trapCount": 2,
@@ -909,7 +909,7 @@
     "enemyIds": [
       26
     ],
-    "rewardStagePoints": 6,
+    "rewardStagePoints": 50,
     "slotCount": 6,
     "trapDamage": 48,
     "trapCount": 2,

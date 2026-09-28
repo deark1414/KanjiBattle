@@ -171,21 +171,20 @@ public class FacilityManager : MonoBehaviour
         };
     }
 
-    public const float BaseBattleExperienceRate = 0.04f;
     public const float BaseMockTrainingExperienceRate = 0.0004f;
 
-    public float GetBattleExperienceRate()
+    public float GetBattleExperienceMultiplier()
     {
         FacilityData trainingGround = FindFacility(FacilityEffectType.Training);
         int level = trainingGround != null && IsUnlocked(trainingGround) ? GetLevel(trainingGround) : 0;
         return level switch
         {
-            1 => 0.06f,
-            2 => 0.08f,
-            3 => 0.10f,
-            4 => 0.12f,
-            >= 5 => 0.15f,
-            _ => BaseBattleExperienceRate
+            1 => 1.25f,
+            2 => 1.5f,
+            3 => 2f,
+            4 => 2.5f,
+            >= 5 => 3f,
+            _ => 1f
         };
     }
 
@@ -245,6 +244,19 @@ public class FacilityManager : MonoBehaviour
         FacilityData infirmary = FindFacility(FacilityEffectType.HealthBoost);
         int level = infirmary != null && IsUnlocked(infirmary) ? GetLevel(infirmary) : 0;
         return 1f + Mathf.Clamp(level, 0, 5) * 0.05f;
+    }
+
+    public int GetPlayerLevelCap()
+    {
+        FacilityData rankTower = FindFacility(FacilityEffectType.PlayerLevelCap);
+        if (rankTower == null || !IsUnlocked(rankTower))
+        {
+            return GetLegacyStageLevelCap();
+        }
+
+        // The tower starts at the Lv.5 base cap. Each chapter-end upgrade
+        // extends the shared player level by one six-level band.
+        return Mathf.Clamp(5 + GetLevel(rankTower) * 6, 5, 50);
     }
 
     public int GetBattleSpeedTier()
@@ -349,11 +361,20 @@ public class FacilityManager : MonoBehaviour
                     break;
             }
         }
+
+        ModernWafuuPresentation.RefreshGlobalStatus();
     }
 
     private FacilityData FindFacility(FacilityEffectType effectType)
     {
         return GetFacilities().FirstOrDefault(facility => facility != null && facility.effectType == effectType);
+    }
+
+    private static int GetLegacyStageLevelCap()
+    {
+        int clearedStageId = GameManager.Instance != null ? GameManager.Instance.GetHighestClearedStageId() : 0;
+        int unlockedBands = Mathf.Max(0, clearedStageId / 5);
+        return Mathf.Clamp(5 + unlockedBands * 6, 5, 50);
     }
 
     private static int GetAutomaticCapUnlockCount(FacilityData facility)

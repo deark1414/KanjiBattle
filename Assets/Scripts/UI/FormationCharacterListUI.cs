@@ -87,10 +87,13 @@ public class FormationCharacterListUI : MonoBehaviour
         var listRect = GetComponent<RectTransform>();
         if (listRect != null)
         {
-            // The owned-piece list is a dedicated lower region. It must not rise
-            // into the formation tray when the viewport is short and wide.
+            // The utility action now lives beside the active piece, so the owned
+            // list can begin directly beneath the formation tray on every shape.
             listRect.anchorMin = new Vector2(0.04f, 0.085f);
-            listRect.anchorMax = new Vector2(0.96f, 0.425f);
+            // The formation's visible artwork ends well above the structural tray
+            // boundary, so start the owned-piece region from that visual edge
+            // instead of leaving an empty card-sized band between the two.
+            listRect.anchorMax = new Vector2(0.96f, 0.520f);
             listRect.anchoredPosition = Vector2.zero;
             listRect.sizeDelta = Vector2.zero;
         }
@@ -100,9 +103,16 @@ public class FormationCharacterListUI : MonoBehaviour
         {
             grid.cellSize = new Vector2(GetListCellWidth(), UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 98f : 96f);
             grid.spacing = new Vector2(0f, 8f);
+            grid.padding = new RectOffset(0, 0, 0, 0);
             grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             grid.constraintCount = 1;
             grid.childAlignment = TextAnchor.UpperCenter;
+        }
+
+        if (content is RectTransform contentRect)
+        {
+            contentRect.offsetMin = new Vector2(0f, contentRect.offsetMin.y);
+            contentRect.offsetMax = new Vector2(0f, 0f);
         }
 
         var fitter = content != null ? content.GetComponent<ResponsiveGridFitter>() : null;

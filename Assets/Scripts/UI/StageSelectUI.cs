@@ -162,10 +162,10 @@ public class StageSelectUI : MonoBehaviour
         if (contentRect == null || stageRects == null || stageRects.Count == 0) return;
 
         bool portrait = UnityUIRuntimeTheme.IsPortraitNarrowScreen();
-        // Favor the source map's native density over filling the scroll view. This
-        // keeps the painterly details crisp while the larger landmark silhouettes
-        // remain easy to pick out from the road.
-        float mapHeight = portrait ? 5200f : 4900f;
+        // A landscape viewport is short and wide, so the portrait map scale reads
+        // as an unnecessary close-up. Pull it back while reducing node footprints
+        // by the same proportion, preserving the authored road spacing.
+        float mapHeight = portrait ? 5200f : 4300f;
         contentRect.anchorMin = new Vector2(0f, 1f);
         contentRect.anchorMax = new Vector2(1f, 1f);
         contentRect.pivot = new Vector2(0.5f, 1f);
@@ -212,8 +212,8 @@ public class StageSelectUI : MonoBehaviour
 
     private void PositionStageNodes(IReadOnlyList<RectTransform> stageRects, float mapHeight, bool portrait, float horizontalMapScale)
     {
-        float nodeWidth = portrait ? 140f : 176f;
-        float nodeHeight = portrait ? 112f : 120f;
+        float nodeWidth = portrait ? 140f : 158f;
+        float nodeHeight = portrait ? 112f : 106f;
         float contentWidth = GetMapWidth(mapHeight) / Mathf.Max(0.01f, horizontalMapScale);
         var placedNodes = new List<Vector2>();
 
@@ -537,7 +537,7 @@ public class StageSelectUI : MonoBehaviour
             ? GameManager.Instance.GetEffectiveStagePointReward(stage.rewardStagePoints)
             : stage.rewardStagePoints;
         int experience = PlayerInventory.Instance != null
-            ? PlayerInventory.Instance.GetEffectiveBattleExperienceReward()
+            ? PlayerInventory.Instance.GetEffectiveBattleExperienceReward(stage)
             : PlayerInventory.BaseBattleExperience;
         bool cleared = GameManager.Instance != null && GameManager.Instance.IsStageCleared(stage.stageId);
         string boss = stage.isBossStage ? "  首領戦" : string.Empty;

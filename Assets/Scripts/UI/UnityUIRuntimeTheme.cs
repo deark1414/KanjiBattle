@@ -11,6 +11,24 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
 {
     // Descriptive text must remain comfortable to read over illustrated backgrounds.
     public const float MinimumTextSize = 21f;
+    private static readonly Vector2 PortraitReferenceResolution = new(1280f, 720f);
+    // Wide canvases still use the entire screen through anchors. A larger virtual
+    // canvas keeps fixed-size pieces, buildings, and cards from doubling in size
+    // merely because the viewport changed from portrait to landscape.
+    private static readonly Vector2 LandscapeReferenceResolution = new(2560f, 1440f);
+
+    private static float ResponsiveMinimumTextSize =>
+        IsPortraitNarrowScreen() ? MinimumTextSize : MinimumTextSize * 2f;
+
+    private static float GetMinimumTextSize(TextMeshProUGUI text)
+    {
+        // Map-stop captions live in a deliberately compact label band. They need
+        // their own readable floor rather than the wide-screen body-text floor.
+        var stageButton = text != null ? text.GetComponentInParent<StageButtonUI>() : null;
+        return stageButton != null && stageButton.IsMapNodeForLayout
+            ? 18f
+            : ResponsiveMinimumTextSize;
+    }
     private static UnityUIRuntimeTheme instance;
 
     private readonly Dictionary<string, Sprite> spriteCache = new();
@@ -178,9 +196,12 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         if (scaler == null) return;
 
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1280f, 720f);
+        bool portrait = IsPortraitNarrowScreen();
+        scaler.referenceResolution = portrait
+            ? PortraitReferenceResolution
+            : LandscapeReferenceResolution;
         scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-        scaler.matchWidthOrHeight = IsPortraitNarrowScreen() ? 0f : 0.5f;
+        scaler.matchWidthOrHeight = portrait ? 0f : 0.5f;
     }
 
     private void EnsureBackdrop(Canvas canvas)
@@ -357,6 +378,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         if (text.GetComponentInParent<FacilityUI>() != null) return;
 
         string path = GetPath(text.transform).ToLowerInvariant();
+        float minimumTextSize = GetMinimumTextSize(text);
         text.textWrappingMode = TextWrappingModes.Normal;
         text.overflowMode = TextOverflowModes.Truncate;
 
@@ -369,7 +391,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             text.color = new Color(1f, 0.95f, 0.82f);
             text.raycastTarget = false;
             text.enableAutoSizing = true;
-            text.fontSizeMin = MinimumTextSize;
+            text.fontSizeMin = minimumTextSize;
             text.fontSizeMax = compact ? 21f : 24f;
             text.margin = compact ? new Vector4(4f, 1f, 4f, 1f) : new Vector4(8f, 2f, 8f, 2f);
         }
@@ -381,23 +403,23 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
         if (path.Contains("entry") || path.Contains("facility") || path.Contains("stagebutton"))
         {
             text.enableAutoSizing = true;
-            text.fontSizeMin = MinimumTextSize;
-            text.fontSizeMax = Mathf.Max(MinimumTextSize, text.fontSizeMax <= 0f ? 24f : text.fontSizeMax);
+            text.fontSizeMin = minimumTextSize;
+            text.fontSizeMax = Mathf.Max(minimumTextSize, text.fontSizeMax <= 0f ? 24f : text.fontSizeMax);
             text.margin = new Vector4(6f, 2f, 6f, 2f);
         }
 
         if (path.Contains("slot"))
         {
             text.enableAutoSizing = true;
-            text.fontSizeMin = MinimumTextSize;
+            text.fontSizeMin = minimumTextSize;
             text.fontSizeMax = 22f;
             text.margin = new Vector4(4f, 2f, 4f, 2f);
             text.alignment = TextAlignmentOptions.Center;
             text.transform.SetAsLastSibling();
         }
-        else if (!path.Contains("entry") && !path.Contains("facility") && !path.Contains("stagebutton") && text.fontSize < 18f)
+        else if (!path.Contains("entry") && !path.Contains("facility") && !path.Contains("stagebutton") && text.fontSize < minimumTextSize)
         {
-            text.fontSize = 18f;
+            text.fontSize = minimumTextSize;
         }
 
         EnforceTextSizeFloor(text);
@@ -416,11 +438,12 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
             return;
         }
 
-        text.fontSizeMin = Mathf.Max(MinimumTextSize, text.fontSizeMin);
-        text.fontSizeMax = Mathf.Max(MinimumTextSize, text.fontSizeMax);
+        float minimumTextSize = GetMinimumTextSize(text);
+        text.fontSizeMin = Mathf.Max(minimumTextSize, text.fontSizeMin);
+        text.fontSizeMax = Mathf.Max(minimumTextSize, text.fontSizeMax);
         if (!text.enableAutoSizing)
         {
-            text.fontSize = Mathf.Max(MinimumTextSize, text.fontSize);
+            text.fontSize = Mathf.Max(minimumTextSize, text.fontSize);
         }
     }
 

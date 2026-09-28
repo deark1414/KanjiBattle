@@ -13,32 +13,30 @@
     "growthFactor": 1,
     "effectPerLevel": 0,
     "levelCapIncreasePerUnlock": 1,
-    "upgradeStagePointCosts": [1, 3, 7, 15, 28],
+    "upgradeStagePointCosts": [
+      1,
+      3,
+      7,
+      15,
+      28
+    ],
     "facilityLevelCapUnlocks": [
-      { "stageId": 2, "requiredStagePoints": 0 },
-      { "stageId": 12, "requiredStagePoints": 0 },
-      { "stageId": 24, "requiredStagePoints": 0 },
-      { "stageId": 34, "requiredStagePoints": 0 }
-    ]
-  },
-  {
-    "id": 2,
-    "fileName": "FacilityData_RecruitmentHall",
-    "facilityName": "勧誘所",
-    "effectType": "Recruitment",
-    "unlockType": "Free",
-    "requiredStageId": 1,
-    "unlockStagePointCost": 0,
-    "initialMaxLevel": 1,
-    "finalMaxLevel": 3,
-    "baseCost": 0,
-    "growthFactor": 1,
-    "effectPerLevel": 0,
-    "levelCapIncreasePerUnlock": 1,
-    "upgradeStagePointCosts": [3, 8, 18],
-    "facilityLevelCapUnlocks": [
-      { "stageId": 7, "requiredStagePoints": 0 },
-      { "stageId": 17, "requiredStagePoints": 0 }
+      {
+        "stageId": 2,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 12,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 24,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 34,
+        "requiredStagePoints": 0
+      }
     ]
   },
   {
@@ -55,12 +53,319 @@
     "growthFactor": 1,
     "effectPerLevel": 0,
     "levelCapIncreasePerUnlock": 1,
-    "upgradeStagePointCosts": [2, 5, 10, 18, 30],
+    "upgradeStagePointCosts": [
+      2,
+      5,
+      10,
+      18,
+      30
+    ],
     "facilityLevelCapUnlocks": [
-      { "stageId": 5, "requiredStagePoints": 0 },
-      { "stageId": 10, "requiredStagePoints": 0 },
-      { "stageId": 15, "requiredStagePoints": 0 },
-      { "stageId": 20, "requiredStagePoints": 0 }
+      {
+        "stageId": 5,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 10,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 15,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 20,
+        "requiredStagePoints": 0
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "fileName": "FacilityData_RankTower",
+    "facilityName": "昇段櫓",
+    "effectType": "PlayerLevelCap",
+    "unlockType": "Free",
+    "requiredStageId": 1,
+    "unlockStagePointCost": 0,
+    "initialMaxLevel": 0,
+    "finalMaxLevel": 8,
+    "baseCost": 0,
+    "growthFactor": 1,
+    "effectPerLevel": 0,
+    "levelCapIncreasePerUnlock": 1,
+    "upgradeStagePointCosts": [
+      8,
+      14,
+      22,
+      32,
+      44,
+      58,
+      74,
+      92
+    ],
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 5,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 10,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 15,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 20,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 25,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 30,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 35,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 40,
+        "requiredStagePoints": 0
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "fileName": "FacilityData_RecruitmentHall",
+    "facilityName": "勧誘所",
+    "effectType": "Recruitment",
+    "unlockType": "Free",
+    "requiredStageId": 1,
+    "unlockStagePointCost": 0,
+    "initialMaxLevel": 1,
+    "finalMaxLevel": 3,
+    "baseCost": 0,
+    "growthFactor": 1,
+    "effectPerLevel": 0,
+    "levelCapIncreasePerUnlock": 1,
+    "upgradeStagePointCosts": [
+      3,
+      8,
+      18
+    ],
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 7,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 17,
+        "requiredStagePoints": 0
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "fileName": "FacilityData_Infirmary",
+    "facilityName": "療養所",
+    "effectType": "HealthBoost",
+    "unlockType": "StagePoint",
+    "requiredStageId": 5,
+    "unlockStagePointCost": 3,
+    "initialMaxLevel": 1,
+    "finalMaxLevel": 5,
+    "baseCost": 0,
+    "growthFactor": 1,
+    "effectPerLevel": 0,
+    "levelCapIncreasePerUnlock": 1,
+    "upgradeStagePointCosts": [
+      3,
+      6,
+      11,
+      18,
+      28
+    ],
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 10,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 18,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 28,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 38,
+        "requiredStagePoints": 0
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "fileName": "FacilityData_MartialHall",
+    "facilityName": "武芸所",
+    "effectType": "AttackBoost",
+    "unlockType": "StagePoint",
+    "requiredStageId": 6,
+    "unlockStagePointCost": 4,
+    "initialMaxLevel": 1,
+    "finalMaxLevel": 5,
+    "baseCost": 0,
+    "growthFactor": 1,
+    "effectPerLevel": 0,
+    "levelCapIncreasePerUnlock": 1,
+    "upgradeStagePointCosts": [
+      4,
+      8,
+      14,
+      23,
+      35
+    ],
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 12,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 20,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 30,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 38,
+        "requiredStagePoints": 0
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "fileName": "FacilityData_StrategyHall",
+    "facilityName": "軍略所",
+    "effectType": "SkillPowerBoost",
+    "unlockType": "StagePoint",
+    "requiredStageId": 9,
+    "unlockStagePointCost": 6,
+    "initialMaxLevel": 1,
+    "finalMaxLevel": 5,
+    "baseCost": 0,
+    "growthFactor": 1,
+    "effectPerLevel": 0,
+    "levelCapIncreasePerUnlock": 1,
+    "upgradeStagePointCosts": [
+      5,
+      10,
+      17,
+      27,
+      40
+    ],
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 15,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 23,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 32,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 40,
+        "requiredStagePoints": 0
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "fileName": "FacilityData_Shrine",
+    "facilityName": "祈願社",
+    "effectType": "SkillChanceBoost",
+    "unlockType": "StagePoint",
+    "requiredStageId": 12,
+    "unlockStagePointCost": 8,
+    "initialMaxLevel": 1,
+    "finalMaxLevel": 5,
+    "baseCost": 0,
+    "growthFactor": 1,
+    "effectPerLevel": 0,
+    "levelCapIncreasePerUnlock": 1,
+    "upgradeStagePointCosts": [
+      6,
+      12,
+      20,
+      31,
+      45
+    ],
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 18,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 26,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 34,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 40,
+        "requiredStagePoints": 0
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "fileName": "FacilityData_DrillTower",
+    "facilityName": "号令櫓",
+    "effectType": "TrainingFrequency",
+    "unlockType": "StagePoint",
+    "requiredStageId": 4,
+    "unlockStagePointCost": 2,
+    "initialMaxLevel": 1,
+    "finalMaxLevel": 5,
+    "baseCost": 0,
+    "growthFactor": 1,
+    "effectPerLevel": 0,
+    "levelCapIncreasePerUnlock": 1,
+    "upgradeStagePointCosts": [
+      3,
+      6,
+      11,
+      18,
+      27
+    ],
+    "facilityLevelCapUnlocks": [
+      {
+        "stageId": 8,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 15,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 25,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 35,
+        "requiredStagePoints": 0
+      }
     ]
   },
   {
@@ -77,15 +382,45 @@
     "growthFactor": 1,
     "effectPerLevel": 0,
     "levelCapIncreasePerUnlock": 1,
-    "upgradeStagePointCosts": [1, 2, 4, 7, 11, 16, 22, 30],
+    "upgradeStagePointCosts": [
+      1,
+      2,
+      4,
+      7,
+      11,
+      16,
+      22,
+      30
+    ],
     "facilityLevelCapUnlocks": [
-      { "stageId": 5, "requiredStagePoints": 0 },
-      { "stageId": 8, "requiredStagePoints": 0 },
-      { "stageId": 12, "requiredStagePoints": 0 },
-      { "stageId": 17, "requiredStagePoints": 0 },
-      { "stageId": 23, "requiredStagePoints": 0 },
-      { "stageId": 30, "requiredStagePoints": 0 },
-      { "stageId": 36, "requiredStagePoints": 0 }
+      {
+        "stageId": 5,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 8,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 12,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 17,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 23,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 30,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 36,
+        "requiredStagePoints": 0
+      }
     ]
   },
   {
@@ -102,10 +437,20 @@
     "growthFactor": 1,
     "effectPerLevel": 0.2,
     "levelCapIncreasePerUnlock": 1,
-    "upgradeStagePointCosts": [5, 12, 25],
+    "upgradeStagePointCosts": [
+      5,
+      12,
+      25
+    ],
     "facilityLevelCapUnlocks": [
-      { "stageId": 20, "requiredStagePoints": 0 },
-      { "stageId": 30, "requiredStagePoints": 0 }
+      {
+        "stageId": 20,
+        "requiredStagePoints": 0
+      },
+      {
+        "stageId": 30,
+        "requiredStagePoints": 0
+      }
     ]
   },
   {
@@ -124,115 +469,5 @@
     "levelCapIncreasePerUnlock": 0,
     "upgradeStagePointCosts": [],
     "facilityLevelCapUnlocks": []
-  },
-  {
-    "id": 7,
-    "fileName": "FacilityData_DrillTower",
-    "facilityName": "号令櫓",
-    "effectType": "TrainingFrequency",
-    "unlockType": "StagePoint",
-    "requiredStageId": 4,
-    "unlockStagePointCost": 2,
-    "initialMaxLevel": 1,
-    "finalMaxLevel": 5,
-    "baseCost": 0,
-    "growthFactor": 1,
-    "effectPerLevel": 0,
-    "levelCapIncreasePerUnlock": 1,
-    "upgradeStagePointCosts": [3, 6, 11, 18, 27],
-    "facilityLevelCapUnlocks": [
-      { "stageId": 8, "requiredStagePoints": 0 },
-      { "stageId": 15, "requiredStagePoints": 0 },
-      { "stageId": 25, "requiredStagePoints": 0 },
-      { "stageId": 35, "requiredStagePoints": 0 }
-    ]
-  },
-  {
-    "id": 8,
-    "fileName": "FacilityData_MartialHall",
-    "facilityName": "武芸所",
-    "effectType": "AttackBoost",
-    "unlockType": "StagePoint",
-    "requiredStageId": 6,
-    "unlockStagePointCost": 4,
-    "initialMaxLevel": 1,
-    "finalMaxLevel": 5,
-    "baseCost": 0,
-    "growthFactor": 1,
-    "effectPerLevel": 0,
-    "levelCapIncreasePerUnlock": 1,
-    "upgradeStagePointCosts": [4, 8, 14, 23, 35],
-    "facilityLevelCapUnlocks": [
-      { "stageId": 12, "requiredStagePoints": 0 },
-      { "stageId": 20, "requiredStagePoints": 0 },
-      { "stageId": 30, "requiredStagePoints": 0 },
-      { "stageId": 38, "requiredStagePoints": 0 }
-    ]
-  },
-  {
-    "id": 9,
-    "fileName": "FacilityData_StrategyHall",
-    "facilityName": "軍略所",
-    "effectType": "SkillPowerBoost",
-    "unlockType": "StagePoint",
-    "requiredStageId": 9,
-    "unlockStagePointCost": 6,
-    "initialMaxLevel": 1,
-    "finalMaxLevel": 5,
-    "baseCost": 0,
-    "growthFactor": 1,
-    "effectPerLevel": 0,
-    "levelCapIncreasePerUnlock": 1,
-    "upgradeStagePointCosts": [5, 10, 17, 27, 40],
-    "facilityLevelCapUnlocks": [
-      { "stageId": 15, "requiredStagePoints": 0 },
-      { "stageId": 23, "requiredStagePoints": 0 },
-      { "stageId": 32, "requiredStagePoints": 0 },
-      { "stageId": 40, "requiredStagePoints": 0 }
-    ]
-  },
-  {
-    "id": 10,
-    "fileName": "FacilityData_Shrine",
-    "facilityName": "祈願社",
-    "effectType": "SkillChanceBoost",
-    "unlockType": "StagePoint",
-    "requiredStageId": 12,
-    "unlockStagePointCost": 8,
-    "initialMaxLevel": 1,
-    "finalMaxLevel": 5,
-    "baseCost": 0,
-    "growthFactor": 1,
-    "effectPerLevel": 0,
-    "levelCapIncreasePerUnlock": 1,
-    "upgradeStagePointCosts": [6, 12, 20, 31, 45],
-    "facilityLevelCapUnlocks": [
-      { "stageId": 18, "requiredStagePoints": 0 },
-      { "stageId": 26, "requiredStagePoints": 0 },
-      { "stageId": 34, "requiredStagePoints": 0 },
-      { "stageId": 40, "requiredStagePoints": 0 }
-    ]
-  },
-  {
-    "id": 11,
-    "fileName": "FacilityData_Infirmary",
-    "facilityName": "療養所",
-    "effectType": "HealthBoost",
-    "unlockType": "StagePoint",
-    "requiredStageId": 5,
-    "unlockStagePointCost": 3,
-    "initialMaxLevel": 1,
-    "finalMaxLevel": 5,
-    "baseCost": 0,
-    "growthFactor": 1,
-    "effectPerLevel": 0,
-    "levelCapIncreasePerUnlock": 1,
-    "upgradeStagePointCosts": [3, 6, 11, 18, 28],
-    "facilityLevelCapUnlocks": [
-      { "stageId": 10, "requiredStagePoints": 0 },
-      { "stageId": 18, "requiredStagePoints": 0 },
-      { "stageId": 28, "requiredStagePoints": 0 },
-      { "stageId": 38, "requiredStagePoints": 0 }
-    ]
   }
 ]

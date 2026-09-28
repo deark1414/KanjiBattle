@@ -1177,7 +1177,7 @@ public class BattleManager : MonoBehaviour
         {
             GameManager.Instance.RegisterClearedStage(currentStage.stageId);
             experienceResult = PlayerInventory.Instance != null
-                ? PlayerInventory.Instance.GrantBattleExperience()
+                ? PlayerInventory.Instance.GrantBattleExperience(currentStage)
                 : default;
             var recruitmentResults = ResearchBondService.Instance.ResolveVictory(encounteredEnemyCharacterIds);
             effectiveReward = GameManager.Instance.GetEffectiveStagePointReward(currentReward);
@@ -1331,17 +1331,18 @@ public class BattleManager : MonoBehaviour
         var rowImage = row.GetComponent<Image>();
         ModernWafuuPresentation.ApplyFlatSurface(rowImage, new Color(1f, 0.92f, 0.72f, 0.06f));
         rowImage.raycastTarget = false;
-        row.GetComponent<LayoutElement>().preferredHeight = 76f;
+        row.GetComponent<LayoutElement>().preferredHeight = 58f;
 
         int previousBond = Mathf.Max(0, result.bond - result.bondGained);
         float previousProgress = result.threshold > 0 ? Mathf.Clamp01((float)previousBond / result.threshold) : 0f;
         float progress = result.threshold > 0 ? Mathf.Clamp01((float)result.bond / result.threshold) : 0f;
         bool complete = result.readyToRecruit || result.bond >= result.threshold;
-        // 下段を戦闘前、上段を戦闘後として同じ始点から比較する。
-        // 横方向に小さな矩形を継ぎ足さないため、増加量が途切れて見えない。
-        CreateResultBondProgressBar(row.transform, "PreviousBond", 0.27f, 0.29f, 0.98f, 0.46f, previousProgress,
+        // One continuous meter: the muted left segment is the existing bond, and
+        // the brighter segment added directly to its edge is this battle's gain.
+        RectTransform track = CreateResultBondProgressTrack(row.transform, 0.27f, 0.34f, 0.98f, 0.66f);
+        CreateResultBondProgressSegment(track, "ExistingBond", 0f, previousProgress,
             new Color(0.74f, 0.50f, 0.19f, 0.88f));
-        CreateResultBondProgressBar(row.transform, "UpdatedBond", 0.27f, 0.54f, 0.98f, 0.71f, progress,
+        CreateResultBondProgressSegment(track, "GainedBond", previousProgress, progress,
             complete ? new Color(0.28f, 0.96f, 0.48f, 1f) : new Color(0.40f, 0.86f, 0.95f, 1f));
 
         var pieceObject = new GameObject("PieceIcon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
@@ -1356,21 +1357,18 @@ public class BattleManager : MonoBehaviour
         pieceRect.anchorMax = new Vector2(0.13f, 0.5f);
         pieceRect.pivot = new Vector2(0.5f, 0.5f);
         pieceRect.anchoredPosition = Vector2.zero;
-        pieceRect.sizeDelta = new Vector2(72f, 72f);
+        pieceRect.sizeDelta = new Vector2(56f, 56f);
         piece.transform.SetAsLastSibling();
     }
 
-    private static void CreateResultBondProgressBar(
+    private static RectTransform CreateResultBondProgressTrack(
         Transform parent,
-        string name,
         float minX,
         float minY,
         float maxX,
-        float maxY,
-        float progress,
-        Color fillColor)
+        float maxY)
     {
-        var trackObject = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        var trackObject = new GameObject("BondProgress", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
         trackObject.transform.SetParent(parent, false);
         var track = trackObject.GetComponent<Image>();
         ModernWafuuPresentation.ApplyFlatSurface(track, new Color(0.04f, 0.035f, 0.025f, 0.86f));
@@ -1380,20 +1378,35 @@ public class BattleManager : MonoBehaviour
         trackRect.anchorMax = new Vector2(maxX, maxY);
         trackRect.offsetMin = Vector2.zero;
         trackRect.offsetMax = Vector2.zero;
+        trackObject.transform.SetAsFirstSibling();
+        return trackRect;
+    }
 
-        var fillObject = new GameObject("Fill", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        fillObject.transform.SetParent(trackObject.transform, false);
+    private static void CreateResultBondProgressSegment(
+        RectTransform track,
+        string name,
+        float start,
+        float end,
+        Color fillColor)
+    {
+        if (track == null || end <= start)
+        {
+            return;
+        }
+
+        var fillObject = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        fillObject.transform.SetParent(track, false);
         var fill = fillObject.GetComponent<Image>();
-        fill.sprite = track.sprite;
-        fill.type = track.type;
+        var trackImage = track.GetComponent<Image>();
+        fill.sprite = trackImage != null ? trackImage.sprite : null;
+        fill.type = trackImage != null ? trackImage.type : Image.Type.Simple;
         fill.raycastTarget = false;
         fill.color = fillColor;
         RectTransform fillRect = fill.rectTransform;
-        fillRect.anchorMin = Vector2.zero;
-        fillRect.anchorMax = new Vector2(progress, 1f);
-        fillRect.offsetMin = new Vector2(1f, 1f);
-        fillRect.offsetMax = new Vector2(-1f, -1f);
-        trackObject.transform.SetAsFirstSibling();
+        fillRect.anchorMin = new Vector2(start, 0f);
+        fillRect.anchorMax = new Vector2(end, 1f);
+        fillRect.offsetMin = new Vector2(start <= 0f ? 1f : 0f, 1f);
+        fillRect.offsetMax = new Vector2(end >= 1f ? -1f : 0f, -1f);
     }
 
     private void ConfigureResultActions()

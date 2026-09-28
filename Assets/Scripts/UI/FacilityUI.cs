@@ -242,6 +242,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         case FacilityEffectType.SkillPowerBoost: return "技能威力";
         case FacilityEffectType.SkillChanceBoost: return "技能発動";
         case FacilityEffectType.HealthBoost: return "体力強化";
+        case FacilityEffectType.PlayerLevelCap: return "軍師上限";
         default: return "施設";
     }
 }
@@ -339,7 +340,13 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         landscapeImage.color = locked
             ? new Color(0.34f, 0.34f, 0.34f, 0.58f)
             : Color.white;
-        Stretch(landscapeImage.rectTransform, new Vector2(0.03f, 0.18f), new Vector2(0.42f, 0.95f));
+        bool landscape = !UnityUIRuntimeTheme.IsPortraitNarrowScreen();
+        // Wide cards have substantially more lateral room. Keep the building as the
+        // recognizable control, but do not let it dominate the facility details.
+        Stretch(
+            landscapeImage.rectTransform,
+            landscape ? new Vector2(0.06f, 0.27f) : new Vector2(0.03f, 0.18f),
+            landscape ? new Vector2(0.33f, 0.84f) : new Vector2(0.42f, 0.95f));
         landscapeImage.rectTransform.localScale = ShouldMirrorLandscape()
             ? new Vector3(-1f, 1f, 1f)
             : Vector3.one;
@@ -380,12 +387,6 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             outline.effectColor = new Color(1f, 0.90f, 0.72f, 0.92f);
             outline.effectDistance = new Vector2(1.5f, -1.5f);
 
-            var sealRect = actionSeal.rectTransform;
-            sealRect.anchorMin = new Vector2(0.72f, 0.70f);
-            sealRect.anchorMax = new Vector2(0.92f, 0.91f);
-            sealRect.offsetMin = Vector2.zero;
-            sealRect.offsetMax = Vector2.zero;
-
             var labelObject = new GameObject("Label", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
             labelObject.transform.SetParent(sealObject.transform, false);
             actionSealText = labelObject.GetComponent<TextMeshProUGUI>();
@@ -402,6 +403,15 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             labelRect.offsetMin = new Vector2(2f, 2f);
             labelRect.offsetMax = new Vector2(-2f, -2f);
         }
+
+        // Keep the action in its own lower row. It used to sit over the right side
+        // of the effect caption, making both the label and the action hard to read.
+        var sealRect = actionSeal.rectTransform;
+        sealRect.anchorMin = new Vector2(0.52f, 0.12f);
+        sealRect.anchorMax = new Vector2(0.92f, 0.30f);
+        sealRect.offsetMin = Vector2.zero;
+        sealRect.offsetMax = Vector2.zero;
+        ApplyDescriptionActionClearance(visible);
 
         actionSeal.gameObject.SetActive(visible);
         if (!visible)
@@ -422,6 +432,22 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         actionSeal.transform.SetAsLastSibling();
     }
 
+    private void ApplyDescriptionActionClearance(bool actionVisible)
+    {
+        if (descriptionText == null)
+        {
+            return;
+        }
+
+        // The bottom row is reserved only while an unlock or upgrade can be made.
+        // In every other state the effect caption retains the full information plate.
+        RectTransform rect = descriptionText.rectTransform;
+        rect.anchorMin = actionVisible ? new Vector2(0.07f, 0.38f) : new Vector2(0.07f, 0.10f);
+        rect.anchorMax = new Vector2(0.93f, 0.90f);
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+    }
+
     private Sprite GetLandscapeSprite()
     {
         string path = facility.effectType switch
@@ -437,6 +463,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             FacilityEffectType.SkillPowerBoost => "UI/ModernWafuu/Buildings/FacilityStrategyHall",
             FacilityEffectType.SkillChanceBoost => "UI/ModernWafuu/Buildings/FacilityShrine",
             FacilityEffectType.HealthBoost => "UI/ModernWafuu/Buildings/FacilityInfirmary",
+            FacilityEffectType.PlayerLevelCap => "UI/ModernWafuu/Buildings/FacilityRankTower",
             _ => "UI/ModernWafuu/Buildings/FacilityBarracks",
         };
 
@@ -649,12 +676,13 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             FacilityEffectType.Recruitment => $"縁の獲得 {FacilityManager.Instance.GetRecruitmentBondGain()}倍",
             // Cards are scanned at a glance. Keep the two experience gains short
             // enough to remain legible in either column on landscape screens.
-            FacilityEffectType.Training => $"戦闘経験 +{FacilityManager.Instance.GetBattleExperienceRate() * 100f:0}%\n稽古経験 +{FacilityManager.Instance.GetMockTrainingExperienceRate() * 100f:0.##}%",
+            FacilityEffectType.Training => $"戦闘経験 x{FacilityManager.Instance.GetBattleExperienceMultiplier():0.##}\n稽古経験 +{FacilityManager.Instance.GetMockTrainingExperienceRate() * 100f:0.##}%",
             FacilityEffectType.TrainingFrequency => $"稽古の間隔 {FacilityManager.Instance.GetMockTrainingCooldownSeconds()}秒",
             FacilityEffectType.AttackBoost => $"味方ATK x{FacilityManager.Instance.GetAttackMultiplier():0.##}",
             FacilityEffectType.SkillPowerBoost => $"技能威力 x{FacilityManager.Instance.GetSkillPowerMultiplier():0.##}",
             FacilityEffectType.SkillChanceBoost => $"技能発動 x{FacilityManager.Instance.GetSkillChanceMultiplier():0.##}",
             FacilityEffectType.HealthBoost => $"味方HP x{FacilityManager.Instance.GetHealthMultiplier():0.##}",
+            FacilityEffectType.PlayerLevelCap => $"軍師上限 Lv.{FacilityManager.Instance.GetPlayerLevelCap()}",
             FacilityEffectType.BattleSpeed => $"最高速度 x{GetSpeedForLevel(level):0.##}",
             FacilityEffectType.StagePointBoost => $"戦果獲得 +{facility.GetEffectValue(level) * 100f:0}%",
             FacilityEffectType.StageRetry => "同じ局へ即再挑戦",
@@ -790,6 +818,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             case FacilityEffectType.SkillPowerBoost: return "味方の技能の威力を高めます。";
             case FacilityEffectType.SkillChanceBoost: return "味方の技能発動率を倍率で高めます。";
             case FacilityEffectType.HealthBoost: return "味方の最大HPを高め、長く戦える軍勢にします。";
+            case FacilityEffectType.PlayerLevelCap: return "章末を越えた後、戦果で軍師のレベル上限を引き上げます。";
             default: return "施設の効果を高めます。";
         }
     }
