@@ -45,8 +45,8 @@ public class CharacterEntryUI : MonoBehaviour
 
         HideLegacyText();
         EnsureBondMeter(threshold > 0 ? Mathf.Clamp01((float)bond / threshold) : 0f, canRecruit);
-        ApplyBondRowLayout();
         SetRecruitState(canRecruit);
+        ApplyBondRowLayout();
 
         selfButton.onClick.RemoveAllListeners();
         if (canRecruit && onRecruit != null)
@@ -143,7 +143,13 @@ public class CharacterEntryUI : MonoBehaviour
         float cardWidth = cardRect != null ? Mathf.Max(cardRect.rect.width, cardRect.sizeDelta.x) : 108f;
         // The roster groups are intentionally variable-width. Scale the piece with
         // its group cell so a single member does not look stranded in empty space.
-        float iconSize = Mathf.Clamp(cardWidth * 0.82f, 66f, compact ? 142f : 156f);
+        bool landscape = !UnityUIRuntimeTheme.IsPortraitNarrowScreen();
+        // On wide screens the roster cells expand with the viewport. Cap the
+        // physical piece instead of scaling it into an oversized centerpiece.
+        float iconSize = Mathf.Clamp(
+            cardWidth * (landscape ? 0.64f : 0.82f),
+            66f,
+            landscape ? 116f : (compact ? 142f : 156f));
         iconRect.sizeDelta = Vector2.one * iconSize;
     }
 
@@ -162,7 +168,7 @@ public class CharacterEntryUI : MonoBehaviour
             iconImage.color = owned
                 ? Color.white
                 : readyToRecruit
-                    ? new Color(1f, 0.93f, 0.70f, 1f)
+                    ? new Color(0.78f, 1f, 0.82f, 1f)
                     : new Color(0.46f, 0.46f, 0.46f, 0.82f);
         }
 
@@ -212,10 +218,11 @@ public class CharacterEntryUI : MonoBehaviour
             ModernWafuuPresentation.ApplyFlatSurface(recruitHalo, new Color(0.22f, 0.82f, 0.36f, 0.22f));
 
             RectTransform haloRect = recruitHalo.rectTransform;
-            haloRect.anchorMin = new Vector2(0.20f, 0.17f);
-            haloRect.anchorMax = new Vector2(0.80f, 0.88f);
-            haloRect.offsetMin = Vector2.zero;
-            haloRect.offsetMax = Vector2.zero;
+            haloRect.anchorMin = new Vector2(0.14f, 0.5f);
+            haloRect.anchorMax = new Vector2(0.14f, 0.5f);
+            haloRect.pivot = new Vector2(0.5f, 0.5f);
+            haloRect.anchoredPosition = Vector2.zero;
+            haloRect.sizeDelta = new Vector2(90f, 90f);
             recruitHalo.transform.SetAsFirstSibling();
         }
 
@@ -234,7 +241,7 @@ public class CharacterEntryUI : MonoBehaviour
         }
 
         float pulse = 0.5f + 0.5f * Mathf.Sin(Time.unscaledTime * 5.2f);
-        recruitHalo.color = new Color(0.18f, 0.72f + pulse * 0.20f, 0.32f, 0.16f + pulse * 0.24f);
+        recruitHalo.color = new Color(0.18f, 0.72f + pulse * 0.20f, 0.32f, 0.10f + pulse * 0.16f);
         if (iconOutline != null)
         {
             iconOutline.effectColor = new Color(0.36f, 0.95f, 0.50f, 0.50f + pulse * 0.45f);
@@ -258,10 +265,15 @@ public class CharacterEntryUI : MonoBehaviour
         }
 
         bondTrack.gameObject.SetActive(true);
+        ModernWafuuPresentation.ApplyFlatSurface(
+            bondTrack,
+            readyToRecruit
+                ? new Color(0.08f, 0.28f, 0.13f, 0.68f)
+                : new Color(0.15f, 0.13f, 0.10f, 0.44f));
 
         RectTransform trackRect = bondTrack.rectTransform;
-        trackRect.anchorMin = new Vector2(0.29f, 0.35f);
-        trackRect.anchorMax = new Vector2(0.94f, 0.65f);
+        trackRect.anchorMin = new Vector2(0.16f, 0.37f);
+        trackRect.anchorMax = new Vector2(0.94f, 0.63f);
         trackRect.offsetMin = Vector2.zero;
         trackRect.offsetMax = Vector2.zero;
 
@@ -284,8 +296,8 @@ public class CharacterEntryUI : MonoBehaviour
         }
 
         RectTransform iconRect = iconImage.rectTransform;
-        iconRect.anchorMin = new Vector2(0.14f, 0.5f);
-        iconRect.anchorMax = new Vector2(0.14f, 0.5f);
+        iconRect.anchorMin = new Vector2(0.12f, 0.5f);
+        iconRect.anchorMax = new Vector2(0.12f, 0.5f);
         iconRect.pivot = new Vector2(0.5f, 0.5f);
         iconRect.anchoredPosition = Vector2.zero;
         iconRect.sizeDelta = new Vector2(76f, 76f);
@@ -293,10 +305,11 @@ public class CharacterEntryUI : MonoBehaviour
         if (recruitHalo != null)
         {
             RectTransform haloRect = recruitHalo.rectTransform;
-            haloRect.anchorMin = new Vector2(0.04f, 0.10f);
-            haloRect.anchorMax = new Vector2(0.24f, 0.90f);
-            haloRect.offsetMin = Vector2.zero;
-            haloRect.offsetMax = Vector2.zero;
+            haloRect.anchorMin = new Vector2(0.12f, 0.5f);
+            haloRect.anchorMax = new Vector2(0.12f, 0.5f);
+            haloRect.pivot = new Vector2(0.5f, 0.5f);
+            haloRect.anchoredPosition = Vector2.zero;
+            haloRect.sizeDelta = new Vector2(90f, 90f);
         }
     }
 

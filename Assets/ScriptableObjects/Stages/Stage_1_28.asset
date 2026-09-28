@@ -22,7 +22,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2a2c1d2944fb44cbc86f2b832147d0e1, type: 2}
   - {fileID: 11400000, guid: 1e8376bc251e144439579c16721a02dd, type: 2}
   - {fileID: 11400000, guid: c19d7a2070dee40bdb10bdd1e03c43f1, type: 2}
-  rewardStagePoints: 2
+  rewardStagePoints: 10
   slotCount: 5
   trapDamage: 32
   trapCount: 1

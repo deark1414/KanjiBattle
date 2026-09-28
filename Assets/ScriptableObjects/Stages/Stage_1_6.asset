@@ -18,7 +18,7 @@ MonoBehaviour:
   enemyPool:
   - {fileID: 11400000, guid: a45a3f137c1464a39a5bcd33f5e6348f, type: 2}
   - {fileID: 11400000, guid: a45a3f137c1464a39a5bcd33f5e6348f, type: 2}
-  rewardStagePoints: 2
+  rewardStagePoints: 5
   slotCount: 3
   trapDamage: 8
   trapCount: 1

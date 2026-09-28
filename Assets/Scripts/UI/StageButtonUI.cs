@@ -258,7 +258,7 @@ public class StageButtonUI : MonoBehaviour
             ? GameManager.Instance.GetEffectiveStagePointReward(stageData.rewardStagePoints)
             : stageData.rewardStagePoints;
         int experience = PlayerInventory.Instance != null
-            ? PlayerInventory.Instance.GetEffectiveBattleExperienceReward()
+            ? PlayerInventory.Instance.GetEffectiveBattleExperienceReward(stageData)
             : PlayerInventory.BaseBattleExperience;
         string rewardLine = $"敵 Lv.{stageData.enemyLevel}  |  戦果 +{stagePoints}  |  軍師経験 +{experience}";
         bool mapNode = IsMapNode();
@@ -640,6 +640,8 @@ public class StageButtonUI : MonoBehaviour
         var rect = GetComponent<RectTransform>();
         return rect != null && rect.sizeDelta.x <= 220f;
     }
+
+    public bool IsMapNodeForLayout => IsMapNode();
 
     private void OnClick()
     {

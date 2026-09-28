@@ -81,7 +81,9 @@ public class FormationUI : MonoBehaviour
         slotRect.offsetMax = Vector2.zero;
 
         Canvas.ForceUpdateCanvases();
-        float cellHeight = Mathf.Clamp(slotRect.rect.height - 8f, 82f, 112f);
+        // Reserve a visible top margin before the piece artwork. Without it the
+        // selected piece appeared glued to the deployment band above.
+        float cellHeight = Mathf.Clamp(slotRect.rect.height - 24f, 82f, 112f);
 
         var grid = slotRect.GetComponent<GridLayoutGroup>();
         if (grid != null)
@@ -89,7 +91,7 @@ public class FormationUI : MonoBehaviour
             grid.enabled = true;
             grid.cellSize = new Vector2(164f, cellHeight);
             grid.spacing = new Vector2(12f, 10f);
-            grid.padding = new RectOffset(4, 4, 4, 4);
+            grid.padding = new RectOffset(4, 4, 30, 4);
             grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
             grid.constraintCount = 5;
             grid.childAlignment = TextAnchor.UpperCenter;
@@ -318,8 +320,14 @@ public class FormationUI : MonoBehaviour
             host = hostObject.GetComponent<RectTransform>();
         }
 
-        host.anchorMin = new Vector2(0.40f, 0.455f);
-        host.anchorMax = new Vector2(0.60f, 0.492f);
+        // Keep this beside the formation tray rather than in a row between the
+        // formation and the owned-piece list. The previous row collided with the
+        // list on wide screens and made the action look detached from its target.
+        // Align the utility action with the bottom of the piece art. This keeps
+        // the row visually coherent while leaving a small breathing space above
+        // the active formation.
+        host.anchorMin = new Vector2(0.76f, 0.560f);
+        host.anchorMax = new Vector2(0.92f, 0.620f);
         host.offsetMin = Vector2.zero;
         host.offsetMax = Vector2.zero;
         var layout = host.GetComponent<HorizontalLayoutGroup>();
@@ -560,8 +568,8 @@ public class FormationUI : MonoBehaviour
         icon.preserveAspect = true;
         icon.raycastTarget = false;
         RectTransform iconRect = icon.rectTransform;
-        iconRect.anchorMin = new Vector2(0.03f, 0.17f);
-        iconRect.anchorMax = new Vector2(0.97f, 0.98f);
+        iconRect.anchorMin = new Vector2(0.03f, 0.15f);
+        iconRect.anchorMax = new Vector2(0.97f, 0.88f);
         iconRect.offsetMin = Vector2.zero;
         iconRect.offsetMax = Vector2.zero;
         var fitter = icon.GetComponent<AspectRatioFitter>();

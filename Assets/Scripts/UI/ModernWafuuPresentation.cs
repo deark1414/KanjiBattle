@@ -501,7 +501,7 @@ public static class ModernWafuuPresentation
 
         ApplyFlatSurface(bar, new Color(0.12f, 0.10f, 0.07f, 0.90f));
         Stretch(bar.rectTransform,
-            UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? new Vector2(0.035f, 0.925f) : new Vector2(0.30f, 0.925f),
+            new Vector2(0.035f, 0.925f),
             new Vector2(0.965f, 0.985f));
         bar.transform.SetAsLastSibling();
 

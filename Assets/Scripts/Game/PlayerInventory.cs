@@ -23,6 +23,8 @@ public class PlayerInventory : MonoBehaviour
     private const int ExperienceTierSize = 5;
     private const int MaximumExperienceTier = 9;
     private const int ExperienceTierMultiplier = 3;
+    private const float StageExperienceRate = 0.04f;
+    private const float StageExperienceRateStep = 0.002f;
     private const float MockTrainingPollIntervalSeconds = 1f;
     private const int MaximumOfflineTrainingCycles = 80;
 
@@ -142,9 +144,9 @@ public class PlayerInventory : MonoBehaviour
         return Mathf.Max(1, Mathf.RoundToInt(character.GetMaxHP(level) * multiplier));
     }
 
-    public PlayerExperienceResult GrantBattleExperience()
+    public PlayerExperienceResult GrantBattleExperience(StageData stage)
     {
-        return GrantPlayerExperience(GetEffectiveBattleExperienceReward());
+        return GrantPlayerExperience(GetEffectiveBattleExperienceReward(stage));
     }
 
     public PlayerExperienceResult GrantMockTrainingExperience()
@@ -249,6 +251,13 @@ public class PlayerInventory : MonoBehaviour
 
     public int GetEffectiveLevelCap()
     {
+        if (FacilityManager.Instance != null)
+        {
+            return FacilityManager.Instance.GetPlayerLevelCap();
+        }
+
+        // During initial scene startup the facility manager may not exist yet.
+        // Preserve the stage-derived cap until the rank tower is ready.
         int clearedStageId = GameManager.Instance != null ? GameManager.Instance.GetHighestClearedStageId() : 0;
         int unlockedBands = Mathf.Max(0, clearedStageId / 5);
         return Mathf.Clamp(5 + unlockedBands * 6, 5, 50);
@@ -262,12 +271,13 @@ public class PlayerInventory : MonoBehaviour
         SaveProgress();
     }
 
-    public int GetEffectiveBattleExperienceReward()
+    public int GetEffectiveBattleExperienceReward(StageData stage)
     {
-        float rate = FacilityManager.Instance != null
-            ? FacilityManager.Instance.GetBattleExperienceRate()
-            : FacilityManager.BaseBattleExperienceRate;
-        return GetExperienceRewardFromCurrentRequirement(rate);
+        int baseReward = GetStageBattleExperienceReward(stage);
+        float multiplier = FacilityManager.Instance != null
+            ? FacilityManager.Instance.GetBattleExperienceMultiplier()
+            : 1f;
+        return Mathf.Max(1, Mathf.CeilToInt(baseReward * multiplier));
     }
 
     private int GetEffectiveMockTrainingExperienceReward()
@@ -357,6 +367,21 @@ public class PlayerInventory : MonoBehaviour
     private int GetExperienceRewardFromCurrentRequirement(float rate)
     {
         return Mathf.Max(1, Mathf.CeilToInt(GetExperienceRequiredForLevel(playerLevel) * rate));
+    }
+
+    private static int GetStageBattleExperienceReward(StageData stage)
+    {
+        int stageId = Mathf.Max(1, stage != null ? stage.stageId : 1);
+        int stageTier = (stageId - 1) / ExperienceTierSize;
+        int stagePosition = (stageId - 1) % ExperienceTierSize;
+        int tierRequirement = BaseBattleExperience * (int)Mathf.Pow(ExperienceTierMultiplier, stageTier);
+
+        // Each stage within a five-stage band pays a little more. The next band
+        // rises with the same 10 -> 30 -> 90 progression as level requirements.
+        float stageRate = StageExperienceRate + stagePosition * StageExperienceRateStep;
+        int scaledReward = Mathf.CeilToInt(tierRequirement * stageRate);
+        int stageBonus = 1 + (stageId - 1) / 2;
+        return Mathf.Max(1, scaledReward + stageBonus);
     }
 
     private string SerializeOwnedCharacters()
