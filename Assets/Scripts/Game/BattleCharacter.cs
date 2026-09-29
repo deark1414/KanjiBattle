@@ -44,7 +44,8 @@ public void Init(CharacterData data, Vector2Int pos, bool ally, int level = 1)
 
     state.Initialize(data, level, ally);
 
-Sprite displayIcon = ally || data.enemyIcon == null ? data.icon : data.enemyIcon;
+bool usesEnemyIcon = !ally && data.enemyIcon != null;
+Sprite displayIcon = usesEnemyIcon ? data.enemyIcon : data.icon;
 bool usesIcon = displayIcon != null;
 if (background != null)
 {
@@ -279,13 +280,14 @@ private void ConfigureBattleLabels(bool usesIcon, bool ally)
 
     if (hpBar != null)
     {
+        hpBar.gameObject.SetActive(true);
         hpBar.color = ally ? new Color(0.1f, 0.9f, 0.28f, 1f) : new Color(1f, 0.22f, 0.16f, 1f);
         var hpRect = hpBar.rectTransform;
         hpRect.anchorMin = new Vector2(0.5f, 0f);
         hpRect.anchorMax = new Vector2(0.5f, 0f);
         hpRect.pivot = new Vector2(0.5f, 0f);
         hpRect.anchoredPosition = new Vector2(0f, 1f);
-            hpRect.sizeDelta = usesIcon ? new Vector2(52f, 10f) : new Vector2(50f, 10f);
+        hpRect.sizeDelta = usesIcon ? new Vector2(52f, 10f) : new Vector2(50f, 10f);
     }
 
     if (levelText != null)

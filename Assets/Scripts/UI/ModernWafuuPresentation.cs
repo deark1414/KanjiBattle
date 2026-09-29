@@ -512,20 +512,21 @@ public static class ModernWafuuPresentation
         int level = PlayerInventory.Instance != null ? PlayerInventory.Instance.PlayerLevel : 1;
         int experience = PlayerInventory.Instance != null ? PlayerInventory.Instance.PlayerExperience : 0;
         int nextExperience = PlayerInventory.Instance != null ? PlayerInventory.Instance.GetExperienceToNextPlayerLevel() : 1;
+        bool levelCapped = PlayerInventory.Instance != null && PlayerInventory.Instance.IsAtEffectiveLevelCap;
         int trainingSeconds = PlayerInventory.Instance != null ? PlayerInventory.Instance.GetSecondsUntilNextMockTraining() : 0;
-        bool trainingCapped = PlayerInventory.Instance != null && PlayerInventory.Instance.IsAtEffectiveLevelCap;
         int stagePoints = GameManager.Instance != null ? GameManager.Instance.StagePoints : 0;
+        string experienceStatus = levelCapped ? $"上限・{experience}蓄積" : $"{experience}/{nextExperience}";
 
         bool portrait = UnityUIRuntimeTheme.IsPortraitNarrowScreen();
         CreateStatusButton(bar.transform, "PlayerLevelStatus", "軍師", $"Lv. {level}",
             portrait ? new Vector2(0.01f, 0.10f) : new Vector2(0.01f, 0.10f),
             portrait ? new Vector2(0.21f, 0.90f) : new Vector2(0.22f, 0.90f),
             anchor => UIManager.Instance?.ShowProgressInfo(ProgressInfoKind.PlayerLevel, anchor));
-        CreateStatusButton(bar.transform, "PlayerExperienceStatus", "経験", $"{experience}/{nextExperience}",
+        CreateStatusButton(bar.transform, "PlayerExperienceStatus", "経験", experienceStatus,
             portrait ? new Vector2(0.22f, 0.10f) : new Vector2(0.23f, 0.10f),
             portrait ? new Vector2(0.43f, 0.90f) : new Vector2(0.45f, 0.90f),
             anchor => UIManager.Instance?.ShowProgressInfo(ProgressInfoKind.PlayerExperience, anchor));
-        CreateStatusButton(bar.transform, "MockTrainingStatus", "稽古", trainingCapped ? "上限" : $"{trainingSeconds}秒",
+        CreateStatusButton(bar.transform, "MockTrainingStatus", "稽古", $"{trainingSeconds}秒",
             portrait ? new Vector2(0.44f, 0.10f) : new Vector2(0.46f, 0.10f),
             portrait ? new Vector2(0.61f, 0.90f) : new Vector2(0.61f, 0.90f),
             null, 16f, 20f);
@@ -749,11 +750,13 @@ public static class ModernWafuuPresentation
         int level = PlayerInventory.Instance != null ? PlayerInventory.Instance.PlayerLevel : 1;
         int experience = PlayerInventory.Instance != null ? PlayerInventory.Instance.PlayerExperience : 0;
         int nextExperience = PlayerInventory.Instance != null ? PlayerInventory.Instance.GetExperienceToNextPlayerLevel() : 1;
+        bool levelCapped = PlayerInventory.Instance != null && PlayerInventory.Instance.IsAtEffectiveLevelCap;
         int stagePoints = GameManager.Instance != null ? GameManager.Instance.StagePoints : 0;
 
         ConfigureProgressText(EnsureText(panel.transform, "LevelLabel"), "軍師", new Vector2(0.06f, 0.51f), new Vector2(0.38f, 0.91f), 13f, new Color(0.84f, 0.73f, 0.48f));
         ConfigureProgressText(EnsureText(panel.transform, "LevelValue"), $"Lv. {level}", new Vector2(0.05f, 0.16f), new Vector2(0.42f, 0.65f), 29f, new Color(1f, 0.92f, 0.68f));
-        ConfigureProgressText(EnsureText(panel.transform, "ExperienceValue"), $"EXP {experience}/{nextExperience}", new Vector2(0.05f, 0.02f), new Vector2(0.48f, 0.20f), 11f, new Color(0.80f, 0.84f, 0.78f));
+        string experienceText = levelCapped ? $"EXP 上限・{experience}蓄積" : $"EXP {experience}/{nextExperience}";
+        ConfigureProgressText(EnsureText(panel.transform, "ExperienceValue"), experienceText, new Vector2(0.05f, 0.02f), new Vector2(0.48f, 0.20f), 11f, new Color(0.80f, 0.84f, 0.78f));
         ConfigureProgressText(EnsureText(panel.transform, "StagePointLabel"), "戦果", new Vector2(0.56f, 0.51f), new Vector2(0.94f, 0.91f), 13f, new Color(0.84f, 0.73f, 0.48f));
         ConfigureProgressText(EnsureText(panel.transform, "StagePointValue"), stagePoints.ToString(), new Vector2(0.54f, 0.15f), new Vector2(0.95f, 0.65f), 30f, new Color(1f, 0.92f, 0.68f));
     }

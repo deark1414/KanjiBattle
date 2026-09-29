@@ -22,7 +22,7 @@ MonoBehaviour:
   finalMaxLevel: 5
   levelCapIncreasePerUnlock: 1
   facilityLevelCapUnlocks:
-  - stageId: 2
+  - stageId: 5
     requiredStagePoints: 0
   - stageId: 12
     requiredStagePoints: 0

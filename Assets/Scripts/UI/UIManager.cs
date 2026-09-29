@@ -311,7 +311,7 @@ public class UIManager : MonoBehaviour
             case ProgressInfoKind.PlayerLevel:
                 return "戦闘で得る経験値により上がる、軍師の采配力です。解放済みの駒全体で共有され、レベルが上がるほど強い局に挑めます。";
             case ProgressInfoKind.PlayerExperience:
-                return "局の勝利と軍勢の稽古で獲得します。必要量に達すると軍師レベルが上がり、解放済みの駒がまとめて成長します。";
+                return "局の勝利と軍勢の稽古で獲得します。必要量に達すると軍師レベルが上がり、解放済みの駒がまとめて成長します。上限中に得た経験値も蓄積され、昇段櫓で上限を解放すると自動的に反映されます。";
             default:
                 return "局の勝利報酬です。城下で施設を解放・強化し、編成枠、経験値、縁、戦闘速度などを整えます。";
         }

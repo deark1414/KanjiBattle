@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,11 +41,16 @@ public class FormationCharacterListUI : MonoBehaviour
 
         ClearEntries();
 
-        foreach (var kv in PlayerInventory.Instance.GetOwnedCharacters())
+        var ownedCharacters = PlayerInventory.Instance.GetOwnedCharacters()
+            .Where(pair => pair.Key != null)
+            .Select(pair => pair.Key)
+            .OrderBy(character => character.characterId);
+
+        foreach (var character in ownedCharacters)
         {
             var entry = Instantiate(characterEntryPrefab, content);
             var ui = entry.GetComponent<CharacterEntryForFormationUI>();
-            ui.SetCharacter(kv.Key, PlayerInventory.Instance.PlayerLevel);
+            ui.SetCharacter(character, PlayerInventory.Instance.PlayerLevel);
         }
     }
 

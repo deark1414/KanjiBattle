@@ -463,9 +463,12 @@ public sealed class RosterPracticeVfx : MonoBehaviour
     {
         if (result.experience > 0)
         {
+            bool storedAtCap = PlayerInventory.Instance != null && PlayerInventory.Instance.IsAtEffectiveLevelCap;
             RefreshTrainingStatus(result.level > result.previousLevel
                 ? $"Lv.{result.previousLevel} → Lv.{result.level}"
-                : $"+{result.experience} EXP");
+                : storedAtCap
+                    ? $"蓄積 +{result.experience} EXP"
+                    : $"+{result.experience} EXP");
         }
     }
 

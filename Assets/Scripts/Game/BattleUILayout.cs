@@ -52,10 +52,12 @@ public static class BattleUILayout
     {
         bool portrait = UnityUIRuntimeTheme.IsPortraitNarrowScreen();
         ConfigureBattleField(battleField, portrait);
+        // The command band is a background surface. Create and send it behind the
+        // interactive controls before laying out the scroll view and buttons.
+        EnsureCommandBand(panelRoot, portrait);
         ConfigureBattleLog(logScroll, portrait);
         ConfigureControlButtons(panelRoot, portrait);
         EnsureBattleHeader(panelRoot, portrait);
-        EnsureCommandBand(panelRoot, portrait);
         HideLegacyBackButton(panelRoot);
 
         if (battleField != null && battleField.TryGetComponent(out GridLayoutGroup grid))
@@ -190,9 +192,9 @@ public static class BattleUILayout
         outline.effectColor = new Color(0.78f, 0.59f, 0.30f, 0.50f);
         outline.effectDistance = new Vector2(1f, -1f);
 
-        // Keep the command band behind the scroll log and buttons while remaining above
-        // the battle environment. It never participates in input.
-        band.transform.SetSiblingIndex(Mathf.Min(1, panelRoot.childCount - 1));
+        // Keep the command band behind every direct child on the panel. The previous
+        // index-based placement could put it above scene-authored pause/resume labels.
+        band.transform.SetAsFirstSibling();
     }
 
     private static void ConfigureBattleLog(ScrollRect logScroll, bool portrait)
@@ -209,6 +211,24 @@ public static class BattleUILayout
         logRect.anchorMax = portrait ? new Vector2(0.96f, 0.25f) : new Vector2(0.84f, 0.23f);
         logRect.offsetMin = Vector2.zero;
         logRect.offsetMax = Vector2.zero;
+        logRect.SetAsLastSibling();
+
+        var content = logScroll.content;
+        if (content == null) return;
+
+        content.anchorMin = new Vector2(0f, 1f);
+        content.anchorMax = new Vector2(1f, 1f);
+        content.pivot = new Vector2(0.5f, 1f);
+        content.anchoredPosition = Vector2.zero;
+        content.sizeDelta = new Vector2(-12f, 0f);
+
+        // BattleManager lays each line out explicitly. Keeping an automatic
+        // layout group here can collapse the TMP entry height during a rebuild.
+        var layout = content.GetComponent<VerticalLayoutGroup>();
+        if (layout != null) layout.enabled = false;
+
+        var fitter = content.GetComponent<ContentSizeFitter>();
+        if (fitter != null) fitter.enabled = false;
     }
 
     private static void HideScrollbars(ScrollRect scrollRect)
@@ -223,12 +243,12 @@ public static class BattleUILayout
 
     private static void ConfigureControlButtons(Transform panelRoot, bool portrait)
     {
-        PlaceControlButton(FindChildRect(panelRoot, "PauseButton"), portrait ? new Vector2(0.34f, 0.285f) : new Vector2(0.42f, 0.285f), portrait, panelRoot);
-        PlaceControlButton(FindChildRect(panelRoot, "ResumeButton"), portrait ? new Vector2(0.54f, 0.285f) : new Vector2(0.58f, 0.285f), portrait, panelRoot);
-        PlaceControlButton(FindChildRect(panelRoot, "SpeedButton"), portrait ? new Vector2(0.74f, 0.285f) : new Vector2(0.70f, 0.285f), portrait, panelRoot);
+        PlaceControlButton(FindChildRect(panelRoot, "PauseButton"), "停止", portrait ? new Vector2(0.34f, 0.285f) : new Vector2(0.40f, 0.285f), portrait, panelRoot);
+        PlaceControlButton(FindChildRect(panelRoot, "ResumeButton"), "再開", portrait ? new Vector2(0.54f, 0.285f) : new Vector2(0.55f, 0.285f), portrait, panelRoot);
+        PlaceControlButton(FindChildRect(panelRoot, "SpeedButton"), null, portrait ? new Vector2(0.74f, 0.285f) : new Vector2(0.70f, 0.285f), portrait, panelRoot);
     }
 
-    private static void PlaceControlButton(RectTransform rect, Vector2 centerAnchor, bool portrait, Transform panelRoot)
+    private static void PlaceControlButton(RectTransform rect, string label, Vector2 centerAnchor, bool portrait, Transform panelRoot)
     {
         if (rect == null) return;
 
@@ -241,7 +261,34 @@ public static class BattleUILayout
         rect.anchorMax = centerAnchor;
         rect.pivot = new Vector2(0.5f, 0.5f);
         rect.anchoredPosition = Vector2.zero;
-        rect.sizeDelta = portrait ? new Vector2(120f, 44f) : new Vector2(120f, 48f);
+        rect.sizeDelta = portrait ? new Vector2(120f, 44f) : new Vector2(144f, 54f);
+        rect.SetAsLastSibling();
+
+        var image = rect.GetComponent<Image>();
+        if (image != null)
+        {
+            image.color = new Color(0.38f, 0.29f, 0.17f, 1f);
+        }
+
+        var text = rect.GetComponentInChildren<TextMeshProUGUI>(true);
+        if (text == null) return;
+
+        if (!string.IsNullOrEmpty(label))
+        {
+            text.text = label;
+        }
+
+        text.gameObject.SetActive(true);
+        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
+        text.enableAutoSizing = false;
+        text.fontSize = portrait ? 22f : 28f;
+        text.fontStyle = FontStyles.Bold;
+        text.alignment = TextAlignmentOptions.Center;
+        text.color = new Color(1f, 0.95f, 0.82f);
+        text.margin = new Vector4(4f, 1f, 4f, 1f);
+        text.raycastTarget = false;
+        text.transform.SetAsLastSibling();
+        text.SetAllDirty();
     }
 
     private static void HideLegacyBackButton(Transform panelRoot)

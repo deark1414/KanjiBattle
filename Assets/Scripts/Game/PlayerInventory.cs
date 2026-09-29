@@ -37,6 +37,7 @@ public class PlayerInventory : MonoBehaviour
     private int playerLevel = 1;
     private int playerExperience;
     private float nextMockTrainingPollAt;
+    private FacilityManager subscribedFacilityManager;
 
     private void Awake()
     {
@@ -57,12 +58,23 @@ public class PlayerInventory : MonoBehaviour
 
     private void Start()
     {
+        SubscribeToFacilityChanges();
         ApplyOfflineMockTraining();
         nextMockTrainingPollAt = Time.unscaledTime + MockTrainingPollIntervalSeconds;
     }
 
+    private void OnDestroy()
+    {
+        if (subscribedFacilityManager != null)
+        {
+            subscribedFacilityManager.OnFacilitiesChanged -= ApplyStoredExperienceAfterLevelCapChange;
+        }
+    }
+
     private void Update()
     {
+        SubscribeToFacilityChanges();
+
         // Mock training belongs to the player's progression, not to the roster
         // screen. Poll from this persistent owner so it continues while marching,
         // forming a party, or browsing facilities. The persisted cooldown keeps
@@ -115,7 +127,7 @@ public class PlayerInventory : MonoBehaviour
 
     public int GetMockTrainingExperienceReward()
     {
-        return IsAtEffectiveLevelCap ? 0 : GetEffectiveMockTrainingExperienceReward();
+        return GetEffectiveMockTrainingExperienceReward();
     }
 
     public int GetSecondsUntilNextMockTraining()
@@ -169,9 +181,8 @@ public class PlayerInventory : MonoBehaviour
         }
 
         PlayerExperienceResult result = GrantPlayerExperience(GetEffectiveMockTrainingExperienceReward());
-        // Reaching the player-level cap still consumes this training interval.
-        // Otherwise the status would remain at "0 seconds" forever until a cap
-        // becomes available again.
+        // Training continues at the level cap, storing experience until the
+        // rank tower makes the next level band available.
         PlayerProgressStore.SetInt(LastMockTrainingUtcKey, (int)Math.Min(now, int.MaxValue));
         PlayerProgressStore.Save();
         onMockTrainingCompleted?.Invoke(result);
@@ -186,24 +197,13 @@ public class PlayerInventory : MonoBehaviour
     private PlayerExperienceResult GrantPlayerExperienceInternal(int amount, bool saveProgress)
     {
         int previousLevel = playerLevel;
-        if (amount <= 0 || playerLevel >= GetEffectiveLevelCap())
+        if (amount <= 0)
         {
             return new PlayerExperienceResult(0, previousLevel, playerLevel, playerExperience);
         }
 
         playerExperience += amount;
-        int levelCap = GetEffectiveLevelCap();
-        while (playerLevel < levelCap && playerExperience >= GetExperienceRequiredForLevel(playerLevel))
-        {
-            playerExperience -= GetExperienceRequiredForLevel(playerLevel);
-            playerLevel++;
-        }
-
-        if (playerLevel >= levelCap)
-        {
-            playerLevel = levelCap;
-            playerExperience = 0;
-        }
+        ApplyStoredExperienceToCurrentCap();
 
         // Incremental experience should not rebuild the roster while its practice
         // animation is active. A level-up still refreshes every shared stat display.
@@ -217,6 +217,53 @@ public class PlayerInventory : MonoBehaviour
         }
         ModernWafuuPresentation.RefreshGlobalStatus();
         return new PlayerExperienceResult(amount, previousLevel, playerLevel, playerExperience);
+    }
+
+    private void ApplyStoredExperienceToCurrentCap()
+    {
+        int levelCap = GetEffectiveLevelCap();
+        while (playerLevel < levelCap && playerExperience >= GetExperienceRequiredForLevel(playerLevel))
+        {
+            playerExperience -= GetExperienceRequiredForLevel(playerLevel);
+            playerLevel++;
+        }
+    }
+
+    private void ApplyStoredExperienceAfterLevelCapChange()
+    {
+        int previousLevel = playerLevel;
+        ApplyStoredExperienceToCurrentCap();
+
+        if (playerLevel != previousLevel)
+        {
+            onInventoryChanged?.Invoke();
+            SaveProgress();
+        }
+
+        ModernWafuuPresentation.RefreshGlobalStatus();
+    }
+
+    private void SubscribeToFacilityChanges()
+    {
+        FacilityManager currentManager = FacilityManager.Instance;
+        if (ReferenceEquals(subscribedFacilityManager, currentManager))
+        {
+            return;
+        }
+
+        if (subscribedFacilityManager != null)
+        {
+            subscribedFacilityManager.OnFacilitiesChanged -= ApplyStoredExperienceAfterLevelCapChange;
+        }
+
+        subscribedFacilityManager = currentManager;
+        if (subscribedFacilityManager == null)
+        {
+            return;
+        }
+
+        subscribedFacilityManager.OnFacilitiesChanged += ApplyStoredExperienceAfterLevelCapChange;
+        ApplyStoredExperienceAfterLevelCapChange();
     }
 
     private void ApplyOfflineMockTraining()

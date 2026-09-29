@@ -263,14 +263,6 @@ namespace KanjiBattle.Editor
   background: url('progress-bar-full-dark.png') no-repeat center;
 }
 #unity-footer {
-  position: absolute;
-  left: 50%;
-  bottom: 8px;
-  width: 100%;
-  transform: translateX(-50%);
-  color: #fff2d7;
-}
-.unity-mobile #unity-footer {
   display: none;
 }
 #unity-logo-title-footer {

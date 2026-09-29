@@ -1154,8 +1154,20 @@ public class BattleManager : MonoBehaviour
     {
         GameObject entry = Instantiate(logEntryPrefab, logContent);
         var text = entry.GetComponent<TextMeshProUGUI>();
+        if (text == null)
+        {
+            Destroy(entry);
+            return;
+        }
+
         UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
         text.text = message;
+
+        var entryRect = text.rectTransform;
+        entryRect.anchorMin = new Vector2(0f, 1f);
+        entryRect.anchorMax = new Vector2(1f, 1f);
+        entryRect.pivot = new Vector2(0.5f, 1f);
+        entryRect.SetAsLastSibling();
 
         if (color.HasValue)
             text.color = color.Value;
@@ -1163,8 +1175,39 @@ public class BattleManager : MonoBehaviour
         if (logContent.childCount > maxLogs)
             Destroy(logContent.GetChild(0).gameObject);
 
+        LayoutBattleLogEntries();
         Canvas.ForceUpdateCanvases();
         logScroll.verticalNormalizedPosition = 0f;
+    }
+
+    private void LayoutBattleLogEntries()
+    {
+        var contentRect = logContent as RectTransform;
+        if (contentRect == null) return;
+
+        float lineHeight = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 30f : 38f;
+        float spacing = UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 3f : 4f;
+        const float padding = 4f;
+
+        for (int i = 0; i < logContent.childCount; i++)
+        {
+            var entryRect = logContent.GetChild(i) as RectTransform;
+            if (entryRect == null) continue;
+
+            entryRect.anchorMin = new Vector2(0f, 1f);
+            entryRect.anchorMax = new Vector2(1f, 1f);
+            entryRect.pivot = new Vector2(0.5f, 1f);
+            entryRect.sizeDelta = new Vector2(0f, lineHeight);
+            entryRect.anchoredPosition = new Vector2(0f, -padding - i * (lineHeight + spacing));
+        }
+
+        float requiredHeight = padding * 2f
+            + logContent.childCount * lineHeight
+            + Mathf.Max(0, logContent.childCount - 1) * spacing;
+        float viewportHeight = logScroll != null && logScroll.viewport != null
+            ? logScroll.viewport.rect.height
+            : 0f;
+        contentRect.sizeDelta = new Vector2(-12f, Mathf.Max(viewportHeight, requiredHeight));
     }
 
     private void ShowResult(string message, Color color, bool isWin = false)
@@ -1217,12 +1260,17 @@ public class BattleManager : MonoBehaviour
 
         resultText.transform.SetAsLastSibling();
         int totalStagePoints = GameManager.Instance != null ? GameManager.Instance.StagePoints : 0;
-        int playerExperience = PlayerInventory.Instance != null ? PlayerInventory.Instance.PlayerExperience : 0;
-        int nextPlayerExperience = PlayerInventory.Instance != null ? PlayerInventory.Instance.GetExperienceToNextPlayerLevel() : 0;
+        PlayerInventory inventory = PlayerInventory.Instance;
+        int playerExperience = inventory != null ? inventory.PlayerExperience : 0;
+        int nextPlayerExperience = inventory != null ? inventory.GetExperienceToNextPlayerLevel() : 0;
+        bool playerLevelCapped = inventory != null && inventory.IsAtEffectiveLevelCap;
+        int playerLevelCap = inventory != null ? inventory.GetEffectiveLevelCap() : 0;
         bool leveledUp = experienceResult.level > experienceResult.previousLevel;
-        string experienceProgress = leveledUp
-            ? $"Lv.{experienceResult.previousLevel} → Lv.{experienceResult.level}　{playerExperience}/{nextPlayerExperience}"
-            : $"{playerExperience}/{nextPlayerExperience}";
+        string experienceProgress = playerLevelCapped
+            ? $"上限 Lv.{playerLevelCap}　蓄積 {playerExperience}（解放後に反映）"
+            : leveledUp
+                ? $"Lv.{experienceResult.previousLevel} → Lv.{experienceResult.level}　{playerExperience}/{nextPlayerExperience}"
+                : $"{playerExperience}/{nextPlayerExperience}";
         string rewardSummary = isWin
             ? $"\n\n戦果 +{effectiveReward}　合計 {totalStagePoints}\n軍師経験 +{experienceResult.experience}　{experienceProgress}"
             : "\n\n今回の獲得なし";
