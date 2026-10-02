@@ -165,7 +165,7 @@
   <script>
     const root = 'review-assets/';
     // Keep local file previews from retaining an older candidate after an art revision.
-    const previewRevision = '20261002-v5';
+    const previewRevision = '20261002-v6';
     const pieces = [
       ['一', 'Art/Generated/CharacterIcons/icon_01_1.png'], ['二', 'Art/Generated/CharacterIcons/icon_02_2.png'], ['三', 'Art/Generated/CharacterIcons/icon_03_3.png'],
       ['四', 'Art/Generated/CharacterIcons/icon_04_4.png'], ['五', 'Art/Generated/CharacterIcons/icon_05_5.png'], ['六', 'Art/Generated/CharacterIcons/icon_06_6.png'],
@@ -211,15 +211,37 @@
       ['結束: 上位・弱', 'Resources/VFX/Animated/NumberAura_High_Weak/frame_01.png'], ['結束: 上位・中', 'Resources/VFX/Animated/NumberAura_High_Medium/frame_01.png'], ['結束: 上位・強', 'Resources/VFX/Animated/NumberAura_High_Strong/frame_07.png']
     ];
 
-    const vfxComparisons = [
-      ['剣: 斬撃', 'Resources/VFX/Weapons/SwordMotion.png', 'Art/Drafts/VFX/Weapons/SwordMotion_pixel_v2_draft.png'],
-      ['槌: 振り下ろし', 'Resources/VFX/Weapons/HammerMotion.png', 'Art/Drafts/VFX/Weapons/HammerMotion_pixel_v2_draft.png'],
-      ['虎: 四本爪', 'Resources/VFX/Animated/TigerTwinClaw/frame_03.png', 'Art/Drafts/VFX/TigerTwinClaw_pixel_draft.png'],
-      ['水: 回復の水滴', 'Resources/VFX/Animated/WaterHeal/frame_03.png', 'Art/Drafts/VFX/WaterHeal/WaterHeal_pixel_v2_draft.png'],
-      ['盾: 木札の防御', 'Resources/VFX/Animated/Shield/frame_02.png', 'Art/Drafts/VFX/Shield/Shield_pixel_v2_draft.png'],
-      ['馬: 突進の砂埃', 'Resources/VFX/Animated/HorseCharge/frame_02.png', 'Art/Drafts/VFX/HorseCharge/HorseCharge_pixel_v4_draft.png'],
-      ['鳥: 退避', 'Resources/VFX/Animated/BirdRetreat/frame_02.png', 'Art/Drafts/VFX/BirdRetreat/BirdRetreat_pixel_v4_draft.png']
-    ];
+    const sourceFaithfulDrafts = {
+      'Resources/VFX/Weapons/SwordMotion.png': 'Art/Drafts/VFX/Weapons/SwordMotion_pixel_source_draft.png',
+      'Resources/VFX/Weapons/HammerMotion.png': 'Art/Drafts/VFX/Weapons/HammerMotion_pixel_source_draft.png',
+      'Resources/VFX/Animated/Spear/frame_03.png': 'Art/Drafts/VFX/Spear/Spear_pixel_source_draft.png',
+      'Resources/VFX/Animated/Arrow/frame_02.png': 'Art/Drafts/VFX/Arrow/Arrow_pixel_source_draft.png',
+      'Resources/VFX/Animated/Gun/frame_02.png': 'Art/Drafts/VFX/Gun/Gun_pixel_source_draft.png',
+      'Resources/VFX/Animated/Stone/frame_00.png': 'Art/Drafts/VFX/Stone/Stone_pixel_source_draft.png',
+      'Resources/VFX/Animated/Fireball/frame_02.png': 'Art/Drafts/VFX/Fireball/Fireball_pixel_source_draft.png',
+      'Resources/VFX/Animated/WaterHeal/frame_03.png': 'Art/Drafts/VFX/WaterHeal/WaterHeal_pixel_source_draft.png',
+      'Resources/VFX/Animated/WoodPush/frame_03.png': 'Art/Drafts/VFX/WoodPush/WoodPush_pixel_source_draft.png',
+      'Resources/VFX/Animated/Soil/frame_03.png': 'Art/Drafts/VFX/Soil/Soil_pixel_source_draft.png',
+      'Resources/VFX/Animated/HorseCharge/frame_02.png': 'Art/Drafts/VFX/HorseCharge/HorseCharge_pixel_v4_draft.png',
+      'Resources/VFX/Animated/BirdRetreat/frame_02.png': 'Art/Drafts/VFX/BirdRetreat/BirdRetreat_pixel_v4_draft.png',
+      'Resources/VFX/Animated/TigerTwinClaw/frame_03.png': 'Art/Drafts/VFX/TigerTwinClaw/TigerTwinClaw_pixel_source_draft.png',
+      'Resources/VFX/Animated/DragonBreath/frame_03.png': 'Art/Drafts/VFX/DragonBreath/DragonBreath_pixel_source_draft.png',
+      'Resources/VFX/Animated/DragonRoar/frame_03.png': 'Art/Drafts/VFX/DragonRoar/DragonRoar_pixel_source_draft.png',
+      'Resources/VFX/Animated/BossSummon/frame_01.png': 'Art/Drafts/VFX/BossSummon/BossSummon_pixel_source_draft.png',
+      'Resources/VFX/Animated/Shield/frame_02.png': 'Art/Drafts/VFX/Shield/Shield_pixel_source_draft.png',
+      'Resources/VFX/Animated/Armor/frame_02.png': 'Art/Drafts/VFX/Armor/Armor_pixel_source_draft.png',
+      'Resources/VFX/Animated/Wall/frame_02.png': 'Art/Drafts/VFX/Wall/Wall_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_Low_Weak/frame_01.png': 'Art/Drafts/VFX/NumberAura_Low_Weak/NumberAura_Low_Weak_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_Low_Medium/frame_01.png': 'Art/Drafts/VFX/NumberAura_Low_Medium/NumberAura_Low_Medium_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_Low_Strong/frame_01.png': 'Art/Drafts/VFX/NumberAura_Low_Strong/NumberAura_Low_Strong_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_Mid_Weak/frame_01.png': 'Art/Drafts/VFX/NumberAura_Mid_Weak/NumberAura_Mid_Weak_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_Mid_Medium/frame_01.png': 'Art/Drafts/VFX/NumberAura_Mid_Medium/NumberAura_Mid_Medium_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_Mid_Strong/frame_01.png': 'Art/Drafts/VFX/NumberAura_Mid_Strong/NumberAura_Mid_Strong_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_High_Weak/frame_01.png': 'Art/Drafts/VFX/NumberAura_High_Weak/NumberAura_High_Weak_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_High_Medium/frame_01.png': 'Art/Drafts/VFX/NumberAura_High_Medium/NumberAura_High_Medium_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_High_Strong/frame_07.png': 'Art/Drafts/VFX/NumberAura_High_Strong/NumberAura_High_Strong_pixel_source_draft.png'
+    };
+    const vfxComparisons = vfx.map(([name, path]) => [name, path, sourceFaithfulDrafts[path]]);
 
     function render(targetId, entries, draft) {
       const target = document.getElementById(targetId);
