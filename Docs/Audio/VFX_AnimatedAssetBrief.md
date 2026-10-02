@@ -116,6 +116,15 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 
 ## Visual Style
 
+### ドット絵化の優先範囲: 2026-10-02
+
+- 今回の置換対象は、キャラクター駒に添える意味モチーフと技能 VFX のみとする。施設、行軍背景・拠点、案山子、盤面フレームは対象外であり、既存素材を変更しない。
+- 駒の漢字、HP、HP バー、所属色を覆わない。モチーフは 256 x 256 px の透明背景 PNG を基本とし、駒の外側へ短く現れる補助表現に留める。漢字札そのものの可読性を落とす置換はしない。
+- 新規 VFX は意図的に低解像度のドット絵調へ統一する。太い輪郭、少ない色数、強い小サイズのシルエットを用い、写真風の陰影、滑らかな発光、細密な AI 風の質感を避ける。
+- 既存の `SkillVfxMotion` と `BattleManager` の発生位置、射程、回転、フェード、表示時間、当たり判定は変更しない。各技能の新素材は既存フォルダ名と原点を維持し、素材だけを差し替える。
+- 虎の `TigerTwinClaw` は、透明背景の四本爪痕のみを一撃分として作る。虎の体・脚・顔・文字は描かず、ランタイムが二撃目を回転させて交差させる既存の挙動を維持する。
+- ドット絵素材は最終確認まで `Assets/Art/Drafts/` に置き、`Assets/Resources/VFX/` への配置とゲーム画面への接続はレビュー承認後に行う。
+
 - Aim for a rugged shogi-board fantasy style: carved wood, forged iron, worn leather, paper, soil, smoke, sparks, embers, and water droplets.
 - Use directional light, contact shadows, debris, dust, and practical-looking impact flashes instead of sci-fi beams.
 - Strong silhouettes and high contrast at small display sizes.
