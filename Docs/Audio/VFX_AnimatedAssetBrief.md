@@ -124,6 +124,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 - 既存の `SkillVfxMotion` と `BattleManager` の発生位置、射程、回転、フェード、表示時間、当たり判定は変更しない。各技能の新素材は既存フォルダ名と原点を維持し、素材だけを差し替える。
 - 虎の `TigerTwinClaw` は、透明背景の四本爪痕のみを一撃分として作る。虎の体・脚・顔・文字は描かず、ランタイムが二撃目を回転させて交差させる既存の挙動を維持する。
 - ドット絵素材は最終確認まで `Assets/Art/Drafts/` に置き、`Assets/Resources/VFX/` への配置とゲーム画面への接続はレビュー承認後に行う。
+- VFX はコンタクトシートや共通スプライトにまとめず、技能フォルダごとに一枚ずつ下書きを用意する。プレビューでは駒モチーフと並べて、透過、中心原点、余白、最小表示時の輪郭を個別に確認する。
 
 - Aim for a rugged shogi-board fantasy style: carved wood, forged iron, worn leather, paper, soil, smoke, sparks, embers, and water droplets.
 - Use directional light, contact shadows, debris, dust, and practical-looking impact flashes instead of sci-fi beams.

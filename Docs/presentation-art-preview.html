@@ -128,7 +128,7 @@
     <section>
       <div class="section-title">
         <h2>新規の駒モチーフ候補</h2>
-        <span class="section-note">未接続。虎・竜は全身、数字は賽の出目のみです</span>
+        <span class="section-note">未接続。数字も含めて一体ずつの透過素材です</span>
       </div>
       <div id="motifs" class="grid wide-grid"></div>
     </section>
@@ -165,7 +165,19 @@
     ];
 
     const motifs = [
-      ['数字の賽モチーフ', 'Art/Drafts/PieceMotifs/NumberDice_topdown_review.png'],
+      ['一: 一の目', 'Art/Drafts/PieceMotifs/NumberDice/Number_01_dice_draft.png'],
+      ['二: 二の目', 'Art/Drafts/PieceMotifs/NumberDice/Number_02_dice_draft.png'],
+      ['三: 三の目', 'Art/Drafts/PieceMotifs/NumberDice/Number_03_dice_draft.png'],
+      ['四: 四の目', 'Art/Drafts/PieceMotifs/NumberDice/Number_04_dice_draft.png'],
+      ['五: 五の目', 'Art/Drafts/PieceMotifs/NumberDice/Number_05_dice_draft.png'],
+      ['六: 六の目', 'Art/Drafts/PieceMotifs/NumberDice/Number_06_dice_draft.png'],
+      ['七: 三と四', 'Art/Drafts/PieceMotifs/NumberDice/Number_07_dice_draft.png'],
+      ['八: 三と五', 'Art/Drafts/PieceMotifs/NumberDice/Number_08_dice_draft.png'],
+      ['九: 四と五', 'Art/Drafts/PieceMotifs/NumberDice/Number_09_dice_draft.png'],
+      ['木: 若木', 'Art/Drafts/PieceMotifs/Nature/Wood_tree_draft.png'],
+      ['土: 盛土', 'Art/Drafts/PieceMotifs/Nature/Soil_packed_mound_draft.png'],
+      ['馬: 全身', 'Art/Drafts/PieceMotifs/Animals/Horse_running_draft.png'],
+      ['鳥: 全身', 'Art/Drafts/PieceMotifs/Animals/Bird_flying_draft.png'],
       ['虎: 全身モチーフ', 'Art/Drafts/PieceMotifs/TigerMotif_fullbody_draft.png'],
       ['竜: 全身モチーフ', 'Art/Drafts/PieceMotifs/DragonMotif_fullbody_draft.png']
     ];
@@ -185,7 +197,15 @@
       ['結束: 上位・弱', 'Resources/VFX/Animated/NumberAura_High_Weak/frame_01.png'], ['結束: 上位・中', 'Resources/VFX/Animated/NumberAura_High_Medium/frame_01.png'], ['結束: 上位・強', 'Resources/VFX/Animated/NumberAura_High_Strong/frame_07.png']
     ];
 
-    const vfxDrafts = [['虎: 四本爪', 'Art/Drafts/VFX/TigerTwinClaw_pixel_draft.png']];
+    const vfxDrafts = [
+      ['虎: 四本爪', 'Art/Drafts/VFX/TigerTwinClaw_pixel_draft.png'],
+      ['火: 着弾', 'Art/Drafts/VFX/Fireball/Fireball_pixel_draft.png'],
+      ['水: 回復', 'Art/Drafts/VFX/WaterHeal/WaterHeal_pixel_draft.png'],
+      ['矢: 飛翔', 'Art/Drafts/VFX/Arrow/Arrow_pixel_draft.png'],
+      ['盾: 防御', 'Art/Drafts/VFX/Shield/Shield_pixel_draft.png'],
+      ['馬: 突進の土煙', 'Art/Drafts/VFX/HorseCharge/HorseCharge_pixel_draft.png'],
+      ['竜: ブレス', 'Art/Drafts/VFX/DragonBreath/DragonBreath_pixel_draft.png']
+    ];
 
     function render(targetId, entries, draft) {
       const target = document.getElementById(targetId);
