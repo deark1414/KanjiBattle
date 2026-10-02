@@ -125,6 +125,7 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 - 虎の `TigerTwinClaw` は、透明背景の四本爪痕のみを一撃分として作る。虎の体・脚・顔・文字は描かず、ランタイムが二撃目を回転させて交差させる既存の挙動を維持する。
 - ドット絵素材は最終確認まで `Assets/Art/Drafts/` に置き、`Assets/Resources/VFX/` への配置とゲーム画面への接続はレビュー承認後に行う。
 - VFX はコンタクトシートや共通スプライトにまとめず、技能フォルダごとに一枚ずつ下書きを用意する。プレビューでは駒モチーフと並べて、透過、中心原点、余白、最小表示時の輪郭を個別に確認する。
+- 既存 VFX に対応するドット絵版は、新規の解釈で描き直さない。元の PNG を編集入力にし、対象物、角度、シルエット、キャンバス内の位置、透明余白、右向きなどの向きを固定したうえで、描画だけをドット絵へ変換する。とくに水は現行どおり水玉、盾は木札と墨線の和風意匠、馬は二股に分かれる採用済みの砂煙を維持する。
 
 - Aim for a rugged shogi-board fantasy style: carved wood, forged iron, worn leather, paper, soil, smoke, sparks, embers, and water droplets.
 - Use directional light, contact shadows, debris, dust, and practical-looking impact flashes instead of sci-fi beams.

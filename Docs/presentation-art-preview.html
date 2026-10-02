@@ -144,7 +144,7 @@
     <section>
       <div class="section-title">
         <h2>ドット絵 VFX 候補</h2>
-        <span class="section-note">未接続。既存の発動位置・回転・時間を保ったまま素材のみ置換します</span>
+        <span class="section-note">未接続。現行PNGの形・向き・余白を固定し、描画だけをドット絵化した候補です</span>
       </div>
       <div id="vfx-drafts" class="grid wide-grid"></div>
     </section>
@@ -198,13 +198,12 @@
     ];
 
     const vfxDrafts = [
+      ['剣: 斬撃', 'Art/Drafts/VFX/Weapons/SwordMotion_pixel_v2_draft.png'],
+      ['槌: 振り下ろし', 'Art/Drafts/VFX/Weapons/HammerMotion_pixel_v2_draft.png'],
       ['虎: 四本爪', 'Art/Drafts/VFX/TigerTwinClaw_pixel_draft.png'],
-      ['火: 着弾', 'Art/Drafts/VFX/Fireball/Fireball_pixel_draft.png'],
-      ['水: 回復', 'Art/Drafts/VFX/WaterHeal/WaterHeal_pixel_draft.png'],
-      ['矢: 飛翔', 'Art/Drafts/VFX/Arrow/Arrow_pixel_draft.png'],
-      ['盾: 防御', 'Art/Drafts/VFX/Shield/Shield_pixel_draft.png'],
-      ['馬: 突進の土煙', 'Art/Drafts/VFX/HorseCharge/HorseCharge_pixel_draft.png'],
-      ['竜: ブレス', 'Art/Drafts/VFX/DragonBreath/DragonBreath_pixel_draft.png']
+      ['水: 回復の水滴', 'Art/Drafts/VFX/WaterHeal/WaterHeal_pixel_v2_draft.png'],
+      ['盾: 木札の防御', 'Art/Drafts/VFX/Shield/Shield_pixel_v2_draft.png'],
+      ['馬: 二股の砂煙', 'Art/Drafts/VFX/HorseCharge/HorseChargeForkedWind_pixel_v2_draft.png']
     ];
 
     function render(targetId, entries, draft) {
