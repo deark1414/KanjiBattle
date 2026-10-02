@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>駒・VFX 素材プレビュー | KanjiBattle</title>
+  <style>
+    :root {
+      --page: #171411;
+      --panel: #282117;
+      --panel-border: #725b31;
+      --text: #fff1ce;
+      --muted: #c9b98e;
+      --accent: #d89c31;
+      --checker-a: #4b4945;
+      --checker-b: #393733;
+      --sample-bg: #4d4a43;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--page); }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    }
+
+    .shell { width: min(1540px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 56px; }
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
+      padding: 22px 24px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(24px, 3vw, 38px); font-weight: 800; }
+    .lede { margin-top: 8px; color: var(--muted); line-height: 1.6; }
+    .key { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; white-space: nowrap; }
+    .key-dot { width: 11px; height: 11px; background: var(--accent); border-radius: 50%; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0; }
+    button {
+      border: 1px solid #927441;
+      border-radius: 4px;
+      padding: 9px 13px;
+      background: #3a3020;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+    button[aria-pressed="true"] { background: #914020; border-color: #e5a63e; }
+
+    section { margin-top: 32px; }
+    .section-title { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding-bottom: 9px; border-bottom: 1px solid #715a34; }
+    h2 { font-size: clamp(20px, 2vw, 28px); }
+    .section-note { color: var(--muted); font-size: 14px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 14px; }
+    .wide-grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+    .asset {
+      min-width: 0;
+      border: 1px solid #645333;
+      background: #242018;
+      overflow: hidden;
+    }
+    .asset-preview {
+      display: grid;
+      place-items: center;
+      min-height: 150px;
+      padding: 14px;
+      background-color: var(--sample-bg);
+      background-image:
+        linear-gradient(45deg, var(--checker-a) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--checker-a) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--checker-a) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--checker-a) 75%);
+      background-size: 22px 22px;
+      background-position: 0 0, 0 11px, 11px -11px, -11px 0;
+    }
+    .asset-preview img { display: block; width: 100%; height: 122px; object-fit: contain; image-rendering: auto; }
+    .wide-grid .asset-preview { min-height: 190px; }
+    .wide-grid .asset-preview img { height: 162px; }
+    .asset-meta { padding: 10px 11px 11px; }
+    .asset-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; }
+    .asset-path { margin-top: 4px; overflow: hidden; color: var(--muted); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+    .asset-draft { border-color: #ba8830; }
+    .asset-draft .asset-meta { background: #3f2d15; }
+    .empty-note { color: var(--muted); line-height: 1.7; padding: 16px 0 0; }
+
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 20px, 1540px); padding-top: 10px; }
+      header { grid-template-columns: 1fr; padding: 18px; }
+      .key { white-space: normal; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .asset-preview { min-height: 126px; padding: 8px; }
+      .asset-preview img { height: 106px; }
+      .wide-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>駒・VFX 素材プレビュー</h1>
+        <p class="lede">ゲーム未接続の確認ページです。現行素材と、ドット絵化の候補を同じ背景・縮尺で比較します。</p>
+      </div>
+      <div class="key"><span class="key-dot"></span> 金枠は新規の下書き</div>
+    </header>
+
+    <nav class="controls" aria-label="背景の切替">
+      <button type="button" data-background="checker" aria-pressed="true">格子</button>
+      <button type="button" data-background="dark" aria-pressed="false">暗色</button>
+      <button type="button" data-background="light" aria-pressed="false">淡色</button>
+    </nav>
+
+    <section>
+      <div class="section-title">
+        <h2>現行の駒</h2>
+        <span class="section-note">漢字札は残し、今後は外側に中立モチーフを重ねます</span>
+      </div>
+      <div id="pieces" class="grid"></div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>新規の駒モチーフ候補</h2>
+        <span class="section-note">未接続。虎・竜は全身、数字は賽の出目のみです</span>
+      </div>
+      <div id="motifs" class="grid wide-grid"></div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>現行の技能 VFX</h2>
+        <span class="section-note">ゲームで使われている代表フレーム</span>
+      </div>
+      <div id="vfx" class="grid"></div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>ドット絵 VFX 候補</h2>
+        <span class="section-note">未接続。既存の発動位置・回転・時間を保ったまま素材のみ置換します</span>
+      </div>
+      <div id="vfx-drafts" class="grid wide-grid"></div>
+    </section>
+  </main>
+
+  <script>
+    const root = 'review-assets/';
+    const pieces = [
+      ['一', 'Art/Generated/CharacterIcons/icon_01_1.png'], ['二', 'Art/Generated/CharacterIcons/icon_02_2.png'], ['三', 'Art/Generated/CharacterIcons/icon_03_3.png'],
+      ['四', 'Art/Generated/CharacterIcons/icon_04_4.png'], ['五', 'Art/Generated/CharacterIcons/icon_05_5.png'], ['六', 'Art/Generated/CharacterIcons/icon_06_6.png'],
+      ['七', 'Art/Generated/CharacterIcons/icon_07_7.png'], ['八', 'Art/Generated/CharacterIcons/icon_08_8.png'], ['九', 'Art/Generated/CharacterIcons/icon_09_9.png'],
+      ['剣', 'Art/Generated/CharacterIcons/icon_10_Sword.png'], ['槍', 'Art/Generated/CharacterIcons/icon_11_Spear.png'], ['槌', 'Art/Generated/CharacterIcons/icon_12_Hammer.png'],
+      ['盾', 'Art/Generated/CharacterIcons/icon_13_Shield.png'], ['鎧', 'Art/Generated/CharacterIcons/icon_14_Armor.png'], ['壁', 'Art/Generated/CharacterIcons/icon_15_Wall.png'],
+      ['石', 'Art/Generated/CharacterIcons/icon_16_Stone.png'], ['矢', 'Art/Generated/CharacterIcons/icon_17_Arrow.png'], ['銃', 'Art/Generated/CharacterIcons/icon_18_Gun.png'],
+      ['火', 'Art/Generated/CharacterIcons/icon_19_Fire.png'], ['水', 'Art/Generated/CharacterIcons/icon_20_Water.png'], ['木', 'Art/Generated/CharacterIcons/icon_21_Wood.png'],
+      ['土', 'Art/Generated/CharacterIcons/icon_22_Soil.png'], ['馬', 'Art/Generated/CharacterIcons/icon_23_Horse.png'], ['鳥', 'Art/Generated/CharacterIcons/icon_24_Bird.png'],
+      ['虎', 'Art/Generated/CharacterIcons/icon_25_Tiger.png'], ['竜', 'Art/Generated/CharacterIcons/icon_26_Dragon.png']
+    ];
+
+    const motifs = [
+      ['数字の賽モチーフ', 'Art/Drafts/PieceMotifs/NumberDice_topdown_review.png'],
+      ['虎: 全身モチーフ', 'Art/Drafts/PieceMotifs/TigerMotif_fullbody_draft.png'],
+      ['竜: 全身モチーフ', 'Art/Drafts/PieceMotifs/DragonMotif_fullbody_draft.png']
+    ];
+
+    const vfx = [
+      ['剣', 'Resources/VFX/Weapons/SwordMotion.png'], ['槌', 'Resources/VFX/Weapons/HammerMotion.png'],
+      ['槍', 'Resources/VFX/Animated/Spear/frame_03.png'], ['矢', 'Resources/VFX/Animated/Arrow/frame_02.png'],
+      ['銃', 'Resources/VFX/Animated/Gun/frame_02.png'], ['石', 'Resources/VFX/Animated/Stone/frame_00.png'],
+      ['火', 'Resources/VFX/Animated/Fireball/frame_02.png'], ['水', 'Resources/VFX/Animated/WaterHeal/frame_03.png'],
+      ['木', 'Resources/VFX/Animated/WoodPush/frame_03.png'], ['土', 'Resources/VFX/Animated/Soil/frame_03.png'],
+      ['馬', 'Resources/VFX/Static/HorseChargeForkedWind.png'], ['鳥', 'Resources/VFX/Static/BirdFeathersOnly.png'],
+      ['虎', 'Resources/VFX/Animated/TigerTwinClaw/frame_03.png'], ['竜の息吹', 'Resources/VFX/Animated/DragonBreath/frame_03.png'],
+      ['竜の咆哮', 'Resources/VFX/Animated/DragonRoar/frame_03.png'], ['召喚', 'Resources/VFX/Animated/BossSummon/frame_01.png'],
+      ['盾', 'Resources/VFX/Animated/Shield/frame_02.png'], ['鎧', 'Resources/VFX/Animated/Armor/frame_02.png'], ['壁', 'Resources/VFX/Animated/Wall/frame_02.png'],
+      ['結束: 下位・弱', 'Resources/VFX/Animated/NumberAura_Low_Weak/frame_01.png'], ['結束: 下位・中', 'Resources/VFX/Animated/NumberAura_Low_Medium/frame_01.png'], ['結束: 下位・強', 'Resources/VFX/Animated/NumberAura_Low_Strong/frame_01.png'],
+      ['結束: 中位・弱', 'Resources/VFX/Animated/NumberAura_Mid_Weak/frame_01.png'], ['結束: 中位・中', 'Resources/VFX/Animated/NumberAura_Mid_Medium/frame_01.png'], ['結束: 中位・強', 'Resources/VFX/Animated/NumberAura_Mid_Strong/frame_01.png'],
+      ['結束: 上位・弱', 'Resources/VFX/Animated/NumberAura_High_Weak/frame_01.png'], ['結束: 上位・中', 'Resources/VFX/Animated/NumberAura_High_Medium/frame_01.png'], ['結束: 上位・強', 'Resources/VFX/Animated/NumberAura_High_Strong/frame_07.png']
+    ];
+
+    const vfxDrafts = [['虎: 四本爪', 'Art/Drafts/VFX/TigerTwinClaw_pixel_draft.png']];
+
+    function render(targetId, entries, draft) {
+      const target = document.getElementById(targetId);
+      entries.forEach(([name, path]) => {
+        const card = document.createElement('article');
+        card.className = `asset${draft ? ' asset-draft' : ''}`;
+        const preview = document.createElement('div');
+        preview.className = 'asset-preview';
+        const image = document.createElement('img');
+        image.src = root + path;
+        image.alt = name;
+        image.loading = 'lazy';
+        preview.appendChild(image);
+        const meta = document.createElement('div');
+        meta.className = 'asset-meta';
+        meta.innerHTML = `<div class="asset-name">${name}</div><div class="asset-path">${path}</div>`;
+        card.append(preview, meta);
+        target.appendChild(card);
+      });
+    }
+
+    render('pieces', pieces, false);
+    render('motifs', motifs, true);
+    render('vfx', vfx, false);
+    render('vfx-drafts', vfxDrafts, true);
+
+    const palettes = {
+      checker: ['#4b4945', '#393733', '#4d4a43'],
+      dark: ['#24211d', '#24211d', '#24211d'],
+      light: ['#ded7c6', '#ded7c6', '#ded7c6']
+    };
+    document.querySelectorAll('[data-background]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const palette = palettes[button.dataset.background];
+        document.documentElement.style.setProperty('--checker-a', palette[0]);
+        document.documentElement.style.setProperty('--checker-b', palette[1]);
+        document.documentElement.style.setProperty('--sample-bg', palette[2]);
+        document.querySelectorAll('[data-background]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+      });
+    });
+  </script>
+</body>
+</html>
