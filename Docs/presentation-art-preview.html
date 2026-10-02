@@ -117,7 +117,7 @@
     <header>
       <div>
         <h1>駒・VFX 素材プレビュー</h1>
-        <p class="lede">ゲーム未接続の確認ページです。現行素材と、ドット絵化の候補を同じ背景・縮尺で比較します。</p>
+        <p class="lede">ゲーム未接続の確認ページです。駒は既存の漢字札へモチーフを重ね、技能 VFX は現行素材と候補を同じ背景・縮尺で比較します。</p>
       </div>
       <div class="key"><span class="key-dot"></span> 金枠は新規の下書き</div>
     </header>
@@ -131,7 +131,7 @@
     <section>
       <div class="section-title">
         <h2>駒とモチーフの対比</h2>
-        <span class="section-note">左が既存、右が未接続の候補です。素材がない側は空欄です</span>
+        <span class="section-note">左の漢字札は残し、右のモチーフだけを駒の外側へ重ねます。素材がない側は空欄です</span>
       </div>
       <div id="piece-comparisons" class="comparison-list"></div>
     </section>
@@ -148,7 +148,7 @@
   <script>
     const root = 'review-assets/';
     // Keep local file previews from retaining an older candidate after an art revision.
-    const previewRevision = '20261002-v7';
+    const previewRevision = '20261002-v8';
     const pieces = [
       ['一', 'Art/Generated/CharacterIcons/icon_01_1.png'], ['二', 'Art/Generated/CharacterIcons/icon_02_2.png'], ['三', 'Art/Generated/CharacterIcons/icon_03_3.png'],
       ['四', 'Art/Generated/CharacterIcons/icon_04_4.png'], ['五', 'Art/Generated/CharacterIcons/icon_05_5.png'], ['六', 'Art/Generated/CharacterIcons/icon_06_6.png'],
@@ -227,7 +227,7 @@
     };
     const vfxComparisons = vfx.map(([name, path]) => [name, path, sourceFaithfulDrafts[path]]);
 
-    function renderComparisons(targetId, entries) {
+    function renderComparisons(targetId, entries, labels = ['既存', '候補']) {
       const target = document.getElementById(targetId);
       entries.forEach(([name, currentPath, candidatePath]) => {
         const card = document.createElement('article');
@@ -235,7 +235,7 @@
         card.innerHTML = `<div class="comparison-title">${name}</div>`;
         const samples = document.createElement('div');
         samples.className = 'comparison-samples';
-        [['既存', currentPath], ['候補', candidatePath]].forEach(([label, path]) => {
+        [[labels[0], currentPath], [labels[1], candidatePath]].forEach(([label, path]) => {
           const sample = document.createElement('div');
           sample.className = 'comparison-sample';
           const preview = path
@@ -249,7 +249,7 @@
       });
     }
 
-    renderComparisons('piece-comparisons', pieceComparisons);
+    renderComparisons('piece-comparisons', pieceComparisons, ['漢字駒', '上乗せモチーフ']);
     renderComparisons('vfx-comparisons', vfxComparisons);
 
     const palettes = {
