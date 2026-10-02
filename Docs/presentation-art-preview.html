@@ -89,7 +89,7 @@
     .asset-draft { border-color: #ba8830; }
     .asset-draft .asset-meta { background: #3f2d15; }
     .empty-note { color: var(--muted); line-height: 1.7; padding: 16px 0 0; }
-    .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 14px; margin-top: 14px; }
+    .comparison-list { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 14px; }
     .comparison { min-width: 0; border: 1px solid #ba8830; background: #242018; }
     .comparison-title { padding: 10px 12px; font-weight: 800; background: #3f2d15; }
     .comparison-samples { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: #645333; }
@@ -107,7 +107,6 @@
       .asset-preview { min-height: 126px; padding: 8px; }
       .asset-preview img { height: 106px; }
       .wide-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .compare-grid { grid-template-columns: 1fr; }
       .comparison-preview { min-height: 142px; padding: 8px; }
       .comparison-preview img { height: 118px; }
     }
@@ -131,41 +130,25 @@
 
     <section>
       <div class="section-title">
-        <h2>現行の駒</h2>
-        <span class="section-note">漢字札は残し、今後は外側に中立モチーフを重ねます</span>
+        <h2>駒とモチーフの対比</h2>
+        <span class="section-note">左が既存、右が未接続の候補です。素材がない側は空欄です</span>
       </div>
-      <div id="pieces" class="grid"></div>
+      <div id="piece-comparisons" class="comparison-list"></div>
     </section>
 
     <section>
       <div class="section-title">
-        <h2>新規の駒モチーフ候補</h2>
-        <span class="section-note">未接続。数字も含めて一体ずつの透過素材です</span>
+        <h2>技能 VFX の対比</h2>
+        <span class="section-note">左が実装参照PNG、右が未接続のドット絵候補です</span>
       </div>
-      <div id="motifs" class="grid wide-grid"></div>
-    </section>
-
-    <section>
-      <div class="section-title">
-        <h2>現行の技能 VFX</h2>
-        <span class="section-note">実際にランタイムが参照する代表素材のみ</span>
-      </div>
-      <div id="vfx" class="grid"></div>
-    </section>
-
-    <section>
-      <div class="section-title">
-        <h2>VFX 置換候補の対比</h2>
-        <span class="section-note">左が現行、右が未接続のドット絵候補です</span>
-      </div>
-      <div id="vfx-comparisons" class="compare-grid"></div>
+      <div id="vfx-comparisons" class="comparison-list"></div>
     </section>
   </main>
 
   <script>
     const root = 'review-assets/';
     // Keep local file previews from retaining an older candidate after an art revision.
-    const previewRevision = '20261002-v6';
+    const previewRevision = '20261002-v7';
     const pieces = [
       ['一', 'Art/Generated/CharacterIcons/icon_01_1.png'], ['二', 'Art/Generated/CharacterIcons/icon_02_2.png'], ['三', 'Art/Generated/CharacterIcons/icon_03_3.png'],
       ['四', 'Art/Generated/CharacterIcons/icon_04_4.png'], ['五', 'Art/Generated/CharacterIcons/icon_05_5.png'], ['六', 'Art/Generated/CharacterIcons/icon_06_6.png'],
@@ -178,23 +161,24 @@
       ['虎', 'Art/Generated/CharacterIcons/icon_25_Tiger.png'], ['竜', 'Art/Generated/CharacterIcons/icon_26_Dragon.png']
     ];
 
-    const motifs = [
-      ['一: 一の目', 'Art/Drafts/PieceMotifs/NumberDice/Number_01_dice_draft.png'],
-      ['二: 二の目', 'Art/Drafts/PieceMotifs/NumberDice/Number_02_dice_draft.png'],
-      ['三: 三の目', 'Art/Drafts/PieceMotifs/NumberDice/Number_03_dice_draft.png'],
-      ['四: 四の目', 'Art/Drafts/PieceMotifs/NumberDice/Number_04_dice_draft.png'],
-      ['五: 五の目', 'Art/Drafts/PieceMotifs/NumberDice/Number_05_dice_draft.png'],
-      ['六: 六の目', 'Art/Drafts/PieceMotifs/NumberDice/Number_06_dice_draft.png'],
-      ['七: 三と四', 'Art/Drafts/PieceMotifs/NumberDice/Number_07_dice_draft.png'],
-      ['八: 三と五', 'Art/Drafts/PieceMotifs/NumberDice/Number_08_dice_draft.png'],
-      ['九: 四と五', 'Art/Drafts/PieceMotifs/NumberDice/Number_09_dice_draft.png'],
-      ['木: 若木', 'Art/Drafts/PieceMotifs/Nature/Wood_tree_draft.png'],
-      ['土: 盛土', 'Art/Drafts/PieceMotifs/Nature/Soil_packed_mound_draft.png'],
-      ['馬: 全身', 'Art/Drafts/PieceMotifs/Animals/Horse_running_draft.png'],
-      ['鳥: 全身', 'Art/Drafts/PieceMotifs/Animals/Bird_flying_draft.png'],
-      ['虎: 全身モチーフ', 'Art/Drafts/PieceMotifs/TigerMotif_fullbody_draft.png'],
-      ['竜: 全身モチーフ', 'Art/Drafts/PieceMotifs/DragonMotif_fullbody_draft.png']
-    ];
+    const motifDraftsByPiece = {
+      '一': 'Art/Drafts/PieceMotifs/NumberDice/Number_01_dice_draft.png',
+      '二': 'Art/Drafts/PieceMotifs/NumberDice/Number_02_dice_draft.png',
+      '三': 'Art/Drafts/PieceMotifs/NumberDice/Number_03_dice_draft.png',
+      '四': 'Art/Drafts/PieceMotifs/NumberDice/Number_04_dice_draft.png',
+      '五': 'Art/Drafts/PieceMotifs/NumberDice/Number_05_dice_draft.png',
+      '六': 'Art/Drafts/PieceMotifs/NumberDice/Number_06_dice_draft.png',
+      '七': 'Art/Drafts/PieceMotifs/NumberDice/Number_07_dice_draft.png',
+      '八': 'Art/Drafts/PieceMotifs/NumberDice/Number_08_dice_draft.png',
+      '九': 'Art/Drafts/PieceMotifs/NumberDice/Number_09_dice_draft.png',
+      '木': 'Art/Drafts/PieceMotifs/Nature/Wood_tree_draft.png',
+      '土': 'Art/Drafts/PieceMotifs/Nature/Soil_packed_mound_draft.png',
+      '馬': 'Art/Drafts/PieceMotifs/Animals/Horse_running_draft.png',
+      '鳥': 'Art/Drafts/PieceMotifs/Animals/Bird_flying_draft.png',
+      '虎': 'Art/Drafts/PieceMotifs/TigerMotif_fullbody_draft.png',
+      '竜': 'Art/Drafts/PieceMotifs/DragonMotif_fullbody_draft.png'
+    };
+    const pieceComparisons = pieces.map(([name, path]) => [name, path, motifDraftsByPiece[name]]);
 
     const vfx = [
       ['剣', 'Resources/VFX/Weapons/SwordMotion.png'], ['槌', 'Resources/VFX/Weapons/HammerMotion.png'],
@@ -243,38 +227,21 @@
     };
     const vfxComparisons = vfx.map(([name, path]) => [name, path, sourceFaithfulDrafts[path]]);
 
-    function render(targetId, entries, draft) {
+    function renderComparisons(targetId, entries) {
       const target = document.getElementById(targetId);
-      entries.forEach(([name, path]) => {
-        const card = document.createElement('article');
-        card.className = `asset${draft ? ' asset-draft' : ''}`;
-        const preview = document.createElement('div');
-        preview.className = 'asset-preview';
-        const image = document.createElement('img');
-        image.src = `${root}${path}?rev=${previewRevision}`;
-        image.alt = name;
-        image.loading = 'lazy';
-        preview.appendChild(image);
-        const meta = document.createElement('div');
-        meta.className = 'asset-meta';
-        meta.innerHTML = `<div class="asset-name">${name}</div><div class="asset-path">${path}</div>`;
-        card.append(preview, meta);
-        target.appendChild(card);
-      });
-    }
-
-    function renderComparisons(entries) {
-      const target = document.getElementById('vfx-comparisons');
       entries.forEach(([name, currentPath, candidatePath]) => {
         const card = document.createElement('article');
         card.className = 'comparison';
         card.innerHTML = `<div class="comparison-title">${name}</div>`;
         const samples = document.createElement('div');
         samples.className = 'comparison-samples';
-        [['現行', currentPath], ['候補', candidatePath]].forEach(([label, path]) => {
+        [['既存', currentPath], ['候補', candidatePath]].forEach(([label, path]) => {
           const sample = document.createElement('div');
           sample.className = 'comparison-sample';
-          sample.innerHTML = `<div class="comparison-label">${label}</div><div class="comparison-preview"><img src="${root}${path}?rev=${previewRevision}" alt="${name} ${label}"></div><span class="comparison-path">${path}</span>`;
+          const preview = path
+            ? `<img src="${root}${path}?rev=${previewRevision}" alt="${name} ${label}">`
+            : '';
+          sample.innerHTML = `<div class="comparison-label">${label}</div><div class="comparison-preview">${preview}</div><span class="comparison-path">${path || ''}</span>`;
           samples.appendChild(sample);
         });
         card.appendChild(samples);
@@ -282,10 +249,8 @@
       });
     }
 
-    render('pieces', pieces, false);
-    render('motifs', motifs, true);
-    render('vfx', vfx, false);
-    renderComparisons(vfxComparisons);
+    renderComparisons('piece-comparisons', pieceComparisons);
+    renderComparisons('vfx-comparisons', vfxComparisons);
 
     const palettes = {
       checker: ['#4b4945', '#393733', '#4d4a43'],
