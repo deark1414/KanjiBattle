@@ -1906,15 +1906,15 @@ public class BattleManager : MonoBehaviour
         return sprite;
     }
 
-    private static Sprite LoadHorseStaticSprite()
+    private static Sprite LoadHorseChargeSprite()
     {
-        const string cacheKey = "HorseStaticForkedWind";
+        const string cacheKey = "HorseChargeRepresentative";
         if (staticVfxSprites.TryGetValue(cacheKey, out Sprite cached))
         {
             return cached;
         }
 
-        Texture2D texture = Resources.Load<Texture2D>("VFX/Static/HorseChargeForkedWind");
+        Texture2D texture = Resources.Load<Texture2D>("VFX/Animated/HorseCharge/frame_02");
         if (texture == null)
         {
             Debug.LogWarning("[VFX] 馬の代表画像がResourcesから見つかりません。");
@@ -1922,22 +1922,22 @@ public class BattleManager : MonoBehaviour
             return null;
         }
 
-        // 馬の前方で左右に分かれる、真上視点の風圧と砂埃を使う。
+        // 採用済みの突進用砂埃フレームを一枚絵として動かす。
         Rect spriteRect = new Rect(0f, 0f, texture.width, texture.height);
         Sprite sprite = Sprite.Create(texture, spriteRect, new Vector2(0.5f, 0.5f), 100f);
         staticVfxSprites[cacheKey] = sprite;
         return sprite;
     }
 
-    private static Sprite LoadBirdStaticSprite()
+    private static Sprite LoadBirdRetreatSprite()
     {
-        const string cacheKey = "BirdStaticCleanFeathers";
+        const string cacheKey = "BirdRetreatRepresentative";
         if (staticVfxSprites.TryGetValue(cacheKey, out Sprite cached))
         {
             return cached;
         }
 
-        Texture2D texture = Resources.Load<Texture2D>("VFX/Static/BirdFeathersOnly");
+        Texture2D texture = Resources.Load<Texture2D>("VFX/Animated/BirdRetreat/frame_02");
         if (texture == null)
         {
             Debug.LogWarning("[VFX] 鳥の代表画像がResourcesから見つかりません。");
@@ -1945,7 +1945,7 @@ public class BattleManager : MonoBehaviour
             return null;
         }
 
-        // 鳥専用の羽だけを使う。地面の土埃やワープ軌跡を含む旧シートは参照しない。
+        // 採用済みの退避用フレームを一枚絵として動かす。
         Rect spriteRect = new Rect(0f, 0f, texture.width, texture.height);
         Sprite sprite = Sprite.Create(texture, spriteRect, new Vector2(0.5f, 0.5f), 100f);
         staticVfxSprites[cacheKey] = sprite;
@@ -2453,11 +2453,11 @@ public class BattleManager : MonoBehaviour
     private IEnumerator HorseChargeSpriteVfxRoutine(RectTransform caster, RectTransform target)
     {
         if (caster == null || target == null) yield break;
-        Sprite sprite = LoadHorseStaticSprite();
+        Sprite sprite = LoadHorseChargeSprite();
         if (sprite == null) yield break;
 
-        // 馬の後方で左右に開く風圧。中央を空けて、馬の駒を覆わないようにする。
-        Image image = CreateSingleSpriteVfx("SingleVfx_HorseChargeForkedWind", EnsureBattleVfxOverlay(), sprite, out RectTransform rect);
+        // 馬の後方へ砂埃を流し、駒を覆わないようにする。
+        Image image = CreateSingleSpriteVfx("SingleVfx_HorseCharge", EnsureBattleVfxOverlay(), sprite, out RectTransform rect);
         Vector3 start = caster.position;
         Vector3 end = target.position;
         Vector3 delta = end - start;
@@ -2476,7 +2476,7 @@ public class BattleManager : MonoBehaviour
             float travel = Mathf.SmoothStep(0f, 1f, progress);
             Vector3 horsePosition = Vector3.Lerp(start, end, travel);
 
-            // 素材は右向き。反転して、V字の開きが馬の後方へ流れるように配置する。
+            // 素材は右向き。反転して、砂埃が馬の後方へ流れるように配置する。
             rect.position = horsePosition - forward * currentBattleCellSize * (0.72f + 0.16f * travel);
             rect.rotation = Quaternion.Euler(0f, 0f, angle + 180f);
             rect.localScale = Vector3.one * (0.62f + 0.38f * travel);
@@ -2491,7 +2491,7 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator BirdRetreatSpriteVfxRoutine(Vector3 position, bool arriving, float delay)
     {
-        Sprite sprite = LoadBirdStaticSprite();
+        Sprite sprite = LoadBirdRetreatSprite();
         if (sprite == null) yield break;
         if (delay > 0f) yield return new WaitForSecondsRealtime(delay);
 

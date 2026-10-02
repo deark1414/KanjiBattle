@@ -66,7 +66,7 @@
 | 石、矢、銃 | `Animated/Stone`、`Arrow`、`Gun` | 射撃の予告と飛翔 |
 | 火、水 | `Animated/Fireball`、`WaterHeal` | 属性の予告と着弾・回復 |
 | 木、土 | `Animated/WoodPush`、`Soil` | 根の押し出しと土罠の発動のみ |
-| 馬、鳥、虎 | `Static/HorseChargeForkedWind`、`BirdFeathersOnly`、`Animated/TigerTwinClaw` | 突進の土煙、離脱の羽、四本爪撃 |
+| 馬、鳥、虎 | `Animated/HorseCharge`、`BirdRetreat`、`TigerTwinClaw` | 突進の土煙、離脱の羽、四本爪撃 |
 | 竜 | `Animated/DragonRoar`、`DragonBreath` | 登場、咆哮、ブレス |
 
 ## 駒と盤面の外装セット

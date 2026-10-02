@@ -12,7 +12,7 @@
 | Arrow / Gun / Stone | 矢 / 銃 / 石 | 各 `Animated` 素材 | 直線飛翔、石のみ放物線 |
 | Fireball / WaterHeal | 火 / 水 | 各 `Animated` 素材 | 対象セルの上方から落下 |
 | WoodPush / Soil | 木 / 土 | 各 `Animated` 素材 | 根の前方スイング、罠の局所発動 |
-| HorseCharge / BirdRetreat | 馬 / 鳥 | `Static/HorseChargeForkedWind`、`Static/BirdFeathersOnly` | 移動に追従する土煙、出発・到着時の羽 |
+| HorseCharge / BirdRetreat | 馬 / 鳥 | `Animated/HorseCharge/frame_02`、`Animated/BirdRetreat/frame_02` | 移動に追従する土煙、出発・到着時の羽 |
 | TigerTwinClaw | 虎 | `Animated/TigerTwinClaw` | 反対向きに交差する二連爪撃 |
 | Counter / AreaCounter / Armor | 盾 / 壁 / 鎧 | 各 `Animated` 素材 | 所有キャラクターの前面に短く表示 |
 | NumberPassive | 一〜九 | `Animated/NumberAura_*` | ターン開始時の結束強度に応じて回転・拡縮 |
