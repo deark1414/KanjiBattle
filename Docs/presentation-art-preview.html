@@ -164,6 +164,8 @@
 
   <script>
     const root = 'review-assets/';
+    // Keep local file previews from retaining an older candidate after an art revision.
+    const previewRevision = '20261002-v5';
     const pieces = [
       ['一', 'Art/Generated/CharacterIcons/icon_01_1.png'], ['二', 'Art/Generated/CharacterIcons/icon_02_2.png'], ['三', 'Art/Generated/CharacterIcons/icon_03_3.png'],
       ['四', 'Art/Generated/CharacterIcons/icon_04_4.png'], ['五', 'Art/Generated/CharacterIcons/icon_05_5.png'], ['六', 'Art/Generated/CharacterIcons/icon_06_6.png'],
@@ -227,7 +229,7 @@
         const preview = document.createElement('div');
         preview.className = 'asset-preview';
         const image = document.createElement('img');
-        image.src = root + path;
+        image.src = `${root}${path}?rev=${previewRevision}`;
         image.alt = name;
         image.loading = 'lazy';
         preview.appendChild(image);
@@ -250,7 +252,7 @@
         [['現行', currentPath], ['候補', candidatePath]].forEach(([label, path]) => {
           const sample = document.createElement('div');
           sample.className = 'comparison-sample';
-          sample.innerHTML = `<div class="comparison-label">${label}</div><div class="comparison-preview"><img src="${root + path}" alt="${name} ${label}"></div><span class="comparison-path">${path}</span>`;
+          sample.innerHTML = `<div class="comparison-label">${label}</div><div class="comparison-preview"><img src="${root}${path}?rev=${previewRevision}" alt="${name} ${label}"></div><span class="comparison-path">${path}</span>`;
           samples.appendChild(sample);
         });
         card.appendChild(samples);
