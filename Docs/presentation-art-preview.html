@@ -89,6 +89,15 @@
     .asset-draft { border-color: #ba8830; }
     .asset-draft .asset-meta { background: #3f2d15; }
     .empty-note { color: var(--muted); line-height: 1.7; padding: 16px 0 0; }
+    .compare-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 14px; margin-top: 14px; }
+    .comparison { min-width: 0; border: 1px solid #ba8830; background: #242018; }
+    .comparison-title { padding: 10px 12px; font-weight: 800; background: #3f2d15; }
+    .comparison-samples { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: #645333; }
+    .comparison-sample { min-width: 0; background: #242018; }
+    .comparison-label { padding: 8px 10px; color: var(--muted); font-size: 13px; font-weight: 700; }
+    .comparison-preview { display: grid; min-height: 180px; place-items: center; padding: 12px; background-color: var(--sample-bg); background-image: linear-gradient(45deg, var(--checker-a) 25%, transparent 25%), linear-gradient(-45deg, var(--checker-a) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--checker-a) 75%), linear-gradient(-45deg, transparent 75%, var(--checker-a) 75%); background-size: 22px 22px; background-position: 0 0, 0 11px, 11px -11px, -11px 0; }
+    .comparison-preview img { display: block; width: 100%; height: 148px; object-fit: contain; }
+    .comparison-path { display: block; overflow: hidden; padding: 0 10px 10px; color: var(--muted); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
 
     @media (max-width: 720px) {
       .shell { width: min(100% - 20px, 1540px); padding-top: 10px; }
@@ -98,6 +107,9 @@
       .asset-preview { min-height: 126px; padding: 8px; }
       .asset-preview img { height: 106px; }
       .wide-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .compare-grid { grid-template-columns: 1fr; }
+      .comparison-preview { min-height: 142px; padding: 8px; }
+      .comparison-preview img { height: 118px; }
     }
   </style>
 </head>
@@ -136,17 +148,17 @@
     <section>
       <div class="section-title">
         <h2>現行の技能 VFX</h2>
-        <span class="section-note">ゲームで使われている代表フレーム</span>
+        <span class="section-note">実際にランタイムが参照する代表素材のみ</span>
       </div>
       <div id="vfx" class="grid"></div>
     </section>
 
     <section>
       <div class="section-title">
-        <h2>ドット絵 VFX 候補</h2>
-        <span class="section-note">未接続。現行PNGの形・向き・余白を固定し、描画だけをドット絵化した候補です</span>
+        <h2>VFX 置換候補の対比</h2>
+        <span class="section-note">左が現行、右が未接続のドット絵候補です</span>
       </div>
-      <div id="vfx-drafts" class="grid wide-grid"></div>
+      <div id="vfx-comparisons" class="compare-grid"></div>
     </section>
   </main>
 
@@ -197,13 +209,14 @@
       ['結束: 上位・弱', 'Resources/VFX/Animated/NumberAura_High_Weak/frame_01.png'], ['結束: 上位・中', 'Resources/VFX/Animated/NumberAura_High_Medium/frame_01.png'], ['結束: 上位・強', 'Resources/VFX/Animated/NumberAura_High_Strong/frame_07.png']
     ];
 
-    const vfxDrafts = [
-      ['剣: 斬撃', 'Art/Drafts/VFX/Weapons/SwordMotion_pixel_v2_draft.png'],
-      ['槌: 振り下ろし', 'Art/Drafts/VFX/Weapons/HammerMotion_pixel_v2_draft.png'],
-      ['虎: 四本爪', 'Art/Drafts/VFX/TigerTwinClaw_pixel_draft.png'],
-      ['水: 回復の水滴', 'Art/Drafts/VFX/WaterHeal/WaterHeal_pixel_v2_draft.png'],
-      ['盾: 木札の防御', 'Art/Drafts/VFX/Shield/Shield_pixel_v2_draft.png'],
-      ['馬: 二股の砂煙', 'Art/Drafts/VFX/HorseCharge/HorseChargeForkedWind_pixel_v2_draft.png']
+    const vfxComparisons = [
+      ['剣: 斬撃', 'Resources/VFX/Weapons/SwordMotion.png', 'Art/Drafts/VFX/Weapons/SwordMotion_pixel_v2_draft.png'],
+      ['槌: 振り下ろし', 'Resources/VFX/Weapons/HammerMotion.png', 'Art/Drafts/VFX/Weapons/HammerMotion_pixel_v2_draft.png'],
+      ['虎: 四本爪', 'Resources/VFX/Animated/TigerTwinClaw/frame_03.png', 'Art/Drafts/VFX/TigerTwinClaw_pixel_draft.png'],
+      ['水: 回復の水滴', 'Resources/VFX/Animated/WaterHeal/frame_03.png', 'Art/Drafts/VFX/WaterHeal/WaterHeal_pixel_v2_draft.png'],
+      ['盾: 木札の防御', 'Resources/VFX/Animated/Shield/frame_02.png', 'Art/Drafts/VFX/Shield/Shield_pixel_v2_draft.png'],
+      ['馬: 二股の砂煙', 'Resources/VFX/Static/HorseChargeForkedWind.png', 'Art/Drafts/VFX/HorseCharge/HorseChargeForkedWind_pixel_v2_draft.png'],
+      ['鳥: 羽の退避', 'Resources/VFX/Static/BirdFeathersOnly.png', 'Art/Drafts/VFX/BirdRetreat/BirdFeathersOnly_pixel_v2_draft.png']
     ];
 
     function render(targetId, entries, draft) {
@@ -226,10 +239,29 @@
       });
     }
 
+    function renderComparisons(entries) {
+      const target = document.getElementById('vfx-comparisons');
+      entries.forEach(([name, currentPath, candidatePath]) => {
+        const card = document.createElement('article');
+        card.className = 'comparison';
+        card.innerHTML = `<div class="comparison-title">${name}</div>`;
+        const samples = document.createElement('div');
+        samples.className = 'comparison-samples';
+        [['現行', currentPath], ['候補', candidatePath]].forEach(([label, path]) => {
+          const sample = document.createElement('div');
+          sample.className = 'comparison-sample';
+          sample.innerHTML = `<div class="comparison-label">${label}</div><div class="comparison-preview"><img src="${root + path}" alt="${name} ${label}"></div><span class="comparison-path">${path}</span>`;
+          samples.appendChild(sample);
+        });
+        card.appendChild(samples);
+        target.appendChild(card);
+      });
+    }
+
     render('pieces', pieces, false);
     render('motifs', motifs, true);
     render('vfx', vfx, false);
-    render('vfx-drafts', vfxDrafts, true);
+    renderComparisons(vfxComparisons);
 
     const palettes = {
       checker: ['#4b4945', '#393733', '#4d4a43'],
