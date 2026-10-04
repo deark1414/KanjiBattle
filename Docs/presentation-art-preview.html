@@ -139,7 +139,7 @@
     <section>
       <div class="section-title">
         <h2>技能 VFX の対比</h2>
-        <span class="section-note">左が実装参照PNG、右が未接続のドット絵候補です</span>
+        <span class="section-note">左が実装参照PNG、右が未接続の候補です。数字一〜三は中央を空けた火の玉で、周回の動きは承認後に接続します。</span>
       </div>
       <div id="vfx-comparisons" class="comparison-list"></div>
     </section>
@@ -148,7 +148,7 @@
   <script>
     const root = 'review-assets/';
     // Keep local file previews from retaining an older candidate after an art revision.
-    const previewRevision = '20261002-v8';
+    const previewRevision = '20261004-v9';
     const pieces = [
       ['一', 'Art/Generated/CharacterIcons/icon_01_1.png'], ['二', 'Art/Generated/CharacterIcons/icon_02_2.png'], ['三', 'Art/Generated/CharacterIcons/icon_03_3.png'],
       ['四', 'Art/Generated/CharacterIcons/icon_04_4.png'], ['五', 'Art/Generated/CharacterIcons/icon_05_5.png'], ['六', 'Art/Generated/CharacterIcons/icon_06_6.png'],
@@ -174,7 +174,7 @@
       '木': 'Art/Drafts/PieceMotifs/Nature/Wood_tree_draft.png',
       '土': 'Art/Drafts/PieceMotifs/Nature/Soil_packed_mound_draft.png',
       '馬': 'Art/Drafts/PieceMotifs/Animals/Horse_running_draft.png',
-      '鳥': 'Art/Drafts/PieceMotifs/Animals/Bird_flying_draft.png',
+      '鳥': 'Art/Drafts/PieceMotifs/Animals/Bird_hawk_flying_draft.png',
       '虎': 'Art/Drafts/PieceMotifs/TigerMotif_fullbody_draft.png',
       '竜': 'Art/Drafts/PieceMotifs/DragonMotif_fullbody_draft.png'
     };
@@ -190,9 +190,9 @@
       ['虎', 'Resources/VFX/Animated/TigerTwinClaw/frame_03.png'], ['竜の息吹', 'Resources/VFX/Animated/DragonBreath/frame_03.png'],
       ['竜の咆哮', 'Resources/VFX/Animated/DragonRoar/frame_03.png'], ['召喚', 'Resources/VFX/Animated/BossSummon/frame_01.png'],
       ['盾', 'Resources/VFX/Animated/Shield/frame_02.png'], ['鎧', 'Resources/VFX/Animated/Armor/frame_02.png'], ['壁', 'Resources/VFX/Animated/Wall/frame_02.png'],
-      ['結束: 下位・弱', 'Resources/VFX/Animated/NumberAura_Low_Weak/frame_01.png'], ['結束: 下位・中', 'Resources/VFX/Animated/NumberAura_Low_Medium/frame_01.png'], ['結束: 下位・強', 'Resources/VFX/Animated/NumberAura_Low_Strong/frame_01.png'],
-      ['結束: 中位・弱', 'Resources/VFX/Animated/NumberAura_Mid_Weak/frame_01.png'], ['結束: 中位・中', 'Resources/VFX/Animated/NumberAura_Mid_Medium/frame_01.png'], ['結束: 中位・強', 'Resources/VFX/Animated/NumberAura_Mid_Strong/frame_01.png'],
-      ['結束: 上位・弱', 'Resources/VFX/Animated/NumberAura_High_Weak/frame_01.png'], ['結束: 上位・中', 'Resources/VFX/Animated/NumberAura_High_Medium/frame_01.png'], ['結束: 上位・強', 'Resources/VFX/Animated/NumberAura_High_Strong/frame_07.png']
+      ['結束: 下位・弱', 'Resources/VFX/Animated/NumberAura_Low_Weak/frame_01.png'], ['数字 一: 火の玉1', 'Resources/VFX/Animated/NumberAura_Low_Medium/frame_01.png'], ['結束: 下位・強', 'Resources/VFX/Animated/NumberAura_Low_Strong/frame_01.png'],
+      ['結束: 中位・弱', 'Resources/VFX/Animated/NumberAura_Mid_Weak/frame_01.png'], ['数字 二: 火の玉2', 'Resources/VFX/Animated/NumberAura_Mid_Medium/frame_01.png'], ['結束: 中位・強', 'Resources/VFX/Animated/NumberAura_Mid_Strong/frame_01.png'],
+      ['結束: 上位・弱', 'Resources/VFX/Animated/NumberAura_High_Weak/frame_01.png'], ['数字 三: 火の玉3', 'Resources/VFX/Animated/NumberAura_High_Medium/frame_01.png'], ['結束: 上位・強', 'Resources/VFX/Animated/NumberAura_High_Strong/frame_07.png']
     ];
 
     const sourceFaithfulDrafts = {
@@ -216,13 +216,13 @@
       'Resources/VFX/Animated/Armor/frame_02.png': 'Art/Drafts/VFX/Armor/Armor_pixel_source_draft.png',
       'Resources/VFX/Animated/Wall/frame_02.png': 'Art/Drafts/VFX/Wall/Wall_pixel_source_draft.png',
       'Resources/VFX/Animated/NumberAura_Low_Weak/frame_01.png': 'Art/Drafts/VFX/NumberAura_Low_Weak/NumberAura_Low_Weak_pixel_source_draft.png',
-      'Resources/VFX/Animated/NumberAura_Low_Medium/frame_01.png': 'Art/Drafts/VFX/NumberAura_Low_Medium/NumberAura_Low_Medium_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_Low_Medium/frame_01.png': 'Art/Drafts/VFX/NumberAura_Low_Medium/NumberAura_OneFireball_draft.png',
       'Resources/VFX/Animated/NumberAura_Low_Strong/frame_01.png': 'Art/Drafts/VFX/NumberAura_Low_Strong/NumberAura_Low_Strong_pixel_source_draft.png',
       'Resources/VFX/Animated/NumberAura_Mid_Weak/frame_01.png': 'Art/Drafts/VFX/NumberAura_Mid_Weak/NumberAura_Mid_Weak_pixel_source_draft.png',
-      'Resources/VFX/Animated/NumberAura_Mid_Medium/frame_01.png': 'Art/Drafts/VFX/NumberAura_Mid_Medium/NumberAura_Mid_Medium_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_Mid_Medium/frame_01.png': 'Art/Drafts/VFX/NumberAura_Mid_Medium/NumberAura_TwoFireballs_draft.png',
       'Resources/VFX/Animated/NumberAura_Mid_Strong/frame_01.png': 'Art/Drafts/VFX/NumberAura_Mid_Strong/NumberAura_Mid_Strong_pixel_source_draft.png',
       'Resources/VFX/Animated/NumberAura_High_Weak/frame_01.png': 'Art/Drafts/VFX/NumberAura_High_Weak/NumberAura_High_Weak_pixel_source_draft.png',
-      'Resources/VFX/Animated/NumberAura_High_Medium/frame_01.png': 'Art/Drafts/VFX/NumberAura_High_Medium/NumberAura_High_Medium_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_High_Medium/frame_01.png': 'Art/Drafts/VFX/NumberAura_High_Medium/NumberAura_ThreeFireballs_draft.png',
       'Resources/VFX/Animated/NumberAura_High_Strong/frame_07.png': 'Art/Drafts/VFX/NumberAura_High_Strong/NumberAura_High_Strong_pixel_source_draft.png'
     };
     const vfxComparisons = vfx.map(([name, path]) => [name, path, sourceFaithfulDrafts[path]]);
