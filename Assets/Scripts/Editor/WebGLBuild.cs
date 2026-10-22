@@ -8,7 +8,22 @@ namespace KanjiBattle.Editor
     public static class WebGLBuild
     {
         private const string BuildRoot = "Docs";
-        private const string GameBuildPath = BuildRoot + "/game";
+        private static string GameBuildPath = BuildRoot + "/game";
+
+        [MenuItem("KanjiBattle/Build/Local Deployment Preview")]
+        public static void BuildLocalDeploymentPreview()
+        {
+            string previousPath = GameBuildPath;
+            try
+            {
+                GameBuildPath = "tmp/deployment-preview/game";
+                BuildGitHubPages();
+            }
+            finally
+            {
+                GameBuildPath = previousPath;
+            }
+        }
 
         [MenuItem("KanjiBattle/Build/GitHub Pages WebGL")]
         public static void BuildGitHubPages()
@@ -30,7 +45,7 @@ namespace KanjiBattle.Editor
             AssetDatabase.SaveAssets();
 
             PrepareOutputDirectory();
-            WriteGitHubPagesFiles();
+            if (GameBuildPath == BuildRoot + "/game") WriteGitHubPagesFiles();
 
             // GitHub Pages does not reliably attach Content-Encoding to Unity's
             // compressed build files. The fallback keeps the archive portable while

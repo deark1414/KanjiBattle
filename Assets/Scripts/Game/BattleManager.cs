@@ -9,8 +9,8 @@ public class BattleManager : MonoBehaviour
 {
     [SerializeField] private GameObject cellPrefab;
     [SerializeField] private Transform battleField;
-    [SerializeField] private int rows = 5;
-    [SerializeField] private int cols = 8;
+    [SerializeField] private int rows = BattleDeploymentRules.Rows;
+    [SerializeField] private int cols = BattleDeploymentRules.Columns;
 
     public int Rows => rows;
     public int Cols => cols;
@@ -24,6 +24,9 @@ public class BattleManager : MonoBehaviour
     private List<BattleCharacter> allies = new();
     private List<BattleCharacter> enemies = new();
     private readonly List<CharacterData> deployedAllies = new();
+    private BattleDeploymentView deploymentView;
+    private BattleCharacter selectedDeploymentCharacter;
+    public bool IsDeploying => deploymentView != null;
     private readonly HashSet<int> encounteredEnemyCharacterIds = new();
 
     [SerializeField] private ScrollRect logScroll;
@@ -112,6 +115,8 @@ public class BattleManager : MonoBehaviour
 
     private void OnDisable()
     {
+        ClearDeploymentView();
+        StopAllCoroutines();
         CleanupBattleVfx();
     }
 
@@ -125,10 +130,20 @@ public class BattleManager : MonoBehaviour
         ConfigureResponsiveLayout();
     }
 
-    public void StartBattle(List<CharacterData> allies, StageData stage)
+    public void StartBattle(List<CharacterData> allies, StageData stage, bool useSavedDeployment = false)
     {
+        if (stage == null || allies == null) return;
+        var party = allies.Where(character => character != null).ToList();
+        int enemyCount = stage.enemyPool != null ? stage.enemyPool.Count(enemy => enemy != null) : 0;
+        if (party.Count == 0 || party.Count > BattleDeploymentRules.Capacity || enemyCount > BattleDeploymentRules.Capacity)
+        {
+            Debug.LogError("[BattleManager] 初期配置の人数が配置可能枠に収まりません。");
+            return;
+        }
         GameAudio.Instance.EnsureBgm();
         ResetBattle();
+        rows = BattleDeploymentRules.Rows;
+        cols = BattleDeploymentRules.Columns;
         currentStage = stage;
         ModernWafuuPresentation.ApplyBattleEnvironment(transform, stage != null ? stage.chapterId : 1);
         BattleUILayout.SetStageContext(stage);
@@ -142,36 +157,107 @@ public class BattleManager : MonoBehaviour
         reinforcementTotalSpawned = 0;
         SyncBattleSpeedFromProgress();
 
-        foreach (var ally in allies)
+        List<Vector2Int> allyPositions = BattleDeploymentRules.Resolve(
+            party.Select(character => character.characterId).ToList(), BattleDeploymentRules.Load());
+        for (int index = 0; index < party.Count; index++)
         {
-            if (ally != null)
-            {
-                deployedAllies.Add(ally);
-                var pos = GetRandomFreeCell();
-                SpawnCharacter(ally, pos, true);
-            }
+            deployedAllies.Add(party[index]);
+            SpawnCharacter(party[index], allyPositions[index], true);
         }
 
-        foreach (var enemy in stage.enemyPool)
+        int enemyIndex = 0;
+        foreach (var enemy in stage.enemyPool ?? new List<CharacterData>())
         {
-            var pos = GetRandomFreeCell();
+            if (enemy == null) continue;
+            var pos = BattleDeploymentRules.DefaultPosition(enemyIndex++, false);
             SpawnCharacter(enemy, pos, false);
         }
 
         GenerateStageTerrain(stage);
         GenerateStageTraps(stage);
 
+        UpdateSpeedButtonLabel();
+        if (useSavedDeployment)
+        {
+            StartCoroutine(StartBattleAfterSetup());
+        }
+        else
+        {
+            deploymentView = new BattleDeploymentView(transform, gridCells, SelectDeploymentCell, ConfirmDeployment, CancelDeployment);
+            selectedDeploymentCharacter = null;
+            deploymentView.Refresh(selectedDeploymentCharacter);
+        }
+    }
+
+    private void SelectDeploymentCell(Vector2Int cell)
+    {
+        if (!IsDeploying || !BattleDeploymentRules.IsAllyCell(cell) || impassableCells.Contains(cell)) return;
+        gridMap.TryGetValue(cell, out BattleCharacter occupant);
+        if (occupant != null && !occupant.isAlly) return;
+        if (selectedDeploymentCharacter != null && selectedDeploymentCharacter.gridPos == cell)
+        {
+            selectedDeploymentCharacter = null;
+        }
+        else if (selectedDeploymentCharacter == null)
+        {
+            selectedDeploymentCharacter = occupant;
+        }
+        else
+        {
+            Vector2Int previous = selectedDeploymentCharacter.gridPos;
+            gridMap.Remove(previous);
+            gridMap.Remove(cell);
+            PlaceDeploymentCharacter(selectedDeploymentCharacter, cell);
+            if (occupant != null) PlaceDeploymentCharacter(occupant, previous);
+            occupied.Clear();
+            occupied.UnionWith(gridMap.Keys);
+            selectedDeploymentCharacter = null;
+        }
+        deploymentView.Refresh(selectedDeploymentCharacter);
+    }
+
+    private void PlaceDeploymentCharacter(BattleCharacter character, Vector2Int cell)
+    {
+        character.gridPos = cell;
+        gridMap[cell] = character;
+        occupied.Add(cell);
+        character.transform.SetParent(gridCells[cell.x, cell.y], false);
+        character.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+    }
+
+    private void ConfirmDeployment()
+    {
+        if (!IsDeploying) return;
+        BattleDeploymentRules.Save(allies.Select(character => character.data.characterId).ToList(),
+            allies.Select(character => character.gridPos).ToList());
+        ClearDeploymentView();
+        isPaused = false;
         StartCoroutine(StartBattleAfterSetup());
+    }
+
+    private void CancelDeployment()
+    {
+        ClearDeploymentView();
+        UIManager.Instance?.ShowFormation();
+    }
+
+    private void ClearDeploymentView()
+    {
+        deploymentView?.Dispose();
+        deploymentView = null;
+        selectedDeploymentCharacter = null;
     }
 
     public void PauseBattle()
     {
+        if (IsDeploying) return;
         isPaused = true;
         AddLog("=== バトル一時停止 ===", Color.gray);
     }
 
     public void ResumeBattle()
     {
+        if (IsDeploying) return;
         isPaused = false;
         AddLog("=== バトル再開 ===", Color.green);
     }
@@ -182,11 +268,18 @@ public class BattleManager : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         yield return null;
 
+        foreach (BattleCharacter character in allies.Concat(enemies).ToList())
+        {
+            if (!character.isDead && trapCells.Remove(character.gridPos))
+                character.TakeDamage(trapDamage, this, isBasicAttack: false,
+                    actionLabel: $"{character.data.characterName} は初期配置の罠を踏んだ！");
+        }
         StartCoroutine(BattleLoop());
     }
 
     private void ResetBattle()
     {
+        ClearDeploymentView();
         StopAllCoroutines();
         CleanupBattleVfx();
 
@@ -269,12 +362,18 @@ public class BattleManager : MonoBehaviour
         int desiredCount = BattleMovementRules.GetStageObstacleCount(stage);
         if (desiredCount <= 0) return;
 
-        int stageSeed = (stage != null ? stage.stageId : 0) * 7919 + rows * 31 + cols;
+        var reserved = new HashSet<Vector2Int>(gridMap.Keys);
+        for (int index = 0; index < BattleDeploymentRules.Capacity; index++)
+        {
+            reserved.Add(BattleDeploymentRules.DefaultPosition(index, true));
+            reserved.Add(BattleDeploymentRules.DefaultPosition(index, false));
+        }
+        int stageSeed = Random.Range(1, int.MaxValue);
         impassableCells.UnionWith(BattleMovementRules.GenerateImpassableCells(
             cols,
             rows,
             desiredCount,
-            new HashSet<Vector2Int>(gridMap.Keys),
+            reserved,
             stageSeed));
 
         foreach (Vector2Int cell in impassableCells)
@@ -296,7 +395,7 @@ public class BattleManager : MonoBehaviour
             for (int x = 0; x < cols; x++)
             {
                 var cell = new Vector2Int(x, y);
-                if (gridMap.ContainsKey(cell) || impassableCells.Contains(cell)) continue;
+                if (impassableCells.Contains(cell)) continue;
                 candidates.Add(cell);
             }
         }
@@ -312,7 +411,6 @@ public class BattleManager : MonoBehaviour
         {
             Vector2Int pos = candidates[index];
             trapCells.Add(pos);
-            CreateBuriedTrapMarker(pos);
         }
     }
 
@@ -402,21 +500,14 @@ public class BattleManager : MonoBehaviour
     private void ConfigureResponsiveLayout()
     {
         currentBattleCellSize = BattleUILayout.Apply(transform, battleField, logScroll, cols, rows);
-    }
-
-    private Vector2Int GetRandomFreeCell()
-    {
-        Vector2Int pos;
-        do
+        foreach (BattleCharacter character in gridMap.Values)
         {
-            int x = Random.Range(0, cols);
-            int y = Random.Range(0, rows);
-            pos = new Vector2Int(x, y);
-        } while (occupied.Contains(pos) || impassableCells.Contains(pos));
-
-        occupied.Add(pos);
-        return pos;
+            if (character != null)
+                BattleUILayout.ApplyCharacterVisualSize(character.GetComponent<RectTransform>(), currentBattleCellSize);
+        }
+        deploymentView?.BringToFront();
     }
+
 
     private void SpawnCharacter(CharacterData data, Vector2Int pos, bool ally)
     {
@@ -449,6 +540,8 @@ public class BattleManager : MonoBehaviour
         rect.SetAsLastSibling(); // 念のため一番前に
 
         gridMap[pos] = bc;
+        occupied.Add(pos);
+        bc.UpdateDirection(ally ? Vector2Int.up : Vector2Int.down);
         if (ally) allies.Add(bc); else enemies.Add(bc);
 
         // ボス召喚演出はラスボスステージの登場時だけ。通常ステージや通常の敵生成では出さない。

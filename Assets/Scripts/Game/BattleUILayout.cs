@@ -72,7 +72,7 @@ public static class BattleUILayout
     {
         if (rect == null) return;
 
-        float pieceSize = Mathf.Clamp(cellSize * 0.84f, 52f, 96f);
+        float pieceSize = Mathf.Max(10f, cellSize * 0.84f);
         rect.anchorMin = new Vector2(0.5f, 0.5f);
         rect.anchorMax = new Vector2(0.5f, 0.5f);
         rect.pivot = new Vector2(0.5f, 0.5f);
@@ -146,7 +146,7 @@ public static class BattleUILayout
         var container = fieldRect.parent as RectTransform;
         if (container == null) return;
 
-        container.anchorMin = portrait ? new Vector2(0.5f, 0.64f) : new Vector2(0.5f, 0.66f);
+        container.anchorMin = portrait ? new Vector2(0.5f, 0.63f) : new Vector2(0.5f, 0.62f);
         container.anchorMax = container.anchorMin;
         container.pivot = new Vector2(0.5f, 0.5f);
         container.anchoredPosition = Vector2.zero;
@@ -323,14 +323,14 @@ public static class BattleUILayout
         float rootWidth = rootRect != null && rootRect.rect.width > 0f ? rootRect.rect.width : 1280f;
         float rootHeight = rootRect != null && rootRect.rect.height > 0f ? rootRect.rect.height : 720f;
         float fieldWidth = portrait ? rootWidth * 0.96f : rootWidth * 0.64f;
-        float fieldHeight = portrait ? rootHeight * 0.42f : rootHeight * 0.44f;
+        float fieldHeight = rootHeight * 0.50f;
         float spacing = portrait ? 8f : 6f;
         int boardPadding = portrait ? 12 : 10;
         float cellSize = Mathf.Floor(Mathf.Min(
             (fieldWidth - boardPadding * 2f - spacing * (cols - 1)) / cols,
             (fieldHeight - boardPadding * 2f - spacing * (rows - 1)) / rows));
 
-        float currentCellSize = Mathf.Max(48f, cellSize);
+        float currentCellSize = Mathf.Max(12f, cellSize);
         grid.padding = new RectOffset(boardPadding, boardPadding, boardPadding, boardPadding);
         grid.spacing = new Vector2(spacing, spacing);
         grid.cellSize = new Vector2(currentCellSize, currentCellSize);
