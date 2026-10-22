@@ -14,6 +14,7 @@ public class BattleManager : MonoBehaviour
 
     public int Rows => rows;
     public int Cols => cols;
+    public bool IsTerrainBlocked(Vector2Int cell) => impassableCells.Contains(cell);
 
     [SerializeField] private GameObject characterPrefab;
     [SerializeField] private List<CharacterData> characterPool;
@@ -974,78 +975,21 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
-        // 移動処理
-        BattleCharacter nearest = TargetingService.FindNearestEnemy(this, character, character.isAlly ? enemies : allies);
-        if (nearest != null)
+        var friends = new HashSet<Vector2Int>();
+        var opponents = new HashSet<Vector2Int>();
+        foreach (BattleCharacter other in gridMap.Values)
         {
-            var blocked = new HashSet<Vector2Int>(gridMap.Keys);
-            blocked.UnionWith(impassableCells);
-            blocked.Remove(character.gridPos);
-            blocked.Remove(nearest.gridPos);
-
-            List<Vector2Int> path = Pathfinding.FindPath(character.gridPos, nearest.gridPos, rows, cols, blocked);
-
-            if (path != null && path.Count > 1)
-            {
-                int destinationIndex = GetMovementDestinationIndex(character, path, targetCellOccupied: true);
-                Vector2Int nextStep = path[destinationIndex];
-                if (IsCellFree(nextStep))
-                {
-                    MoveCharacter(character, path, destinationIndex, side);
-                    return;
-                }
-            }
-            else
-            {
-                // ターゲットの周囲8マスを候補として最も近づけるセルを探す
-                List<Vector2Int> candidates = new List<Vector2Int>();
-                for (int dx = -1; dx <= 1; dx++)
-                {
-                    for (int dy = -1; dy <= 1; dy++)
-                    {
-                        if (dx == 0 && dy == 0) continue;
-                        Vector2Int pos = nearest.gridPos + new Vector2Int(dx, dy);
-                        if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) continue;
-                        if (IsCellFree(pos))
-                        {
-                            candidates.Add(pos);
-                        }
-                    }
-                }
-                // 最も近づけるセルへのpathを探す
-                float minDist = float.MaxValue;
-                List<Vector2Int> bestPath = null;
-                foreach (var candidate in candidates)
-                {
-                    var blocked2 = new HashSet<Vector2Int>(gridMap.Keys);
-                    blocked2.UnionWith(impassableCells);
-                    blocked2.Remove(character.gridPos);
-                    // candidateは空きマスなのでblocked2に含まれていない
-                    List<Vector2Int> candidatePath = Pathfinding.FindPath(character.gridPos, candidate, rows, cols, blocked2);
-                    if (candidatePath != null && candidatePath.Count > 1)
-                    {
-                        // 距離はターゲットまでの距離で比較
-                        float dist = Vector2Int.Distance(candidate, nearest.gridPos);
-                        if (bestPath == null || dist < minDist)
-                        {
-                            minDist = dist;
-                            bestPath = candidatePath;
-                        }
-                    }
-                }
-                if (bestPath != null && bestPath.Count > 1)
-                {
-                    int destinationIndex = GetMovementDestinationIndex(character, bestPath, targetCellOccupied: false);
-                    Vector2Int nextStep = bestPath[destinationIndex];
-                    if (IsCellFree(nextStep))
-                    {
-                        MoveCharacter(character, bestPath, destinationIndex, side);
-                        return;
-                    }
-                }
-                AddLog($"{side} {character.data.characterName} は動けない！", Color.gray);
-            }
+            if (other == null || other.isDead) continue;
+            (other.isAlly == character.isAlly ? friends : opponents).Add(other.gridPos);
         }
+        SkillType movementSkill = BattleActionRules.IsReliableRoleSkill(character.data.skillType)
+            && character.data.skillType != SkillType.WaterHeal ? character.data.skillType : SkillType.None;
+        List<Vector2Int> path = BattleMovementPlanner.FindNextMove(character.gridPos, opponents.ToList(), movementSkill,
+            character.data.category, friends, opponents, impassableCells, cols, rows);
+        if (path != null && path.Count > 1)
+            MoveCharacter(character, path, path.Count - 1, side);
+        else
+            AddLog($"{side} {character.data.characterName} は待機する。", Color.gray);
     }
 
     private BattleCharacter FindSkillTarget(BattleCharacter character)
@@ -1068,12 +1012,12 @@ public class BattleManager : MonoBehaviour
             case SkillType.Stone:
                 return TargetingService.FindStoneTarget(this, character);
             case SkillType.Gun:
-                return TargetingService.FindNearestEnemy(this, character, character.isAlly ? enemies : allies);
+                return TargetingService.FindGunTarget(this, character);
             case SkillType.Soil:
             case SkillType.Dragon:
                 return character;
             case SkillType.Fireball:
-                return FindRandomLivingTarget(character.isAlly ? enemies : allies);
+                return TargetingService.FindEnemyTarget(this, character, SkillType.Fireball);
             case SkillType.WaterHeal:
                 return TargetingService.FindAdjacentAlly(this, character);
             case SkillType.HorseCharge:
@@ -1083,29 +1027,6 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private static BattleCharacter FindRandomLivingTarget(List<BattleCharacter> candidates)
-    {
-        if (candidates == null) return null;
-
-        List<BattleCharacter> living = new();
-        foreach (BattleCharacter candidate in candidates)
-        {
-            if (candidate != null && !candidate.isDead)
-            {
-                living.Add(candidate);
-            }
-        }
-
-        return living.Count > 0 ? living[Random.Range(0, living.Count)] : null;
-    }
-
-    private static int GetMovementDestinationIndex(BattleCharacter character, List<Vector2Int> path, bool targetCellOccupied)
-    {
-        CharacterCategory category = character != null && character.data != null
-            ? character.data.category
-            : CharacterCategory.None;
-        return BattleMovementRules.GetDestinationIndex(category, path, targetCellOccupied);
-    }
 
     private bool IsCellFree(Vector2Int pos)
     {

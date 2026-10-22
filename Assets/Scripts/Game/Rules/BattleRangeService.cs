@@ -4,6 +4,29 @@ using UnityEngine;
 // Shared skill geometry for battle, previews, and regression checks.
 public static class BattleRangeService
 {
+    public static int Distance(Vector2Int from, Vector2Int to) =>
+        Mathf.Max(Mathf.Abs(to.x - from.x), Mathf.Abs(to.y - from.y));
+
+    public static bool CanTargetCell(SkillType skill, Vector2Int from, Vector2Int to,
+        int cols, int rows, ISet<Vector2Int> friendlyCells = null)
+    {
+        if (to.x < 0 || to.x >= cols || to.y < 0 || to.y >= rows) return false;
+        int distance = Distance(from, to);
+        if (skill == SkillType.WaterHeal) return distance <= 1;
+        if (distance == 0) return false;
+        if (skill is SkillType.Stone or SkillType.Fireball) return distance <= 2;
+        if (skill is not (SkillType.Arrow or SkillType.Gun or SkillType.Spear)) return distance == 1;
+
+        Vector2Int delta = to - from;
+        if (delta.x != 0 && delta.y != 0 && Mathf.Abs(delta.x) != Mathf.Abs(delta.y)) return false;
+        if (skill != SkillType.Spear) return true;
+        if (distance > 2) return false;
+        Vector2Int direction = NormalizeDirection(delta);
+        for (int step = 1; step < distance; step++)
+            if (friendlyCells != null && friendlyCells.Contains(from + direction * step)) return false;
+        return true;
+    }
+
     private static readonly Vector2Int[] AdjacentDirections =
     {
         Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right,

@@ -27,6 +27,7 @@ public static class BattleRuleRegression
         VerifyTrapDamage();
         VerifyNumberPassives();
         VerifyDeployment();
+        BattleActionRegression.Run();
     }
 
     private static void VerifyDeployment()

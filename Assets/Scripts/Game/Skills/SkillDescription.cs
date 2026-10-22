@@ -51,6 +51,7 @@ public static class SkillDescription
     private static bool UsesChance(SkillType skillType)
     {
         return skillType != SkillType.None
+            && !BattleActionRules.IsReliableRoleSkill(skillType)
             && skillType != SkillType.NumberPassive
             && skillType != SkillType.Counter
             && skillType != SkillType.AreaCounter
@@ -97,16 +98,16 @@ public static class SkillDescription
             SkillType.Armor => "受けるダメージをレベルに応じて軽減する。",
             SkillType.Heal => "味方を回復する。",
             SkillType.NumberPassive => "自分以外の生存数字との組み合わせにより、ターン開始時に効果が決まる。",
-            SkillType.Arrow => "離れた敵に矢を放つ。",
-            SkillType.Gun => "直線上の敵を撃ち抜く。",
-            SkillType.Spear => "8方向の敵を最大2マスまで貫通して攻撃する。",
-            SkillType.Stone => "離れた敵へ石を投げる。",
+            SkillType.Arrow => "8方向の直線上の敵へ矢を放つ。味方と水を越え、射撃可能なら接近しない。",
+            SkillType.Gun => "8方向の直線上の敵を貫通して撃つ。味方と水を越え、味方には当たらない。",
+            SkillType.Spear => "8方向の敵を最大2マスまで貫通して攻撃する。水は越えるが、味方の先へは届かない。",
+            SkillType.Stone => "周囲2マスの敵へ石を投げる。味方と水を越える。",
             SkillType.Shield => "防御寄りの能力を持つ。",
             SkillType.Wall => "高い耐久で前線を支える。",
             SkillType.Soil => "周囲5x5の候補から最大2マスに土の罠を設置する。土以外が踏むと設置者の攻撃力に応じたダメージを受け、立ち続けるとターンごとに再びダメージを受ける。",
-            SkillType.Fireball => "敵に防御無視の火球を放つ。",
+            SkillType.Fireball => "周囲2マスの敵に防御無視の火球を放つ。味方と水を越える。",
             SkillType.WoodPush => "敵を攻撃し、後方へ押し出す。",
-            SkillType.WaterHeal => "隣接した味方を回復する。",
+            SkillType.WaterHeal => "自分と隣接味方のうち、HP割合が最も低い負傷者を回復する。回復不要なら攻撃する。",
             SkillType.HorseCharge => "敵へ突進し、距離を詰めながら攻撃する。",
             SkillType.BirdRetreat => "攻撃後に後退し、距離を取る。",
             SkillType.TigerTwinClaw => "近くの敵に連続攻撃を行う。",

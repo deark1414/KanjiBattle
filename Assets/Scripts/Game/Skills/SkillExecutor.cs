@@ -31,7 +31,11 @@ public static class SkillExecutor
             return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.PassiveOrReactiveSkill);
         }
 
-        if (skillType != SkillType.Dragon)
+        bool reliableRole = BattleActionRules.IsReliableRoleSkill(skillType);
+        if (reliableRole && !IsValidRoleTarget(caster, target, bm))
+            return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.NoValidTarget);
+
+        if (skillType != SkillType.Dragon && !reliableRole)
         {
             int chance = GetSkillChance(caster.data, skillType, caster.isAlly);
             if (!RollSkillActivation(chance))
@@ -127,6 +131,7 @@ public static class SkillExecutor
 
     public static int GetSkillChance(CharacterData data, SkillType skillType, bool isAlly = false)
     {
+        if (BattleActionRules.IsReliableRoleSkill(skillType)) return 100;
         if (ForceSkillActivationForVfxReview)
         {
             return 100;
@@ -145,7 +150,19 @@ public static class SkillExecutor
 
     public static bool RollSkillActivation(int chance)
     {
-        return ForceSkillActivationForVfxReview || Random.value < Mathf.Clamp(chance, 0, 100) / 100f;
+        return ForceSkillActivationForVfxReview || chance >= 100 || (chance > 0 && Random.value < chance / 100f);
+    }
+
+    private static bool IsValidRoleTarget(BattleCharacter caster, BattleCharacter target, BattleManager bm)
+    {
+        if (bm == null || target == null || target.isDead || target.currentHP <= 0) return false;
+        bool healing = caster.data.skillType == SkillType.WaterHeal;
+        if (healing ? target.isAlly != caster.isAlly || target.currentHP >= target.maxHP : target.isAlly == caster.isAlly)
+            return false;
+        var friends = new HashSet<Vector2Int>();
+        foreach (BattleCharacter character in bm.gridMap.Values)
+            if (character != null && !character.isDead && character.isAlly == caster.isAlly) friends.Add(character.gridPos);
+        return BattleRangeService.CanTargetCell(caster.data.skillType, caster.gridPos, target.gridPos, bm.Cols, bm.Rows, friends);
     }
 
     private static bool IsCounterEligibleForVfxReview(SkillType skillType)
@@ -431,31 +448,15 @@ public static class SkillExecutor
             return false;
         }
 
-        Vector2Int delta = ctx.Target.gridPos - ctx.Caster.gridPos;
-        int dx = Mathf.Clamp(delta.x, -1, 1);
-        int dy = Mathf.Clamp(delta.y, -1, 1);
-        if (dx == 0 && dy == 0)
-        {
-            return false;
-        }
-
-        Vector2Int dir = new Vector2Int(dx, dy);
-        Vector2Int pos1 = ctx.Caster.gridPos + dir;
-        Vector2Int pos2 = ctx.Caster.gridPos + dir * 2;
-
-        ctx.BattleManager.gridMap.TryGetValue(pos1, out BattleCharacter firstHit);
-        ctx.BattleManager.gridMap.TryGetValue(pos2, out BattleCharacter secondHit);
-
+        Vector2Int direction = BattleRangeService.NormalizeDirection(ctx.Target.gridPos - ctx.Caster.gridPos);
         bool didHit = false;
-        if (firstHit != null && !firstHit.isDead && firstHit.isAlly != ctx.Caster.isAlly)
+        foreach (Vector2Int cell in BattleRangeService.GetLineWithinBoard(ctx.Caster.gridPos, direction, 2,
+            ctx.BattleManager.Cols, ctx.BattleManager.Rows))
         {
-            ctx.Caster.PerformAttack(firstHit, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} が槍を突き出した！ {{0}} ダメージ");
-            didHit = true;
-        }
-
-        if (secondHit != null && !secondHit.isDead && secondHit.isAlly != ctx.Caster.isAlly)
-        {
-            ctx.Caster.PerformAttack(secondHit, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} の貫通が命中！ {{0}} ダメージ");
+            if (!ctx.BattleManager.gridMap.TryGetValue(cell, out BattleCharacter victim) || victim == null || victim.isDead) continue;
+            if (victim.isAlly == ctx.Caster.isAlly) break;
+            ctx.Caster.PerformAttack(victim, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(),
+                $"{ctx.Caster.DisplayName} が槍を突き出した！ {{0}} ダメージ");
             didHit = true;
         }
 
@@ -569,39 +570,9 @@ public static class SkillExecutor
             }
         }
 
-        Vector2Int[] dirs =
-        {
-            Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right,
-            new Vector2Int(1,1), new Vector2Int(-1,1), new Vector2Int(1,-1), new Vector2Int(-1,-1)
-        };
-
-        var validDirs = new List<Vector2Int>();
-        foreach (var dir in dirs)
-        {
-            for (int d = 1; d <= ctx.BattleManager.Rows + ctx.BattleManager.Cols; d++)
-            {
-                Vector2Int pos = ctx.Caster.gridPos + dir * d;
-                if (pos.x < 0 || pos.x >= ctx.BattleManager.Cols || pos.y < 0 || pos.y >= ctx.BattleManager.Rows)
-                {
-                    break;
-                }
-                if (ctx.BattleManager.gridMap.TryGetValue(pos, out var bc))
-                {
-                    if (bc != null && !bc.isDead && bc.isAlly != ctx.Caster.isAlly)
-                    {
-                        validDirs.Add(dir);
-                    }
-                    break;
-                }
-            }
-        }
-
-        if (validDirs.Count == 0)
-        {
-            return false;
-        }
-
-        Vector2Int chosenDir = validDirs[Random.Range(0, validDirs.Count)];
+        if (ctx.Target == null || !BattleRangeService.CanTargetCell(SkillType.Gun, ctx.Caster.gridPos,
+            ctx.Target.gridPos, ctx.BattleManager.Cols, ctx.BattleManager.Rows)) return false;
+        Vector2Int chosenDir = BattleRangeService.NormalizeDirection(ctx.Target.gridPos - ctx.Caster.gridPos);
         bool didHit = false;
         ctx.BattleManager.PlayGunLineVfx(ctx.Caster, chosenDir);
 
