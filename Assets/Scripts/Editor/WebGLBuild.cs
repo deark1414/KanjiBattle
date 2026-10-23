@@ -9,6 +9,24 @@ namespace KanjiBattle.Editor
     {
         private const string BuildRoot = "Docs";
         private static string GameBuildPath = BuildRoot + "/game";
+        private static bool includeE2EBridge;
+
+        public static void BuildLocalE2E()
+        {
+            string previousPath = GameBuildPath;
+            try
+            {
+                GameBuildPath = "tmp/e2e/game";
+                includeE2EBridge = true;
+                BuildGitHubPages();
+                File.WriteAllText("tmp/e2e/build.json", "{\"protocol\":1,\"define\":\"KANJI_BATTLE_E2E\"}");
+            }
+            finally
+            {
+                GameBuildPath = previousPath;
+                includeE2EBridge = false;
+            }
+        }
 
         [MenuItem("KanjiBattle/Build/Local Deployment Preview")]
         public static void BuildLocalDeploymentPreview()
@@ -59,7 +77,8 @@ namespace KanjiBattle.Editor
                 scenes = new[] { "Assets/Scenes/SampleScene.unity" },
                 locationPathName = GameBuildPath,
                 target = BuildTarget.WebGL,
-                options = BuildOptions.None
+                options = BuildOptions.None,
+                extraScriptingDefines = includeE2EBridge ? new[] { "KANJI_BATTLE_E2E" } : new string[0]
             };
 
             BuildReport report = BuildPipeline.BuildPlayer(options);

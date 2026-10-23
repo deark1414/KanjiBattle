@@ -6,6 +6,11 @@
   "scripts": {
     "install:browsers": "playwright install chromium",
     "qa:visual": "node scripts/visual/check-webgl-layout.js",
+    "qa:e2e": "node scripts/e2e/run.js",
+    "qa:e2e:build": "node scripts/e2e/run.js --build",
+    "qa:e2e:list": "node scripts/e2e/run.js --list",
+    "qa:e2e:doctor": "node scripts/e2e/run.js --doctor",
+    "qa:e2e:unit": "node --test scripts/e2e/harness.test.js",
     "font:glyphs": "node scripts/font/collect-glyphs.js"
   },
   "devDependencies": {
