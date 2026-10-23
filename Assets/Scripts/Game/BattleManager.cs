@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class BattleManager : MonoBehaviour
+public partial class BattleManager : MonoBehaviour
 {
     [SerializeField] private GameObject cellPrefab;
     [SerializeField] private Transform battleField;
@@ -178,13 +178,16 @@ public class BattleManager : MonoBehaviour
         GenerateStageTraps(stage);
 
         UpdateSpeedButtonLabel();
+        PrepareFusionPlan();
         if (useSavedDeployment)
         {
+            ApplyFusionPlan();
             StartCoroutine(StartBattleAfterSetup());
         }
         else
         {
-            deploymentView = new BattleDeploymentView(transform, gridCells, SelectDeploymentCell, ConfirmDeployment, CancelDeployment);
+            deploymentView = new BattleDeploymentView(transform, gridCells, SelectDeploymentCell, ConfirmDeployment, CancelDeployment,
+                CanUseFusion ? OpenFusionSelection : null);
             selectedDeploymentCharacter = null;
             deploymentView.Refresh(selectedDeploymentCharacter);
         }
@@ -192,6 +195,7 @@ public class BattleManager : MonoBehaviour
 
     private void SelectDeploymentCell(Vector2Int cell)
     {
+        if (fusionView != null) return;
         if (!IsDeploying || !BattleDeploymentRules.IsAllyCell(cell) || impassableCells.Contains(cell)) return;
         gridMap.TryGetValue(cell, out BattleCharacter occupant);
         if (occupant != null && !occupant.isAlly) return;
@@ -228,9 +232,11 @@ public class BattleManager : MonoBehaviour
 
     private void ConfirmDeployment()
     {
-        if (!IsDeploying) return;
+        if (!IsDeploying || fusionView != null) return;
         BattleDeploymentRules.Save(allies.Select(character => character.data.characterId).ToList(),
             allies.Select(character => character.gridPos).ToList());
+        if (CanUseFusion) BattleFusionRules.Save(deployedAllies, fusionPlan);
+        ApplyFusionPlan();
         ClearDeploymentView();
         isPaused = false;
         StartCoroutine(StartBattleAfterSetup());
@@ -244,6 +250,7 @@ public class BattleManager : MonoBehaviour
 
     private void ClearDeploymentView()
     {
+        CloseFusionSelection();
         deploymentView?.Dispose();
         deploymentView = null;
         selectedDeploymentCharacter = null;
@@ -281,6 +288,7 @@ public class BattleManager : MonoBehaviour
     private void ResetBattle()
     {
         ClearDeploymentView();
+        ClearFusionRuntimeData();
         StopAllCoroutines();
         CleanupBattleVfx();
 
@@ -507,10 +515,11 @@ public class BattleManager : MonoBehaviour
                 BattleUILayout.ApplyCharacterVisualSize(character.GetComponent<RectTransform>(), currentBattleCellSize);
         }
         deploymentView?.BringToFront();
+        fusionView?.BringToFront();
     }
 
 
-    private void SpawnCharacter(CharacterData data, Vector2Int pos, bool ally)
+    private void SpawnCharacter(CharacterData data, Vector2Int pos, bool ally, int? levelOverride = null)
     {
         // CellContent を親にしてキャラを生成
         Transform content = gridCells[pos.x, pos.y];
@@ -528,7 +537,7 @@ public class BattleManager : MonoBehaviour
             level = currentStage.enemyLevel;  // 🔹 敵はステージ設定
         }
 
-        bc.Init(data, pos, ally, level);
+        bc.Init(data, pos, ally, levelOverride ?? level);
 
         if (!ally && data != null)
         {
@@ -998,8 +1007,11 @@ public class BattleManager : MonoBehaviour
 
         switch (character.data.skillType)
         {
+            case SkillType.DoubleSlash:
             case SkillType.Slash:
                 return TargetingService.FindSwordTarget(this, character);
+            case SkillType.ScatterShot:
+                return TargetingService.FindEnemyTarget(this, character, SkillType.ScatterShot);
             case SkillType.Arrow:
                 return TargetingService.FindArrowTarget(this, character);
             case SkillType.Spear:

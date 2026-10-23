@@ -197,8 +197,9 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 ApplyVisualState(MaxCardColor, NeedTextColor, new Color(0.38f, 0.30f, 0.23f, 1f), false, false);
                 break;
             default:
-                bool isUnlockOnly = facility.effectType == FacilityEffectType.StageRetry;
-                costText.text = isUnlockOnly ? "戦闘後に同じステージへ再挑戦できます" : "最大強化済み";
+                bool isUnlockOnly = facility.effectType is FacilityEffectType.StageRetry or FacilityEffectType.Fusion;
+                costText.text = facility.effectType == FacilityEffectType.Fusion ? "融合 解放済み"
+                    : isUnlockOnly ? "同じ局への再戦・連戦ができます" : "最大強化済み";
                 buttonText.text = isUnlockOnly ? "解放済み" : "MAX";
                 ApplyVisualState(MaxCardColor, MaxTextColor, new Color(0.40f, 0.30f, 0.22f, 1f), false, false);
                 break;
@@ -217,6 +218,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         return "再戦機能 解放済み";
     }
+    if (facility != null && facility.effectType == FacilityEffectType.Fusion) return "融合 解放済み";
 
     string capPrefix = level >= maxLevel ? "上限中 " : string.Empty;
     return $"{capPrefix}{GetEffectLabel()} Lv.{level} / {maxLevel}";
@@ -237,6 +239,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         case FacilityEffectType.Training: return "経験値強化";
         case FacilityEffectType.BattleSpeed: return "戦闘速度";
         case FacilityEffectType.StageRetry: return "再戦解放";
+        case FacilityEffectType.Fusion: return "融合解放";
         case FacilityEffectType.TrainingFrequency: return "稽古頻度";
         case FacilityEffectType.AttackBoost: return "攻勢強化";
         case FacilityEffectType.SkillPowerBoost: return "技能威力";
@@ -685,7 +688,8 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             FacilityEffectType.PlayerLevelCap => $"軍師上限 Lv.{FacilityManager.Instance.GetPlayerLevelCap()}",
             FacilityEffectType.BattleSpeed => $"最高速度 x{GetSpeedForLevel(level):0.##}",
             FacilityEffectType.StagePointBoost => $"戦果獲得 +{facility.GetEffectValue(level) * 100f:0}%",
-            FacilityEffectType.StageRetry => "同じ局へ即再挑戦",
+            FacilityEffectType.Fusion => "融合解放",
+            FacilityEffectType.StageRetry => "同じ局へ再戦・連戦",
             _ => string.Empty
         };
         // The building card itself already conveys the name and lock state. Keep
@@ -700,6 +704,9 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             return string.Empty;
         }
+
+        if (facility.effectType == FacilityEffectType.Fusion && FacilityManager.Instance.IsUnlocked(facility))
+            return "融合 解放済み";
 
         if (!FacilityManager.Instance.IsUnlocked(facility))
         {
@@ -812,7 +819,8 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             case FacilityEffectType.Recruitment: return "勝利した局で出会った敵との縁を早め、低確率で縁を一気に満たします。満ちた仲間は軍勢から迎え入れます。";
             case FacilityEffectType.Training: return "現在の必要経験値に対する戦闘・稽古の獲得割合を増やします。";
             case FacilityEffectType.BattleSpeed: return "戦闘速度を小刻みに上げ、最高3倍まで解放します。";
-            case FacilityEffectType.StageRetry: return "戦闘結果から、同じステージにすぐ再挑戦できるようにします。";
+            case FacilityEffectType.StageRetry: return "同じ局への再戦と、敗北するまでの自動連戦を解放します。";
+            case FacilityEffectType.Fusion: return "出陣時に素材のコマと出現位置を選び、融合できます。戦闘後は元の編成に戻ります。";
             case FacilityEffectType.TrainingFrequency: return "稽古の間隔を短くし、経験値を得る頻度を高めます。";
             case FacilityEffectType.AttackBoost: return "味方の攻撃力を高めます。";
             case FacilityEffectType.SkillPowerBoost: return "味方の技能の威力を高めます。";

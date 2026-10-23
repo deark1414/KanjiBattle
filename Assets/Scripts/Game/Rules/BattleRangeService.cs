@@ -15,6 +15,7 @@ public static class BattleRangeService
         if (skill == SkillType.WaterHeal) return distance <= 1;
         if (distance == 0) return false;
         if (skill is SkillType.Stone or SkillType.Fireball) return distance <= 2;
+        if (skill == SkillType.ScatterShot) return distance <= 3;
         if (skill is not (SkillType.Arrow or SkillType.Gun or SkillType.Spear)) return distance == 1;
 
         Vector2Int delta = to - from;
@@ -41,6 +42,8 @@ public static class BattleRangeService
         int cols,
         int rows)
     {
+        if (skillType is SkillType.DoubleSlash or SkillType.ScatterShot)
+            return GetEffectCells(skillType, caster, target, cols, rows);
         var cells = new List<Vector2Int>();
         switch (skillType)
         {
@@ -82,6 +85,14 @@ public static class BattleRangeService
         var cells = new List<Vector2Int>();
         switch (skillType)
         {
+            case SkillType.ScatterShot:
+                if (target.HasValue)
+                {
+                    Vector2Int direction = NormalizeDirection(target.Value - caster);
+                    cells.AddRange(GetSwordWedgeCells(target.Value - direction, direction));
+                }
+                break;
+            case SkillType.DoubleSlash:
             case SkillType.Slash:
                 if (target.HasValue) cells.AddRange(GetSwordWedgeCells(caster, target.Value - caster));
                 break;

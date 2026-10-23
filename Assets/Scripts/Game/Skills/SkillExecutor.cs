@@ -59,6 +59,8 @@ public static class SkillExecutor
     {
         SkillType skillType = caster.data.skillType;
         bool executed;
+        if (skillType is SkillType.DoubleSlash or SkillType.ScatterShot)
+            return FusionSkillExecutor.Execute(caster, target, bm);
         if (skillType == SkillType.Slash)
         {
             var context = new SkillContext(bm, caster, target);

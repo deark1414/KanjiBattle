@@ -10,13 +10,18 @@ public sealed class BattleDeploymentView : IDisposable
     private readonly TextMeshProUGUI selection;
     private readonly Dictionary<Vector2Int, Image> cells = new();
 
-    public BattleDeploymentView(Transform parent, Transform[,] grid, Action<Vector2Int> selectCell, Action confirm, Action cancel)
+    public BattleDeploymentView(Transform parent, Transform[,] grid, Action<Vector2Int> selectCell, Action confirm, Action cancel, Action fusion = null)
     {
         root = new GameObject("DeploymentControls", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
         root.transform.SetParent(parent, false);
         Place(root.GetComponent<RectTransform>(), new Vector2(0.04f, 0.05f), new Vector2(0.96f, 0.31f));
         root.GetComponent<Image>().color = new Color(0.08f, 0.10f, 0.09f, 1f);
         selection = Text(root.transform, "SelectedPiece", "布陣", new Vector2(0.04f, 0.63f), new Vector2(0.96f, 0.96f));
+        if (fusion != null)
+        {
+            Place(selection.rectTransform, new Vector2(0.04f, 0.63f), new Vector2(0.69f, 0.96f));
+            Command(root.transform, "FusionSelection", "融合", new Vector2(0.72f, 0.65f), new Vector2(0.96f, 0.95f), fusion);
+        }
         Command(root.transform, "ConfirmDeployment", "開戦", new Vector2(0.52f, 0.10f), new Vector2(0.96f, 0.55f), confirm);
         Command(root.transform, "CancelDeployment", "編成に戻る", new Vector2(0.04f, 0.10f), new Vector2(0.48f, 0.55f), cancel);
 

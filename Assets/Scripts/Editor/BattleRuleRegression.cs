@@ -28,6 +28,7 @@ public static class BattleRuleRegression
         VerifyNumberPassives();
         VerifyDeployment();
         BattleActionRegression.Run();
+        BattleFusionRegression.Run();
     }
 
     private static void VerifyDeployment()

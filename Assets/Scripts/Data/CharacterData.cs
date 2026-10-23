@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public enum SkillType
 {
@@ -23,7 +24,9 @@ public enum SkillType
     HorseCharge,
     BirdRetreat,
     TigerTwinClaw,
-    Dragon
+    Dragon,
+    DoubleSlash,
+    ScatterShot
 }
 
 public enum CharacterCategory
@@ -90,5 +93,33 @@ public class CharacterData : ScriptableObject
         int baseCost = 100;
         float growthRate = 1.2f;
         return Mathf.RoundToInt(baseCost * Mathf.Pow(growthRate, currentLevel));
+    }
+
+    public static CharacterData CreateBattleFusion(BattleFusionRules.Recipe recipe, IReadOnlyList<CharacterData> materials, int battleLevel)
+    {
+        if (recipe == null || materials == null || materials.Count != recipe.Materials.Length || battleLevel < 1)
+            throw new System.ArgumentException("Invalid fusion materials or battle level.");
+        foreach (CharacterData material in materials)
+            if (material == null) throw new System.ArgumentException("Missing fusion material.");
+        var result = CreateInstance<CharacterData>();
+        result.hideFlags = HideFlags.HideAndDontSave;
+        result.characterId = recipe.Id;
+        result.characterName = recipe.Name;
+        result.category = recipe.Skill == SkillType.DoubleSlash ? CharacterCategory.Weapon : CharacterCategory.Ranged;
+        result.skillType = recipe.Skill;
+        result.skillChance = 100;
+        result.skillPower = 1f;
+        float hp = 0, attack = 0, defense = 0;
+        foreach (CharacterData material in materials)
+        {
+            hp += material.GetMaxHP(battleLevel);
+            attack += material.GetAttack(battleLevel);
+            defense += material.GetDefense(battleLevel);
+        }
+        result.baseHP = Mathf.Max(1, Mathf.RoundToInt(hp / materials.Count * 3.5f));
+        result.baseAttack = Mathf.Max(1, Mathf.RoundToInt(attack / materials.Count * 1.5f));
+        result.baseDefense = Mathf.Max(0, Mathf.RoundToInt(defense / materials.Count * 1.2f));
+        result.hpGrowth = result.attackGrowth = result.defenseGrowth = 0;
+        return result;
     }
 }

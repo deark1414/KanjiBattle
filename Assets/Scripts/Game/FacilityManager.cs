@@ -271,6 +271,12 @@ public class FacilityManager : MonoBehaviour
         return retryHall != null && IsUnlocked(retryHall);
     }
 
+    public bool IsFusionUnlocked()
+    {
+        FacilityData hall = FindFacility(FacilityEffectType.Fusion);
+        return hall != null && IsUnlocked(hall);
+    }
+
     public bool CanUpgradeLevelCap(FacilityData facility)
     {
         return false;
@@ -331,6 +337,7 @@ public class FacilityManager : MonoBehaviour
 
     public void ResetProgress()
     {
+        BattleFusionRules.ResetProgress();
         PlayerProgressStore.Delete(UnlockedKey);
         PlayerProgressStore.Delete(LevelsKey);
         PlayerProgressStore.Delete(MigrationVersionKey);
