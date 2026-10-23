@@ -10,10 +10,11 @@ public sealed class BattleFusionView : IDisposable
     private readonly GameObject root;
     private readonly List<Action> refreshers = new();
 
-    public BattleFusionView(Transform parent, IReadOnlyList<CharacterData> party, BattleFusionRules.Plan plan, Action close)
+    public BattleFusionView(Transform parent, IReadOnlyList<CharacterData> party, BattleFusionRules.Plan plan,
+        IReadOnlyList<BattleFusionRules.Group> candidates, Action close)
     {
         root = Panel(parent, "FusionSelection", new Color(0.06f, 0.08f, 0.07f, 0.99f), new Vector2(0.03f, 0.05f), new Vector2(0.97f, 0.94f));
-        Label(root.transform, "融合", new Vector2(0.05f, 0.89f), new Vector2(0.95f, 0.98f));
+        Label(root.transform, "融合の組合せ", new Vector2(0.05f, 0.89f), new Vector2(0.95f, 0.98f));
         var viewport = Panel(root.transform, "Recipes", new Color(0.11f, 0.13f, 0.11f), new Vector2(0.03f, 0.20f), new Vector2(0.97f, 0.88f));
         viewport.AddComponent<RectMask2D>();
         var scroll = viewport.AddComponent<ScrollRect>();
@@ -29,7 +30,6 @@ public sealed class BattleFusionView : IDisposable
         layout.childControlHeight = true; layout.childForceExpandHeight = false;
         content.GetComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         scroll.content = rect;
-        List<BattleFusionRules.Group> candidates = BattleFusionRules.Candidates(party);
         if (candidates.Count == 0) Label(viewport.transform, "融合できる組み合わせなし", Vector2.zero, Vector2.one);
         foreach (BattleFusionRules.Group candidate in candidates)
         {
@@ -69,7 +69,7 @@ public sealed class BattleFusionView : IDisposable
                 origin.GetComponentInChildren<TextMeshProUGUI>().text = selected == null ? "―" : $"位置\n{party[selected.origin].characterName}[{selected.origin + 1}]";
             });
         }
-        Button(root.transform, "全解除", new Vector2(0.04f, 0.04f), new Vector2(0.46f, 0.16f), () => { plan.groups.Clear(); Refresh(); });
+        Button(root.transform, "選び直す", new Vector2(0.04f, 0.04f), new Vector2(0.46f, 0.16f), () => { plan.groups.Clear(); Refresh(); });
         Button(root.transform, "布陣に戻る", new Vector2(0.52f, 0.04f), new Vector2(0.96f, 0.16f), close);
         Refresh();
     }

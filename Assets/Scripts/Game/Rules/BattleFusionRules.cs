@@ -35,7 +35,7 @@ public static class BattleFusionRules
         public List<Group> groups = new();
     }
 
-    private const string PlanKey = "KanjiBattle.Fusion.Plan.v1";
+    private const string PlanKey = "KanjiBattle.Fusion.AdjacentChoices.v2";
     private const string DiscoveryPrefix = "KanjiBattle.Fusion.Discovered.";
 
     public static Recipe GetRecipe(int id) => Recipes.FirstOrDefault(recipe => recipe.Id == id);
@@ -52,6 +52,59 @@ public static class BattleFusionRules
                 result.Add(new Group { recipeId = recipe.Id, members = new[] { first, second }, origin = first });
         }
         return result;
+    }
+
+    public sealed class Resolution
+    {
+        public Plan plan;
+        public List<Group> candidates;
+        public List<Group> conflicts;
+        public List<Group> alternatives;
+    }
+
+    public static bool SameGroup(Group left, Group right) => left.recipeId == right.recipeId
+        && left.members.OrderBy(index => index).SequenceEqual(right.members.OrderBy(index => index));
+
+    public static bool Overlaps(Group left, Group right) => left.members.Intersect(right.members).Any();
+
+    public static Resolution ResolveAdjacent(IReadOnlyList<CharacterData> party, IReadOnlyList<Vector2Int> positions, Plan choices)
+    {
+        if (party == null || positions == null || party.Count != positions.Count)
+            throw new ArgumentException("Fusion positions must match the original party.");
+        var candidates = Candidates(party).Where(group => IsConnected(group.members, positions)).ToList();
+        foreach (Group candidate in candidates)
+            candidate.origin = candidate.members.OrderBy(index => positions[index].y).ThenBy(index => positions[index].x).First();
+        var plan = Empty(party);
+        if (IsValid(party, choices))
+            foreach (Group choice in choices.groups)
+                if (candidates.Any(candidate => SameGroup(candidate, choice)))
+                    plan.groups.Add(new Group { recipeId = choice.recipeId, members = (int[])choice.members.Clone(), origin = choice.origin });
+        List<Group> remaining = candidates.Where(candidate => !plan.groups.Any(chosen => Overlaps(candidate, chosen))).ToList();
+        List<Group> unique = remaining.Where(candidate => !remaining.Any(other => other != candidate && Overlaps(candidate, other))).ToList();
+        plan.groups.AddRange(unique);
+        return new Resolution
+        {
+            plan = plan, candidates = candidates,
+            conflicts = remaining.Except(unique).ToList(),
+            alternatives = candidates.Where(candidate => candidates.Any(other => other != candidate && Overlaps(candidate, other))).ToList()
+        };
+    }
+
+    private static bool IsConnected(int[] members, IReadOnlyList<Vector2Int> positions)
+    {
+        var visited = new HashSet<int> { members[0] };
+        bool changed;
+        do
+        {
+            changed = false;
+            foreach (int member in members)
+            {
+                if (visited.Contains(member)) continue;
+                if (visited.Any(other => Mathf.Abs(positions[member].x - positions[other].x)
+                    + Mathf.Abs(positions[member].y - positions[other].y) == 1)) changed |= visited.Add(member);
+            }
+        } while (changed);
+        return visited.Count == members.Length;
     }
 
     public static bool IsValid(IReadOnlyList<CharacterData> party, Plan plan)
@@ -96,6 +149,7 @@ public static class BattleFusionRules
     public static void ResetProgress()
     {
         PlayerProgressStore.Delete(PlanKey);
+        PlayerProgressStore.Delete("KanjiBattle.Fusion.Plan.v1");
         foreach (Recipe recipe in Recipes) PlayerProgressStore.Delete(DiscoveryPrefix + recipe.Id);
         PlayerProgressStore.Save();
     }

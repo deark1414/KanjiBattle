@@ -179,7 +179,7 @@ public partial class BattleManager : MonoBehaviour
 
         UpdateSpeedButtonLabel();
         PrepareFusionPlan();
-        if (useSavedDeployment)
+        if (useSavedDeployment && !HasFusionConflict)
         {
             ApplyFusionPlan();
             StartCoroutine(StartBattleAfterSetup());
@@ -190,6 +190,7 @@ public partial class BattleManager : MonoBehaviour
                 CanUseFusion ? OpenFusionSelection : null);
             selectedDeploymentCharacter = null;
             deploymentView.Refresh(selectedDeploymentCharacter);
+            RefreshFusionPreview();
         }
     }
 
@@ -219,6 +220,7 @@ public partial class BattleManager : MonoBehaviour
             selectedDeploymentCharacter = null;
         }
         deploymentView.Refresh(selectedDeploymentCharacter);
+        RefreshFusionPlan();
     }
 
     private void PlaceDeploymentCharacter(BattleCharacter character, Vector2Int cell)
@@ -233,9 +235,11 @@ public partial class BattleManager : MonoBehaviour
     private void ConfirmDeployment()
     {
         if (!IsDeploying || fusionView != null) return;
+        RefreshFusionPlan();
+        if (HasFusionConflict) { OpenFusionSelection(); return; }
         BattleDeploymentRules.Save(allies.Select(character => character.data.characterId).ToList(),
             allies.Select(character => character.gridPos).ToList());
-        if (CanUseFusion) BattleFusionRules.Save(deployedAllies, fusionPlan);
+        if (CanUseFusion) BattleFusionRules.Save(deployedAllies, fusionChoices);
         ApplyFusionPlan();
         ClearDeploymentView();
         isPaused = false;
@@ -251,6 +255,8 @@ public partial class BattleManager : MonoBehaviour
     private void ClearDeploymentView()
     {
         CloseFusionSelection();
+        fusionPreview?.Dispose();
+        fusionPreview = null;
         deploymentView?.Dispose();
         deploymentView = null;
         selectedDeploymentCharacter = null;
@@ -515,6 +521,7 @@ public partial class BattleManager : MonoBehaviour
                 BattleUILayout.ApplyCharacterVisualSize(character.GetComponent<RectTransform>(), currentBattleCellSize);
         }
         deploymentView?.BringToFront();
+        RefreshFusionPreview();
         fusionView?.BringToFront();
     }
 

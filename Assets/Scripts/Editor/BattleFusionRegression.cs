@@ -26,11 +26,12 @@ public static class BattleFusionRegression
             var candidates = BattleFusionRules.Candidates(party);
             Check(candidates.Count == 5, "duplicate instances have separate candidates");
             Check(BattleFusionRules.Candidates(new[] { two, evolved }).Count == 0, "evolution cannot substitute for basic material");
+            VerifyAdjacent(party);
             var plan = BattleFusionRules.Empty(party);
             plan.groups.Add(new BattleFusionRules.Group { recipeId = -1001, members = new[] { 0, 3 }, origin = 3 });
             plan.groups.Add(new BattleFusionRules.Group { recipeId = -1001, members = new[] { 2, 1 }, origin = 2 });
             plan.groups.Add(new BattleFusionRules.Group { recipeId = -1002, members = new[] { 4, 5 }, origin = 4 });
-            Check(BattleFusionRules.IsValid(party, plan), "multiple nonadjacent fusion groups allowed");
+            Check(BattleFusionRules.IsValid(party, plan), "independent groups have valid material membership before layout validation");
             Check(party.Length - plan.groups.Sum(group => group.members.Length - 1) == 3, "six paid formation slots become three battlefield units");
             var restored = JsonUtility.FromJson<BattleFusionRules.Plan>(JsonUtility.ToJson(plan));
             Check(BattleFusionRules.IsValid(party, restored) && restored.groups[0].origin == 3, "plan JSON preserves exact members and origin");
@@ -78,4 +79,37 @@ public static class BattleFusionRegression
     }
     private static void Check(bool condition, string label)
     { if (!condition) throw new InvalidOperationException("[BattleFusionRegression] " + label); }
+
+    private static void VerifyAdjacent(CharacterData[] party)
+    {
+        Vector2Int[] positions = { new(0,5), new(2,5), new(4,5), new(1,6), new(3,6), new(5,6) };
+        var choices = BattleFusionRules.Empty(party);
+        var result = BattleFusionRules.ResolveAdjacent(party, positions, choices);
+        Check(result.candidates.Count == 0 && result.plan.groups.Count == 0, "separation and diagonal contact do not fuse");
+        positions[1] = new(1,5);
+        result = BattleFusionRules.ResolveAdjacent(party, positions, choices);
+        Check(result.plan.groups.Count == 1 && result.conflicts.Count == 0, "one orthogonal pair fuses automatically");
+        Check(result.plan.groups[0].origin == 0, "automatic origin is the front-left material");
+        positions[5] = new(4,6);
+        result = BattleFusionRules.ResolveAdjacent(party, positions, choices);
+        Check(result.plan.groups.Count == 2 && result.alternatives.Count == 0, "independent adjacent pairs need no selection");
+        positions[2] = new(2,5); positions[3] = new(3,5);
+        result = BattleFusionRules.ResolveAdjacent(party, positions, choices);
+        Check(result.conflicts.Count == 3 && result.plan.groups.Count == 1, "shared material ambiguity is never silently resolved");
+        choices.groups.Add(new BattleFusionRules.Group { recipeId = -1001, members = new[] { 0,1 }, origin = 1 });
+        result = BattleFusionRules.ResolveAdjacent(party, positions, choices);
+        Check(result.conflicts.Count == 0 && result.plan.groups.Count == 3, "explicit choice also resolves remaining independent pairs");
+        Check(result.plan.groups.Any(group => group.recipeId == -1001 && group.origin == 1), "explicit source cell survives conflict resolution");
+        positions[1] = new(5,5);
+        result = BattleFusionRules.ResolveAdjacent(party, positions, choices);
+        Check(!result.plan.groups.Any(group => group.members.Contains(0)), "saved choice cannot fuse separated materials");
+        var corrupt = BattleFusionRules.Empty(party);
+        corrupt.groups.Add(new BattleFusionRules.Group { recipeId = -1001, members = new[] { 0,0 }, origin = 0 });
+        result = BattleFusionRules.ResolveAdjacent(party, positions, corrupt);
+        Check(BattleFusionRules.IsValid(party, result.plan), "corrupt preferences do not create overlapping results");
+        bool rejected = false;
+        try { BattleFusionRules.ResolveAdjacent(party, new[] { Vector2Int.zero }, null); }
+        catch (ArgumentException) { rejected = true; }
+        Check(rejected, "mismatched layout rejected");
+    }
 }

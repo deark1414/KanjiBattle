@@ -130,6 +130,35 @@ class GameHarness {
     return this.click(this.recipe(first, second), `Fusion materials ${first},${second}`);
   }
 
+  async move(slot, x, y) {
+    let state = await this.request();
+    const unit = state.battle.units.find(unit => unit.ally && unit.slot === slot);
+    assert(unit, `Material slot ${slot} is missing.`);
+    if (unit.x === x && unit.y === y) return state;
+    await this.clickBox(state.battle.cells.find(cell => cell.x === unit.x && cell.y === unit.y).rect);
+    // Unity polls pointer events per frame; do not merge source and destination
+    // clicks into the same frame on small, fast-rendering landscape canvases.
+    await this.page.waitForTimeout(100);
+    await this.clickBox(state.battle.cells.find(cell => cell.x === x && cell.y === y).rect);
+    state = await this.request();
+    const moved = state.battle.units.find(unit => unit.ally && unit.slot === slot);
+    assert(moved.x === x && moved.y === y, `Material ${slot} did not move to ${x},${y}; actual ${moved.x},${moved.y}.`);
+    return state;
+  }
+
+  async arrange(positions) {
+    for (let slot = 0; slot < positions.length; slot++) await this.move(slot, ...positions[slot]);
+    return this.request();
+  }
+
+  async separate() { return this.arrange([[0,5],[2,5],[4,5],[1,6],[3,6],[5,6]]); }
+  async adjacent(both = false) {
+    await this.separate(); await this.move(1,1,5);
+    if (both) await this.move(5,4,6);
+    return this.request();
+  }
+  async competing() { return this.arrange([[0,5],[1,5],[2,5],[3,5],[3,6],[5,6]]); }
+
   async closeFusion() { return this.click(control => control.text === "布陣に戻る", "布陣に戻る"); }
   async start() {
     await this.named("ConfirmDeployment");

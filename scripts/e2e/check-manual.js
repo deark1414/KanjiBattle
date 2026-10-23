@@ -25,9 +25,9 @@ async function main() {
     await page.goto(base + '?preset=standard'); await ready();
     assert((await state()).fusionUnlocked); assert.equal((await state()).formation.length, 6);
     await click(control => control.path.endsWith('/DeployButton'));
-    await click(control => control.path.endsWith('/FusionSelection'));
-    await click(control => control.kind === 'Toggle' && control.text.includes('[1]') && control.text.includes('[2]'));
-    await click(control => control.text === '布陣に戻る');
+    assert.equal((await state()).battle.plan.groups.length, 1);
+    assert.equal((await state()).battle.previewLinks, 1);
+    assert(!((await state()).controls.some(control => control.path.endsWith('/FusionSelection'))));
     await click(control => control.path.endsWith('/ConfirmDeployment'));
     assert((await state()).battle.units.some(unit => unit.ally && unit.id === -1001));
     await page.locator('#formation').click(); await ready();

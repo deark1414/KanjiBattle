@@ -19,12 +19,13 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public string path; public string text; public string kind; public int id;
         public bool enabled; public bool selected; public bool visible; public bool reachable; public Box rect;
     }
-    [Serializable] public sealed class Unit { public int id; public string name; public bool ally; public int x; public int y; public int hp; public int maxHP; public int level; }
+    [Serializable] public sealed class Unit { public int id; public int slot; public string name; public bool ally; public int x; public int y; public int hp; public int maxHP; public int level; }
     [Serializable] public sealed class Cell { public int x; public int y; public Box rect; }
     [Serializable] public sealed class BattleState
     {
         public bool active; public bool deploying; public bool fusionOpen; public bool result; public bool won;
         public int battleId; public int[] originalIds; public Unit[] units; public Cell[] cells; public BattleFusionRules.Plan plan;
+        public int conflicts; public int previewLinks; public string fusionSummary;
     }
     [Serializable] private sealed class Snapshot
     {
@@ -54,7 +55,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "nextDefeat": fixtureStage.enemyLevel = 2000; break;
                 case "gate20": GameManager.Instance.RegisterClearedStage(20); GameManager.Instance.SpendStagePoints(GameManager.Instance.StagePoints); break;
                 case "fundFusion": GameManager.Instance.AddStagePoints(10); break;
-                case "corruptPlan": PlayerProgressStore.SetString("KanjiBattle.Fusion.Plan.v1", "{broken"); PlayerProgressStore.Save(); break;
+                case "corruptPlan": PlayerProgressStore.SetString("KanjiBattle.Fusion.AdjacentChoices.v2", "{broken"); PlayerProgressStore.Save(); break;
                 case "snapshot": break;
                 default: throw new ArgumentException("Unknown E2E action: " + request.action);
             }

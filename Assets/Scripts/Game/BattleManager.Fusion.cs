@@ -5,17 +5,60 @@ using UnityEngine;
 public partial class BattleManager
 {
     private BattleFusionRules.Plan fusionPlan;
+    private BattleFusionRules.Plan fusionChoices;
+    private BattleFusionRules.Resolution fusionResolution;
     private BattleFusionView fusionView;
+    private BattleFusionPreviewView fusionPreview;
+    private Vector2Int[] fusionPositions;
     private readonly List<CharacterData> fusionRuntimeData = new();
     private bool CanUseFusion => FacilityManager.Instance != null && FacilityManager.Instance.IsFusionUnlocked();
 
-    private void PrepareFusionPlan() => fusionPlan = CanUseFusion
-        ? BattleFusionRules.Load(deployedAllies) : BattleFusionRules.Empty(deployedAllies);
+    private bool HasFusionConflict => fusionResolution != null && fusionResolution.conflicts.Count > 0;
+
+    private void PrepareFusionPlan()
+    {
+        fusionChoices = CanUseFusion ? BattleFusionRules.Load(deployedAllies) : BattleFusionRules.Empty(deployedAllies);
+        RefreshFusionPlan();
+    }
+
+    private void RefreshFusionPlan()
+    {
+        fusionPositions = allies.Select(unit => unit.gridPos).ToArray();
+        if (!CanUseFusion)
+        {
+            fusionPlan = BattleFusionRules.Empty(deployedAllies);
+            fusionResolution = null;
+        }
+        else
+        {
+            fusionResolution = BattleFusionRules.ResolveAdjacent(deployedAllies, fusionPositions, fusionChoices);
+            fusionChoices.groups.RemoveAll(choice => !fusionResolution.candidates.Any(candidate => BattleFusionRules.SameGroup(candidate, choice)));
+            fusionPlan = fusionResolution.plan;
+        }
+        RefreshFusionPreview();
+    }
+
+    private void RefreshFusionPreview()
+    {
+        if (!IsDeploying) return;
+        fusionPreview ??= new BattleFusionPreviewView(transform, gridCells);
+        fusionPreview.Draw(fusionPlan, fusionPositions, fusionResolution?.conflicts);
+        string summary = fusionPlan.groups.Count == 0 ? "融合なし" : string.Join("　", fusionPlan.groups.Select(group =>
+            $"{string.Join("＋", group.members.Select(index => deployedAllies[index].characterName))} → {(BattleFusionRules.IsDiscovered(group.recipeId) ? BattleFusionRules.GetRecipe(group.recipeId).Name : "？")}（{group.members.Length}→1）"));
+        if (HasFusionConflict) summary = "組合せ未確定　" + summary;
+        deploymentView.SetFusionState(summary, !HasFusionConflict, fusionResolution?.alternatives.Count > 0);
+        deploymentView.BringToFront();
+        fusionView?.BringToFront();
+    }
 
     private void OpenFusionSelection()
     {
-        if (!IsDeploying || !CanUseFusion || fusionView != null) return;
-        fusionView = new BattleFusionView(transform, deployedAllies, fusionPlan, CloseFusionSelection);
+        if (!IsDeploying || !CanUseFusion || fusionView != null || fusionResolution.alternatives.Count == 0) return;
+        fusionView = new BattleFusionView(transform, deployedAllies, fusionChoices, fusionResolution.alternatives, () =>
+        {
+            CloseFusionSelection();
+            RefreshFusionPlan();
+        });
     }
 
     private void CloseFusionSelection()
@@ -26,7 +69,7 @@ public partial class BattleManager
 
     private void ApplyFusionPlan()
     {
-        if (!CanUseFusion || !BattleFusionRules.IsValid(deployedAllies, fusionPlan)) return;
+        if (!CanUseFusion || HasFusionConflict || !BattleFusionRules.IsValid(deployedAllies, fusionPlan)) return;
         BattleCharacter[] originals = allies.ToArray();
         foreach (BattleFusionRules.Group group in fusionPlan.groups)
         {
