@@ -1833,7 +1833,7 @@ public partial class BattleManager : MonoBehaviour
             SkillType.Fireball => "Fireball",
             SkillType.BirdRetreat => "BirdRetreat",
             SkillType.HorseCharge => "HorseCharge",
-            SkillType.Counter => "Shield",
+            SkillType.Counter or SkillType.Shield => "Shield",
             SkillType.AreaCounter => "Wall",
             SkillType.Armor => "Armor",
             SkillType.Dragon => "DragonBreath",

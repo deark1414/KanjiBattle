@@ -106,26 +106,27 @@
     "attackGrowth": 2,
     "baseDefense": 10,
     "defenseGrowth": 2,
-    "skillType": "Counter",
-    "skillPower": 1.0,
-    "skillChance": 15,
+    "skillType": "Shield",
+    "skillPower": 1,
+    "skillChance": 0,
     "isBoss": false
   },
   {
     "id": 14,
     "fileName": "CharacterData_Armor",
-    "characterName": "鎧",
+    "characterName": "甲",
     "category": "Defense",
-    "baseHP": 150,
-    "hpGrowth": 10,
-    "baseAttack": 25,
-    "attackGrowth": 3,
-    "baseDefense": 15,
-    "defenseGrowth": 2,
-    "skillType": "Armor",
-    "skillPower": 1.0,
+    "baseHP": 180,
+    "hpGrowth": 8,
+    "baseAttack": 18,
+    "attackGrowth": 2,
+    "baseDefense": 12,
+    "defenseGrowth": 1,
+    "skillType": "GuardAlly",
+    "skillPower": 0.25,
     "skillChance": 0,
-    "isBoss": false
+    "isBoss": false,
+    "clearIcons": true
   },
   {
     "id": 15,
@@ -162,7 +163,7 @@
   {
     "id": 17,
     "fileName": "CharacterData_Arrow",
-    "characterName": "矢",
+    "characterName": "弓",
     "category": "Ranged",
     "baseHP": 120,
     "hpGrowth": 5,
@@ -173,7 +174,8 @@
     "skillType": "Arrow",
     "skillPower": 1.2,
     "skillChance": 10,
-    "isBoss": false
+    "isBoss": false,
+    "clearIcons": true
   },
   {
     "id": 18,

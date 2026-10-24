@@ -6,6 +6,17 @@ using System.Collections.Generic;
 
 public class DataImporter : EditorWindow
 {
+    [MenuItem("Tools/Import Combat JSON Data")]
+    public static void ImportCombatData()
+    {
+        ImportCharacters("Assets/Data/characters.json");
+        ImportStages("Assets/Data/stages.json");
+        AssetDatabase.SaveAssets();
+        RebuildCharacterDatabase();
+        RebuildStageDatabase();
+        Debug.Log("[DataImporter] Combat data imported.");
+    }
+
     [MenuItem("Tools/Import JSON Data")]
     public static void ImportAllData()
     {
@@ -50,6 +61,7 @@ public class DataImporter : EditorWindow
         public int skillChance;
         public bool isBoss;
         public bool isEvolved;
+        public bool clearIcons;
     }
 
     [System.Serializable]
@@ -135,6 +147,11 @@ public class DataImporter : EditorWindow
             data.skillChance = c.skillChance;
             data.isBoss = c.isBoss;
             data.isEvolved = c.isEvolved;
+            if (c.clearIcons)
+            {
+                data.icon = null;
+                data.enemyIcon = null;
+            }
 
             EditorUtility.SetDirty(data);
         }

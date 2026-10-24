@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+public static class BattleDamageRegression
+{
+    public static void Run()
+    {
+        Check(BattleDamageRules.ReduceByShield(100) == 80, "shield reduces twenty percent");
+        Check(BattleDamageRules.ReduceByShield(1) == 1 && BattleDamageRules.ReduceByShield(0) == 0, "shield minimum and zero");
+        Check(BattleDamageRules.GuardShare(80, 100, 0.25f) == 20, "share after mitigation");
+        Check(BattleDamageRules.GuardShare(80, 3, 0.25f) == 3, "share cannot exceed remaining HP");
+        Check(BattleDamageRules.GuardShare(1, 100, 0.25f) == 0, "small hit does not create extra damage");
+        Check(BattleDamageRules.GuardShare(80, 100, 2f) == 80
+            && BattleDamageRules.GuardShare(80, 100, -1f) == 0, "invalid ratios are clamped");
+        var host = new GameObject("DamageRegression", typeof(RectTransform));
+        host.SetActive(false);
+        var definitions = new List<CharacterData>();
+        bool force = SkillExecutor.ForceSkillActivationForVfxReview;
+        try
+        {
+            BattleCharacter Create(Vector2Int pos, bool ally, SkillType skill, float ratio = 0.25f)
+            {
+                var data = ScriptableObject.CreateInstance<CharacterData>();
+                definitions.Add(data);
+                data.skillType = skill; data.skillPower = ratio;
+                var go = new GameObject("Unit", typeof(RectTransform));
+                go.transform.SetParent(host.transform, false);
+                var unit = go.AddComponent<BattleCharacter>();
+                unit.Init(data, pos, ally);
+                return unit;
+            }
+            var target = Create(new(2, 3), true, SkillType.Shield);
+            var guard = Create(new(1, 3), true, SkillType.GuardAlly);
+            var strong = Create(new(3, 3), true, SkillType.GuardAlly, 0.4f);
+            var wrong = Create(new(2, 2), false, SkillType.GuardAlly, 1f);
+            var units = new[] { target, guard, strong, wrong };
+            Check(BattleDamageRules.FindProtector(target, units) == strong, "highest-ratio friendly guard only");
+            strong.isDead = true;
+            Check(BattleDamageRules.FindProtector(target, units) == guard, "dead guard ignored");
+            strong.isDead = false; strong.currentHP = 0;
+            Check(BattleDamageRules.FindProtector(target, units) == guard, "zero HP guard ignored");
+            guard.gridPos = new(0, 0);
+            Check(BattleDamageRules.FindProtector(target, units) == null, "distance and enemy guards rejected");
+            Check(BattleDamageRules.FindProtector(guard, new[] { guard }) == null, "no self protection");
+            target.defense = 0;
+            target.TakeDamage(100, null, ignoreDefense: true);
+            Check(target.currentHP == 20, "shield executes in damage pipeline");
+            target.currentHP = 100;
+            target.TakeDamage(40, null, origin: BattleDamageOrigin.Transferred);
+            Check(target.currentHP == 60, "transfer bypasses shield reduction");
+            target.currentHP = 100;
+            target.TakeDamage(0, null);
+            Check(target.currentHP == 100, "zero damage is not promoted to one");
+            target.data.skillType = SkillType.AreaCounter;
+            SkillExecutor.ForceSkillActivationForVfxReview = true;
+            target.TakeDamage(40, null, wrong, isBasicAttack: true, origin: BattleDamageOrigin.Transferred);
+            Check(target.currentHP == 60 && wrong.currentHP == wrong.maxHP,
+                "transferred hit cannot trigger an adjacent area counter");
+            Check(SkillExecutor.TryExecuteDetailed(guard, target, null).Failure == SkillExecutionFailure.PassiveOrReactiveSkill,
+                "guard is passive, not a chance to use its ordinary turn");
+        }
+        finally
+        {
+            SkillExecutor.ForceSkillActivationForVfxReview = force;
+            UnityEngine.Object.DestroyImmediate(host);
+            foreach (CharacterData data in definitions) UnityEngine.Object.DestroyImmediate(data);
+        }
+    }
+
+    private static void Check(bool value, string label)
+    {
+        if (!value) throw new InvalidOperationException("[BattleDamageRegression] " + label);
+    }
+}

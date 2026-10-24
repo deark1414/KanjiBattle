@@ -235,7 +235,7 @@
   {
     "stageId": 12,
     "fileName": "Stage_1_12",
-    "stageName": "鎧の間",
+    "stageName": "甲の間",
     "chapterId": 3,
     "enemyIds": [
       14,
@@ -466,7 +466,7 @@
   {
     "stageId": 22,
     "fileName": "Stage_1_22",
-    "stageName": "矢の間",
+    "stageName": "弓の間",
     "chapterId": 5,
     "enemyIds": [
       17,

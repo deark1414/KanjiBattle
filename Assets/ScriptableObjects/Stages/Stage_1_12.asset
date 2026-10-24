@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1df6bc30dc24f4ef8a24d39e608d3dda, type: 3}
   m_Name: Stage_1_12
   m_EditorClassIdentifier: 
-  stageName: "\u93A7\u306E\u9593"
+  stageName: "\u7532\u306E\u9593"
   stageId: 12
   chapterId: 3
   enemyPool:

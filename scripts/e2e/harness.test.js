@@ -59,7 +59,7 @@ test("covered controls fail before a misleading click is sent", async () => {
 
 test("test-only C# entry points are excluded from normal players", () => {
   const root = path.resolve(__dirname, "../..");
-  for (const file of ["BattleE2EBridge.cs", "BattleManager.E2E.cs"]) {
+  for (const file of ["BattleE2EBridge.cs", "BattleManager.E2E.cs", "BattleManager.DefenseE2E.cs"]) {
     const source = fs.readFileSync(path.join(root, "Assets/Scripts/Game", file), "utf8");
     assert(source.startsWith("#if KANJI_BATTLE_E2E\n")); assert(source.trimEnd().endsWith("#endif"));
   }

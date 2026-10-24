@@ -145,19 +145,20 @@ if (background != null)
         BattleCharacter attacker = null,
         bool ignoreDefense = false,
         bool isBasicAttack = false,
-        string actionLabel = null)
+        string actionLabel = null,
+        BattleDamageOrigin origin = BattleDamageOrigin.Direct)
     {
-        if (isDead) return;
+        if (isDead || dmg <= 0) return;
 
         bool armorReducedDamage = false;
         // Defense-based reduction (unless Armor skill or ignoreDefense is true)
-        if (!ignoreDefense && (data == null || data.skillType != SkillType.Armor)) {
+        if (origin != BattleDamageOrigin.Transferred && !ignoreDefense && (data == null || data.skillType != SkillType.Armor)) {
             float effectiveDefense = Mathf.Max(0, defense / 4f);
             int reducedByDefense = Mathf.FloorToInt(dmg * 100f / (100f + effectiveDefense));
             dmg = Mathf.Max(1, reducedByDefense);
         }
         // Handle Armor skill: after defense/ignoreDefense check, reduce incoming damage
-        if (data != null && data.skillType == SkillType.Armor)
+        if (origin != BattleDamageOrigin.Transferred && data != null && data.skillType == SkillType.Armor)
         {
             int reductionPerLevel = 2;
             SkillData skillData = SkillCatalog.Get(SkillType.Armor);
@@ -180,6 +181,26 @@ if (background != null)
             dmg = reduced;
         }
 
+        if (origin != BattleDamageOrigin.Transferred && data != null && data.skillType == SkillType.Shield)
+        {
+            dmg = BattleDamageRules.ReduceByShield(dmg);
+            bm?.PlayDefensiveVfx(this, SkillType.Shield);
+        }
+
+        if (origin == BattleDamageOrigin.Direct && bm != null)
+        {
+            BattleCharacter protector = BattleDamageRules.FindProtector(this, bm.gridMap.Values);
+            int shared = protector == null ? 0 : BattleDamageRules.GuardShare(dmg, protector.currentHP, protector.data.skillPower);
+            if (shared > 0)
+            {
+                dmg -= shared;
+                bm.PlayDefensiveVfx(protector, SkillType.Shield);
+                protector.TakeDamage(shared, bm, attacker, ignoreDefense: true,
+                    actionLabel: $"{protector.DisplayName} が {DisplayName} をかばった！",
+                    origin: BattleDamageOrigin.Transferred);
+            }
+        }
+
         if (!string.IsNullOrEmpty(actionLabel))
         {
             string mitigation = armorReducedDamage ? "（鎧で軽減）" : string.Empty;
@@ -192,11 +213,12 @@ if (background != null)
 
         if (currentHP <= 0)
         {
-            bm.HandleDeath(this);
+            if (bm != null) bm.HandleDeath(this);
+            else isDead = true;
         }
 
         // Counter logic after taking damage
-        if (data != null && isBasicAttack)
+        if (data != null && isBasicAttack && origin == BattleDamageOrigin.Direct)
         {
             // Counter: 30% chance to reflect 30% of taken damage to attacker
             if (data.skillType == SkillType.Counter && attacker != null && !attacker.isDead)
@@ -210,7 +232,7 @@ if (background != null)
                     {
                         bm.AddLog($"{DisplayName} のカウンター発動！{attacker.DisplayName} に {reflect} ダメージを反射！");
                         bm?.PlayDefensiveVfx(this, SkillType.Counter);
-                        attacker.TakeDamage(reflect, bm, this, ignoreDefense: false, isBasicAttack: false);
+                        attacker.TakeDamage(reflect, bm, this, ignoreDefense: false, isBasicAttack: false, origin: BattleDamageOrigin.Reflected);
                         attacker.UpdateHPBar();
                     }
                 }
@@ -248,7 +270,7 @@ if (background != null)
                             bm?.PlayDefensiveVfx(this, SkillType.AreaCounter);
                             foreach (var target in targets)
                             {
-                                target.TakeDamage(reflect, bm, this, ignoreDefense: false, isBasicAttack: false);
+                                target.TakeDamage(reflect, bm, this, ignoreDefense: false, isBasicAttack: false, origin: BattleDamageOrigin.Reflected);
                                 target.UpdateHPBar();
                             }
                         }

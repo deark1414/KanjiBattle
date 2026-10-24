@@ -26,7 +26,8 @@ public static class SkillExecutor
             return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.NoSkill);
         }
 
-        if (skillType == SkillType.Counter || skillType == SkillType.AreaCounter || skillType == SkillType.NumberPassive || skillType == SkillType.BellEcho)
+        if (skillType is SkillType.Counter or SkillType.AreaCounter or SkillType.NumberPassive
+            or SkillType.BellEcho or SkillType.GuardAlly or SkillType.Shield or SkillType.Armor)
         {
             return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.PassiveOrReactiveSkill);
         }

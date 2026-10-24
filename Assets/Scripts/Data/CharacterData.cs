@@ -29,7 +29,8 @@ public enum SkillType
     ScatterShot,
     BellEcho,
     ThreadPull,
-    ShadowCopy
+    ShadowCopy,
+    GuardAlly
 }
 
 public enum CharacterCategory

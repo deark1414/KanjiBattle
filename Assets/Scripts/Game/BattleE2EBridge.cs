@@ -59,6 +59,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "corruptPlan": PlayerProgressStore.SetString("KanjiBattle.Fusion.AdjacentChoices.v2", "{broken"); PlayerProgressStore.Save(); break;
                 case "snapshot": break;
                 case "supportProbe": FindFirstObjectByType<BattleManager>().ProbeSupportSkills(); break;
+                case "defenseProbe": FindFirstObjectByType<BattleManager>().ProbeDefenseSkills(); break;
                 case "recruitSupport": ProbeSupportRecruitment(); break;
                 default: throw new ArgumentException("Unknown E2E action: " + request.action);
             }
@@ -111,7 +112,9 @@ public sealed class BattleE2EBridge : MonoBehaviour
         CharacterDatabase database = Resources.Load<CharacterDatabase>("CharacterDatabase");
         var names = alternate ? new[] { "剣", "二", "二", "剣", "三", "銃" } : new[] { "二", "剣", "二", "剣", "三", "銃" };
         bool support = PlayerProgressStore.GetString(FixtureKey) == "support";
+        bool defense = PlayerProgressStore.GetString(FixtureKey) == "defense";
         if (support) names = new[] { "鈴", "糸", "影", "剣", "槍", "水" };
+        if (defense) names = new[] { "甲", "盾", "壁", "甲", "弓", "水" };
         if (PlayerProgressStore.GetString(FixtureKey) == "locked") names = names.Take(4).ToArray();
         CharacterData[] party = names.Select(name => database.characters.First(data => data.characterName == name)).ToArray();
         foreach (CharacterData data in party) PlayerInventory.Instance.AddCharacter(data);
@@ -130,6 +133,16 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 database.characters.First(data => data.characterName == "剣"),
                 database.characters.First(data => data.characterName == "糸"),
                 database.characters.First(data => data.characterName == "鈴")
+            };
+            fixtureStage.enemyLevel = 20;
+        }
+        if (defense)
+        {
+            fixtureStage.stageName = "守りの確認";
+            fixtureStage.chapterId = 2;
+            fixtureStage.enemyPool = new List<CharacterData>
+            {
+                database.GetById(14), database.GetById(13), database.GetById(10)
             };
             fixtureStage.enemyLevel = 20;
         }

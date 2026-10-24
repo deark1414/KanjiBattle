@@ -5,6 +5,40 @@ const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y
 
 module.exports = [
   {
+    id:"defense-abilities", name:"盾軽減・甲の肩代わり・連鎖禁止・肩代わり撃破", fixture:"defense",
+    async run(game) {
+      const initial=await game.deploy();
+      assert.deepEqual(initial.battle.originalIds,[14,13,15,14,17,20]);
+      assert(initial.battle.units.some(unit=>unit.id===14 && unit.name==="甲"));
+      assert(initial.battle.units.some(unit=>unit.id===17 && unit.name==="弓"));
+      const state=await game.request("defenseProbe");
+      assert(state.battle.logs.some(log=>log.includes("防御能力チェック完了")));
+      assert(state.battle.logs.some(log=>log.includes("かばった")));
+      assert.equal(allies(state).length,5);
+      await game.screenshot("guard-resolution");
+    }
+  },
+  {
+    id:"defense-battle", name:"防御編成の実戦と再戦での原編成復元", fixture:"defense",
+    async run(game) {
+      let state=await game.deploy(); const original=state.battle.originalIds,owned=state.owned;
+      await game.arrange([[2,6],[2,5],[3,5],[3,6],[1,6],[4,6]]);
+      await game.screenshot("defense-deployment");
+      await game.start();
+      const logs=new Set();
+      state=await game.wait(current=>{
+        for(const log of current.battle.logs || []) logs.add(log);
+        return current.battle.result;
+      },"Defense battle timed out.",120000);
+      assert([...logs].some(log=>log.includes("かばった")),"No protection occurred in actual combat.");
+      assert.deepEqual(state.owned,owned);
+      await game.named("RetryStageButton");
+      state=await game.wait(current=>current.battle.deploying,"Defense retry did not open.");
+      assert.deepEqual(state.battle.originalIds,original);
+      assert.equal(allies(state).length,6);
+    }
+  },
+  {
     id:"support-recruitment", name:"新3体の縁候補・勝利累積・加入処理と保存", fixture:"standard",
     async run(game) {
       let state=await game.request("recruitSupport");
