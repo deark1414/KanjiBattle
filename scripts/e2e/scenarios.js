@@ -4,6 +4,64 @@ const groups = state => state.battle.plan?.groups || [];
 const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y})=>({id,x,y}));
 
 module.exports = [
+  ...[
+    {id:"animals-dead",name:"丑が撃破されても勝利経験値1.5倍・再戦で復元",fixture:"animals",bonus:1.5,killCow:true},
+    {id:"animals-double",name:"丑2体の経験値倍率は重複しない",fixture:"animals-double",bonus:1.5},
+    {id:"animals-enemy",name:"所持だけ・敵側の丑では経験値が増えない",fixture:"animals-enemy",bonus:1},
+    {id:"animals-mobile",name:"干支の編成と経験値補正リザルト・縦長",fixture:"animals",bonus:1.5,viewport:{width:390,height:844}}
+  ].map(options=>({
+    ...options,
+    async run(game) {
+      const initial=await game.deploy();
+      assert(allies(initial).every(unit=>unit.level===initial.level),"New animals use the shared player level.");
+      for(const [id,name] of [[23,"午"],[24,"酉"],[25,"寅"]])
+        for(const unit of allies(initial).filter(unit=>unit.id===id)) assert.equal(unit.name,name);
+      if(options.fixture==="animals-enemy") {
+        assert(initial.owned.includes(30)); assert(!initial.formation.includes(30));
+      }
+      await game.separate(); await game.start();
+      if(options.killCow) {
+        const state=await game.request("defeatCow");
+        assert(!allies(state).some(unit=>unit.id===30));
+        assert(state.battle.originalIds.includes(30));
+      }
+      let state=await game.result();
+      assert(state.battle.won); assert.equal(state.level,initial.level);
+      assert.equal(state.experience-initial.experience,Math.ceil(initial.baseBattleExperience*options.bonus));
+      assert.equal(state.stagePoints-initial.stagePoints,8,"Cow must not multiply stage points.");
+      assert.equal(state.battle.resultText.includes("経験値補正"),options.bonus>1);
+      assert(!state.battle.resultTextOverflow,"Result text must fit the modal.");
+      await game.screenshot("animal-victory");
+      if(options.killCow) {
+        await game.named("RetryStageButton");
+        state=await game.wait(current=>current.battle.deploying,"Animal retry did not open.");
+        assert.deepEqual(state.battle.originalIds,initial.battle.originalIds);
+        const cow=allies(state).find(unit=>unit.id===30);
+        assert(cow && cow.hp===cow.maxHP); assert.equal(allies(state).length,6);
+      }
+    }
+  })),
+  {
+    id:"animals-defeat",name:"丑を出撃させても敗北時に経験値・戦果を得ない",fixture:"animals-defeat",
+    async run(game) {
+      const initial=await game.deploy(); await game.start();
+      const state=await game.result();
+      assert(!state.battle.won); assert.equal(state.experience,initial.experience);
+      assert.equal(state.stagePoints,initial.stagePoints);
+      assert(!state.battle.resultText.includes("経験値補正"));
+    }
+  },
+  {
+    id:"animals-recruitment",name:"丑の縁候補・勝利累積・加入と保存",fixture:"standard",
+    async run(game) {
+      let state=await game.request("recruitCow");
+      assert(state.owned.includes(30)); assert.equal(state.experience,0);
+      await game.page.waitForTimeout(1500); await game.page.reload();
+      await game.page.waitForFunction(()=>!!window.unityInstance,null,{timeout:120000});
+      await game.page.waitForTimeout(4500); state=await game.request("resume");
+      assert(state.owned.includes(30)); assert.equal(state.experience,0);
+    }
+  },
   {
     id:"defense-abilities", name:"盾軽減・甲の肩代わり・連鎖禁止・肩代わり撃破", fixture:"defense",
     async run(game) {

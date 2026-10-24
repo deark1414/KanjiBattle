@@ -35,7 +35,9 @@ public static class SkillDescription
 
         if (skillType == SkillType.GuardAlly)
             builder.Append($"\n肩代わり率: {data.skillPower * 100:0.#}%");
-        if (data.skillPower > 0f && skillType is not (SkillType.NumberPassive or SkillType.BellEcho or SkillType.ShadowCopy or SkillType.GuardAlly or SkillType.Shield))
+        if (skillType == SkillType.ExperienceBonus)
+            builder.Append($"\n経験値倍率: ×{data.skillPower:0.#}");
+        if (data.skillPower > 0f && skillType is not (SkillType.NumberPassive or SkillType.BellEcho or SkillType.ShadowCopy or SkillType.GuardAlly or SkillType.Shield or SkillType.ExperienceBonus))
         {
             builder.Append($"\n威力補正: x{data.skillPower:0.##}");
         }
@@ -59,6 +61,7 @@ public static class SkillDescription
             && skillType != SkillType.AreaCounter
             && skillType != SkillType.GuardAlly
             && skillType != SkillType.Shield
+            && skillType != SkillType.ExperienceBonus
             && skillType != SkillType.Armor;
     }
 
@@ -84,6 +87,7 @@ public static class SkillDescription
             SkillType.Stone => "投石",
             SkillType.Shield => "堅守",
             SkillType.GuardAlly => "肩代わり",
+            SkillType.ExperienceBonus => "育成支援",
             SkillType.Wall => "壁",
             SkillType.Soil => "土罠",
             SkillType.Fireball => "火球",
@@ -119,6 +123,7 @@ public static class SkillDescription
             SkillType.Stone => "周囲2マスの敵へ石を投げる。味方と水を越える。",
             SkillType.Shield => "自分が受けるダメージを、防御計算後さらに20%軽減する。反射はしない。",
             SkillType.GuardAlly => "隣接8マスの味方の軽減後ダメージの一部を肩代わりする。複数体いても1体だけが担当。移した分は再軽減・再転送・反射しない。残りHPを超える肩代わりはできない。",
+            SkillType.ExperienceBonus => "出撃した戦闘の勝利経験値を増やす。撃破されても有効。複数体いても最大倍率だけを適用し、施設倍率と掛け合わせる。所持だけ・敵側・敗北・訓練・縁・戦果には効果なし。",
             SkillType.Wall => "高い耐久で前線を支える。",
             SkillType.Soil => "周囲5x5の候補から最大2マスに土の罠を設置する。土以外が踏むと設置者の攻撃力に応じたダメージを受け、立ち続けるとターンごとに再びダメージを受ける。",
             SkillType.Fireball => "周囲2マスの敵に防御無視の火球を放つ。味方と水を越える。",

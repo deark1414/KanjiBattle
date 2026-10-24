@@ -46,14 +46,18 @@ async function main() {
     assert.deepEqual((await state()).formation, [14,13,15,14,17,20]);
     await page.goto(base); await ready();
     assert.equal(await page.locator('#preset').inputValue(), 'defense');
+    await page.locator('#preset').selectOption('animals'); await page.locator('#reset').click(); await ready();
+    assert.deepEqual((await state()).formation, [30,23,24,25,10,20]);
+    await page.goto(base); await ready();
+    assert.equal(await page.locator('#preset').inputValue(), 'animals');
     await page.setViewportSize({ width: 390, height: 844 }); await page.waitForTimeout(500);
     const frame = await page.locator('#game').boundingBox();
     const canvas = await page.frameLocator('#game').locator('#unity-canvas').boundingBox();
     assert(canvas.width >= frame.width * 0.98 && canvas.height >= frame.height * 0.98);
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     assert.deepEqual(errors, []);
-    await page.screenshot({ path: 'tmp/e2e/manual-defense-mobile.png' });
-    console.log('Passed: fixture initialization, real fusion clicks, support/defense presets, preserve/reset, reload, mobile layout.');
+    await page.screenshot({ path: 'tmp/e2e/manual-animals-mobile.png' });
+    console.log('Passed: fixture initialization, real fusion clicks, support/defense/animal presets, preserve/reset, reload, mobile layout.');
     await context.close();
   } finally { await browser.close(); }
 }

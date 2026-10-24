@@ -4,6 +4,12 @@ using UnityEngine;
 
 public partial class BattleManager
 {
+    internal void DefeatExperienceUnit()
+    {
+        if (IsDeploying) throw new System.InvalidOperationException("Battle must have started.");
+        HandleDeath(allies.First(unit => unit.data.skillType == SkillType.ExperienceBonus));
+    }
+
     internal void ProbeSupportSkills()
     {
         if (!IsDeploying || allies.Count != 6 || allies[0].data.skillType != SkillType.BellEcho)
@@ -82,6 +88,8 @@ public partial class BattleManager
             previewLinks = fusionPreview?.LinkCount ?? 0,
             fusionSummary = deploymentView?.FusionSummary ?? "",
             logs = logContent == null ? new string[0] : logContent.GetComponentsInChildren<TMPro.TMP_Text>().Select(text => text.text).ToArray(),
+            resultText = resultText == null ? "" : resultText.text,
+            resultTextOverflow = resultText != null && resultText.isTextOverflowing,
             battleId = gridCells == null ? 0 : gridCells[0, 0].GetInstanceID(),
             result = resultPanel != null && resultPanel.activeInHierarchy,
             won = resultText != null && resultText.text.Contains("勝利"),

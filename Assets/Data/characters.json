@@ -260,7 +260,7 @@
   {
     "id": 23,
     "fileName": "CharacterData_Horse",
-    "characterName": "馬",
+    "characterName": "午",
     "category": "Animal",
     "baseHP": 140,
     "hpGrowth": 6,
@@ -271,12 +271,13 @@
     "skillType": "HorseCharge",
     "skillPower": 1.5,
     "skillChance": 15,
-    "isBoss": false
+    "isBoss": false,
+    "clearIcons": true
   },
   {
     "id": 24,
     "fileName": "CharacterData_Bird",
-    "characterName": "鳥",
+    "characterName": "酉",
     "category": "Animal",
     "baseHP": 130,
     "hpGrowth": 5,
@@ -287,12 +288,13 @@
     "skillType": "BirdRetreat",
     "skillPower": 1.3,
     "skillChance": 15,
-    "isBoss": false
+    "isBoss": false,
+    "clearIcons": true
   },
   {
     "id": 25,
     "fileName": "CharacterData_Tiger",
-    "characterName": "虎",
+    "characterName": "寅",
     "category": "Animal",
     "baseHP": 120,
     "hpGrowth": 6,
@@ -303,7 +305,8 @@
     "skillType": "TigerTwinClaw",
     "skillPower": 1.6,
     "skillChance": 15,
-    "isBoss": false
+    "isBoss": false,
+    "clearIcons": true
   },
   {
     "id": 4,
@@ -463,6 +466,22 @@
     "skillType": "ShadowCopy",
     "skillPower": 1,
     "skillChance": 100,
+    "isBoss": false
+  },
+  {
+    "id": 30,
+    "fileName": "CharacterData_Ox",
+    "characterName": "丑",
+    "category": "Animal",
+    "baseHP": 140,
+    "hpGrowth": 7,
+    "baseAttack": 20,
+    "attackGrowth": 3,
+    "baseDefense": 10,
+    "defenseGrowth": 1,
+    "skillType": "ExperienceBonus",
+    "skillPower": 1.5,
+    "skillChance": 0,
     "isBoss": false
   }
 ]

@@ -684,7 +684,7 @@
   {
     "stageId": 31,
     "fileName": "Stage_1_31",
-    "stageName": "馬の間",
+    "stageName": "午の間",
     "chapterId": 7,
     "enemyIds": [
       23,
@@ -708,7 +708,7 @@
   {
     "stageId": 32,
     "fileName": "Stage_1_32",
-    "stageName": "鳥の間",
+    "stageName": "酉の間",
     "chapterId": 7,
     "enemyIds": [
       24,
@@ -732,7 +732,7 @@
   {
     "stageId": 33,
     "fileName": "Stage_1_33",
-    "stageName": "虎の間",
+    "stageName": "寅の間",
     "chapterId": 7,
     "enemyIds": [
       25,
@@ -756,14 +756,14 @@
   {
     "stageId": 34,
     "fileName": "Stage_1_34",
-    "stageName": "動物の組手",
+    "stageName": "丑の間",
     "chapterId": 7,
     "enemyIds": [
+      30,
       23,
       24,
       25,
-      23,
-      24
+      30
     ],
     "rewardStagePoints": 11,
     "slotCount": 5,
@@ -786,7 +786,7 @@
       25,
       24,
       23,
-      24,
+      30,
       25
     ],
     "rewardStagePoints": 38,

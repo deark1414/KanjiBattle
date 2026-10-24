@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1df6bc30dc24f4ef8a24d39e608d3dda, type: 3}
   m_Name: Stage_1_32
   m_EditorClassIdentifier: Assembly-CSharp::StageData
-  stageName: "\u9CE5\u306E\u9593"
+  stageName: "\u9149\u306E\u9593"
   stageId: 32
   chapterId: 7
   enemyPool:

@@ -156,9 +156,9 @@ public class PlayerInventory : MonoBehaviour
         return Mathf.Max(1, Mathf.RoundToInt(character.GetMaxHP(level) * multiplier));
     }
 
-    public PlayerExperienceResult GrantBattleExperience(StageData stage)
+    public PlayerExperienceResult GrantBattleExperience(StageData stage, IEnumerable<CharacterData> deployedParty = null)
     {
-        return GrantPlayerExperience(GetEffectiveBattleExperienceReward(stage));
+        return GrantPlayerExperience(GetEffectiveBattleExperienceReward(stage, deployedParty));
     }
 
     public PlayerExperienceResult GrantMockTrainingExperience()
@@ -318,13 +318,13 @@ public class PlayerInventory : MonoBehaviour
         SaveProgress();
     }
 
-    public int GetEffectiveBattleExperienceReward(StageData stage)
+    public int GetEffectiveBattleExperienceReward(StageData stage, IEnumerable<CharacterData> deployedParty = null)
     {
         int baseReward = GetStageBattleExperienceReward(stage);
         float multiplier = FacilityManager.Instance != null
             ? FacilityManager.Instance.GetBattleExperienceMultiplier()
             : 1f;
-        return Mathf.Max(1, Mathf.CeilToInt(baseReward * multiplier));
+        return BattleRewardRules.CalculateExperience(baseReward, multiplier, deployedParty);
     }
 
     private int GetEffectiveMockTrainingExperienceReward()

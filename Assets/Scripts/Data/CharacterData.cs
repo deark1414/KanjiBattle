@@ -30,7 +30,8 @@ public enum SkillType
     BellEcho,
     ThreadPull,
     ShadowCopy,
-    GuardAlly
+    GuardAlly,
+    ExperienceBonus
 }
 
 public enum CharacterCategory

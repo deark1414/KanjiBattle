@@ -27,12 +27,14 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public int battleId; public int[] originalIds; public Unit[] units; public Cell[] cells; public BattleFusionRules.Plan plan;
         public int conflicts; public int previewLinks; public string fusionSummary;
         public string[] logs;
+        public string resultText; public bool resultTextOverflow;
     }
     [Serializable] private sealed class Snapshot
     {
         public int protocol = 1; public string requestId; public string error;
         public Control[] controls; public BattleState battle; public int[] formation; public int[] owned;
         public int[] discovered; public bool fusionUnlocked; public bool canUnlockFusion; public int stagePoints;
+        public int level; public int experience; public int baseBattleExperience;
     }
 
     private StageData fixtureStage;
@@ -60,7 +62,9 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "snapshot": break;
                 case "supportProbe": FindFirstObjectByType<BattleManager>().ProbeSupportSkills(); break;
                 case "defenseProbe": FindFirstObjectByType<BattleManager>().ProbeDefenseSkills(); break;
-                case "recruitSupport": ProbeSupportRecruitment(); break;
+                case "recruitSupport": ProbeRecruitment(new[] { 27, 28, 29 }, 35); break;
+                case "recruitCow": ProbeRecruitment(new[] { 30 }, 80); break;
+                case "defeatCow": FindFirstObjectByType<BattleManager>().DefeatExperienceUnit(); break;
                 default: throw new ArgumentException("Unknown E2E action: " + request.action);
             }
         }
@@ -113,8 +117,13 @@ public sealed class BattleE2EBridge : MonoBehaviour
         var names = alternate ? new[] { "剣", "二", "二", "剣", "三", "銃" } : new[] { "二", "剣", "二", "剣", "三", "銃" };
         bool support = PlayerProgressStore.GetString(FixtureKey) == "support";
         bool defense = PlayerProgressStore.GetString(FixtureKey) == "defense";
+        string kind = PlayerProgressStore.GetString(FixtureKey);
+        bool animals = kind.StartsWith("animals", StringComparison.Ordinal);
         if (support) names = new[] { "鈴", "糸", "影", "剣", "槍", "水" };
         if (defense) names = new[] { "甲", "盾", "壁", "甲", "弓", "水" };
+        if (animals) names = new[] { "丑", "午", "酉", "寅", "剣", "水" };
+        if (kind == "animals-double") names = new[] { "丑", "丑", "午", "酉", "剣", "水" };
+        if (kind == "animals-enemy") names = new[] { "午", "酉", "寅", "剣", "槍", "水" };
         if (PlayerProgressStore.GetString(FixtureKey) == "locked") names = names.Take(4).ToArray();
         CharacterData[] party = names.Select(name => database.characters.First(data => data.characterName == name)).ToArray();
         foreach (CharacterData data in party) PlayerInventory.Instance.AddCharacter(data);
@@ -123,7 +132,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         fixtureStage.name = "E2E_FixtureStage";
         fixtureStage.hideFlags = HideFlags.DontSave;
         fixtureStage.enemyPool = new List<CharacterData> { database.characters.First(data => data.characterName == "一") };
-        fixtureStage.enemyLevel = PlayerProgressStore.GetString(FixtureKey) == "defeat" ? 2000 : 1;
+        fixtureStage.enemyLevel = kind is "defeat" or "animals-defeat" ? 2000 : 1;
         if (support)
         {
             fixtureStage.stageName = "新能力の確認";
@@ -145,6 +154,16 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 database.GetById(14), database.GetById(13), database.GetById(10)
             };
             fixtureStage.enemyLevel = 20;
+        }
+        if (animals)
+        {
+            fixtureStage.stageName = "干支と育成の確認";
+            fixtureStage.chapterId = 2;
+            if (kind == "animals-enemy")
+            {
+                fixtureStage.enemyPool = new List<CharacterData> { database.GetById(30) };
+                PlayerInventory.Instance.AddCharacter(database.GetById(30));
+            }
         }
         fixtureStage.slotCount = party.Length;
         fixtureStage.trapCount = 0;
@@ -172,23 +191,25 @@ public sealed class BattleE2EBridge : MonoBehaviour
             owned = PlayerInventory.Instance.GetUnlockedCharacters().Select(data => data.characterId).OrderBy(id => id).ToArray(),
             discovered = BattleFusionRules.Recipes.Where(recipe => BattleFusionRules.IsDiscovered(recipe.Id)).Select(recipe => recipe.Id).ToArray(),
             fusionUnlocked = FacilityManager.Instance.IsFusionUnlocked(), canUnlockFusion = FacilityManager.Instance.CanUnlock(fusion),
-            stagePoints = GameManager.Instance.StagePoints
+            stagePoints = GameManager.Instance.StagePoints,
+            level = PlayerInventory.Instance.PlayerLevel, experience = PlayerInventory.Instance.PlayerExperience,
+            baseBattleExperience = fixtureStage == null ? 0 : PlayerInventory.Instance.GetEffectiveBattleExperienceReward(fixtureStage)
         };
     }
 
-    private static void ProbeSupportRecruitment()
+    private static void ProbeRecruitment(int[] ids, int threshold)
     {
         CharacterDatabase database = Resources.Load<CharacterDatabase>("CharacterDatabase");
         ResearchBondService bonds = ResearchBondService.Instance;
-        foreach (int id in new[] { 27, 28, 29 })
+        foreach (int id in ids)
         {
             CharacterData data = database.GetById(id);
-            if (PlayerInventory.Instance.IsOwned(data) || bonds.GetBondThreshold(data) != 35)
+            if (PlayerInventory.Instance.IsOwned(data) || bonds.GetBondThreshold(data) != threshold)
                 throw new InvalidOperationException("Invalid new-character recruitment mapping: " + id);
             bonds.RegisterDefeated(data);
             if (!bonds.GetDefeatedCandidates().Contains(data))
                 throw new InvalidOperationException("New character missing from defeated candidates: " + id);
-            for (int win = 0; win < 35 && !bonds.CanRecruit(data); win++)
+            for (int win = 0; win < threshold && !bonds.CanRecruit(data); win++)
                 bonds.ResolveVictory(new[] { id });
             if (PlayerInventory.Instance.IsOwned(data) || !bonds.CanRecruit(data) || !bonds.Recruit(data))
                 throw new InvalidOperationException("New character could not be recruited: " + id);

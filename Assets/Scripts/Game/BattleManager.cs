@@ -1257,7 +1257,7 @@ public partial class BattleManager : MonoBehaviour
         {
             GameManager.Instance.RegisterClearedStage(currentStage.stageId);
             experienceResult = PlayerInventory.Instance != null
-                ? PlayerInventory.Instance.GrantBattleExperience(currentStage)
+                ? PlayerInventory.Instance.GrantBattleExperience(currentStage, deployedAllies)
                 : default;
             var recruitmentResults = ResearchBondService.Instance.ResolveVictory(encounteredEnemyCharacterIds);
             effectiveReward = GameManager.Instance.GetEffectiveStagePointReward(currentReward);
@@ -1311,6 +1311,9 @@ public partial class BattleManager : MonoBehaviour
         string rewardSummary = isWin
             ? $"\n\n戦果 +{effectiveReward}　合計 {totalStagePoints}\n軍師経験 +{experienceResult.experience}　{experienceProgress}"
             : "\n\n今回の獲得なし";
+        float experienceMultiplier = BattleRewardRules.ArmyExperienceMultiplier(deployedAllies);
+        if (isWin && experienceMultiplier > 1f)
+            rewardSummary += $"\n経験値補正 ×{experienceMultiplier:0.#}";
         resultText.text = message + rewardSummary;
         resultText.color = isWin
             ? new Color(1f, 0.88f, 0.46f)
