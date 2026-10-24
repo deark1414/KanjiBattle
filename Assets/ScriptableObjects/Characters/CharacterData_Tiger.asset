@@ -15,6 +15,7 @@ MonoBehaviour:
   characterName: "\u864E"
   characterId: 25
   isBoss: 0
+  isEvolved: 0
   icon: {fileID: 21300000, guid: 563f5b1c8f90f4b1fa78ddabeef3d3ff, type: 3}
   enemyIcon: {fileID: 21300000, guid: ece30fe6080be478e91d32f034bf7592, type: 3}
   category: 8

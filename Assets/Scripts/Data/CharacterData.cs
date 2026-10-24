@@ -26,7 +26,10 @@ public enum SkillType
     TigerTwinClaw,
     Dragon,
     DoubleSlash,
-    ScatterShot
+    ScatterShot,
+    BellEcho,
+    ThreadPull,
+    ShadowCopy
 }
 
 public enum CharacterCategory
@@ -49,6 +52,7 @@ public class CharacterData : ScriptableObject
     public string characterName;
     public int characterId;
     public bool isBoss;
+    public bool isEvolved;
     public Sprite icon;
     public Sprite enemyIcon;
 

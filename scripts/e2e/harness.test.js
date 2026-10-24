@@ -64,3 +64,16 @@ test("test-only C# entry points are excluded from normal players", () => {
     assert(source.startsWith("#if KANJI_BATTLE_E2E\n")); assert(source.trimEnd().endsWith("#endif"));
   }
 });
+
+test("an incomplete build is reported as a test failure instead of an unhandled route exception", async () => {
+  const page = new EventEmitter(); let handler, fulfilled;
+  page.route = async (_, callback) => { handler = callback; };
+  page.goto = async () => handler({
+    fetch: async () => ({ text: async () => "build temporarily unavailable" }),
+    fulfill: async value => { fulfilled = value; }
+  });
+  const game = new GameHarness(page, "/unused");
+  await assert.rejects(() => game.boot("http://local/game/index.html"), /Unity loader could not be prepared/);
+  assert.equal(fulfilled.status, 503);
+  assert.match(game.errors[0], /avoid rebuilding/);
+});

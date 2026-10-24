@@ -5,6 +5,56 @@ const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y
 
 module.exports = [
   {
+    id:"support-recruitment", name:"新3体の縁候補・勝利累積・加入処理と保存", fixture:"standard",
+    async run(game) {
+      let state=await game.request("recruitSupport");
+      for(const id of [27,28,29]) assert(state.owned.includes(id));
+      await game.page.waitForTimeout(1500);
+      await game.page.reload();
+      await game.page.waitForFunction(()=>!!window.unityInstance,null,{timeout:120000});
+      await game.page.waitForTimeout(4500);
+      state=await game.request("resume");
+      for(const id of [27,28,29]) assert(state.owned.includes(id));
+    }
+  },
+  {
+    id:"support-abilities", name:"新能力の確定検証・再響回数と引寄せ失敗とHP維持", fixture:"support",
+    async run(game) {
+      await game.deploy();
+      const state=await game.request("supportProbe");
+      assert(state.battle.logs.some(log=>log.includes("新キャラ能力チェック完了")));
+      assert(state.battle.logs.some(log=>log.includes("再響")));
+      assert(state.battle.units.some(unit=>unit.ally && unit.originalId===29 && unit.transformed && unit.hp===31));
+    }
+  },
+  {
+    id:"support-battle", name:"鈴・糸・影の実戦と再戦復元", fixture:"support",
+    async run(game) {
+      let state=await game.deploy();
+      const original=state.battle.originalIds, owned=state.owned;
+      assert.deepEqual(original,[27,28,29,10,11,20]);
+      await game.arrange([[3,6],[3,5],[2,5],[0,6],[5,6],[4,6]]);
+      await game.screenshot("support-deployment");
+      await game.start();
+      const observed=new Set(); let transformed=false;
+      state=await game.wait(current=>{
+        for(const log of current.battle.logs || []) observed.add(log);
+        transformed ||= current.battle.units.some(unit=>unit.ally && unit.originalId===29 && unit.transformed && unit.id!==29);
+        return current.battle.result;
+      },"Support battle timed out.",120000);
+      const logs=[...observed].join("\n");
+      assert(logs.includes("引き寄せた"),"Thread pull never resolved.");
+      assert(logs.includes("変身"),"Shadow never transformed.");
+      assert(transformed,"The copied form must retain shadow's original identity.");
+      assert.deepEqual(state.owned,owned,"Transformation must not change permanent ownership.");
+      await game.screenshot("support-result");
+      await game.named("RetryStageButton");
+      state=await game.wait(current=>current.battle.deploying,"Support retry did not open.");
+      assert.deepEqual(state.battle.originalIds,original);
+      assert(allies(state).every(unit=>!unit.transformed && unit.id===unit.originalId));
+    }
+  },
+  {
     id:"fusion-gate", name:"融合解放前は隣接しても融合しない", fixture:"locked",
     async run(game) {
       const state=await game.deploy();

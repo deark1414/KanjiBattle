@@ -414,5 +414,53 @@
     "skillPower": 1.4,
     "skillChance": 15,
     "isBoss": true
+  },
+  {
+    "id": 27,
+    "fileName": "CharacterData_Bell",
+    "characterName": "鈴",
+    "category": "None",
+    "baseHP": 140,
+    "hpGrowth": 9,
+    "baseAttack": 18,
+    "attackGrowth": 2,
+    "baseDefense": 14,
+    "defenseGrowth": 1,
+    "skillType": "BellEcho",
+    "skillPower": 1,
+    "skillChance": 25,
+    "isBoss": false
+  },
+  {
+    "id": 28,
+    "fileName": "CharacterData_Thread",
+    "characterName": "糸",
+    "category": "Ranged",
+    "baseHP": 130,
+    "hpGrowth": 8,
+    "baseAttack": 30,
+    "attackGrowth": 3,
+    "baseDefense": 10,
+    "defenseGrowth": 1,
+    "skillType": "ThreadPull",
+    "skillPower": 0.8,
+    "skillChance": 100,
+    "isBoss": false
+  },
+  {
+    "id": 29,
+    "fileName": "CharacterData_Shadow",
+    "characterName": "影",
+    "category": "None",
+    "baseHP": 150,
+    "hpGrowth": 9,
+    "baseAttack": 22,
+    "attackGrowth": 2,
+    "baseDefense": 12,
+    "defenseGrowth": 1,
+    "skillType": "ShadowCopy",
+    "skillPower": 1,
+    "skillChance": 100,
+    "isBoss": false
   }
 ]

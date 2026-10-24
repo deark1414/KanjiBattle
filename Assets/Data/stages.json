@@ -326,11 +326,11 @@
   {
     "stageId": 16,
     "fileName": "Stage_1_16",
-    "stageName": "四の間",
+    "stageName": "鈴の間",
     "chapterId": 4,
     "enemyIds": [
-      4,
-      4,
+      10,
+      27,
       1,
       2
     ],
@@ -349,12 +349,12 @@
   {
     "stageId": 17,
     "fileName": "Stage_1_17",
-    "stageName": "五の間",
+    "stageName": "糸の間",
     "chapterId": 4,
     "enemyIds": [
-      5,
-      5,
-      4,
+      28,
+      28,
+      13,
       1
     ],
     "rewardStagePoints": 7,
@@ -372,13 +372,13 @@
   {
     "stageId": 18,
     "fileName": "Stage_1_18",
-    "stageName": "六の間",
+    "stageName": "影の間",
     "chapterId": 4,
     "enemyIds": [
-      6,
-      6,
-      5,
-      4
+      29,
+      29,
+      10,
+      27
     ],
     "rewardStagePoints": 8,
     "slotCount": 4,
@@ -395,14 +395,14 @@
   {
     "stageId": 19,
     "fileName": "Stage_1_19",
-    "stageName": "中位数字の組手",
+    "stageName": "絡繰の組手",
     "chapterId": 4,
     "enemyIds": [
-      4,
-      5,
-      6,
-      4,
-      5
+      28,
+      27,
+      29,
+      11,
+      13
     ],
     "rewardStagePoints": 8,
     "slotCount": 4,
@@ -419,14 +419,14 @@
   {
     "stageId": 20,
     "fileName": "Stage_1_20",
-    "stageName": "中位数字の門番",
+    "stageName": "絡繰の門番",
     "chapterId": 4,
     "enemyIds": [
-      6,
-      6,
-      5,
-      4,
-      5
+      29,
+      28,
+      27,
+      10,
+      15
     ],
     "rewardStagePoints": 26,
     "slotCount": 4,

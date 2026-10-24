@@ -15,7 +15,7 @@ public static class SkillExecutor
 
     public static SkillExecutionResult TryExecuteDetailed(BattleCharacter caster, BattleCharacter target, BattleManager bm)
     {
-        if (caster == null || caster.data == null)
+        if (caster == null || caster.data == null || caster.isDead || caster.currentHP <= 0)
         {
             return SkillExecutionResult.Failed(SkillType.None, SkillExecutionFailure.InvalidCaster);
         }
@@ -26,7 +26,7 @@ public static class SkillExecutor
             return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.NoSkill);
         }
 
-        if (skillType == SkillType.Counter || skillType == SkillType.AreaCounter || skillType == SkillType.NumberPassive)
+        if (skillType == SkillType.Counter || skillType == SkillType.AreaCounter || skillType == SkillType.NumberPassive || skillType == SkillType.BellEcho)
         {
             return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.PassiveOrReactiveSkill);
         }
@@ -50,15 +50,19 @@ public static class SkillExecutor
             return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.UnsupportedEffect);
         }
 
-        return TryExecuteResolved(caster, target, bm)
-            ? SkillExecutionResult.Success(skillType)
-            : SkillExecutionResult.Failed(skillType, SkillExecutionFailure.NoValidTarget);
+        if (!TryExecuteResolved(caster, target, bm))
+            return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.NoValidTarget);
+        if (skillType != SkillType.ShadowCopy)
+            SupportSkillExecutor.TryEcho(caster, target, bm, repeatTarget => TryExecuteResolved(caster, repeatTarget, bm));
+        return SkillExecutionResult.Success(skillType);
     }
 
     private static bool TryExecuteResolved(BattleCharacter caster, BattleCharacter target, BattleManager bm)
     {
         SkillType skillType = caster.data.skillType;
         bool executed;
+        if (skillType is SkillType.ThreadPull or SkillType.ShadowCopy)
+            return SupportSkillExecutor.Execute(caster, target, bm);
         if (skillType is SkillType.DoubleSlash or SkillType.ScatterShot)
             return FusionSkillExecutor.Execute(caster, target, bm);
         if (skillType == SkillType.Slash)

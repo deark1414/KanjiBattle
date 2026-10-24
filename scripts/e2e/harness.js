@@ -37,13 +37,23 @@ class GameHarness {
 
   async boot(url) {
     await this.page.route("**/game/index.html*", async route => {
-      const response = await route.fetch();
-      const source = await response.text();
-      const hook = ".then((unityInstance) => {";
-      assert(source.includes(hook), "Unity loader hook changed; update the E2E adapter.");
-      await route.fulfill({ response, body: source.replace(hook, `${hook} window.unityInstance = unityInstance;`) });
+      try {
+        const response = await route.fetch();
+        const source = await response.text();
+        const hook = ".then((unityInstance) => {";
+        if (!source.includes(hook)) {
+          this.errors.push("Unity loader hook is missing; check the E2E build and avoid rebuilding it during a test run.");
+          await route.fulfill({ status: 503, contentType: "text/plain", body: this.errors.at(-1) });
+          return;
+        }
+        await route.fulfill({ response, body: source.replace(hook, `${hook} window.unityInstance = unityInstance;`) });
+      } catch (error) {
+        this.errors.push(`Unity loader request failed: ${error.message}`);
+        await route.abort().catch(() => {});
+      }
     });
     await this.page.goto(url);
+    assert.deepEqual(this.errors, [], "Unity loader could not be prepared.");
     await this.page.waitForFunction(() => !!window.unityInstance, null, { timeout: 120000 });
     // Unity's splash can still cover the first rendered frame after startup.
     await this.page.waitForTimeout(4500);

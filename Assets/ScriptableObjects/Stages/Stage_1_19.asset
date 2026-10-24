@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1df6bc30dc24f4ef8a24d39e608d3dda, type: 3}
   m_Name: Stage_1_19
   m_EditorClassIdentifier: 
-  stageName: "\u4E2D\u4F4D\u6570\u5B57\u306E\u7D44\u624B"
+  stageName: "\u7D61\u7E70\u306E\u7D44\u624B"
   stageId: 19
   chapterId: 4
   enemyPool:
-  - {fileID: 11400000, guid: 021e01b73df88486c84be7643b0e0a26, type: 2}
-  - {fileID: 11400000, guid: c25f44457639447e5bf49a2ef3a74b3b, type: 2}
-  - {fileID: 11400000, guid: 6c216b850f67847ccb6bf646b16f4876, type: 2}
-  - {fileID: 11400000, guid: 021e01b73df88486c84be7643b0e0a26, type: 2}
-  - {fileID: 11400000, guid: c25f44457639447e5bf49a2ef3a74b3b, type: 2}
+  - {fileID: 11400000, guid: fb39b40fb570248c29fb2bf28db54d54, type: 2}
+  - {fileID: 11400000, guid: f5b98ab44ef824bbd826cb14c9818c47, type: 2}
+  - {fileID: 11400000, guid: bef1f922a99d84bf68f448a1da2897f8, type: 2}
+  - {fileID: 11400000, guid: 72ba58126cfe041d8ac0dc6cf96169fc, type: 2}
+  - {fileID: 11400000, guid: 900ecc4fc8132484191c54303b8cbe88, type: 2}
   rewardStagePoints: 8
   slotCount: 4
   trapDamage: 24

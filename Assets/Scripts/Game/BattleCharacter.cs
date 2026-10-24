@@ -7,6 +7,9 @@ using TMPro;
 public class BattleCharacter : MonoBehaviour
 {
     public CharacterData data;
+    public CharacterData OriginalData { get; private set; }
+    public bool HasTransformed { get; private set; }
+    private CharacterData copiedForm;
     public Vector2Int gridPos;
     public bool isAlly;
     private readonly BattleCharacterState state = new();
@@ -38,6 +41,8 @@ public class BattleCharacter : MonoBehaviour
 public void Init(CharacterData data, Vector2Int pos, bool ally, int level = 1)
 {
     this.data = data;
+    OriginalData = data;
+    HasTransformed = false;
     this.gridPos = pos;
     this.isAlly = ally;
     this.level = level;
@@ -88,6 +93,43 @@ if (background != null)
     UpdateHPBar();
     UpdateDirection(Vector2Int.down);
 }
+
+    public bool CopyBattleForm(BattleCharacter target)
+    {
+        if (HasTransformed || !SupportSkillExecutor.CanCopy(this, target)) return false;
+        HasTransformed = true;
+        copiedForm = Instantiate(target.data);
+        copiedForm.hideFlags = HideFlags.HideAndDontSave;
+        data = copiedForm;
+        attack = target.attack;
+        defense = target.defense;
+        state.SetNumberPassiveAttackBonus(0);
+        Sprite sprite = !isAlly && data.enemyIcon != null ? data.enemyIcon : data.icon;
+        bool usesIcon = sprite != null;
+        if (background != null)
+        {
+            background.sprite = sprite;
+            background.type = Image.Type.Simple;
+            background.preserveAspect = usesIcon;
+            background.color = isAlly ? new Color(0.6f, 0.9f, 1f) : new Color(1f, 0.7f, 0.7f);
+        }
+        if (nameText != null)
+        {
+            nameText.gameObject.SetActive(!usesIcon);
+            nameText.text = usesIcon ? "" : data.characterName;
+        }
+        ConfigureBattleLabels(usesIcon, isAlly);
+        CaptureBaseVisualState();
+        UpdateHPBar();
+        return true;
+    }
+
+    private void OnDestroy()
+    {
+        if (copiedForm == null) return;
+        if (Application.isPlaying) Destroy(copiedForm);
+        else DestroyImmediate(copiedForm);
+    }
 
     public string DisplayName
     {

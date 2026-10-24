@@ -49,6 +49,7 @@ public class DataImporter : EditorWindow
         public float skillPower;
         public int skillChance;
         public bool isBoss;
+        public bool isEvolved;
     }
 
     [System.Serializable]
@@ -133,6 +134,7 @@ public class DataImporter : EditorWindow
             data.skillPower = c.skillPower;
             data.skillChance = c.skillChance;
             data.isBoss = c.isBoss;
+            data.isEvolved = c.isEvolved;
 
             EditorUtility.SetDirty(data);
         }

@@ -68,7 +68,8 @@ async function main() {
     let url = option("--url");
     if (!url) ({ server, url } = await serve());
     browser = await chromium.launch({ headless: !args.includes("--headed") });
-    const selected = option("--only") ? scenarios.filter(scenario => scenario.id === option("--only")) : scenarios;
+    const only = option("--only")?.split(",");
+    const selected = only ? scenarios.filter(scenario => only.includes(scenario.id)) : scenarios;
     assert(selected.length > 0, "No matching scenario.");
     for (const scenario of selected) {
       const directory = path.join(output, scenario.id); fs.mkdirSync(directory, { recursive: true });

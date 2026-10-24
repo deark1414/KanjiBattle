@@ -4,7 +4,7 @@ using UnityEngine;
 public static class PlayerProgressStore
 {
     private const string SaveFormatKey = "KanjiBattle.SaveFormatVersion";
-    private const int CurrentSaveFormatVersion = 4;
+    private const int CurrentSaveFormatVersion = 5;
     private static bool formatValidatedThisSession;
 
     public static int GetInt(string key, int defaultValue = 0) => PlayerPrefs.GetInt(key, defaultValue);

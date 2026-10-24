@@ -14,7 +14,7 @@ public static class BattleRangeService
         int distance = Distance(from, to);
         if (skill == SkillType.WaterHeal) return distance <= 1;
         if (distance == 0) return false;
-        if (skill is SkillType.Stone or SkillType.Fireball) return distance <= 2;
+        if (skill is SkillType.Stone or SkillType.Fireball or SkillType.ThreadPull) return distance <= 2;
         if (skill == SkillType.ScatterShot) return distance <= 3;
         if (skill is not (SkillType.Arrow or SkillType.Gun or SkillType.Spear)) return distance == 1;
 
@@ -48,6 +48,7 @@ public static class BattleRangeService
         switch (skillType)
         {
             case SkillType.Stone:
+            case SkillType.ThreadPull:
             case SkillType.Fireball:
             case SkillType.HorseCharge:
             case SkillType.Soil:
@@ -57,6 +58,7 @@ public static class BattleRangeService
                 if (target.HasValue) cells.AddRange(GetSwordWedgeCells(caster, target.Value - caster));
                 break;
             case SkillType.StunBlow:
+            case SkillType.ShadowCopy:
             case SkillType.TigerTwinClaw:
             case SkillType.WaterHeal:
             case SkillType.BirdRetreat:
@@ -97,6 +99,8 @@ public static class BattleRangeService
                 if (target.HasValue) cells.AddRange(GetSwordWedgeCells(caster, target.Value - caster));
                 break;
             case SkillType.StunBlow:
+            case SkillType.ThreadPull:
+            case SkillType.ShadowCopy:
             case SkillType.TigerTwinClaw:
             case SkillType.Arrow:
             case SkillType.Stone:

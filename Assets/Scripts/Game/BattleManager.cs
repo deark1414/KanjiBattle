@@ -1014,6 +1014,10 @@ public partial class BattleManager : MonoBehaviour
 
         switch (character.data.skillType)
         {
+            case SkillType.ThreadPull:
+                return TargetingService.FindEnemyTarget(this, character, SkillType.ThreadPull);
+            case SkillType.ShadowCopy:
+                return SupportSkillExecutor.FindCopyTarget(character, this);
             case SkillType.DoubleSlash:
             case SkillType.Slash:
                 return TargetingService.FindSwordTarget(this, character);
@@ -2927,7 +2931,7 @@ public partial class BattleManager : MonoBehaviour
 
         if (!target.isAlly)
         {
-            ResearchBondService.Instance.RegisterDefeated(target.data);
+            ResearchBondService.Instance.RegisterDefeated(target.OriginalData);
         }
 
         gridMap.Remove(target.gridPos);
