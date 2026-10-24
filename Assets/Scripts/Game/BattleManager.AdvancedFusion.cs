@@ -175,14 +175,14 @@ public partial class BattleManager
         int hp = sand ? Mathf.Max(1, source.maxHP / 2) : source.maxHP;
         int attack = Mathf.Max(1, Mathf.RoundToInt(source.attack * (sand ? .5f : .7f)));
         int defense = sand ? source.defense / 2 : source.defense;
-        var data = CharacterData.CreateBattleCopy(sand ? "砂偶" : "草", sand ? SkillType.None : SkillType.Grass, hp, attack, defense);
+        var data = CharacterData.CreateBattleCopy(sand ? "砂" : "草", sand ? SkillType.None : SkillType.Grass, hp, attack, defense);
         fusionRuntimeData.Add(data);
         SpawnCharacter(data, empty.Value, source.isAlly, source.level);
         BattleCharacter copy = gridMap[empty.Value];
         copy.SetBattleVitals(hp, sand ? hp : source.currentHP, attack, defense);
         copy.IsGenerated = true; copy.Summoner = sand ? source : null;
         copy.LineageId = source.LineageId; copy.EligibleTurn = fusionTurn + 1;
-        AddLog($"{source.DisplayName} が{(sand ? "砂人形を生成" : "分裂")}！");
+        AddLog($"{source.DisplayName} が{(sand ? "砂の分身を生成" : "分裂")}！");
         return copy;
     }
 

@@ -19,8 +19,12 @@ async function main(){
     }
     assert(solid>size*size*.015,entry.name+' blank '+key);assert(clear>size*size*.1,entry.name+' no transparency');
     assert.equal(edge,0,entry.name+' clipped '+key);report.pngs++;
+    const block=key==='resource'?8:2;
+    for(let y=0;y<size;y++)for(let x=0;x<size;x++)for(let channel=0;channel<4;channel++)
+      assert.equal(png.data[(y*size+x)*4+channel],png.data[((y-y%block)*size+x-x%block)*4+channel],entry.name+' inconsistent pixel grid');
   }
   report.checks.push('45 complete sets; 135 nonblank PNGs with real alpha, safe edges, fixed dimensions');
+  report.checks.push('all motifs use a 64px logical grid; all pieces use a 128px logical grid');
   const server=await serve(0);const browser=await chromium.launch();
   try{
     const page=await browser.newPage({viewport:{width:1440,height:1000}});

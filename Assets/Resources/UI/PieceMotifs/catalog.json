@@ -3,7 +3,7 @@
     {
       "id": 1,
       "name": "一",
-      "source": "Assets/Art/Drafts/PieceMotifs/NumberDice/Number_01_dice_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/One.png",
       "resource": "UI/PieceMotifs/Ready/Motif_1",
       "piece": "UI/CharacterPieces/Piece_1",
       "enemyPiece": "UI/CharacterPieces/Piece_1_Enemy",
@@ -18,7 +18,7 @@
     {
       "id": 2,
       "name": "二",
-      "source": "Assets/Art/Drafts/PieceMotifs/NumberDice/Number_02_dice_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Two.png",
       "resource": "UI/PieceMotifs/Ready/Motif_2",
       "piece": "UI/CharacterPieces/Piece_2",
       "enemyPiece": "UI/CharacterPieces/Piece_2_Enemy",
@@ -33,7 +33,7 @@
     {
       "id": 3,
       "name": "三",
-      "source": "Assets/Art/Drafts/PieceMotifs/NumberDice/Number_03_dice_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Three.png",
       "resource": "UI/PieceMotifs/Ready/Motif_3",
       "piece": "UI/CharacterPieces/Piece_3",
       "enemyPiece": "UI/CharacterPieces/Piece_3_Enemy",
@@ -48,7 +48,7 @@
     {
       "id": 10,
       "name": "剣",
-      "source": "Assets/Art/Drafts/VFX/Weapons/SwordMotion_pixel_source_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Sword.png",
       "resource": "UI/PieceMotifs/Ready/Motif_10",
       "piece": "UI/CharacterPieces/Piece_10",
       "enemyPiece": "UI/CharacterPieces/Piece_10_Enemy",
@@ -63,7 +63,7 @@
     {
       "id": 11,
       "name": "槍",
-      "source": "Assets/Art/Drafts/VFX/Spear/Spear_pixel_source_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Spear.png",
       "resource": "UI/PieceMotifs/Ready/Motif_11",
       "piece": "UI/CharacterPieces/Piece_11",
       "enemyPiece": "UI/CharacterPieces/Piece_11_Enemy",
@@ -73,12 +73,12 @@
       "height": 1,
       "aspect": 1,
       "scale": 1.18,
-      "rotation": 35
+      "rotation": 0
     },
     {
       "id": 12,
       "name": "槌",
-      "source": "Assets/Art/Drafts/VFX/Weapons/HammerMotion_pixel_source_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Hammer.png",
       "resource": "UI/PieceMotifs/Ready/Motif_12",
       "piece": "UI/CharacterPieces/Piece_12",
       "enemyPiece": "UI/CharacterPieces/Piece_12_Enemy",
@@ -93,7 +93,7 @@
     {
       "id": 13,
       "name": "盾",
-      "source": "Assets/Art/Drafts/VFX/Shield/Shield_pixel_source_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Shield.png",
       "resource": "UI/PieceMotifs/Ready/Motif_13",
       "piece": "UI/CharacterPieces/Piece_13",
       "enemyPiece": "UI/CharacterPieces/Piece_13_Enemy",
@@ -108,7 +108,7 @@
     {
       "id": 14,
       "name": "甲",
-      "source": "Assets/Art/Generated/CharacterMotifs/Carapace.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Carapace.png",
       "resource": "UI/PieceMotifs/Ready/Motif_14",
       "piece": "UI/CharacterPieces/Piece_14",
       "enemyPiece": "UI/CharacterPieces/Piece_14_Enemy",
@@ -123,7 +123,7 @@
     {
       "id": 15,
       "name": "壁",
-      "source": "Assets/Art/Drafts/VFX/Wall/Wall_pixel_source_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Wall.png",
       "resource": "UI/PieceMotifs/Ready/Motif_15",
       "piece": "UI/CharacterPieces/Piece_15",
       "enemyPiece": "UI/CharacterPieces/Piece_15_Enemy",
@@ -138,7 +138,7 @@
     {
       "id": 16,
       "name": "石",
-      "source": "Assets/Art/Drafts/PieceMotifs/Stone_detailed_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Stone.png",
       "resource": "UI/PieceMotifs/Ready/Motif_16",
       "piece": "UI/CharacterPieces/Piece_16",
       "enemyPiece": "UI/CharacterPieces/Piece_16_Enemy",
@@ -153,7 +153,7 @@
     {
       "id": 17,
       "name": "弓",
-      "source": "Assets/Art/Generated/CharacterMotifs/Bow.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Bow.png",
       "resource": "UI/PieceMotifs/Ready/Motif_17",
       "piece": "UI/CharacterPieces/Piece_17",
       "enemyPiece": "UI/CharacterPieces/Piece_17_Enemy",
@@ -168,7 +168,7 @@
     {
       "id": 18,
       "name": "銃",
-      "source": "Assets/Art/Drafts/PieceMotifs/Gun_matchlock_v2_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Gun.png",
       "resource": "UI/PieceMotifs/Ready/Motif_18",
       "piece": "UI/CharacterPieces/Piece_18",
       "enemyPiece": "UI/CharacterPieces/Piece_18_Enemy",
@@ -183,7 +183,7 @@
     {
       "id": 19,
       "name": "火",
-      "source": "Assets/Art/Drafts/VFX/Fireball/Fireball_pixel_source_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Fire.png",
       "resource": "UI/PieceMotifs/Ready/Motif_19",
       "piece": "UI/CharacterPieces/Piece_19",
       "enemyPiece": "UI/CharacterPieces/Piece_19_Enemy",
@@ -198,7 +198,7 @@
     {
       "id": 20,
       "name": "水",
-      "source": "Assets/Art/Drafts/VFX/WaterHeal/WaterHeal_pixel_source_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Water.png",
       "resource": "UI/PieceMotifs/Ready/Motif_20",
       "piece": "UI/CharacterPieces/Piece_20",
       "enemyPiece": "UI/CharacterPieces/Piece_20_Enemy",
@@ -213,7 +213,7 @@
     {
       "id": 21,
       "name": "木",
-      "source": "Assets/Art/Drafts/PieceMotifs/Nature/Wood_tree_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Wood.png",
       "resource": "UI/PieceMotifs/Ready/Motif_21",
       "piece": "UI/CharacterPieces/Piece_21",
       "enemyPiece": "UI/CharacterPieces/Piece_21_Enemy",
@@ -228,7 +228,7 @@
     {
       "id": 22,
       "name": "土",
-      "source": "Assets/Art/Drafts/PieceMotifs/Nature/Soil_packed_mound_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Soil.png",
       "resource": "UI/PieceMotifs/Ready/Motif_22",
       "piece": "UI/CharacterPieces/Piece_22",
       "enemyPiece": "UI/CharacterPieces/Piece_22_Enemy",
@@ -243,7 +243,7 @@
     {
       "id": 23,
       "name": "午",
-      "source": "Assets/Art/Drafts/PieceMotifs/Animals/Horse_running_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Horse.png",
       "resource": "UI/PieceMotifs/Ready/Motif_23",
       "piece": "UI/CharacterPieces/Piece_23",
       "enemyPiece": "UI/CharacterPieces/Piece_23_Enemy",
@@ -258,7 +258,7 @@
     {
       "id": 24,
       "name": "酉",
-      "source": "Assets/Art/Generated/CharacterMotifs/Rooster.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Rooster.png",
       "resource": "UI/PieceMotifs/Ready/Motif_24",
       "piece": "UI/CharacterPieces/Piece_24",
       "enemyPiece": "UI/CharacterPieces/Piece_24_Enemy",
@@ -273,7 +273,7 @@
     {
       "id": 25,
       "name": "寅",
-      "source": "Assets/Art/Drafts/PieceMotifs/TigerMotif_fullbody_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Tiger.png",
       "resource": "UI/PieceMotifs/Ready/Motif_25",
       "piece": "UI/CharacterPieces/Piece_25",
       "enemyPiece": "UI/CharacterPieces/Piece_25_Enemy",
@@ -288,7 +288,7 @@
     {
       "id": 26,
       "name": "竜",
-      "source": "Assets/Art/Drafts/PieceMotifs/DragonMotif_fullbody_draft.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Dragon.png",
       "resource": "UI/PieceMotifs/Ready/Motif_26",
       "piece": "UI/CharacterPieces/Piece_26",
       "enemyPiece": "UI/CharacterPieces/Piece_26_Enemy",
@@ -303,7 +303,7 @@
     {
       "id": 27,
       "name": "鈴",
-      "source": "Assets/Art/Generated/CharacterMotifs/Bell.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Bell.png",
       "resource": "UI/PieceMotifs/Ready/Motif_27",
       "piece": "UI/CharacterPieces/Piece_27",
       "enemyPiece": "UI/CharacterPieces/Piece_27_Enemy",
@@ -318,7 +318,7 @@
     {
       "id": 28,
       "name": "糸",
-      "source": "Assets/Art/Generated/CharacterMotifs/Thread.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Thread.png",
       "resource": "UI/PieceMotifs/Ready/Motif_28",
       "piece": "UI/CharacterPieces/Piece_28",
       "enemyPiece": "UI/CharacterPieces/Piece_28_Enemy",
@@ -333,7 +333,7 @@
     {
       "id": 29,
       "name": "影",
-      "source": "Assets/Art/Generated/CharacterMotifs/Shadow.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Shadow.png",
       "resource": "UI/PieceMotifs/Ready/Motif_29",
       "piece": "UI/CharacterPieces/Piece_29",
       "enemyPiece": "UI/CharacterPieces/Piece_29_Enemy",
@@ -348,7 +348,7 @@
     {
       "id": 30,
       "name": "丑",
-      "source": "Assets/Art/Generated/CharacterMotifs/Ox.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Ox.png",
       "resource": "UI/PieceMotifs/Ready/Motif_30",
       "piece": "UI/CharacterPieces/Piece_30",
       "enemyPiece": "UI/CharacterPieces/Piece_30_Enemy",
@@ -363,7 +363,7 @@
     {
       "id": 31,
       "name": "電",
-      "source": "Assets/Art/Generated/CharacterMotifs/Electricity.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Electricity.png",
       "resource": "UI/PieceMotifs/Ready/Motif_31",
       "piece": "UI/CharacterPieces/Piece_31",
       "enemyPiece": "UI/CharacterPieces/Piece_31_Enemy",
@@ -378,7 +378,7 @@
     {
       "id": 32,
       "name": "風",
-      "source": "Assets/Art/Generated/CharacterMotifs/Wind.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Wind.png",
       "resource": "UI/PieceMotifs/Ready/Motif_32",
       "piece": "UI/CharacterPieces/Piece_32",
       "enemyPiece": "UI/CharacterPieces/Piece_32_Enemy",
@@ -393,7 +393,7 @@
     {
       "id": 33,
       "name": "鉄",
-      "source": "Assets/Art/Generated/CharacterMotifs/Iron.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Iron.png",
       "resource": "UI/PieceMotifs/Ready/Motif_33",
       "piece": "UI/CharacterPieces/Piece_33",
       "enemyPiece": "UI/CharacterPieces/Piece_33_Enemy",
@@ -408,7 +408,7 @@
     {
       "id": -1001,
       "name": "双剣",
-      "source": "Assets/Art/Generated/CharacterMotifs/DualSwords.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/DualSwords.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1001",
       "piece": "UI/CharacterPieces/Piece_F1001",
       "enemyPiece": "UI/CharacterPieces/Piece_F1001_Enemy",
@@ -423,7 +423,7 @@
     {
       "id": -1002,
       "name": "散弾",
-      "source": "Assets/Art/Generated/CharacterMotifs/ScatterShot.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/ScatterShot.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1002",
       "piece": "UI/CharacterPieces/Piece_F1002",
       "enemyPiece": "UI/CharacterPieces/Piece_F1002_Enemy",
@@ -438,7 +438,7 @@
     {
       "id": -1003,
       "name": "戦士",
-      "source": "Assets/Art/Generated/CharacterMotifs/Warrior.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Warrior.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1003",
       "piece": "UI/CharacterPieces/Piece_F1003",
       "enemyPiece": "UI/CharacterPieces/Piece_F1003_Enemy",
@@ -453,7 +453,7 @@
     {
       "id": -1004,
       "name": "衛兵",
-      "source": "Assets/Art/Generated/CharacterMotifs/Sentinel.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Sentinel.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1004",
       "piece": "UI/CharacterPieces/Piece_F1004",
       "enemyPiece": "UI/CharacterPieces/Piece_F1004_Enemy",
@@ -468,7 +468,7 @@
     {
       "id": -1005,
       "name": "鍛冶",
-      "source": "Assets/Art/Generated/CharacterMotifs/Forge.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Forge.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1005",
       "piece": "UI/CharacterPieces/Piece_F1005",
       "enemyPiece": "UI/CharacterPieces/Piece_F1005_Enemy",
@@ -483,7 +483,7 @@
     {
       "id": -1006,
       "name": "波",
-      "source": "Assets/Art/Generated/CharacterMotifs/Wave.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Wave.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1006",
       "piece": "UI/CharacterPieces/Piece_F1006",
       "enemyPiece": "UI/CharacterPieces/Piece_F1006_Enemy",
@@ -498,7 +498,7 @@
     {
       "id": -1007,
       "name": "磁石",
-      "source": "Assets/Art/Generated/CharacterMotifs/Magnet.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Magnet.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1007",
       "piece": "UI/CharacterPieces/Piece_F1007",
       "enemyPiece": "UI/CharacterPieces/Piece_F1007_Enemy",
@@ -513,7 +513,7 @@
     {
       "id": -1008,
       "name": "山",
-      "source": "Assets/Art/Generated/CharacterMotifs/Mountain.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Mountain.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1008",
       "piece": "UI/CharacterPieces/Piece_F1008",
       "enemyPiece": "UI/CharacterPieces/Piece_F1008_Enemy",
@@ -528,7 +528,7 @@
     {
       "id": -1009,
       "name": "炭",
-      "source": "Assets/Art/Generated/CharacterMotifs/Coal.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Coal.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1009",
       "piece": "UI/CharacterPieces/Piece_F1009",
       "enemyPiece": "UI/CharacterPieces/Piece_F1009_Enemy",
@@ -543,7 +543,7 @@
     {
       "id": -1010,
       "name": "要塞",
-      "source": "Assets/Art/Generated/CharacterMotifs/Fortress.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Fortress.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1010",
       "piece": "UI/CharacterPieces/Piece_F1010",
       "enemyPiece": "UI/CharacterPieces/Piece_F1010_Enemy",
@@ -558,7 +558,7 @@
     {
       "id": -1011,
       "name": "賽子",
-      "source": "Assets/Art/Generated/CharacterMotifs/Dice.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Dice.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1011",
       "piece": "UI/CharacterPieces/Piece_F1011",
       "enemyPiece": "UI/CharacterPieces/Piece_F1011_Enemy",
@@ -573,7 +573,7 @@
     {
       "id": -1012,
       "name": "雨",
-      "source": "Assets/Art/Generated/CharacterMotifs/Rain.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Rain.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1012",
       "piece": "UI/CharacterPieces/Piece_F1012",
       "enemyPiece": "UI/CharacterPieces/Piece_F1012_Enemy",
@@ -588,7 +588,7 @@
     {
       "id": -1013,
       "name": "砂",
-      "source": "Assets/Art/Generated/CharacterMotifs/Sand.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Sand.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1013",
       "piece": "UI/CharacterPieces/Piece_F1013",
       "enemyPiece": "UI/CharacterPieces/Piece_F1013_Enemy",
@@ -603,7 +603,7 @@
     {
       "id": -1014,
       "name": "草",
-      "source": "Assets/Art/Generated/CharacterMotifs/Grass.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Grass.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1014",
       "piece": "UI/CharacterPieces/Piece_F1014",
       "enemyPiece": "UI/CharacterPieces/Piece_F1014_Enemy",
@@ -618,7 +618,7 @@
     {
       "id": -1015,
       "name": "繭",
-      "source": "Assets/Art/Generated/CharacterMotifs/Cocoon.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Cocoon.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1015",
       "piece": "UI/CharacterPieces/Piece_F1015",
       "enemyPiece": "UI/CharacterPieces/Piece_F1015_Enemy",
@@ -633,7 +633,7 @@
     {
       "id": -1016,
       "name": "風鈴",
-      "source": "Assets/Art/Generated/CharacterMotifs/WindChime.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/WindChime.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1016",
       "piece": "UI/CharacterPieces/Piece_F1016",
       "enemyPiece": "UI/CharacterPieces/Piece_F1016_Enemy",
@@ -648,7 +648,7 @@
     {
       "id": -1017,
       "name": "灯",
-      "source": "Assets/Art/Generated/CharacterMotifs/Lantern.png",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Lantern.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1017",
       "piece": "UI/CharacterPieces/Piece_F1017",
       "enemyPiece": "UI/CharacterPieces/Piece_F1017_Enemy",
@@ -662,8 +662,8 @@
     },
     {
       "id": -20000,
-      "name": "砂偶",
-      "source": "Assets/Art/Generated/CharacterMotifs/Sand.png",
+      "name": "砂",
+      "source": "Assets/Art/Generated/CharacterMotifsPixel/Sand.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F20000",
       "piece": "UI/CharacterPieces/Piece_F20000",
       "enemyPiece": "UI/CharacterPieces/Piece_F20000_Enemy",

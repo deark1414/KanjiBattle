@@ -4,13 +4,13 @@ const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
 
 const root = path.resolve(__dirname, '../..');
-const manifest = require('../../Docs/Art/CharacterArtProduction.json');
+const manifest = require('../../Docs/Art/CharacterArtPixelProduction.json');
 const oldCatalog = require('./reviewed-motif-crops.json');
 const characters = require('../../Assets/Data/characters.json');
 const fusionNames = ['双剣','散弾','戦士','衛兵','鍛冶','波','磁石','山','炭','要塞','賽子','雨','砂','草','繭','風鈴','灯'];
 const roster = [...characters.map(c => ({ id:c.id, name:c.characterName })),
-  ...fusionNames.map((name,index) => ({ id:-1001-index, name })), {id:-20000,name:'砂偶'}];
-const rawDirectory = 'Assets/Art/Generated/CharacterMotifs';
+  ...fusionNames.map((name,index) => ({ id:-1001-index, name })), {id:-20000,name:'砂'}];
+const rawDirectory = 'Assets/Art/Generated/CharacterMotifsPixel';
 const pieceDirectory = 'Assets/Resources/UI/CharacterPieces';
 const motifDirectory = 'Assets/Resources/UI/PieceMotifs/Ready';
 
@@ -57,18 +57,20 @@ async function main() {
         if(!opaque || !clear)throw Error(`Not an isolated transparent image: ${item.name}`);
         const motif=document.createElement('canvas');motif.width=motif.height=512;
         const mc=motif.getContext('2d');mc.imageSmoothingEnabled=false;
-        const w=right-left+1,h=bottom-top+1,s=432/Math.max(w,h);
-        mc.drawImage(image,left,top,w,h,(512-w*s)/2,(512-h*s)/2,w*s,h*s);
+        const w=right-left+1,h=bottom-top+1,s=54/Math.max(w,h);
+        const logical=document.createElement('canvas');logical.width=logical.height=64;
+        const lc=logical.getContext('2d');lc.imageSmoothingEnabled=false;
+        const dw=Math.max(1,Math.round(w*s)),dh=Math.max(1,Math.round(h*s));
+        lc.drawImage(image,left,top,w,h,Math.floor((64-dw)/2),Math.floor((64-dh)/2),dw,dh);
+        mc.drawImage(logical,0,0,512,512);
         const pieces=[];
         for(const enemy of [false,true]){
-          const c=document.createElement('canvas');c.width=c.height=512;const ctx=c.getContext('2d');
+          const c=document.createElement('canvas');c.width=c.height=128;const ctx=c.getContext('2d');ctx.scale(.25,.25);
           const polygon=(points)=>{ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();};
-          ctx.save();ctx.shadowColor='#140d0780';ctx.shadowBlur=6;ctx.shadowOffsetY=5;
+          ctx.save();ctx.shadowColor='#140d0780';ctx.shadowBlur=0;ctx.shadowOffsetY=4;
           polygon([[256,20],[425,116],[473,481],[39,481],[87,116]]);ctx.fillStyle=enemy?'#5e1b14':'#684626';ctx.fill();ctx.restore();
           polygon([[256,29],[418,121],[460,470],[52,470],[94,121]]);
-          const face=ctx.createLinearGradient(100,70,410,480);face.addColorStop(0,enemy?'#c94e39':'#e6cf96');
-          face.addColorStop(.45,enemy?'#9b2d25':'#c9ad71');face.addColorStop(1,enemy?'#72251f':'#b69457');
-          ctx.fillStyle=face;ctx.fill();
+          ctx.fillStyle=enemy?'#a1372b':'#c9ad71';ctx.fill();
           ctx.save();ctx.clip();
           ctx.strokeStyle=enemy?'#e89e6b16':'#81562115';ctx.lineWidth=1.3;
           for(let n=0;n<25;n++){const x=60+n*17;ctx.beginPath();ctx.moveTo(x,40);ctx.bezierCurveTo(x+18,180,x-14,320,x+5,480);ctx.stroke();}
@@ -85,7 +87,8 @@ async function main() {
             ctx.fillStyle=enemy?'#fff2d7':'#301c11';
             ctx.fillText(ch,(m.actualBoundingBoxLeft-m.actualBoundingBoxRight)/2,(m.actualBoundingBoxAscent-m.actualBoundingBoxDescent)/2);ctx.restore();
           });
-          const small=document.createElement('canvas');small.width=small.height=256;small.getContext('2d').drawImage(c,0,0,256,256);
+          const small=document.createElement('canvas');small.width=small.height=256;
+          const output=small.getContext('2d');output.imageSmoothingEnabled=false;output.drawImage(c,0,0,256,256);
           pieces.push(small.toDataURL('image/png').split(',')[1]);
         }
         return {motif:motif.toDataURL('image/png').split(',')[1],pieces,opaque,clear,bounds:{left,top,right,bottom}};
@@ -100,7 +103,7 @@ async function main() {
       entries.push({...item,source,resource:motifPath.replace('Assets/Resources/','').replace('.png',''),
         piece:allyPath.replace('Assets/Resources/','').replace('.png',''),
         enemyPiece:enemyPath.replace('Assets/Resources/','').replace('.png',''),
-        u:0,v:0,width:1,height:1,aspect:1,scale:1.18,rotation:!generated.has(item.id)&&inherited?inherited.rotation:0});
+        u:0,v:0,width:1,height:1,aspect:1,scale:1.18,rotation:0});
       checks.push({id:item.id,name:item.name,source,bounds:result.bounds,transparentPixels:result.clear});
     }
     fs.writeFileSync(path.join(root,'Assets/Resources/UI/PieceMotifs/catalog.json'),JSON.stringify({entries},null,2)+'\n');
