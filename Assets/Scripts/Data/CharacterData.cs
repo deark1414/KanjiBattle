@@ -31,7 +31,10 @@ public enum SkillType
     ThreadPull,
     ShadowCopy,
     GuardAlly,
-    ExperienceBonus
+    ExperienceBonus,
+    ChainLightning,
+    WindShift,
+    IronAdapt
 }
 
 public enum CharacterCategory

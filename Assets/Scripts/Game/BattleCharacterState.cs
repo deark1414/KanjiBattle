@@ -11,6 +11,9 @@ public sealed class BattleCharacterState
     public bool IsDead { get; set; }
     public int NumberPassiveAttackBonusPercent { get; private set; }
     public int StunTurns { get; private set; }
+    public bool WindBoost { get; set; }
+    public bool WindSlow { get; set; }
+    public IronForm IronForm { get; set; }
 
     public void Initialize(CharacterData data, int level, bool isAlly)
     {
@@ -25,6 +28,8 @@ public sealed class BattleCharacterState
         IsDead = false;
         NumberPassiveAttackBonusPercent = 0;
         StunTurns = 0;
+        WindBoost = WindSlow = false;
+        IronForm = IronForm.Sword;
     }
 
     public int GetEffectiveAttack()

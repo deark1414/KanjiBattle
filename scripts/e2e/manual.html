@@ -11,7 +11,7 @@ button:disabled,select:disabled{opacity:.45}output{font-size:12px;overflow-wrap:
 </style>
 <header>
   <strong>KanjiBattle / DEBUG</strong>
-  <select id="preset" aria-label="初期状態" disabled><option value="standard">融合確認・勝利</option><option value="defeat">融合確認・敗北</option><option value="locked">融合解放前</option><option value="support">新キャラ・鈴糸影</option><option value="defense">守り・甲盾壁弓</option><option value="animals">干支・丑の育成支援</option></select>
+  <select id="preset" aria-label="初期状態" disabled><option value="standard">融合確認・勝利</option><option value="defeat">融合確認・敗北</option><option value="locked">融合解放前</option><option value="support">新キャラ・鈴糸影</option><option value="defense">守り・甲盾壁弓</option><option value="animals">干支・丑の育成支援</option><option value="elements">電・風・鉄</option></select>
   <button id="reset" title="デバッグ用の進行だけを選択した状態で初期化" disabled>初期化</button>
   <button id="formation" title="進行を保持して確認用の編成へ戻る" disabled>編成へ</button>
   <button id="defeat" title="確認用ステージの次の戦闘を敗北条件へ変更" disabled>次戦を強敵に</button>
@@ -71,7 +71,7 @@ document.querySelector('#defeat').onclick=()=>execute('nextDefeat').catch(()=>{}
   }
   await new Promise(resolve=>setTimeout(resolve,4500));
   const selected=new URLSearchParams(location.search).get('preset');
-  const valid=['standard','defeat','locked','support','defense','animals'];
+  const valid=['standard','defeat','locked','support','defense','animals','elements'];
   const explicit=valid.includes(selected);
   preset.value=explicit?selected:(localStorage.getItem(key)||'standard');
   await execute(explicit || !localStorage.getItem(key)?'seed':'resume',preset.value);

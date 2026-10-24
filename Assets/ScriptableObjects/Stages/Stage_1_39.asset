@@ -16,12 +16,12 @@ MonoBehaviour:
   stageId: 39
   chapterId: 8
   enemyPool:
-  - {fileID: 11400000, guid: b78b90014b2f3477b9c3178b6f091bb8, type: 2}
-  - {fileID: 11400000, guid: ac1fac6eefc69432e8ab46c3f0827b2f, type: 2}
-  - {fileID: 11400000, guid: db82ac29718264256aa4b5d49d4cc7d1, type: 2}
-  - {fileID: 11400000, guid: b78b90014b2f3477b9c3178b6f091bb8, type: 2}
-  - {fileID: 11400000, guid: ac1fac6eefc69432e8ab46c3f0827b2f, type: 2}
-  - {fileID: 11400000, guid: db82ac29718264256aa4b5d49d4cc7d1, type: 2}
+  - {fileID: 11400000, guid: 8bec765616db044dba5e0eca122b205b, type: 2}
+  - {fileID: 11400000, guid: c4bdf81b972a942e4929848d9a47b771, type: 2}
+  - {fileID: 11400000, guid: fb244f76b9d3d4d5aaa484dfa332eefa, type: 2}
+  - {fileID: 11400000, guid: 8bec765616db044dba5e0eca122b205b, type: 2}
+  - {fileID: 11400000, guid: c4bdf81b972a942e4929848d9a47b771, type: 2}
+  - {fileID: 11400000, guid: fb244f76b9d3d4d5aaa484dfa332eefa, type: 2}
   rewardStagePoints: 14
   slotCount: 6
   trapDamage: 40

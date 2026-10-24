@@ -11,7 +11,7 @@ public static class BattleMovementPlanner
 
     public static List<Vector2Int> FindNextMove(Vector2Int start, IReadOnlyList<Vector2Int> targets,
         SkillType attackSkill, CharacterCategory category, ISet<Vector2Int> friendlyCells,
-        ISet<Vector2Int> enemyCells, ISet<Vector2Int> terrain, int cols, int rows)
+        ISet<Vector2Int> enemyCells, ISet<Vector2Int> terrain, int cols, int rows, int movementModifier = 0)
     {
         if (targets == null || targets.Count == 0) return null;
         var friends = friendlyCells != null ? new HashSet<Vector2Int>(friendlyCells) : new HashSet<Vector2Int>();
@@ -33,7 +33,8 @@ public static class BattleMovementPlanner
 
             // Search legal turns rather than individual cells: animals can cross
             // allies within a two-step turn, but no unit can end on an occupied cell.
-            foreach (List<Vector2Int> move in CollectMoves(position, BattleMovementRules.GetMaxSteps(category), friends, blocked, cols, rows))
+            foreach (List<Vector2Int> move in CollectMoves(position,
+                Mathf.Max(1, BattleMovementRules.GetMaxSteps(category) + movementModifier), friends, blocked, cols, rows))
             {
                 Vector2Int destination = move[move.Count - 1];
                 if (firstMoves.ContainsKey(destination)) continue;

@@ -4,6 +4,47 @@ const groups = state => state.battle.plan?.groups || [];
 const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y})=>({id,x,y}));
 
 module.exports = [
+  {
+    id:"element-abilities",name:"電の連鎖減衰と上限・鉄3形態・風の有効期間",fixture:"elements",
+    async run(game) {
+      const initial=await game.deploy();
+      assert.deepEqual(initial.battle.originalIds,[31,32,33,23,10,20]);
+      const state=await game.request("elementProbe");
+      assert(state.battle.logs.some(log=>log.includes("電風鉄の能力チェック完了")));
+      await game.screenshot("element-abilities");
+    }
+  },
+  ...[undefined,{width:390,height:844}].map((viewport,index)=>({
+    id:index?"element-mobile":"element-battle",name:index?"電風鉄の実戦・縦長":"電風鉄の実戦・再戦復元",fixture:"elements",viewport,
+    async run(game) {
+      const initial=await game.deploy(); await game.start();
+      const observed=new Set();
+      await game.wait(state=>{
+        for(const log of state.battle.logs || []) observed.add(log);
+        return state.battle.result;
+      },"Element battle timed out.",120000);
+      assert([...observed].some(log=>log.includes("連鎖電撃")));
+      assert([...observed].some(log=>log.includes("追風") || log.includes("向風")));
+      await game.screenshot("element-result");
+      await game.named("RetryStageButton");
+      const state=await game.wait(current=>current.battle.deploying,"Element retry did not open.");
+      assert.deepEqual(state.battle.originalIds,initial.battle.originalIds);
+      assert(allies(state).every(unit=>unit.hp===unit.maxHP));
+    }
+  })),
+  {
+    id:"element-recruitment",name:"電風鉄の縁と加入・旧数字の除外・再読込",fixture:"standard",
+    async run(game) {
+      let state=await game.request("recruitElements");
+      for(const id of [31,32,33]) assert(state.owned.includes(id));
+      assert.equal(state.roster.length,26);
+      assert(!state.roster.some(id=>id>=4 && id<=9));
+      await game.page.waitForTimeout(1500); await game.page.reload();
+      await game.page.waitForFunction(()=>!!window.unityInstance,null,{timeout:120000});
+      await game.page.waitForTimeout(4500); state=await game.request("resume");
+      for(const id of [31,32,33]) assert(state.owned.includes(id));
+    }
+  },
   ...[
     {id:"animals-dead",name:"丑が撃破されても勝利経験値1.5倍・再戦で復元",fixture:"animals",bonus:1.5,killCow:true},
     {id:"animals-double",name:"丑2体の経験値倍率は重複しない",fixture:"animals-double",bonus:1.5},

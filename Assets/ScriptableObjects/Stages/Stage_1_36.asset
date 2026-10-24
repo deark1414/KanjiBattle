@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1df6bc30dc24f4ef8a24d39e608d3dda, type: 3}
   m_Name: Stage_1_36
   m_EditorClassIdentifier: Assembly-CSharp::StageData
-  stageName: "\u4E03\u306E\u9593"
+  stageName: "\u96FB\u306E\u9593"
   stageId: 36
   chapterId: 8
   enemyPool:
-  - {fileID: 11400000, guid: b78b90014b2f3477b9c3178b6f091bb8, type: 2}
-  - {fileID: 11400000, guid: b78b90014b2f3477b9c3178b6f091bb8, type: 2}
-  - {fileID: 11400000, guid: 021e01b73df88486c84be7643b0e0a26, type: 2}
-  - {fileID: 11400000, guid: c25f44457639447e5bf49a2ef3a74b3b, type: 2}
-  - {fileID: 11400000, guid: 6c216b850f67847ccb6bf646b16f4876, type: 2}
+  - {fileID: 11400000, guid: 8bec765616db044dba5e0eca122b205b, type: 2}
+  - {fileID: 11400000, guid: 8bec765616db044dba5e0eca122b205b, type: 2}
+  - {fileID: 11400000, guid: c19d7a2070dee40bdb10bdd1e03c43f1, type: 2}
+  - {fileID: 11400000, guid: 1e8376bc251e144439579c16721a02dd, type: 2}
+  - {fileID: 11400000, guid: 2a2c1d2944fb44cbc86f2b832147d0e1, type: 2}
   - {fileID: 11400000, guid: 76349d043ec8445949168a7c39201e9e, type: 2}
   rewardStagePoints: 12
   slotCount: 6

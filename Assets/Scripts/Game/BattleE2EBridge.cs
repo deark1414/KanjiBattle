@@ -34,7 +34,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public int protocol = 1; public string requestId; public string error;
         public Control[] controls; public BattleState battle; public int[] formation; public int[] owned;
         public int[] discovered; public bool fusionUnlocked; public bool canUnlockFusion; public int stagePoints;
-        public int level; public int experience; public int baseBattleExperience;
+        public int level; public int experience; public int baseBattleExperience; public int[] roster;
     }
 
     private StageData fixtureStage;
@@ -65,6 +65,8 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "recruitSupport": ProbeRecruitment(new[] { 27, 28, 29 }, 35); break;
                 case "recruitCow": ProbeRecruitment(new[] { 30 }, 80); break;
                 case "defeatCow": FindFirstObjectByType<BattleManager>().DefeatExperienceUnit(); break;
+                case "elementProbe": FindFirstObjectByType<BattleManager>().ProbeElementSkills(); break;
+                case "recruitElements": ProbeRecruitment(new[] { 31, 32, 33 }, 100); break;
                 default: throw new ArgumentException("Unknown E2E action: " + request.action);
             }
         }
@@ -124,6 +126,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         if (animals) names = new[] { "丑", "午", "酉", "寅", "剣", "水" };
         if (kind == "animals-double") names = new[] { "丑", "丑", "午", "酉", "剣", "水" };
         if (kind == "animals-enemy") names = new[] { "午", "酉", "寅", "剣", "槍", "水" };
+        if (kind == "elements") names = new[] { "電", "風", "鉄", "午", "剣", "水" };
         if (PlayerProgressStore.GetString(FixtureKey) == "locked") names = names.Take(4).ToArray();
         CharacterData[] party = names.Select(name => database.characters.First(data => data.characterName == name)).ToArray();
         foreach (CharacterData data in party) PlayerInventory.Instance.AddCharacter(data);
@@ -165,6 +168,17 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 PlayerInventory.Instance.AddCharacter(database.GetById(30));
             }
         }
+        if (kind == "elements")
+        {
+            fixtureStage.stageName = "電・風・鉄の確認";
+            fixtureStage.chapterId = 2;
+            fixtureStage.enemyPool = new List<CharacterData>
+            {
+                database.GetById(10), database.GetById(10), database.GetById(10),
+                database.GetById(10), database.GetById(10), database.GetById(32)
+            };
+            fixtureStage.enemyLevel = 20;
+        }
         fixtureStage.slotCount = party.Length;
         fixtureStage.trapCount = 0;
         fixtureStage.reinforcementEnemy = new List<CharacterData>();
@@ -193,6 +207,8 @@ public sealed class BattleE2EBridge : MonoBehaviour
             fusionUnlocked = FacilityManager.Instance.IsFusionUnlocked(), canUnlockFusion = FacilityManager.Instance.CanUnlock(fusion),
             stagePoints = GameManager.Instance.StagePoints,
             level = PlayerInventory.Instance.PlayerLevel, experience = PlayerInventory.Instance.PlayerExperience,
+            roster = Resources.Load<CharacterDatabase>("CharacterDatabase").characters.Where(data => !data.isBoss)
+                .Select(data => data.characterId).OrderBy(id => id).ToArray(),
             baseBattleExperience = fixtureStage == null ? 0 : PlayerInventory.Instance.GetEffectiveBattleExperienceReward(fixtureStage)
         };
     }

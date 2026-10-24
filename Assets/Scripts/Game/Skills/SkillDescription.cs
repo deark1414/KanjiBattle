@@ -37,7 +37,7 @@ public static class SkillDescription
             builder.Append($"\n肩代わり率: {data.skillPower * 100:0.#}%");
         if (skillType == SkillType.ExperienceBonus)
             builder.Append($"\n経験値倍率: ×{data.skillPower:0.#}");
-        if (data.skillPower > 0f && skillType is not (SkillType.NumberPassive or SkillType.BellEcho or SkillType.ShadowCopy or SkillType.GuardAlly or SkillType.Shield or SkillType.ExperienceBonus))
+        if (data.skillPower > 0f && skillType is not (SkillType.NumberPassive or SkillType.BellEcho or SkillType.ShadowCopy or SkillType.GuardAlly or SkillType.Shield or SkillType.ExperienceBonus or SkillType.WindShift))
         {
             builder.Append($"\n威力補正: x{data.skillPower:0.##}");
         }
@@ -62,6 +62,7 @@ public static class SkillDescription
             && skillType != SkillType.GuardAlly
             && skillType != SkillType.Shield
             && skillType != SkillType.ExperienceBonus
+            && skillType != SkillType.WindShift
             && skillType != SkillType.Armor;
     }
 
@@ -88,6 +89,9 @@ public static class SkillDescription
             SkillType.Shield => "堅守",
             SkillType.GuardAlly => "肩代わり",
             SkillType.ExperienceBonus => "育成支援",
+            SkillType.ChainLightning => "連鎖電撃",
+            SkillType.WindShift => "風向操作",
+            SkillType.IronAdapt => "武装変形",
             SkillType.Wall => "壁",
             SkillType.Soil => "土罠",
             SkillType.Fireball => "火球",
@@ -124,6 +128,9 @@ public static class SkillDescription
             SkillType.Shield => "自分が受けるダメージを、防御計算後さらに20%軽減する。反射はしない。",
             SkillType.GuardAlly => "隣接8マスの味方の軽減後ダメージの一部を肩代わりする。複数体いても1体だけが担当。移した分は再軽減・再転送・反射しない。残りHPを超える肩代わりはできない。",
             SkillType.ExperienceBonus => "出撃した戦闘の勝利経験値を増やす。撃破されても有効。複数体いても最大倍率だけを適用し、施設倍率と掛け合わせる。所持だけ・敵側・敗北・訓練・縁・戦果には効果なし。",
+            SkillType.ChainLightning => "3マス以内の敵へ電撃。隣接8マスの未命中の敵へ最大4体まで連鎖し、威力は毎回75%になる。味方には命中しない。",
+            SkillType.WindShift => "ターン開始時、移動を増やせば攻撃圏へ届く味方がいれば自分と味方1体の移動+1。それ以外は敵1体の移動-1。最低移動1、そのターンのみ、同効果は重複しない。",
+            SkillType.IronAdapt => "行動開始時、HP半分以下なら被害25%軽減の盾。それ以外は扇状に敵2体以上で剣、槍が届けば槍、届かなければ剣で接近。形態は次の行動まで維持する。",
             SkillType.Wall => "高い耐久で前線を支える。",
             SkillType.Soil => "周囲5x5の候補から最大2マスに土の罠を設置する。土以外が踏むと設置者の攻撃力に応じたダメージを受け、立ち続けるとターンごとに再びダメージを受ける。",
             SkillType.Fireball => "周囲2マスの敵に防御無視の火球を放つ。味方と水を越える。",

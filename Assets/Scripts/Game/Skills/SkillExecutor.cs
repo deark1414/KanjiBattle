@@ -27,7 +27,7 @@ public static class SkillExecutor
         }
 
         if (skillType is SkillType.Counter or SkillType.AreaCounter or SkillType.NumberPassive
-            or SkillType.BellEcho or SkillType.GuardAlly or SkillType.Shield or SkillType.Armor or SkillType.ExperienceBonus)
+            or SkillType.BellEcho or SkillType.GuardAlly or SkillType.Shield or SkillType.Armor or SkillType.ExperienceBonus or SkillType.WindShift)
         {
             return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.PassiveOrReactiveSkill);
         }
@@ -62,6 +62,24 @@ public static class SkillExecutor
     {
         SkillType skillType = caster.data.skillType;
         bool executed;
+        if (skillType == SkillType.ChainLightning)
+            return ElementSkillExecutor.ExecuteLightning(caster, target, bm);
+        if (skillType == SkillType.IronAdapt)
+        {
+            var context = new SkillContext(bm, caster, target);
+            SkillType form = ElementSkillExecutor.AttackSkill(caster);
+            if (form == SkillType.Slash && CanSwordSlashHit(context))
+            {
+                bm?.PlaySkillVfx(caster, target, SkillType.Slash);
+                return ExecuteSwordSlash(context);
+            }
+            if (form == SkillType.Spear && CanSpearPierceHit(context))
+            {
+                bm?.PlaySkillVfx(caster, target, SkillType.Spear);
+                return ExecuteSpearPierce(context);
+            }
+            return false;
+        }
         if (skillType is SkillType.ThreadPull or SkillType.ShadowCopy)
             return SupportSkillExecutor.Execute(caster, target, bm);
         if (skillType is SkillType.DoubleSlash or SkillType.ScatterShot)
@@ -169,7 +187,8 @@ public static class SkillExecutor
         var friends = new HashSet<Vector2Int>();
         foreach (BattleCharacter character in bm.gridMap.Values)
             if (character != null && !character.isDead && character.isAlly == caster.isAlly) friends.Add(character.gridPos);
-        return BattleRangeService.CanTargetCell(caster.data.skillType, caster.gridPos, target.gridPos, bm.Cols, bm.Rows, friends);
+        if (caster.data.skillType == SkillType.IronAdapt && caster.IronForm == IronForm.Shield) return false;
+        return BattleRangeService.CanTargetCell(ElementSkillExecutor.AttackSkill(caster), caster.gridPos, target.gridPos, bm.Cols, bm.Rows, friends);
     }
 
     private static bool IsCounterEligibleForVfxReview(SkillType skillType)

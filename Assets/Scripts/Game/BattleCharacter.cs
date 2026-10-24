@@ -19,6 +19,10 @@ public class BattleCharacter : MonoBehaviour
     public int defense { get => state.Defense; set => state.Defense = value; }
     public int maxHP => state.MaxHP;
     public bool isDead { get => state.IsDead; set => state.IsDead = value; }
+    public bool WindBoost { get => state.WindBoost; set => state.WindBoost = value; }
+    public bool WindSlow { get => state.WindSlow; set => state.WindSlow = value; }
+    public int MovementModifier => (WindBoost ? 1 : 0) - (WindSlow ? 1 : 0);
+    public IronForm IronForm { get => state.IronForm; set => state.IronForm = value; }
 
     [Header("UI")]
     [SerializeField] private Image background;
@@ -186,6 +190,10 @@ if (background != null)
             dmg = BattleDamageRules.ReduceByShield(dmg);
             bm?.PlayDefensiveVfx(this, SkillType.Shield);
         }
+
+        if (origin != BattleDamageOrigin.Transferred && data != null
+            && data.skillType == SkillType.IronAdapt && IronForm == IronForm.Shield)
+            dmg = Mathf.Max(1, Mathf.FloorToInt(dmg * 0.75f));
 
         if (origin == BattleDamageOrigin.Direct && bm != null)
         {

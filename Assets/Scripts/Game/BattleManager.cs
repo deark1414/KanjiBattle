@@ -587,21 +587,26 @@ public partial class BattleManager : MonoBehaviour
             
             AddLog($"--- ターン {turn} ---");
 
+            ElementSkillExecutor.ApplyWind(this, true, impassableCells);
+
             ApplyNumberPassivesAtTurnStart("味方", allies, turn, true);
 
             foreach (var ally in new List<BattleCharacter>(allies))
             {
                 if (ally != null) DoAction(ally, "味方");
-                yield return BattleWait(0.3f);
+                yield return BattleWait(ElementActionDelay(ally));
             }
+            ElementSkillExecutor.EndSideTurn(this, true);
 
             ApplyNumberPassivesAtTurnStart("敵", enemies, turn, false);
+            ElementSkillExecutor.ApplyWind(this, false, impassableCells);
 
             foreach (var enemy in new List<BattleCharacter>(enemies))
             {
                 if (enemy != null) DoAction(enemy, "敵");
-                yield return BattleWait(0.3f);
+                yield return BattleWait(ElementActionDelay(enemy));
             }
+            ElementSkillExecutor.EndSideTurn(this, false);
 
             // 土の罠による継続ダメージ
             foreach (var bc in new List<BattleCharacter>(allies))
@@ -964,6 +969,8 @@ public partial class BattleManager : MonoBehaviour
             return;
         }
 
+        if (character.data.skillType == SkillType.IronAdapt)
+            ElementSkillExecutor.SelectIronForm(character, this);
         BattleCharacter skillTarget = FindSkillTarget(character);
 
         // ドラゴンは特殊処理
@@ -999,9 +1006,9 @@ public partial class BattleManager : MonoBehaviour
             (other.isAlly == character.isAlly ? friends : opponents).Add(other.gridPos);
         }
         SkillType movementSkill = BattleActionRules.IsReliableRoleSkill(character.data.skillType)
-            && character.data.skillType != SkillType.WaterHeal ? character.data.skillType : SkillType.None;
+            && character.data.skillType != SkillType.WaterHeal ? ElementSkillExecutor.AttackSkill(character) : SkillType.None;
         List<Vector2Int> path = BattleMovementPlanner.FindNextMove(character.gridPos, opponents.ToList(), movementSkill,
-            character.data.category, friends, opponents, impassableCells, cols, rows);
+            character.data.category, friends, opponents, impassableCells, cols, rows, character.MovementModifier);
         if (path != null && path.Count > 1)
             MoveCharacter(character, path, path.Count - 1, side);
         else
@@ -1014,6 +1021,11 @@ public partial class BattleManager : MonoBehaviour
 
         switch (character.data.skillType)
         {
+            case SkillType.ChainLightning:
+                return TargetingService.FindEnemyTarget(this, character, SkillType.ChainLightning);
+            case SkillType.IronAdapt:
+                return character.IronForm == IronForm.Sword ? TargetingService.FindSwordTarget(this, character)
+                    : character.IronForm == IronForm.Spear ? TargetingService.FindSpearTarget(this, character) : null;
             case SkillType.ThreadPull:
                 return TargetingService.FindEnemyTarget(this, character, SkillType.ThreadPull);
             case SkillType.ShadowCopy:

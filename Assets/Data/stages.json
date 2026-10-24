@@ -804,14 +804,14 @@
   {
     "stageId": 36,
     "fileName": "Stage_1_36",
-    "stageName": "七の間",
+    "stageName": "電の間",
     "chapterId": 8,
     "enemyIds": [
-      7,
-      7,
-      4,
-      5,
-      6,
+      31,
+      31,
+      19,
+      20,
+      21,
       25
     ],
     "rewardStagePoints": 12,
@@ -829,14 +829,14 @@
   {
     "stageId": 37,
     "fileName": "Stage_1_37",
-    "stageName": "八の間",
+    "stageName": "風の間",
     "chapterId": 8,
     "enemyIds": [
-      8,
-      8,
-      7,
-      4,
-      5,
+      32,
+      32,
+      31,
+      17,
+      20,
       24
     ],
     "rewardStagePoints": 12,
@@ -854,14 +854,14 @@
   {
     "stageId": 38,
     "fileName": "Stage_1_38",
-    "stageName": "九の間",
+    "stageName": "鉄の間",
     "chapterId": 8,
     "enemyIds": [
-      9,
-      9,
-      8,
-      7,
-      6,
+      33,
+      33,
+      32,
+      31,
+      13,
       25
     ],
     "rewardStagePoints": 14,
@@ -882,12 +882,12 @@
     "stageName": "総力戦",
     "chapterId": 8,
     "enemyIds": [
-      7,
-      8,
-      9,
-      7,
-      8,
-      9
+      31,
+      32,
+      33,
+      31,
+      32,
+      33
     ],
     "rewardStagePoints": 14,
     "slotCount": 6,

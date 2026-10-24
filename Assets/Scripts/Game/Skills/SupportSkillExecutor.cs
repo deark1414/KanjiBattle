@@ -30,7 +30,7 @@ public static class SupportSkillExecutor
             if (healing ? target.isAlly != caster.isAlly || target.currentHP >= target.maxHP : target.isAlly == caster.isAlly) return;
             var friends = new System.Collections.Generic.HashSet<Vector2Int>(battle.gridMap.Values
                 .Where(unit => unit != null && !unit.isDead && unit.isAlly == caster.isAlly).Select(unit => unit.gridPos));
-            if (!BattleRangeService.CanTargetCell(skill, caster.gridPos, target.gridPos, battle.Cols, battle.Rows, friends)) return;
+            if (!BattleRangeService.CanTargetCell(ElementSkillExecutor.AttackSkill(caster), caster.gridPos, target.gridPos, battle.Cols, battle.Rows, friends)) return;
         }
         // At most one repeat per action; repeats bypass this entry point to avoid chains.
         BattleCharacter bell = battle.gridMap.Values.Where(unit => CanEcho(unit, caster))

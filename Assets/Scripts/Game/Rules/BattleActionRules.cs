@@ -4,5 +4,6 @@ public static class BattleActionRules
     public static bool IsReliableRoleSkill(SkillType skill) => skill is
         SkillType.Slash or SkillType.Spear or SkillType.Arrow or SkillType.Gun
         or SkillType.Stone or SkillType.Fireball or SkillType.WaterHeal
-        or SkillType.DoubleSlash or SkillType.ScatterShot or SkillType.ThreadPull or SkillType.ShadowCopy;
+        or SkillType.DoubleSlash or SkillType.ScatterShot or SkillType.ThreadPull or SkillType.ShadowCopy
+        or SkillType.ChainLightning or SkillType.IronAdapt;
 }

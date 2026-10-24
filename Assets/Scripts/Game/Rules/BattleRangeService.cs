@@ -15,7 +15,7 @@ public static class BattleRangeService
         if (skill == SkillType.WaterHeal) return distance <= 1;
         if (distance == 0) return false;
         if (skill is SkillType.Stone or SkillType.Fireball or SkillType.ThreadPull) return distance <= 2;
-        if (skill == SkillType.ScatterShot) return distance <= 3;
+        if (skill is SkillType.ScatterShot or SkillType.ChainLightning) return distance <= 3;
         if (skill is not (SkillType.Arrow or SkillType.Gun or SkillType.Spear)) return distance == 1;
 
         Vector2Int delta = to - from;
@@ -47,6 +47,9 @@ public static class BattleRangeService
         var cells = new List<Vector2Int>();
         switch (skillType)
         {
+            case SkillType.ChainLightning:
+                AddBox(cells, caster, 3);
+                break;
             case SkillType.Stone:
             case SkillType.ThreadPull:
             case SkillType.Fireball:
@@ -99,6 +102,7 @@ public static class BattleRangeService
                 if (target.HasValue) cells.AddRange(GetSwordWedgeCells(caster, target.Value - caster));
                 break;
             case SkillType.StunBlow:
+            case SkillType.ChainLightning:
             case SkillType.ThreadPull:
             case SkillType.ShadowCopy:
             case SkillType.TigerTwinClaw:
