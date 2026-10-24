@@ -83,5 +83,61 @@ namespace KanjiBattle.Editor
                     throw new Exception("Missing fusion art: " + recipe.Name);
             Debug.Log("[CharacterArtImporter] 45 motifs, 90 pieces, all base and fusion characters wired. Passed.");
         }
+
+        [Serializable]
+        private sealed class ReferenceAudit
+        {
+            public ReferenceAuditEntry[] entries;
+        }
+
+        [Serializable]
+        private sealed class ReferenceAuditEntry
+        {
+            public int id;
+            public string name, dataAsset, allyPiece, enemyPiece, motif, source;
+            public int motifWidth, motifHeight;
+            public bool matchesCatalog;
+        }
+
+        [MenuItem("KanjiBattle/Art/Export Runtime Art References")]
+        public static void ExportReferenceAudit()
+        {
+            var database = Resources.Load<CharacterDatabase>("CharacterDatabase");
+            var rows = CharacterArtCatalog.Entries.Select(entry =>
+            {
+                var character = database.characters.FirstOrDefault(value => value.characterId == entry.id);
+                bool temporary = character == null;
+                if (temporary)
+                {
+                    var recipe = BattleFusionRules.GetRecipe(entry.id);
+                    character = recipe == null
+                        ? CharacterData.CreateBattleCopy(entry.name, SkillType.None, 1, 1, 0)
+                        : CharacterData.CreateBattleFusion(recipe, recipe.Materials.Select(name =>
+                            database.characters.First(value => value.characterName == name)).ToArray(), 1);
+                }
+                var texture = Resources.Load<Texture2D>(entry.resource);
+                var row = new ReferenceAuditEntry
+                {
+                    id = entry.id, name = entry.name,
+                    dataAsset = temporary ? "runtime: CharacterData factory" : AssetDatabase.GetAssetPath(character),
+                    allyPiece = AssetDatabase.GetAssetPath(character.icon),
+                    enemyPiece = AssetDatabase.GetAssetPath(character.enemyIcon),
+                    motif = AssetDatabase.GetAssetPath(texture), source = entry.source,
+                    motifWidth = texture == null ? 0 : texture.width,
+                    motifHeight = texture == null ? 0 : texture.height,
+                    matchesCatalog = character.icon != null && character.enemyIcon != null && texture != null
+                        && AssetDatabase.GetAssetPath(character.icon) == AssetPath(entry.piece)
+                        && AssetDatabase.GetAssetPath(character.enemyIcon) == AssetPath(entry.enemyPiece)
+                        && AssetDatabase.GetAssetPath(texture) == AssetPath(entry.resource)
+                };
+                if (temporary) UnityEngine.Object.DestroyImmediate(character);
+                return row;
+            }).ToArray();
+            string output = Path.GetFullPath(Path.Combine(Application.dataPath, "../tmp/character-art/reference-audit.json"));
+            Directory.CreateDirectory(Path.GetDirectoryName(output));
+            File.WriteAllText(output, JsonUtility.ToJson(new ReferenceAudit { entries = rows }, true));
+            if (rows.Any(row => !row.matchesCatalog)) throw new Exception("Art reference mismatch. See " + output);
+            Debug.Log($"[CharacterArtAudit] {rows.Length} loaded art references match the catalog. Passed. {output}");
+        }
     }
 }
