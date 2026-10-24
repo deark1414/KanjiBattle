@@ -1350,7 +1350,7 @@
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1011.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1011_Enemy.png",
       "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1011.png",
-      "source": "Assets/Art/Generated/CharacterMotifsReviewed/DiceReviewed.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/DiceGeometryV2.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,

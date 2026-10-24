@@ -558,7 +558,7 @@
     {
       "id": -1011,
       "name": "賽子",
-      "source": "Assets/Art/Generated/CharacterMotifsReviewed/DiceReviewed.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/DiceGeometryV2.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1011",
       "piece": "UI/CharacterPieces/Piece_F1011",
       "enemyPiece": "UI/CharacterPieces/Piece_F1011_Enemy",

@@ -39,15 +39,34 @@
     },
     {
       "id": -1011,
-      "key": "DiceReviewed",
+      "key": "DiceGeometryV2",
+      "prompt": "Use case: precise-object-edit. Make ONE tiny localized correction in this three-wooden-dice sprite. On the UPPER die only, its RIGHT-facing vertical side currently shows ONE brown pip, duplicating the one on its top face. Replace that single pip on the upper die's RIGHT-facing side with TWO separate brown recessed pips arranged diagonally along that face. Leave the upper die top face with ONE pip, and left face with THREE pips. Do NOT change ANY cube edges, vertex positions, orientation, geometry, sizes, wood shading, grain, highlights, arrangement, transparency, outlines, pixel resolution or the two lower dice. Preserve the corrected straight, parallel cube edges exactly. Change ONLY the upper die right face's pip count from one to two. Genuine transparent background, same fine pixel art.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-3ba9ea8a-0754-4645-8e82-a36f20381c38.png",
       "refs": [
-        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Dice.png",
-        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_01.png"
+        "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-89015ff8-d045-4986-a2bc-8a832bb1585f.png"
       ],
-      "change": "Image 1 is the edit target. Keep a compact group of THREE dice, but change their material and pixel language to match the golden honey WOODEN number-die motif in reference Image 2: warm golden wood grain, caramel bevelled edges, dark brown recessed circular pips. Not ivory/bone, no red pips. Three main visible faces show respectively ONE central pip, TWO diagonal pips, THREE diagonal pips, evoking the game's 一 二 三 number characters. Preserve a compact three-die grouping and true transparency. Match the reference's wooden number-piece design closely, with moderate fine pixel detail.",
-      "prompt": "Use case: precise-object-edit. Asset type: transparent in-game motif sprite for KanjiBattle. Style: fine, deliberate hand-shaded Japanese fantasy pixel art, approximately 128x128 logical sprite enlarged cleanly; clearly finer detail than chunky 64px pixel icons, but still genuine square-pixel edges, no smooth vector edges or painterly blur. Match the existing reference game's material palette and restrained outlines. Keep one isolated sprite composition centered with 12 percent safe transparent margin, complete silhouette, no text or labels, no UI, no backdrop, no cast floor shadow, no halo. Image 1 is the edit target. Keep a compact group of THREE dice, but change their material and pixel language to match the golden honey WOODEN number-die motif in reference Image 2: warm golden wood grain, caramel bevelled edges, dark brown recessed circular pips. Not ivory/bone, no red pips. Three main visible faces show respectively ONE central pip, TWO diagonal pips, THREE diagonal pips, evoking the game's 一 二 三 number characters. Preserve a compact three-die grouping and true transparency. Match the reference's wooden number-piece design closely, with moderate fine pixel detail.",
-      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-387e3db2-e1b3-4c27-abcc-919523b4c99b.png",
-      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/DiceReviewed.png"
+      "previous": {
+        "id": -1011,
+        "key": "DiceGeometry",
+        "prompt": "Use case: precise-object-edit. Edit target: reference image 1, the three wooden dice sprite. Correct the distorted cube geometry ONLY, preserving its warm honey wood material, brown recessed pips, pixel art style, transparent background, and triangular arrangement of three dice. Geometry requirement: THREE IDENTICAL-SIZED PERFECT CUBES in the SAME strict orthographic isometric orientation. Each cube has three exactly straight edge families: vertical, 30 degrees down-left, 30 degrees down-right. Opposite edges of each face are perfectly parallel; each visible face is a consistent planar rhombus; all three axis lengths are equal. NO swollen surfaces, bulging wood, crooked edges, bent corners, trapezoidal faces, stretched blocks, rounded pill shapes, or perspective warping. At a logical 128px canvas, use approximately 42px wide by 48px tall cubes, with a 42x24px top rhombus and 24px straight vertical edges. Use the same cube geometry three times, arranged one above and two below, fully separate with clean gaps, at least 8px safe margin. Use tiny straight bevels, not rounded corners. Pips must follow the perspective of each plane. Top die faces: top ONE, left TWO, right THREE. Lower-left die: top TWO, left ONE, right THREE. Lower-right die: top THREE, left ONE, right TWO. No repeated number on adjacent faces of a die. Brown pips only, no red. Wood grain subordinate to precise clean geometry, fine 128px logical pixel detail, not soft painting. Single transparent sprite, no floor, no shadows outside cubes, no text, no labels, no UI. The result should read as three geometrically regular wooden gaming dice.",
+        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-89015ff8-d045-4986-a2bc-8a832bb1585f.png",
+        "refs": [
+          "Assets/Art/Generated/CharacterMotifsReviewed/DiceReviewed.png"
+        ]
+      },
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/DiceGeometryV2.png",
+      "previousVersion": {
+        "id": -1011,
+        "key": "DiceReviewed",
+        "refs": [
+          "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Dice.png",
+          "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_01.png"
+        ],
+        "change": "Image 1 is the edit target. Keep a compact group of THREE dice, but change their material and pixel language to match the golden honey WOODEN number-die motif in reference Image 2: warm golden wood grain, caramel bevelled edges, dark brown recessed circular pips. Not ivory/bone, no red pips. Three main visible faces show respectively ONE central pip, TWO diagonal pips, THREE diagonal pips, evoking the game's 一 二 三 number characters. Preserve a compact three-die grouping and true transparency. Match the reference's wooden number-piece design closely, with moderate fine pixel detail.",
+        "prompt": "Use case: precise-object-edit. Asset type: transparent in-game motif sprite for KanjiBattle. Style: fine, deliberate hand-shaded Japanese fantasy pixel art, approximately 128x128 logical sprite enlarged cleanly; clearly finer detail than chunky 64px pixel icons, but still genuine square-pixel edges, no smooth vector edges or painterly blur. Match the existing reference game's material palette and restrained outlines. Keep one isolated sprite composition centered with 12 percent safe transparent margin, complete silhouette, no text or labels, no UI, no backdrop, no cast floor shadow, no halo. Image 1 is the edit target. Keep a compact group of THREE dice, but change their material and pixel language to match the golden honey WOODEN number-die motif in reference Image 2: warm golden wood grain, caramel bevelled edges, dark brown recessed circular pips. Not ivory/bone, no red pips. Three main visible faces show respectively ONE central pip, TWO diagonal pips, THREE diagonal pips, evoking the game's 一 二 三 number characters. Preserve a compact three-die grouping and true transparency. Match the reference's wooden number-piece design closely, with moderate fine pixel detail.",
+        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-387e3db2-e1b3-4c27-abcc-919523b4c99b.png",
+        "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/DiceReviewed.png"
+      }
     }
   ]
 }
