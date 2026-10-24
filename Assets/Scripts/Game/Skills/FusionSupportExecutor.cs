@@ -56,7 +56,8 @@ public static class FusionSupportExecutor
     public static void EndSideTurn(BattleManager battle, bool ally)
     {
         foreach (BattleCharacter unit in battle.gridMap.Values)
-            if (Living(unit) && unit.isAlly == ally) unit.TickAttackBuffs();
+            if (Living(unit) && unit.isAlly == ally)
+                unit.TickAttackBuffs();
     }
 
     private static bool Living(BattleCharacter unit) => unit != null && !unit.isDead && unit.currentHP > 0;

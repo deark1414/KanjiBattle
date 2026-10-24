@@ -179,7 +179,7 @@ class GameHarness {
   writeArtifacts() {
     fs.writeFileSync(path.join(this.output, "console.log"), this.logs.join("\n"));
     fs.writeFileSync(path.join(this.output, "errors.json"), JSON.stringify(this.errors, null, 2));
-    fs.writeFileSync(path.join(this.output, "state.json"), JSON.stringify(this.state, null, 2));
+    fs.writeFileSync(path.join(this.output, "state.json"), JSON.stringify(this.state ?? null, null, 2));
   }
 }
 

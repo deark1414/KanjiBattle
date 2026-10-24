@@ -26,6 +26,15 @@ public class BattleCharacter : MonoBehaviour
     public int AttackBuffPercent => state.AttackBuffPercent;
     public void ApplyAttackBuff(BattleAttackBuff source, int percent, int turns) => state.ApplyAttackBuff(source, percent, turns);
     public void TickAttackBuffs() => state.TickAttackBuffs();
+    public bool CoalAwake { get => state.CoalAwake; set => state.CoalAwake = value; }
+    public bool CocoonShield { get => state.CocoonShield; set => state.CocoonShield = value; }
+    public int DiceDefensePercent { get => state.DiceDefensePercent; set => state.DiceDefensePercent = value; }
+    public bool IsGenerated { get; set; }
+    public BattleCharacter Summoner { get; set; }
+    public int LineageId { get; set; }
+    public int EligibleTurn { get; set; }
+    public void SetBattleVitals(int hp, int current, int attack, int defense)
+    { state.SetVitals(hp, current, attack, defense); UpdateHPBar(); }
 
     [Header("UI")]
     [SerializeField] private Image background;
@@ -55,6 +64,8 @@ public void Init(CharacterData data, Vector2Int pos, bool ally, int level = 1)
     this.level = level;
 
     state.Initialize(data, level, ally);
+    LineageId = GetInstanceID();
+    IsGenerated = false; Summoner = null; EligibleTurn = 0;
 
 bool usesEnemyIcon = !ally && data.enemyIcon != null;
 Sprite displayIcon = usesEnemyIcon ? data.enemyIcon : data.icon;
@@ -156,16 +167,20 @@ if (background != null)
         BattleDamageOrigin origin = BattleDamageOrigin.Direct)
     {
         if (isDead || dmg <= 0) return;
+        if (origin == BattleDamageOrigin.Direct && attacker != null && attacker.isAlly != isAlly
+            && FusionReactionRules.TryProtect(this, attacker, bm, !isBasicAttack)) return;
+
+        bool canMitigate = origin is not (BattleDamageOrigin.Transferred or BattleDamageOrigin.Returned);
 
         bool armorReducedDamage = false;
         // Defense-based reduction (unless Armor skill or ignoreDefense is true)
-        if (origin != BattleDamageOrigin.Transferred && !ignoreDefense && (data == null || data.skillType != SkillType.Armor)) {
-            float effectiveDefense = Mathf.Max(0, defense / 4f);
+        if (canMitigate && !ignoreDefense && (data == null || data.skillType != SkillType.Armor)) {
+            float effectiveDefense = Mathf.Max(0, defense * (1f + DiceDefensePercent / 100f) / 4f);
             int reducedByDefense = Mathf.FloorToInt(dmg * 100f / (100f + effectiveDefense));
             dmg = Mathf.Max(1, reducedByDefense);
         }
         // Handle Armor skill: after defense/ignoreDefense check, reduce incoming damage
-        if (origin != BattleDamageOrigin.Transferred && data != null && data.skillType == SkillType.Armor)
+        if (canMitigate && data != null && data.skillType == SkillType.Armor)
         {
             int reductionPerLevel = 2;
             SkillData skillData = SkillCatalog.Get(SkillType.Armor);
@@ -188,15 +203,18 @@ if (background != null)
             dmg = reduced;
         }
 
-        if (origin != BattleDamageOrigin.Transferred && data != null && BattleDamageRules.HasShield(data.skillType))
+        if (canMitigate && data != null && BattleDamageRules.HasShield(data.skillType))
         {
             dmg = BattleDamageRules.ReduceByShield(dmg);
             bm?.PlayDefensiveVfx(this, SkillType.Shield);
         }
 
-        if (origin != BattleDamageOrigin.Transferred && data != null
+        if (canMitigate && data != null
             && data.skillType == SkillType.IronAdapt && IronForm == IronForm.Shield)
             dmg = Mathf.Max(1, Mathf.FloorToInt(dmg * 0.75f));
+
+        if (canMitigate && data != null && data.skillType == SkillType.Coal && !CoalAwake)
+            dmg = Mathf.Max(1, Mathf.FloorToInt(dmg * 0.5f));
 
         if (origin == BattleDamageOrigin.Direct && bm != null)
         {
@@ -218,9 +236,12 @@ if (background != null)
             bm?.AddLog($"{actionLabel} {dmg} ダメージ{mitigation}");
         }
 
+        int actualLoss = Mathf.Min(Mathf.Max(0, currentHP), dmg);
         currentHP -= dmg;
         UpdateHPBar();
         bm?.PlayDamageVfx(this, dmg);
+
+        FusionReactionRules.AfterDamage(this, attacker, actualLoss, origin, bm);
 
         if (currentHP <= 0)
         {

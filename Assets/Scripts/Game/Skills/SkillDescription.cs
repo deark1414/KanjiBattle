@@ -64,6 +64,8 @@ public static class SkillDescription
             && skillType != SkillType.ExperienceBonus
             && skillType != SkillType.WindShift
             && skillType != SkillType.Forge
+            && skillType is not (SkillType.Magnet or SkillType.Mountain or SkillType.Coal or SkillType.Fortress
+                or SkillType.Dice or SkillType.Sand or SkillType.Grass or SkillType.Lantern)
             && skillType != SkillType.Armor;
     }
 
@@ -96,6 +98,18 @@ public static class SkillDescription
             SkillType.Warrior => "斬撃・堅守・鼓舞",
             SkillType.Sentinel => "貫通・堅守・守護回復",
             SkillType.Forge => "鍛造",
+            SkillType.Wave => "押し流し",
+            SkillType.Magnet => "磁力",
+            SkillType.Mountain => "山びこ",
+            SkillType.Coal => "燃え上がり",
+            SkillType.Fortress => "堅守・反撃・迫撃砲",
+            SkillType.Dice => "賽振り",
+            SkillType.Rain => "回復の雨",
+            SkillType.Sand => "砂人形",
+            SkillType.Grass => "分裂",
+            SkillType.Cocoon => "繭の保護",
+            SkillType.WindChime => "全体再響",
+            SkillType.Lantern => "灯守り",
             SkillType.Wall => "壁",
             SkillType.Soil => "土罠",
             SkillType.Fireball => "火球",
@@ -138,6 +152,18 @@ public static class SkillDescription
             SkillType.Warrior => "剣と同じ扇状攻撃と被害20%軽減。第1・4・7…ターンに自分と最寄り味方1体の攻撃+20%、2ターン。同じ鼓舞は重複しない。",
             SkillType.Sentinel => "槍と同じ2マス貫通攻撃と被害20%軽減。毎ターン開始時、自分と隣接8マスの味方をそれぞれ最大HPの4%回復。",
             SkillType.Forge => "第1・4・7…ターンに味方の剣・槍・槌・盾と対応する武器系融合の攻撃+25%、3ターン。同じ鍛造は重複せず更新。自分は対象外、武器は生成しない。",
+            SkillType.Wave => "前方扇状3マスへ威力80%の攻撃と1マス押し出し。移動先が塞がれば移動だけ不発。衝突ダメージ・スタンなし。",
+            SkillType.Magnet => "ターン開始時にランダムな敵1体を自身へ1マス引き寄せる。移動先が空かなければ不発、選び直さない。",
+            SkillType.Mountain => "直接攻撃で失った実HPを30%の確率で攻撃者へ返す。スキルと致死被弾も対象。罠・肩代わり・反射では発動せず、返還分は再軽減・再反射しない。",
+            SkillType.Coal => "被弾前は被害半減。敵の直接攻撃で生き残ると燃え上がり、以後は軽減を失う代わりに攻撃+40%。罠・肩代わり・反射では変化しない。",
+            SkillType.Fortress => "被害20%軽減。直接被弾時25%で隣接敵へ実HP損失25%の反撃。第1・3・5…ターンに敵最大2体へ威力50%の迫撃砲。",
+            SkillType.Dice => "毎ターン1～6を等確率で振る。1・2は全味方HP6%回復、3・4はそのターン防御+20%、5・6は攻撃+20%。同種の強化は重複しない。",
+            SkillType.Rain => "行動時に味方の足元と隣接8マスへ回復域。直後と次の2ターンに味方を各層最大HP3%回復。場所固定・重複可。",
+            SkillType.Sand => "ターン開始時、最大HP・素攻撃・防御半分の砂人形を1体生成。同時最大3体、次ターンから行動。本体退場で消滅。人形は生成できない。",
+            SkillType.Grass => "直接被弾後、生存してHP75%以下なら現在HP・最大HPを維持した子へ分裂。系列全体で3回まで。子の攻撃は親の70%、次ターンから行動。致死被弾では分裂しない。",
+            SkillType.Cocoon => "保護されていない味方1体へ繭を付与。次の敵の直接攻撃1段を無効化し消える。重ね置き不可。",
+            SkillType.WindChime => "盤面全体の味方のスキルを確率で1回再発動。自分は対象外。鈴と重なっても追加は最大1回、再発動から再誘発しない。",
+            SkillType.Lantern => "隣接8マスの味方は投射攻撃を70%で回避。自分は守らない。射撃可能な敵から優先して狙われる。槍・電の連鎖・迫撃砲・竜の息は対象外。",
             SkillType.Wall => "高い耐久で前線を支える。",
             SkillType.Soil => "周囲5x5の候補から最大2マスに土の罠を設置する。土以外が踏むと設置者の攻撃力に応じたダメージを受け、立ち続けるとターンごとに再びダメージを受ける。",
             SkillType.Fireball => "周囲2マスの敵に防御無視の火球を放つ。味方と水を越える。",

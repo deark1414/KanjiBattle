@@ -64,13 +64,24 @@ async function main() {
       await page.goto(base); await ready();
       assert.equal(await page.locator('#preset').inputValue(), preset);
     }
+    for (const key of ['wave','magnet','mountain','coal','fortress','dice','rain','sand','grass','cocoon','windchime','lantern']) {
+      await page.locator('#preset').selectOption('fusion-'+key); await page.locator('#reset').click(); await ready();
+      await click(control => control.path.endsWith('/DeployButton'));
+      const current=await state();
+      assert.equal(current.battle.plan.groups.length,1);
+      assert.equal(current.battle.plan.groups[0].members.length,key==='dice'?3:2);
+      assert.equal(current.battle.conflicts,0);
+      await click(control => control.path.endsWith('/CancelDeployment'));
+    }
+    await page.goto(base); await ready();
+    assert.equal(await page.locator('#preset').inputValue(),'fusion-lantern');
     await page.setViewportSize({ width: 390, height: 844 }); await page.waitForTimeout(500);
     const frame = await page.locator('#game').boundingBox();
     const canvas = await page.frameLocator('#game').locator('#unity-canvas').boundingBox();
     assert(canvas.width >= frame.width * 0.98 && canvas.height >= frame.height * 0.98);
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     assert.deepEqual(errors, []);
-    await page.screenshot({ path: 'tmp/e2e/manual-forge-mobile.png' });
+    await page.screenshot({ path: 'tmp/e2e/manual-fusions-mobile.png' });
     console.log('Passed: fixture initialization, fusion/element/animal/support/defense/soldier/forge presets, preserve/reset, reload, mobile layout.');
     await context.close();
   } finally { await browser.close(); }

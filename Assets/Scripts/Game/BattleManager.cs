@@ -546,7 +546,7 @@ public partial class BattleManager : MonoBehaviour
 
         bc.Init(data, pos, ally, levelOverride ?? level);
 
-        if (!ally && data != null)
+        if (!ally && data != null && data.characterId > 0)
         {
             encounteredEnemyCharacterIds.Add(data.characterId);
         }
@@ -586,6 +586,8 @@ public partial class BattleManager : MonoBehaviour
             }
             
             AddLog($"--- ターン {turn} ---");
+            fusionTurn = turn;
+            BeginAdvancedFusionTurn(true, turn);
 
             ElementSkillExecutor.ApplyWind(this, true, impassableCells);
 
@@ -601,6 +603,7 @@ public partial class BattleManager : MonoBehaviour
             FusionSupportExecutor.EndSideTurn(this, true);
 
             ApplyNumberPassivesAtTurnStart("敵", enemies, turn, false);
+            BeginAdvancedFusionTurn(false, turn);
             FusionSupportExecutor.BeginSideTurn(this, false, turn);
             ElementSkillExecutor.ApplyWind(this, false, impassableCells);
 
@@ -964,7 +967,8 @@ public partial class BattleManager : MonoBehaviour
 
     private void DoAction(BattleCharacter character, string side)
     {
-        if (character == null || character.currentHP <= 0) return;
+        if (character == null || character.isDead || character.currentHP <= 0) return;
+        if (character.EligibleTurn > fusionTurn) return;
 
         if (character.IsStunned())
         {
@@ -1025,6 +1029,12 @@ public partial class BattleManager : MonoBehaviour
 
         switch (character.data.skillType)
         {
+            case SkillType.Rain:
+                return AdvancedFusionExecutor.FindFriendlyTarget(this, character, false);
+            case SkillType.Cocoon:
+                return AdvancedFusionExecutor.FindFriendlyTarget(this, character, true);
+            case SkillType.Wave:
+                return TargetingService.FindSwordTarget(this, character);
             case SkillType.ChainLightning:
                 return TargetingService.FindEnemyTarget(this, character, SkillType.ChainLightning);
             case SkillType.IronAdapt:
@@ -2952,12 +2962,13 @@ public partial class BattleManager : MonoBehaviour
 
         if (!target.isAlly)
         {
-            ResearchBondService.Instance.RegisterDefeated(target.OriginalData);
+            if (!target.IsGenerated) ResearchBondService.Instance.RegisterDefeated(target.OriginalData);
         }
 
         gridMap.Remove(target.gridPos);
         if (target.isAlly) allies.Remove(target);
         else enemies.Remove(target);
+        RemoveFusionSummons(target);
 
         // スキル素材の途中で倒されたコマだけが消えないよう、盤面上の論理からは
         // 先に外しつつ、見た目は短く残す。次の行動もこの時間を待つ。

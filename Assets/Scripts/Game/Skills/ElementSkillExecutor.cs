@@ -68,7 +68,7 @@ public static class ElementSkillExecutor
             var enemyCells = new HashSet<Vector2Int>(enemies.Select(unit => unit.gridPos));
             bool Helps(BattleCharacter unit)
             {
-                if (unit.IsStunned() || unit.WindBoost) return false;
+                if (unit.IsStunned() || unit.WindBoost || unit.EligibleTurn > battle.CurrentBattleTurn) return false;
                 SkillType skill = unit.data.skillType == SkillType.WaterHeal ? SkillType.None : AttackSkill(unit);
                 var normal = BattleMovementPlanner.FindNextMove(unit.gridPos, enemyCells.ToList(), skill,
                     unit.data.category, friendCells, enemyCells, terrain, battle.Cols, battle.Rows, unit.MovementModifier);

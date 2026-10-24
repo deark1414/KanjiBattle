@@ -5,11 +5,12 @@ public static class BattleActionRules
         SkillType.Slash or SkillType.Spear or SkillType.Arrow or SkillType.Gun
         or SkillType.Stone or SkillType.Fireball or SkillType.WaterHeal
         or SkillType.DoubleSlash or SkillType.ScatterShot or SkillType.ThreadPull or SkillType.ShadowCopy
-        or SkillType.ChainLightning or SkillType.IronAdapt or SkillType.Warrior or SkillType.Sentinel;
+        or SkillType.ChainLightning or SkillType.IronAdapt or SkillType.Warrior or SkillType.Sentinel
+        or SkillType.Wave or SkillType.Rain or SkillType.Cocoon;
 
     public static SkillType GeometrySkill(SkillType skill) => skill switch
     {
-        SkillType.Warrior => SkillType.Slash,
+        SkillType.Warrior or SkillType.Wave => SkillType.Slash,
         SkillType.Sentinel => SkillType.Spear,
         _ => skill
     };

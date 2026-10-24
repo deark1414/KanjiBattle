@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BattleDamageOrigin { Direct, Transferred, Reflected }
+public enum BattleDamageOrigin { Direct, Transferred, Reflected, Returned }
 
 public static class BattleDamageRules
 {
-    public static bool HasShield(SkillType skill) => skill is SkillType.Shield or SkillType.Warrior or SkillType.Sentinel;
+    public static bool HasShield(SkillType skill) => skill is SkillType.Shield or SkillType.Warrior or SkillType.Sentinel or SkillType.Fortress;
     public static int ReduceByShield(int damage) => damage <= 0 ? 0 : Mathf.Max(1, Mathf.FloorToInt(damage * 0.8f));
 
     public static int GuardShare(int damage, int protectorHP, float ratio) =>

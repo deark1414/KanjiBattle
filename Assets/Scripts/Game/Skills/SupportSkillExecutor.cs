@@ -17,14 +17,15 @@ public static class SupportSkillExecutor
     public static bool CanEcho(BattleCharacter bell, BattleCharacter caster) =>
         bell != null && caster != null && bell != caster && !bell.isDead && !caster.isDead
         && bell.currentHP > 0 && caster.currentHP > 0 && bell.data != null && caster.data != null
-        && bell.data.skillType == SkillType.BellEcho && bell.isAlly == caster.isAlly
-        && BattleRangeService.Distance(bell.gridPos, caster.gridPos) == 1;
+        && bell.isAlly == caster.isAlly
+        && (bell.data.skillType == SkillType.WindChime || (bell.data.skillType == SkillType.BellEcho
+            && BattleRangeService.Distance(bell.gridPos, caster.gridPos) == 1));
 
     public static void TryEcho(BattleCharacter caster, BattleCharacter target, BattleManager battle, Func<BattleCharacter, bool> repeat)
     {
         if (battle == null || caster == null || caster.isDead || target == null || target.isDead || target.currentHP <= 0) return;
         SkillType skill = caster.data.skillType;
-        if (skill is not (SkillType.Soil or SkillType.Dragon))
+        if (skill is not (SkillType.Soil or SkillType.Dragon or SkillType.Rain or SkillType.Cocoon))
         {
             bool healing = skill == SkillType.WaterHeal;
             if (healing ? target.isAlly != caster.isAlly || target.currentHP >= target.maxHP : target.isAlly == caster.isAlly) return;
@@ -34,8 +35,8 @@ public static class SupportSkillExecutor
         }
         // At most one repeat per action; repeats bypass this entry point to avoid chains.
         BattleCharacter bell = battle.gridMap.Values.Where(unit => CanEcho(unit, caster))
-            .OrderByDescending(unit => SkillExecutor.GetSkillChance(unit.data, SkillType.BellEcho, unit.isAlly)).FirstOrDefault();
-        if (bell == null || !SkillExecutor.RollSkillActivation(SkillExecutor.GetSkillChance(bell.data, SkillType.BellEcho, bell.isAlly))) return;
+            .OrderByDescending(unit => SkillExecutor.GetSkillChance(unit.data, unit.data.skillType, unit.isAlly)).FirstOrDefault();
+        if (bell == null || !SkillExecutor.RollSkillActivation(SkillExecutor.GetSkillChance(bell.data, bell.data.skillType, bell.isAlly))) return;
         if (repeat(target))
         {
             bell.PlayCastEffect(new Color(1f, 0.88f, 0.35f));

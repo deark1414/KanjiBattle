@@ -68,6 +68,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "elementProbe": FindFirstObjectByType<BattleManager>().ProbeElementSkills(); break;
                 case "recruitElements": ProbeRecruitment(new[] { 31, 32, 33 }, 100); break;
                 case "fusionSupportProbe": FindFirstObjectByType<BattleManager>().ProbeFusionSupport(); break;
+                case "advancedFusionProbe": FindFirstObjectByType<BattleManager>().ProbeAdvancedFusion(); break;
                 default: throw new ArgumentException("Unknown E2E action: " + request.action);
             }
         }
@@ -113,6 +114,12 @@ public sealed class BattleE2EBridge : MonoBehaviour
         if (kind is "soldiers" or "forge")
             BattleDeploymentRules.Save(FormationUI.Instance.GetFormation().Select(data => data.characterId).ToArray(),
                 new[] { new Vector2Int(0,5), new(0,6), new(3,5), new(3,6), new(5,6), new(5,5) });
+        if (kind == "elements")
+            BattleDeploymentRules.Save(FormationUI.Instance.GetFormation().Select(data => data.characterId).ToArray(),
+                new[] { new Vector2Int(0,5), new(2,5), new(4,5), new(1,6), new(3,6), new(5,6) });
+        if (kind.StartsWith("fusion-", StringComparison.Ordinal))
+            BattleDeploymentRules.Save(FormationUI.Instance.GetFormation().Select(data => data.characterId).ToArray(),
+                new[] { new Vector2Int(0,5), new(0,6), new(1,6), new(3,5), new(5,5), new(3,6) });
         UnityEngine.Random.InitState(1729);
         PlayerProgressStore.Save();
     }
@@ -133,6 +140,9 @@ public sealed class BattleE2EBridge : MonoBehaviour
         if (kind == "elements") names = new[] { "電", "風", "鉄", "午", "剣", "水" };
         if (kind == "soldiers") names = new[] { "剣", "盾", "槍", "盾", "一", "水" };
         if (kind == "forge") names = new[] { "火", "槌", "二", "剣", "水", "甲" };
+        var reviewRecipe = kind.StartsWith("fusion-", StringComparison.Ordinal)
+            ? BattleFusionRules.Recipes.FirstOrDefault(recipe => string.Equals(recipe.Skill.ToString(), kind.Substring(7), StringComparison.OrdinalIgnoreCase)) : null;
+        if (reviewRecipe != null) names = reviewRecipe.Materials.Concat(new[] { "午", "酉", "寅", "丑" }).Take(6).ToArray();
         if (PlayerProgressStore.GetString(FixtureKey) == "locked") names = names.Take(4).ToArray();
         CharacterData[] party = names.Select(name => database.characters.First(data => data.characterName == name)).ToArray();
         foreach (CharacterData data in party) PlayerInventory.Instance.AddCharacter(data);
@@ -195,6 +205,13 @@ public sealed class BattleE2EBridge : MonoBehaviour
             fixtureStage.enemyLevel = 20;
         }
         fixtureStage.trapCount = 0;
+        if (reviewRecipe != null)
+        {
+            fixtureStage.stageName = reviewRecipe.Name + "の確認"; fixtureStage.chapterId = 2;
+            fixtureStage.enemyPool = new List<CharacterData>
+                { database.GetById(10), database.GetById(10), database.GetById(11), database.GetById(20) };
+            fixtureStage.enemyLevel = 12;
+        }
         fixtureStage.reinforcementEnemy = new List<CharacterData>();
         fixtureStage.reinforcementInterval = 0;
         GameManager.Instance.SetSelectedStage(fixtureStage);

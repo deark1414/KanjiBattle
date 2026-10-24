@@ -34,6 +34,7 @@ public static class BattleRuleRegression
         BattleRewardRegression.Run();
         ElementSkillRegression.Run();
         FusionSupportRegression.Run();
+        CompleteFusionRegression.Run();
     }
 
     private static void VerifyDeployment()

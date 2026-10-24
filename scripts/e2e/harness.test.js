@@ -6,6 +6,17 @@ const path = require("node:path");
 const { GameHarness } = require("./harness");
 const scenarios = require("./scenarios");
 
+test("failure artifacts survive browser closure before the first snapshot", () => {
+  const directory = fs.mkdtempSync(path.join(require("node:os").tmpdir(), "kanji-no-state-"));
+  try {
+    const game = new GameHarness(new EventEmitter(), directory);
+    game.errors.push("browser closed before startup");
+    game.writeArtifacts();
+    assert.equal(JSON.parse(fs.readFileSync(path.join(directory,"state.json"),"utf8")), null);
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(directory,"errors.json"),"utf8")),game.errors);
+  } finally { fs.rmSync(directory,{recursive:true,force:true}); }
+});
+
 test("Japanese state responses survive chunk boundaries and out-of-order console delivery", () => {
   const page = new EventEmitter();
   const game = new GameHarness(page, "/unused");

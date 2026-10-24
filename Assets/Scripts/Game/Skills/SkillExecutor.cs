@@ -27,7 +27,9 @@ public static class SkillExecutor
         }
 
         if (skillType is SkillType.Counter or SkillType.AreaCounter or SkillType.NumberPassive
-            or SkillType.BellEcho or SkillType.GuardAlly or SkillType.Shield or SkillType.Armor or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge)
+            or SkillType.BellEcho or SkillType.GuardAlly or SkillType.Shield or SkillType.Armor or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge
+            or SkillType.Magnet or SkillType.Mountain or SkillType.Coal or SkillType.Fortress or SkillType.Dice
+            or SkillType.Sand or SkillType.Grass or SkillType.WindChime or SkillType.Lantern)
         {
             return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.PassiveOrReactiveSkill);
         }
@@ -62,6 +64,8 @@ public static class SkillExecutor
     {
         SkillType skillType = caster.data.skillType;
         bool executed;
+        if (skillType is SkillType.Wave or SkillType.Rain or SkillType.Cocoon)
+            return AdvancedFusionExecutor.Execute(caster, target, bm);
         if (skillType == SkillType.ChainLightning)
             return ElementSkillExecutor.ExecuteLightning(caster, target, bm);
         if (skillType == SkillType.IronAdapt)
@@ -181,6 +185,8 @@ public static class SkillExecutor
     private static bool IsValidRoleTarget(BattleCharacter caster, BattleCharacter target, BattleManager bm)
     {
         if (bm == null || target == null || target.isDead || target.currentHP <= 0) return false;
+        if (caster.data.skillType is SkillType.Rain or SkillType.Cocoon)
+            return target.isAlly == caster.isAlly && (caster.data.skillType != SkillType.Cocoon || !target.CocoonShield);
         bool healing = caster.data.skillType == SkillType.WaterHeal;
         if (healing ? target.isAlly != caster.isAlly || target.currentHP >= target.maxHP : target.isAlly == caster.isAlly)
             return false;

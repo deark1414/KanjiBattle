@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-public enum BattleAttackBuff { Warrior, Forge }
+public enum BattleAttackBuff { Warrior, Forge, Dice }
 
 // Runtime-only combat state. BattleCharacter remains responsible for Unity UI and presentation.
 public sealed class BattleCharacterState
@@ -18,6 +18,9 @@ public sealed class BattleCharacterState
     public bool WindBoost { get; set; }
     public bool WindSlow { get; set; }
     public IronForm IronForm { get; set; }
+    public bool CoalAwake { get; set; }
+    public bool CocoonShield { get; set; }
+    public int DiceDefensePercent { get; set; }
     private readonly Dictionary<BattleAttackBuff, (int percent, int turns)> attackBuffs = new();
 
     public void Initialize(CharacterData data, int level, bool isAlly)
@@ -36,11 +39,19 @@ public sealed class BattleCharacterState
         WindBoost = WindSlow = false;
         IronForm = IronForm.Sword;
         attackBuffs.Clear();
+        CoalAwake = CocoonShield = false;
+        DiceDefensePercent = 0;
     }
 
     public int GetEffectiveAttack()
     {
-        return Mathf.RoundToInt(Attack * (1f + (NumberPassiveAttackBonusPercent + AttackBuffPercent) / 100f));
+        return Mathf.RoundToInt(Attack * (1f + (NumberPassiveAttackBonusPercent + AttackBuffPercent + (CoalAwake ? 40 : 0)) / 100f));
+    }
+
+    public void SetVitals(int hp, int currentHP, int attack, int defense)
+    {
+        MaxHP = Mathf.Max(1, hp); CurrentHP = Mathf.Clamp(currentHP, 1, MaxHP);
+        Attack = Mathf.Max(1, attack); Defense = Mathf.Max(0, defense);
     }
 
     public int AttackBuffPercent => attackBuffs.Values.Sum(buff => buff.percent);

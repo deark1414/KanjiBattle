@@ -64,6 +64,11 @@ public static class TargetingService
             if (!IsLiving(candidate) || candidate.isAlly == self.isAlly) continue;
             if (BattleRangeService.CanTargetCell(skill, self.gridPos, candidate.gridPos, bm.Cols, bm.Rows, friends)) candidates.Add(candidate);
         }
+        if (FusionReactionRules.IsProjectile(skill))
+        {
+            var lamps = candidates.FindAll(unit => unit.data.skillType == SkillType.Lantern);
+            if (lamps.Count > 0) candidates = lamps;
+        }
         return FindNearest(self, candidates, false);
     }
 

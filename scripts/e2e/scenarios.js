@@ -4,6 +4,7 @@ const groups = state => state.battle.plan?.groups || [];
 const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y})=>({id,x,y}));
 
 module.exports = [
+  ...require("./advanced-scenarios"),
   ...["soldiers","forge"].flatMap(fixture=>[
     {
       id:`${fixture}-abilities`,name:`${fixture}: 隣接融合と支援効果・持続・対象制限`,fixture,

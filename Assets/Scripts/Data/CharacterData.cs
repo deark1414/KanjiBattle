@@ -37,7 +37,8 @@ public enum SkillType
     IronAdapt,
     Warrior,
     Sentinel,
-    Forge
+    Forge,
+    Wave, Magnet, Mountain, Coal, Fortress, Dice, Rain, Sand, Grass, Cocoon, WindChime, Lantern
 }
 
 public enum CharacterCategory
@@ -119,7 +120,7 @@ public class CharacterData : ScriptableObject
         result.characterName = recipe.Name;
         result.category = recipe.Category;
         result.skillType = recipe.Skill;
-        result.skillChance = 100;
+        result.skillChance = recipe.Skill == SkillType.WindChime ? 15 : 100;
         result.skillPower = 1f;
         float hp = 0, attack = 0, defense = 0;
         foreach (CharacterData material in materials)
@@ -132,6 +133,18 @@ public class CharacterData : ScriptableObject
         result.baseHP = Mathf.Max(1, Mathf.RoundToInt(hp / materials.Count * multipliers.x));
         result.baseAttack = Mathf.Max(1, Mathf.RoundToInt(attack / materials.Count * multipliers.y));
         result.baseDefense = Mathf.Max(0, Mathf.RoundToInt(defense / materials.Count * multipliers.z));
+        result.hpGrowth = result.attackGrowth = result.defenseGrowth = 0;
+        return result;
+    }
+
+    public static CharacterData CreateBattleCopy(string name, SkillType skill, int hp, int attack, int defense)
+    {
+        var result = CreateInstance<CharacterData>();
+        result.hideFlags = HideFlags.HideAndDontSave;
+        result.characterName = name; result.characterId = -20000;
+        result.category = CharacterCategory.Nature; result.skillType = skill;
+        result.baseHP = Mathf.Max(1, hp); result.baseAttack = Mathf.Max(1, attack);
+        result.baseDefense = Mathf.Max(0, defense); result.skillChance = 0;
         result.hpGrowth = result.attackGrowth = result.defenseGrowth = 0;
         return result;
     }

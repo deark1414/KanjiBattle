@@ -29,7 +29,19 @@ public static class BattleFusionRules
         new Recipe(-1002, "散弾", SkillType.ScatterShot, CharacterCategory.Ranged, new(3.5f, 1.5f, 1.2f), true, "三", "銃"),
         new Recipe(-1003, "戦士", SkillType.Warrior, CharacterCategory.Weapon, new(4f, 1.2f, 1.4f), true, "剣", "盾"),
         new Recipe(-1004, "衛兵", SkillType.Sentinel, CharacterCategory.Defense, new(4f, 1.2f, 1.4f), true, "槍", "盾"),
-        new Recipe(-1005, "鍛冶", SkillType.Forge, CharacterCategory.Weapon, new(3f, 1.2f, 1.1f), false, "火", "槌")
+        new Recipe(-1005, "鍛冶", SkillType.Forge, CharacterCategory.Weapon, new(3f, 1.2f, 1.1f), false, "火", "槌"),
+        new Recipe(-1006, "波", SkillType.Wave, CharacterCategory.Nature, new(3.5f, 1.5f, 1.2f), false, "風", "水"),
+        new Recipe(-1007, "磁石", SkillType.Magnet, CharacterCategory.Nature, new(3f, 1.2f, 1.1f), false, "電", "鉄"),
+        new Recipe(-1008, "山", SkillType.Mountain, CharacterCategory.Defense, new(4f, 1.2f, 1.4f), false, "土", "土"),
+        new Recipe(-1009, "炭", SkillType.Coal, CharacterCategory.Nature, new(3.5f, 1.5f, 1.2f), false, "木", "火"),
+        new Recipe(-1010, "要塞", SkillType.Fortress, CharacterCategory.Defense, new(4f, 1.2f, 1.4f), true, "盾", "壁"),
+        new Recipe(-1011, "賽子", SkillType.Dice, CharacterCategory.Nature, new(4.5f, 1.5f, 1.2f), false, "一", "二", "三"),
+        new Recipe(-1012, "雨", SkillType.Rain, CharacterCategory.Nature, new(3f, 1.2f, 1.1f), false, "水", "弓"),
+        new Recipe(-1013, "砂", SkillType.Sand, CharacterCategory.Nature, new(2.5f, 1.2f, 1f), false, "石", "槌"),
+        new Recipe(-1014, "草", SkillType.Grass, CharacterCategory.Nature, new(2.5f, 1.2f, 1f), false, "土", "水"),
+        new Recipe(-1015, "繭", SkillType.Cocoon, CharacterCategory.Defense, new(3f, 1.2f, 1.1f), false, "甲", "糸"),
+        new Recipe(-1016, "風鈴", SkillType.WindChime, CharacterCategory.Nature, new(3f, 1.2f, 1.1f), false, "鈴", "風"),
+        new Recipe(-1017, "灯", SkillType.Lantern, CharacterCategory.Nature, new(3f, 1.2f, 1.1f), false, "影", "火")
     };
 
     [Serializable] public sealed class Group
@@ -53,13 +65,24 @@ public static class BattleFusionRules
     public static List<Group> Candidates(IReadOnlyList<CharacterData> party)
     {
         var result = new List<Group>();
-        for (int first = 0; first < party.Count; first++)
-        for (int second = first + 1; second < party.Count; second++)
         foreach (Recipe recipe in Recipes)
         {
-            var names = new[] { party[first].characterName, party[second].characterName }.OrderBy(value => value);
-            if (names.SequenceEqual(recipe.Materials.OrderBy(value => value)))
-                result.Add(new Group { recipeId = recipe.Id, members = new[] { first, second }, origin = first });
+            void Choose(List<int> indices, int start)
+            {
+                if (indices.Count == recipe.Materials.Length)
+                {
+                    if (indices.Select(index => party[index].characterName).OrderBy(value => value)
+                        .SequenceEqual(recipe.Materials.OrderBy(value => value)))
+                        result.Add(new Group { recipeId = recipe.Id, members = indices.ToArray(), origin = indices[0] });
+                    return;
+                }
+                for (int index = start; index < party.Count; index++)
+                {
+                    if (party[index] == null || party[index].isEvolved || party[index].characterId < 0) continue;
+                    indices.Add(index); Choose(indices, index + 1); indices.RemoveAt(indices.Count - 1);
+                }
+            }
+            Choose(new List<int>(), 0);
         }
         return result;
     }

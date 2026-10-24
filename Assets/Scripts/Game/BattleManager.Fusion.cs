@@ -96,6 +96,7 @@ public partial class BattleManager
 
     private void ClearFusionRuntimeData()
     {
+        ClearAdvancedFusionState();
         foreach (CharacterData data in fusionRuntimeData)
             if (data != null) Destroy(data);
         fusionRuntimeData.Clear();
