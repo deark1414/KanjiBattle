@@ -1,5 +1,7 @@
 # 実装画像の参照監査（2026-10-25）
 
+この文書は差し替え原因を調べた時点の履歴。後続のユーザー指示により、以前のモチーフがある20組は元画像へ接続し直した。現行の比較表は`character-art-status.html`、運用方針は`CharacterArtProduction.md`を参照。以下の「現」は監査当時を指す。
+
 ## 結論
 
 - ドット絵対応を既存画像の全面再制作に広げたのは実装側の判断であり、既存の採用済み画像まで差し替える必要はなかった。
@@ -81,4 +83,3 @@ Unityの`CharacterArtImporter.ExportReferenceAudit`で通常キャラ27体のCha
 | -20000 | 砂 | 戦闘用生成処理 | `Assets/Resources/UI/CharacterPieces/Piece_F20000.png` | `Assets/Resources/UI/PieceMotifs/Ready/Motif_F20000.png` |
 
 機械可読の実行結果: `tmp/character-art/reference-audit.json`。
-

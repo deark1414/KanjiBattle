@@ -35,18 +35,26 @@ async function main() {
     const checks = [];
     for (const item of roster) {
       const inherited = oldCatalog.entries.find(entry => entry.id === item.id);
-      const source = generated.get(item.id === -20000 ? -1013 : item.id) || inherited?.source;
+      if (inherited) {
+        const token=String(item.id).replace('-','F');
+        const piece=`${pieceDirectory}/Piece_${token}`.replace('Assets/Resources/','');
+        const enemyPiece=piece+'_Enemy';
+        const source='Assets/Resources/'+inherited.resource+'.png';
+        for(const file of [source,'Assets/Resources/'+piece+'.png','Assets/Resources/'+enemyPiece+'.png'])
+          assert(fs.existsSync(path.join(root,file)),`Missing preserved art: ${file}`);
+        const {resource,u,v,width,height,aspect,rotation}=inherited;
+        entries.push({...item,source,resource,piece,enemyPiece,u,v,width,height,aspect,rotation,scale:1.18});
+        checks.push({id:item.id,name:item.name,source,reused:true});
+        continue;
+      }
+      const source = generated.get(item.id === -20000 ? -1013 : item.id);
       assert(source,`Missing motif for ${item.name}`);
       const png = fs.readFileSync(path.join(root,source)).toString('base64');
-      const result = await page.evaluate(async ({item,png,inherited,fresh}) => {
+      const result = await page.evaluate(async ({item,png}) => {
         const image = new Image(); image.src = `data:image/png;base64,${png}`; await image.decode();
         const source = document.createElement('canvas'); source.width=image.width;source.height=image.height;
         const sc = source.getContext('2d',{willReadFrequently:true});sc.drawImage(image,0,0);
         let x0=0,y0=0,x1=image.width,y1=image.height;
-        if (!fresh && inherited) {
-          x0=Math.floor(inherited.u*image.width); x1=Math.ceil((inherited.u+inherited.width)*image.width);
-          y0=Math.floor((1-inherited.v-inherited.height)*image.height); y1=Math.ceil((1-inherited.v)*image.height);
-        }
         const pixels=sc.getImageData(0,0,image.width,image.height).data;
         let left=x1,top=y1,right=x0,bottom=y0,opaque=0,clear=0;
         for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){
@@ -92,7 +100,7 @@ async function main() {
           pieces.push(small.toDataURL('image/png').split(',')[1]);
         }
         return {motif:motif.toDataURL('image/png').split(',')[1],pieces,opaque,clear,bounds:{left,top,right,bottom}};
-      },{item,png,inherited,fresh:generated.has(item.id === -20000 ? -1013 : item.id)});
+      },{item,png});
       const token=String(item.id).replace('-','F');
       const motifPath=`${motifDirectory}/Motif_${token}.png`;
       const allyPath=`${pieceDirectory}/Piece_${token}.png`;
@@ -108,7 +116,7 @@ async function main() {
     }
     fs.writeFileSync(path.join(root,'Assets/Resources/UI/PieceMotifs/catalog.json'),JSON.stringify({entries},null,2)+'\n');
     fs.writeFileSync(path.join(root,'tmp/character-art/production-checks.json'),JSON.stringify(checks,null,2)+'\n');
-    console.log(`Produced ${entries.length} motifs and ${entries.length*2} kanji pieces.`);
+    console.log(`Prepared ${entries.length} art sets; preserved ${checks.filter(c=>c.reused).length} reviewed motifs and their existing pieces.`);
   } finally {await browser.close();}
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

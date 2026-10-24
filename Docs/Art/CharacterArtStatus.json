@@ -1,6 +1,6 @@
 {
   "date": "2026-10-25",
-  "note": "画像・実装・プレビューは変更せず、既存の参照監査とテスト記録を分類した比較表。個別の意匠承認を意味しない。",
+  "note": "以前のモチーフ20組を再利用。コマ・以前の画像ファイルは変更なし。参照とクロップ情報を更新。",
   "rows": [
     {
       "id": 1,
@@ -8,8 +8,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_1.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_1.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_1_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_1.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/One.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_01.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_01.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -29,7 +29,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.27352472089314195,
+        "v": 0.27352472089314195,
+        "width": 0.4529505582137161,
+        "height": 0.4529505582137161,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 2,
@@ -37,8 +45,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_2.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_2.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_2_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_2.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Two.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_02.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_02.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -58,7 +66,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.2543859649122807,
+        "v": 0.2543859649122807,
+        "width": 0.49122807017543857,
+        "height": 0.4920255183413078,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 3,
@@ -66,8 +82,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_3.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_3.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_3_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_3.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Three.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_03.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_03.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -87,7 +103,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.24720893141945774,
+        "v": 0.22647527910685805,
+        "width": 0.5055821371610846,
+        "height": 0.5063795853269537,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 10,
@@ -95,8 +119,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Sword.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_10.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_10_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_10.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Sword.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_10.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_10.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -116,7 +140,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.0733652312599681,
+        "v": 0.13397129186602874,
+        "width": 0.8755980861244019,
+        "height": 0.5653907496012759,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 11,
@@ -124,8 +156,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Spear.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_11.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_11_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_11.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Spear.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_11.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_11.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -145,7 +177,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.0703125,
+        "v": 0.46875,
+        "width": 0.609375,
+        "height": 0.1015625,
+        "rotation": 35
+      },
+      "reusedMotif": true
     },
     {
       "id": 12,
@@ -153,8 +193,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Hammer.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_12.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_12_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_12.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Hammer.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_12.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_12.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -174,7 +214,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.1371610845295056,
+        "v": 0.15948963317384368,
+        "width": 0.7862838915470495,
+        "height": 0.7065390749601276,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 13,
@@ -182,9 +230,9 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Shield.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_13.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_13_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_13.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Shield.png",
-      "motifWidth": 512,
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_13.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_13.png",
+      "motifWidth": 341,
       "motifHeight": 512,
       "matchesCatalog": true,
       "type": "通常",
@@ -203,7 +251,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.12903225806451613,
+        "v": 0.03125,
+        "width": 0.7419354838709677,
+        "height": 0.94140625,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 14,
@@ -211,9 +267,9 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Armor.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_14.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_14_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_14.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Carapace.png",
-      "motifWidth": 512,
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_14.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_14.png",
+      "motifWidth": 480,
       "motifHeight": 512,
       "matchesCatalog": true,
       "type": "通常",
@@ -232,7 +288,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "旧キャラと同一扱いにしない／個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.0875,
+        "v": 0.1171875,
+        "width": 0.8458333333333333,
+        "height": 0.7421875,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 15,
@@ -240,10 +304,10 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Wall.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_15.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_15_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_15.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Wall.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_15.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_15.png",
       "motifWidth": 512,
-      "motifHeight": 512,
+      "motifHeight": 341,
       "matchesCatalog": true,
       "type": "通常",
       "group": "既存系列",
@@ -261,7 +325,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.15625,
+        "v": 0.2404692082111437,
+        "width": 0.6875,
+        "height": 0.4941348973607038,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 16,
@@ -269,8 +341,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Stone.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_16.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_16_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_16.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Stone.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_16.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_16.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -290,7 +362,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.1467304625199362,
+        "v": 0.0430622009569378,
+        "width": 0.7639553429027113,
+        "height": 0.8708133971291866,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 17,
@@ -298,10 +378,10 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Arrow.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_17.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_17_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_17.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Bow.png",
-      "motifWidth": 512,
-      "motifHeight": 512,
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_17.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_17.png",
+      "motifWidth": 443,
+      "motifHeight": 443,
       "matchesCatalog": true,
       "type": "通常",
       "group": "役割・題材変更",
@@ -319,7 +399,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "旧キャラと同一扱いにしない／個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.21896162528216703,
+        "v": 0.4446952595936795,
+        "width": 0.5440180586907449,
+        "height": 0.11060948081264109,
+        "rotation": 35
+      },
+      "reusedMotif": true
     },
     {
       "id": 18,
@@ -327,8 +415,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Gun.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_18.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_18_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_18.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Gun.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_18.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_18.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -348,7 +436,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.019936204146730464,
+        "v": 0.06698564593301437,
+        "width": 0.9585326953748007,
+        "height": 0.8580542264752791,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 19,
@@ -356,10 +452,10 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Fire.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_19.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_19_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_19.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Fire.png",
-      "motifWidth": 512,
-      "motifHeight": 512,
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_19.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_19.png",
+      "motifWidth": 443,
+      "motifHeight": 443,
       "matchesCatalog": true,
       "type": "通常",
       "group": "既存系列",
@@ -377,7 +473,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.3544018058690745,
+        "v": 0.09029345372460496,
+        "width": 0.28216704288939054,
+        "height": 0.744920993227991,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 20,
@@ -385,9 +489,9 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Water.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_20.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_20_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_20.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Water.png",
-      "motifWidth": 512,
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_20.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_20.png",
+      "motifWidth": 341,
       "motifHeight": 512,
       "matchesCatalog": true,
       "type": "通常",
@@ -406,7 +510,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.3524229074889868,
+        "v": 0.26953125,
+        "width": 0.3010279001468429,
+        "height": 0.54296875,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 21,
@@ -414,8 +526,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Wood.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_21.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_21_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_21.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Wood.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_21.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_21.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -435,7 +547,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.18580542264752792,
+        "v": 0.11323763955342903,
+        "width": 0.6515151515151515,
+        "height": 0.7567783094098883,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 22,
@@ -443,8 +563,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Soil.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_22.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_22_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_22.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Soil.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_22.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_22.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -464,7 +584,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.08373205741626795,
+        "v": 0.32296650717703346,
+        "width": 0.8452950558213717,
+        "height": 0.2958532695374801,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 23,
@@ -472,8 +600,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Horse.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_23.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_23_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_23.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Horse.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_23.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_23.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -493,7 +621,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.0430622009569378,
+        "v": 0.20813397129186606,
+        "width": 0.9138755980861244,
+        "height": 0.5637958532695375,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 24,
@@ -501,8 +637,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Bird.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_24.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_24_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_24.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Rooster.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_24.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_24.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -522,7 +658,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "旧キャラと同一扱いにしない／個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.017543859649122806,
+        "v": 0.05023923444976075,
+        "width": 0.9792663476874003,
+        "height": 0.9098883572567783,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 25,
@@ -530,8 +674,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Tiger.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_25.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_25_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_25.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Tiger.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_25.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_25.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -551,7 +695,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.12280701754385964,
+        "v": 0.1307814992025519,
+        "width": 0.777511961722488,
+        "height": 0.6602870813397129,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 26,
@@ -559,8 +711,8 @@
       "dataAsset": "Assets/ScriptableObjects/Characters/CharacterData_Dragon.asset",
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_26.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_26_Enemy.png",
-      "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_26.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Dragon.png",
+      "motif": "Assets/Resources/UI/PieceMotifs/Motif_26.png",
+      "source": "Assets/Resources/UI/PieceMotifs/Motif_26.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -580,7 +732,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "既存デザインとの扱いを整理／全体の個別目視"
+      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "currentCrop": {
+        "u": 0.029505582137161084,
+        "v": 0.12041467304625197,
+        "width": 0.9585326953748007,
+        "height": 0.7081339712918661,
+        "rotation": 0
+      },
+      "reusedMotif": true
     },
     {
       "id": 27,
@@ -603,7 +763,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": 28,
@@ -626,7 +794,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": 29,
@@ -649,7 +825,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": 30,
@@ -672,7 +856,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": 31,
@@ -695,7 +887,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": 32,
@@ -718,7 +918,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": 33,
@@ -741,7 +949,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1001,
@@ -764,7 +980,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1002,
@@ -787,7 +1011,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1003,
@@ -810,7 +1042,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1004,
@@ -833,7 +1073,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1005,
@@ -856,7 +1104,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1006,
@@ -879,7 +1135,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1007,
@@ -902,7 +1166,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1008,
@@ -925,7 +1197,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1009,
@@ -948,7 +1228,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1010,
@@ -971,7 +1259,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1011,
@@ -994,7 +1290,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1012,
@@ -1017,7 +1321,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1013,
@@ -1040,7 +1352,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1014,
@@ -1063,7 +1383,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1015,
@@ -1086,7 +1414,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1016,
@@ -1109,7 +1445,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -1017,
@@ -1132,7 +1476,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認"
+      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     },
     {
       "id": -20000,
@@ -1155,7 +1507,15 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "砂の名前・分身の出現は確認済み"
+      "remaining": "砂の名前・分身の出現は確認済み",
+      "currentCrop": {
+        "u": 0,
+        "v": 0,
+        "width": 1,
+        "height": 1,
+        "rotation": 0
+      },
+      "reusedMotif": false
     }
   ]
 }
