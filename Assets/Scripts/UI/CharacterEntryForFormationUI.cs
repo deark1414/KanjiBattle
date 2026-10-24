@@ -111,6 +111,14 @@ public class CharacterEntryForFormationUI : MonoBehaviour
         iconRect.pivot = new Vector2(0f, 0.5f);
         iconRect.anchoredPosition = new Vector2(10f, 4f);
         iconRect.sizeDelta = new Vector2(72f, 72f);
+        PieceMotifPresentation.Attach(iconRect, data, false);
+    }
+
+    public void SetSelectedCharacter(CharacterData selected, bool summon = false)
+    {
+        var motif = iconImage?.GetComponent<PieceMotifPresentation>();
+        motif?.SetVisible(false);
+        if (summon && selected != null && characterData == selected) motif?.PlayArrival();
     }
 
     private static void ConfigureStatTextRect(TextMeshProUGUI text)

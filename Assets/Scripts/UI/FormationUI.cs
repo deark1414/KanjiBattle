@@ -19,6 +19,7 @@ public class FormationUI : MonoBehaviour
     private Button deployButton;
     private ScreenInfoRegion informationRegion;
     private CharacterData inspectedCharacter;
+    public CharacterData InspectedCharacter => inspectedCharacter;
 
     private void Awake()
     {
@@ -27,6 +28,7 @@ public class FormationUI : MonoBehaviour
 
     private void OnEnable()
     {
+        inspectedCharacter = null;
         ApplySlotAreaLayout();
         ApplyActionLabels();
 
@@ -173,7 +175,6 @@ public class FormationUI : MonoBehaviour
         if (index < 0 || index >= formationSlots.Length) return;
 
         formationSlots[index] = character;
-        inspectedCharacter = character;
 
         var slot = GetSlotObject(index);
         if (slot == null) return;
@@ -193,7 +194,8 @@ public class FormationUI : MonoBehaviour
         }
 
         SetSlotPieceIcon(slot, character);
-
+        if (character == inspectedCharacter)
+            slot.GetComponentInChildren<PieceMotifPresentation>(true)?.PlayArrival();
         RefreshInformationRegion();
     }
 
@@ -205,7 +207,20 @@ public class FormationUI : MonoBehaviour
         }
 
         inspectedCharacter = character;
+        RefreshMotifSelection(true);
         RefreshInformationRegion();
+    }
+
+    private void RefreshMotifSelection(bool summon = false)
+    {
+        characterListUI?.SetSelectedCharacter(inspectedCharacter, summon);
+        for (int i = 0; i < slotButtons.Count; i++)
+        {
+            var motif = slotButtons[i].GetComponentInChildren<PieceMotifPresentation>(true);
+            motif?.SetVisible(false);
+            if (summon && inspectedCharacter != null && i < formationSlots.Length && formationSlots[i] == inspectedCharacter)
+                motif?.PlayArrival();
+        }
     }
 
     public void ClearSlot(int index)
@@ -225,6 +240,8 @@ public class FormationUI : MonoBehaviour
         }
 
         SetSlotPieceIcon(slot, null);
+        if (removedCharacter == inspectedCharacter) inspectedCharacter = null;
+        RefreshMotifSelection();
 
         if (removedCharacter != null)
         {
@@ -579,6 +596,7 @@ public class FormationUI : MonoBehaviour
             fitter.aspectRatio = 1f;
         }
         icon.gameObject.SetActive(icon.sprite != null);
+        PieceMotifPresentation.Attach(iconRect, character, false);
 
         var label = slot.GetComponentInChildren<TextMeshProUGUI>();
         if (label != null)

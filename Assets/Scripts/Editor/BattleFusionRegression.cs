@@ -58,8 +58,10 @@ public static class BattleFusionRegression
             Check(fusion.GetMaxHP(11) == 875 && fusion.GetAttack(11) == 75 && fusion.GetDefense(11) == 24,
                 "same-level mean stats apply fusion multipliers before facilities");
             Check(two.GetMaxHP(11) == 200 && sword.GetMaxHP(11) == 300, "shared material assets are unchanged");
-            Check(fusion.characterId < 0 && fusion.icon == null && fusion.skillType == SkillType.DoubleSlash,
+            Check(fusion.characterId < 0 && fusion != two && fusion != sword
+                && fusion.hideFlags == HideFlags.HideAndDontSave && fusion.skillType == SkillType.DoubleSlash,
                 "temporary result is separate from owned characters");
+            Check(fusion.icon != null && fusion.enemyIcon != null, "fusion uses production piece art for both sides");
             var state = new BattleCharacterState(); state.Initialize(fusion, 11, false);
             Check(state.MaxHP == 875 && state.CurrentHP == 875 && state.Level == 11, "fusion initializes at full HP and shared level");
 

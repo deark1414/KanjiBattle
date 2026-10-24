@@ -77,7 +77,7 @@ if (background != null)
         background.sprite = displayIcon;
         background.type = Image.Type.Simple;
         background.preserveAspect = true;
-        background.color = ally ? new Color(0.28f, 0.58f, 1f) : new Color(1f, 0.28f, 0.22f);
+        background.color = Color.white;
     }
     else
         {
@@ -110,6 +110,8 @@ if (background != null)
 
     UpdateHPBar();
     UpdateDirection(Vector2Int.down);
+    if (usesIcon && background != null)
+        PieceMotifPresentation.Attach(background.rectTransform, data, false);
 }
 
     public bool CopyBattleForm(BattleCharacter target)
@@ -129,7 +131,8 @@ if (background != null)
             background.sprite = sprite;
             background.type = Image.Type.Simple;
             background.preserveAspect = usesIcon;
-            background.color = isAlly ? new Color(0.6f, 0.9f, 1f) : new Color(1f, 0.7f, 0.7f);
+            background.color = usesIcon ? Color.white
+                : isAlly ? new Color(0.6f, 0.9f, 1f) : new Color(1f, 0.7f, 0.7f);
         }
         if (nameText != null)
         {
@@ -147,6 +150,15 @@ if (background != null)
         if (copiedForm == null) return;
         if (Application.isPlaying) Destroy(copiedForm);
         else DestroyImmediate(copiedForm);
+    }
+
+    public void PlayMotifArrival()
+    {
+        if (background != null)
+            background.GetComponent<PieceMotifPresentation>()?.PlayArrival();
+        if (hpBar != null) hpBar.transform.SetAsLastSibling();
+        if (levelText != null) levelText.transform.SetAsLastSibling();
+        if (directionText != null) directionText.transform.SetAsLastSibling();
     }
 
     public string DisplayName

@@ -152,6 +152,7 @@ public class DataImporter : EditorWindow
                 data.icon = null;
                 data.enemyIcon = null;
             }
+            CharacterArtCatalog.Apply(data);
 
             EditorUtility.SetDirty(data);
         }

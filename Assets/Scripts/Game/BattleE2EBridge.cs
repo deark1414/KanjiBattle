@@ -19,7 +19,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public string path; public string text; public string kind; public int id;
         public bool enabled; public bool selected; public bool visible; public bool reachable; public Box rect;
     }
-    [Serializable] public sealed class Unit { public int id; public int originalId; public bool transformed; public int slot; public string name; public bool ally; public int x; public int y; public int hp; public int maxHP; public int level; public int attackBuff; }
+    [Serializable] public sealed class Unit { public int id; public int originalId; public bool transformed; public int slot; public string name; public bool ally; public int x; public int y; public int hp; public int maxHP; public int level; public int attackBuff; public bool icon; public bool motif; public bool motifVisible; public float motifAlpha; }
     [Serializable] public sealed class Cell { public int x; public int y; public Box rect; }
     [Serializable] public sealed class BattleState
     {
@@ -35,6 +35,8 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public Control[] controls; public BattleState battle; public int[] formation; public int[] owned;
         public int[] discovered; public bool fusionUnlocked; public bool canUnlockFusion; public int stagePoints;
         public int level; public int experience; public int baseBattleExperience; public int[] roster;
+        public int visibleMotifs;
+        public int[] visibleMotifIds;
     }
 
     private StageData fixtureStage;
@@ -230,6 +232,8 @@ public sealed class BattleE2EBridge : MonoBehaviour
         {
             controls = FindObjectsByType<Selectable>(FindObjectsSortMode.None).Where(control => control.gameObject.activeInHierarchy)
                 .Select(CaptureControl).ToArray(),
+            visibleMotifs = FindObjectsByType<PieceMotifPresentation>(FindObjectsSortMode.None).Count(motif => motif.IsVisible),
+            visibleMotifIds = FindObjectsByType<PieceMotifPresentation>(FindObjectsSortMode.None).Where(motif => motif.IsVisible).Select(motif => motif.CharacterId).ToArray(),
             battle = battle.CaptureE2EState(),
             formation = FormationUI.Instance == null || FormationUI.Instance.GetFormation() == null ? new int[0]
                 : FormationUI.Instance.GetFormation().Select(data => data == null ? 0 : data.characterId).ToArray(),

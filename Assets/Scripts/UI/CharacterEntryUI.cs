@@ -17,6 +17,7 @@ public class CharacterEntryUI : MonoBehaviour
     private Image recruitHalo;
     private Outline iconOutline;
     private bool recruitReady;
+    private CharacterData characterData;
 
     public void SetCharacter(CharacterData data, int level, int experience = 0, int experienceToNextLevel = 0, int levelCap = 99, Action<CharacterData> onSelect = null)
     {
@@ -62,6 +63,7 @@ public class CharacterEntryUI : MonoBehaviour
 
     private void ApplyLayout(CharacterData data)
     {
+        characterData = data;
         var background = GetComponent<Image>();
         // The piece itself carries state; there must be no rectangular card behind it.
         ModernWafuuPresentation.ApplyFlatSurface(background, new Color(1f, 1f, 1f, 0f));
@@ -151,6 +153,14 @@ public class CharacterEntryUI : MonoBehaviour
             66f,
             landscape ? 116f : (compact ? 142f : 156f));
         iconRect.sizeDelta = Vector2.one * iconSize;
+        PieceMotifPresentation.Attach(iconRect, data, false);
+    }
+
+    public void SetSelectedCharacter(CharacterData selected, bool summon = false)
+    {
+        var motif = iconImage?.GetComponent<PieceMotifPresentation>();
+        motif?.SetVisible(false);
+        if (summon && selected != null && characterData == selected) motif?.PlayArrival();
     }
 
     private void HideLegacyText()
@@ -170,6 +180,7 @@ public class CharacterEntryUI : MonoBehaviour
                 : readyToRecruit
                     ? new Color(0.78f, 1f, 0.82f, 1f)
                     : new Color(0.46f, 0.46f, 0.46f, 0.82f);
+            iconImage.GetComponent<PieceMotifPresentation>()?.SetTint(iconImage.color);
         }
 
         var background = GetComponent<Image>();

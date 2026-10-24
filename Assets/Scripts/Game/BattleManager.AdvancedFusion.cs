@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public partial class BattleManager
 {
@@ -19,13 +18,22 @@ public partial class BattleManager
         var old = target.transform.Find("FusionProtectionMarker");
         if (!active) { if (old != null) Destroy(old.gameObject); return; }
         if (old != null) return;
-        var go = new GameObject("FusionProtectionMarker", typeof(RectTransform), typeof(TextMeshProUGUI));
+        var go = new GameObject("FusionProtectionMarker", typeof(RectTransform));
         go.transform.SetParent(target.transform, false);
-        var text = go.GetComponent<TextMeshProUGUI>(); UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
-        text.text = "護"; text.fontSize = 13; text.color = Color.white; text.raycastTarget = false;
-        text.alignment = TextAlignmentOptions.TopRight;
-        var rect = text.rectTransform; rect.anchorMin = rect.anchorMax = Vector2.one;
-        rect.pivot = Vector2.one; rect.sizeDelta = new Vector2(20, 18); rect.anchoredPosition = new Vector2(-2,-14);
+        var rect = (RectTransform)go.transform;
+        rect.anchorMin = Vector2.one * .08f; rect.anchorMax = Vector2.one * .92f;
+        rect.offsetMin = rect.offsetMax = Vector2.zero;
+        for (int index = 0; index < 4; index++)
+        {
+            var edge = new GameObject("Edge", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            edge.transform.SetParent(rect, false);
+            var image = edge.GetComponent<Image>(); image.color = new Color(1f, .87f, .35f); image.raycastTarget = false;
+            var line = image.rectTransform;
+            line.anchorMin = index < 2 ? new Vector2(0f, index) : new Vector2(index - 2, 0f);
+            line.anchorMax = index < 2 ? new Vector2(1f, index) : new Vector2(index - 2, 1f);
+            line.sizeDelta = index < 2 ? new Vector2(0f, 1.5f) : new Vector2(1.5f, 0f);
+            line.anchoredPosition = Vector2.zero;
+        }
     }
 
     private void ClearAdvancedFusionState()

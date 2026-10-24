@@ -52,6 +52,14 @@ public class FormationCharacterListUI : MonoBehaviour
             var ui = entry.GetComponent<CharacterEntryForFormationUI>();
             ui.SetCharacter(character, PlayerInventory.Instance.PlayerLevel);
         }
+        SetSelectedCharacter(FormationUI.Instance != null ? FormationUI.Instance.InspectedCharacter : null);
+    }
+
+    public void SetSelectedCharacter(CharacterData character, bool summon = false)
+    {
+        if (content == null) return;
+        foreach (var entry in content.GetComponentsInChildren<CharacterEntryForFormationUI>())
+            entry.SetSelectedCharacter(character, summon);
     }
 
     private void ClearEntries()

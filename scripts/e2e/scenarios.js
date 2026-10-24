@@ -4,6 +4,7 @@ const groups = state => state.battle.plan?.groups || [];
 const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y})=>({id,x,y}));
 
 module.exports = [
+  ...require("./art-scenarios"),
   ...require("./advanced-scenarios"),
   ...["soldiers","forge"].flatMap(fixture=>[
     {

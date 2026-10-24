@@ -16,8 +16,8 @@ MonoBehaviour:
   characterId: 31
   isBoss: 0
   isEvolved: 0
-  icon: {fileID: 0}
-  enemyIcon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 741133399896941018340e35f98afa38, type: 3}
+  enemyIcon: {fileID: 21300000, guid: 4daa5a83224f44e46bc837299de29b60, type: 3}
   category: 7
   baseHP: 110
   baseAttack: 25

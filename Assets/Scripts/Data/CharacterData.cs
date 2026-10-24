@@ -134,6 +134,7 @@ public class CharacterData : ScriptableObject
         result.baseAttack = Mathf.Max(1, Mathf.RoundToInt(attack / materials.Count * multipliers.y));
         result.baseDefense = Mathf.Max(0, Mathf.RoundToInt(defense / materials.Count * multipliers.z));
         result.hpGrowth = result.attackGrowth = result.defenseGrowth = 0;
+        CharacterArtCatalog.Apply(result);
         return result;
     }
 
@@ -146,6 +147,7 @@ public class CharacterData : ScriptableObject
         result.baseHP = Mathf.Max(1, hp); result.baseAttack = Mathf.Max(1, attack);
         result.baseDefense = Mathf.Max(0, defense); result.skillChance = 0;
         result.hpGrowth = result.attackGrowth = result.defenseGrowth = 0;
+        CharacterArtCatalog.Apply(result);
         return result;
     }
 }

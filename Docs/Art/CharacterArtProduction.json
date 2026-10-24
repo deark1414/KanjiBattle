@@ -1,0 +1,305 @@
+{
+  "tool": "Built-in image_gen",
+  "prefix": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: ",
+  "jobs": [
+    {
+      "id": -1001,
+      "key": "DualSwords",
+      "subject": "two crossed Japanese tsurugi swords"
+    },
+    {
+      "id": 14,
+      "key": "Carapace",
+      "subject": "a low domed dark jade turtle-shell carapace, no living turtle, hexagonal scutes, sturdy shell rim, three-quarter view, broad protective silhouette. This is a carapace not samurai armor."
+    },
+    {
+      "id": 17,
+      "key": "Bow",
+      "subject": "one complete asymmetrical Japanese yumi bow with a taut clearly visible bowstring and one feathered arrow laid diagonally across it. Rich red lacquer wood, ivory fletching, thick enough limbs to remain legible, compact diagonal arrangement."
+    },
+    {
+      "id": 24,
+      "key": "Rooster",
+      "subject": "a proud full-body Japanese rooster with a brilliant red comb, ivory body and dark emerald curved tail feathers, two feet visible, three-quarter view, alert poised stance. Not a hawk or eagle."
+    },
+    {
+      "id": 27,
+      "key": "Bell",
+      "subject": "a single round antique Japanese bronze suzu bell, visible mouth slit and subtle engraved ornament, crimson braided hanging cord and knot, gold-bronze highlights, compact shape."
+    },
+    {
+      "id": 28,
+      "key": "Thread",
+      "subject": "a short wooden spool wound with ivory silk thread, a clearly visible thick curved loose thread forming one loop beside the spool, blue-gray shadow and restrained red tying cord."
+    },
+    {
+      "id": 29,
+      "key": "Shadow",
+      "subject": "a mysterious solid ink-black human-shaped shadow, simple crouching silhouette with a flowing smoke-like hem and soft gray-purple rim highlights, no weapons, no facial features, no visible eyes, not a ninja costume, compact readable full figure."
+    },
+    {
+      "id": 30,
+      "key": "Ox",
+      "subject": "a powerful full-body Japanese black ox with short curved ivory horns, red braided halter, stocky calm stance, all hooves visible, side three-quarter view, subtle warm highlights on black hide."
+    },
+    {
+      "id": 31,
+      "key": "Electricity",
+      "subject": "one compact branching golden lightning bolt, jagged bright ivory core with golden amber outline, three distinct branches, crisp solid lightning silhouette, a few small electric sparks kept close to the main bolt."
+    },
+    {
+      "id": 32,
+      "key": "Wind",
+      "subject": "a compact sculptural swirl of pale celadon wind, three distinct flowing ivory curved streams wrapping a pair of small green leaves, strong opaque highlighted contours, not a cloud and not a tornado."
+    },
+    {
+      "id": 33,
+      "key": "Iron",
+      "subject": "three dark iron ingots stacked low in a stable pyramid, forged steel gray surfaces, hammered texture, bright cold silver edge highlights, one small warm forge reflection, clearly iron not gold."
+    },
+    {
+      "id": -1002,
+      "key": "ScatterShot",
+      "subject": "a compact antique Japanese fantasy matchlock blunderbuss, wide believable flared steel muzzle integrated naturally into a short thick barrel, dark walnut stock, brass fittings, diagonal full gun with butt and muzzle both visible; no firing, no bullets, no modern shotgun."
+    },
+    {
+      "id": -1003,
+      "key": "Warrior",
+      "subject": "a full-body Japanese ashigaru foot soldier holding one straight sword and a small wooden shield, conical jingasa hat, indigo fabric and simple red-brown armor, face understated, firm grounded stance, compact character sprite."
+    },
+    {
+      "id": -1004,
+      "key": "Sentinel",
+      "subject": "a full-body Japanese fortress guard with a long upright spear and broad lacquered shield, dark teal lamellar armor, simple kabuto helmet, calm guarded stance, both spear tip and feet visible, compact silhouette."
+    },
+    {
+      "id": -1005,
+      "key": "Forge",
+      "subject": "a squat iron anvil with a Japanese smith hammer resting diagonally on it and a small heated orange steel billet, charcoal-black iron, warm hammered copper details, grounded blacksmith craft, not a furnace or a modern factory."
+    },
+    {
+      "id": -1006,
+      "key": "Wave",
+      "subject": "a single compact cresting Japanese ocean wave, deep turquoise water and ivory sea foam, curling side-view crest with three readable splashes contained within silhouette, sculptural solid water, no sea background."
+    },
+    {
+      "id": -1007,
+      "key": "Magnet",
+      "subject": "a naturally magnetic dark magnetite lodestone rock with silver iron filings forming visible short curved bands around two ends, a few small iron fragments attracted close to it, no horseshoe shape, no red-blue school magnet, grounded mineral."
+    },
+    {
+      "id": -1008,
+      "key": "Mountain",
+      "subject": "a compact rocky Japanese mountain peak with rugged gray stone, deep green lower slopes, small ivory snowcap, triangular majestic silhouette, isolated entire mountain base, no landscape background."
+    },
+    {
+      "id": -1009,
+      "key": "Coal",
+      "subject": "a compact cluster of black charcoal chunks with a few subtle glowing orange ember fissures inside, mostly dense dark solid charcoal silhouette, no big flames, heavy solid defensive impression."
+    },
+    {
+      "id": -1010,
+      "key": "Fortress",
+      "subject": "a compact Japanese stone-and-timber fortified gatehouse with two small bronze mortars mounted on the parapet, mossy gray stone base, white plaster and dark timber, red banners without symbols, sturdy broad fortress silhouette, no terrain or surrounding landscape."
+    },
+    {
+      "id": -1011,
+      "key": "Dice",
+      "subject": "three antique ivory Japanese dice tumbling together in a triangular arrangement, inset black and red pips, distinct visible faces, warm carved edges, crisp clean geometry, no digits or letters, no magical ring."
+    },
+    {
+      "id": -1012,
+      "key": "Rain",
+      "subject": "a small sculptural pale blue-gray rain cloud with a group of distinct long luminous turquoise raindrops below it and a tiny translucent puddle splash at its base, refreshing gentle healing rain, not a storm, compact full subject."
+    },
+    {
+      "id": -1013,
+      "key": "Sand",
+      "subject": "a small humanoid sand guardian emerging waist-high from a mound of golden-gray sand, rough granular body, broad arms, abstract featureless face, a smaller sand figurine beside its foot to suggest copying, no tomb or Egyptian symbols."
+    },
+    {
+      "id": -1014,
+      "key": "Grass",
+      "subject": "a vibrant dense tuft of Japanese wild grass with three clearly distinguishable clumps sprouting from a small connected root base, emerald and lime sharp blades, subtle white root highlights, resilient living growing silhouette, no ground tile."
+    },
+    {
+      "id": -1015,
+      "key": "Cocoon",
+      "subject": "a single hanging ivory silkworm cocoon wrapped in thick overlapping silk strands, pale jade supporting leaf, soft pearlescent shell highlights, protective closed oval form, no butterfly or insect outside."
+    },
+    {
+      "id": -1016,
+      "key": "WindChime",
+      "subject": "a traditional Japanese glass furin wind chime with a delicate clear pale aqua rounded bell, bronze clapper, one long ivory paper strip hanging beneath tied with red cord, subtle red and blue hand-painted accents, no writing on paper."
+    },
+    {
+      "id": -1017,
+      "key": "Lantern",
+      "subject": "a traditional Japanese standing andon lantern, dark walnut square lattice frame and warm softly glowing ivory washi panels, small solid wooden feet, amber candlelight inside, no kanji or writing, no cast ground shadow outside object."
+    }
+  ],
+  "generated": [
+    {
+      "id": -1001,
+      "key": "DualSwords",
+      "prompt": "Use case: stylized-concept. Asset type: production transparent game motif for Japanese kanji auto-battler. Subject: two Japanese straight double-edged tsurugi swords crossed in a balanced X, both blades clearly separate, two dark wrapped handles, steel blades and understated gold guards. Style: polished high-detail pixel-art item sprite, chunky deliberate pixels, sharp readable silhouette, warm grounded Japanese fantasy, matching premium 16/32-bit weapon item sprites. Single centered compact object on actual transparent background. Full blades and handles visible with 12 percent clear padding, square composition, no character, no pedestal, no letters, no kanji, no border, no glow cloud, no scenery, no checkerboard. This represents the fusion unit 'dual swords'. Large enough for a 256px summon overlay and readable at 64px.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-6756cbe4-427a-4ab6-975b-8811c052c6d0.png"
+    },
+    {
+      "id": 14,
+      "key": "Carapace",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a low domed dark jade turtle-shell carapace, no living turtle, hexagonal scutes, sturdy shell rim, three-quarter view, broad protective silhouette. This is a carapace not samurai armor.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-9192b487-c74e-485c-a522-132da7883e30.png"
+    },
+    {
+      "id": 17,
+      "key": "Bow",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: one complete asymmetrical Japanese yumi bow with a taut clearly visible bowstring and one feathered arrow laid diagonally across it. Rich red lacquer wood, ivory fletching, thick enough limbs to remain legible, compact diagonal arrangement.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-af8860a9-ad19-4a47-b4ff-a5ff6261e01c.png"
+    },
+    {
+      "id": 24,
+      "key": "Rooster",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a proud full-body Japanese rooster with a brilliant red comb, ivory body and dark emerald curved tail feathers, two feet visible, three-quarter view, alert poised stance. Not a hawk or eagle.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-3e0f94ed-72f0-4d22-92dc-bea9bc16fb3b.png"
+    },
+    {
+      "id": 27,
+      "key": "Bell",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a single round antique Japanese bronze suzu bell, visible mouth slit and subtle engraved ornament, crimson braided hanging cord and knot, gold-bronze highlights, compact shape.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-e936c307-2632-4cbb-a9e0-91acd6fc4e0d.png"
+    },
+    {
+      "id": 28,
+      "key": "Thread",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a short wooden spool wound with ivory silk thread, a clearly visible thick curved loose thread forming one loop beside the spool, blue-gray shadow and restrained red tying cord.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-7d9c8b52-3222-45fd-9907-ddb12105a1d3.png"
+    },
+    {
+      "id": 29,
+      "key": "Shadow",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a mysterious solid ink-black human-shaped shadow, simple crouching silhouette with a flowing smoke-like hem and soft gray-purple rim highlights, no weapons, no facial features, no visible eyes, not a ninja costume, compact readable full figure.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8c3e55c2-1f56-4a53-b100-cf4e4d04d956.png"
+    },
+    {
+      "id": 30,
+      "key": "Ox",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a powerful full-body Japanese black ox with short curved ivory horns, red braided halter, stocky calm stance, all hooves visible, side three-quarter view, subtle warm highlights on black hide.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-5236e6ab-636e-4c2d-922e-1ec84bc9ff3b.png"
+    },
+    {
+      "id": 31,
+      "key": "Electricity",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: one compact branching golden lightning bolt, jagged bright ivory core with golden amber outline, three distinct branches, crisp solid lightning silhouette, a few small electric sparks kept close to the main bolt.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-896e374c-1852-4789-8014-624e017a493f.png"
+    },
+    {
+      "id": 32,
+      "key": "Wind",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a compact sculptural swirl of pale celadon wind, three distinct flowing ivory curved streams wrapping a pair of small green leaves, strong opaque highlighted contours, not a cloud and not a tornado.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-6c94712c-55ef-43ee-81ce-82110cfd3c51.png"
+    },
+    {
+      "id": 33,
+      "key": "Iron",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: three dark iron ingots stacked low in a stable pyramid, forged steel gray surfaces, hammered texture, bright cold silver edge highlights, one small warm forge reflection, clearly iron not gold.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-caa99b84-2f0d-4ae7-8389-b38b353c7ae6.png"
+    },
+    {
+      "id": -1002,
+      "key": "ScatterShot",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a compact antique Japanese fantasy matchlock blunderbuss, wide believable flared steel muzzle integrated naturally into a short thick barrel, dark walnut stock, brass fittings, diagonal full gun with butt and muzzle both visible; no firing, no bullets, no modern shotgun.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-627abb72-0e95-4477-bb4e-5033bafe05ce.png"
+    },
+    {
+      "id": -1003,
+      "key": "Warrior",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a full-body Japanese ashigaru foot soldier holding one straight sword and a small wooden shield, conical jingasa hat, indigo fabric and simple red-brown armor, face understated, firm grounded stance, compact character sprite.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-fdda63b5-bb9f-415b-8d46-f807a4497150.png"
+    },
+    {
+      "id": -1004,
+      "key": "Sentinel",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a full-body Japanese fortress guard with a long upright spear and broad lacquered shield, dark teal lamellar armor, simple kabuto helmet, calm guarded stance, both spear tip and feet visible, compact silhouette.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-3f64396d-ade9-4ea6-a8e6-360af8acfea7.png"
+    },
+    {
+      "id": -1005,
+      "key": "Forge",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a squat iron anvil with a Japanese smith hammer resting diagonally on it and a small heated orange steel billet, charcoal-black iron, warm hammered copper details, grounded blacksmith craft, not a furnace or a modern factory.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-55994f33-5a13-4b62-9b99-d19faab00c51.png"
+    },
+    {
+      "id": -1006,
+      "key": "Wave",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a single compact cresting Japanese ocean wave, deep turquoise water and ivory sea foam, curling side-view crest with three readable splashes contained within silhouette, sculptural solid water, no sea background.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-09c218aa-3ee9-4ce3-8211-84c405367665.png"
+    },
+    {
+      "id": -1007,
+      "key": "Magnet",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a naturally magnetic dark magnetite lodestone rock with silver iron filings forming visible short curved bands around two ends, a few small iron fragments attracted close to it, no horseshoe shape, no red-blue school magnet, grounded mineral.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-c81e90ac-0329-4629-88ba-5b1cbe3131ef.png"
+    },
+    {
+      "id": -1008,
+      "key": "Mountain",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a compact rocky Japanese mountain peak with rugged gray stone, deep green lower slopes, small ivory snowcap, triangular majestic silhouette, isolated entire mountain base, no landscape background.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-699612fe-96f2-4c13-8303-7cdfc5db5ca3.png"
+    },
+    {
+      "id": -1009,
+      "key": "Coal",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a compact cluster of black charcoal chunks with a few subtle glowing orange ember fissures inside, mostly dense dark solid charcoal silhouette, no big flames, heavy solid defensive impression.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-bd219476-6a7f-4f08-bd0b-b4b0a6c40a3c.png"
+    },
+    {
+      "id": -1010,
+      "key": "Fortress",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a compact Japanese stone-and-timber fortified gatehouse with two small bronze mortars mounted on the parapet, mossy gray stone base, white plaster and dark timber, red banners without symbols, sturdy broad fortress silhouette, no terrain or surrounding landscape.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-56d91a5b-2020-42ba-a0d4-8505d223fe7d.png"
+    },
+    {
+      "id": -1011,
+      "key": "Dice",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: three antique ivory Japanese dice tumbling together in a triangular arrangement, inset black and red pips, distinct visible faces, warm carved edges, crisp clean geometry, no digits or letters, no magical ring.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-6738558f-55dd-4d64-8b82-b214f79c56c6.png"
+    },
+    {
+      "id": -1012,
+      "key": "Rain",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a small sculptural pale blue-gray rain cloud with a group of distinct long luminous turquoise raindrops below it and a tiny translucent puddle splash at its base, refreshing gentle healing rain, not a storm, compact full subject.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-03af66fc-b9e8-4416-a2df-93207f77fa5a.png"
+    },
+    {
+      "id": -1013,
+      "key": "Sand",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a small humanoid sand guardian emerging waist-high from a mound of golden-gray sand, rough granular body, broad arms, abstract featureless face, a smaller sand figurine beside its foot to suggest copying, no tomb or Egyptian symbols.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-9ecee4db-4e33-4795-9607-fb72196c4dd7.png"
+    },
+    {
+      "id": -1014,
+      "key": "Grass",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a vibrant dense tuft of Japanese wild grass with three clearly distinguishable clumps sprouting from a small connected root base, emerald and lime sharp blades, subtle white root highlights, resilient living growing silhouette, no ground tile.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-83553f27-6239-4b34-b5ce-4ea9575ffddc.png"
+    },
+    {
+      "id": -1015,
+      "key": "Cocoon",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a single hanging ivory silkworm cocoon wrapped in thick overlapping silk strands, pale jade supporting leaf, soft pearlescent shell highlights, protective closed oval form, no butterfly or insect outside.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-f1160de4-b23a-461e-a881-90468df0e3e4.png"
+    },
+    {
+      "id": -1016,
+      "key": "WindChime",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a traditional Japanese glass furin wind chime with a delicate clear pale aqua rounded bell, bronze clapper, one long ivory paper strip hanging beneath tied with red cord, subtle red and blue hand-painted accents, no writing on paper.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-28555bcf-93e9-49de-8657-caf89fc983ac.png"
+    },
+    {
+      "id": -1017,
+      "key": "Lantern",
+      "prompt": "Use case: stylized-concept. Asset type: production isolated motif sprite for a Japanese kanji strategy game. Style: premium high-detail pixel art, deliberate crisp pixels, grounded Japanese fantasy, dimensional hand-shaded materials, clean outer silhouette, readable at 64px and attractive at 256px. Single centered subject on genuine transparent background. Full object in square composition with at least 10 percent clear margin on every edge. No text, no kanji, no numbers, no frame, no pedestal, no environment, no checkerboard, no UI, no modern neon effects. Subject: a traditional Japanese standing andon lantern, dark walnut square lattice frame and warm softly glowing ivory washi panels, small solid wooden feet, amber candlelight inside, no kanji or writing, no cast ground shadow outside object.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-fc645fb4-6e33-4427-9302-d4ea85609db7.png"
+    }
+  ]
+}

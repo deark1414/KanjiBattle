@@ -282,6 +282,9 @@ public partial class BattleManager : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         yield return null;
 
+        foreach (var character in allies) character.PlayMotifArrival();
+        foreach (var character in enemies) character.PlayMotifArrival();
+        yield return new WaitForSecondsRealtime(1.2f);
         foreach (BattleCharacter character in allies.Concat(enemies).ToList())
         {
             if (!character.isDead && trapCells.Remove(character.gridPos))
