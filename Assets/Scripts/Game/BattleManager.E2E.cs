@@ -99,7 +99,7 @@ public partial class BattleManager
                 id = unit.data.characterId, slot = unit.isAlly ? allies.IndexOf(unit) : -1, name = unit.data.characterName, ally = unit.isAlly,
                 originalId = unit.OriginalData.characterId, transformed = unit.HasTransformed,
                 x = unit.gridPos.x, y = unit.gridPos.y, hp = unit.currentHP,
-                maxHP = unit.maxHP, level = unit.level
+                maxHP = unit.maxHP, level = unit.level, attackBuff = unit.AttackBuffPercent
             }).ToArray(),
             plan = fusionPlan,
             cells = gridCells == null ? new BattleE2EBridge.Cell[0] : Enumerable.Range(0, cols * rows).Select(index =>

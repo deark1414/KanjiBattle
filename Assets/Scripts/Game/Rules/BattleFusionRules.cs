@@ -11,15 +11,25 @@ public static class BattleFusionRules
         public string Name { get; }
         public string[] Materials { get; }
         public SkillType Skill { get; }
-        public Recipe(int id, string name, SkillType skill, params string[] materials)
-        { Id = id; Name = name; Skill = skill; Materials = materials; }
+        public CharacterCategory Category { get; }
+        public Vector3 StatMultipliers { get; }
+        public bool ForgeEligible { get; }
+        public Recipe(int id, string name, SkillType skill, CharacterCategory category, Vector3 multipliers,
+            bool forgeEligible, params string[] materials)
+        {
+            Id = id; Name = name; Skill = skill; Materials = materials;
+            Category = category; StatMultipliers = multipliers; ForgeEligible = forgeEligible;
+        }
     }
 
     // Only recipes with implemented battle effects are selectable.
     public static readonly IReadOnlyList<Recipe> Recipes = new[]
     {
-        new Recipe(-1001, "双剣", SkillType.DoubleSlash, "二", "剣"),
-        new Recipe(-1002, "散弾", SkillType.ScatterShot, "三", "銃")
+        new Recipe(-1001, "双剣", SkillType.DoubleSlash, CharacterCategory.Weapon, new(3.5f, 1.5f, 1.2f), true, "二", "剣"),
+        new Recipe(-1002, "散弾", SkillType.ScatterShot, CharacterCategory.Ranged, new(3.5f, 1.5f, 1.2f), true, "三", "銃"),
+        new Recipe(-1003, "戦士", SkillType.Warrior, CharacterCategory.Weapon, new(4f, 1.2f, 1.4f), true, "剣", "盾"),
+        new Recipe(-1004, "衛兵", SkillType.Sentinel, CharacterCategory.Defense, new(4f, 1.2f, 1.4f), true, "槍", "盾"),
+        new Recipe(-1005, "鍛冶", SkillType.Forge, CharacterCategory.Weapon, new(3f, 1.2f, 1.1f), false, "火", "槌")
     };
 
     [Serializable] public sealed class Group

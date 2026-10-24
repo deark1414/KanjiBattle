@@ -1,4 +1,8 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+
+public enum BattleAttackBuff { Warrior, Forge }
 
 // Runtime-only combat state. BattleCharacter remains responsible for Unity UI and presentation.
 public sealed class BattleCharacterState
@@ -14,6 +18,7 @@ public sealed class BattleCharacterState
     public bool WindBoost { get; set; }
     public bool WindSlow { get; set; }
     public IronForm IronForm { get; set; }
+    private readonly Dictionary<BattleAttackBuff, (int percent, int turns)> attackBuffs = new();
 
     public void Initialize(CharacterData data, int level, bool isAlly)
     {
@@ -30,11 +35,31 @@ public sealed class BattleCharacterState
         StunTurns = 0;
         WindBoost = WindSlow = false;
         IronForm = IronForm.Sword;
+        attackBuffs.Clear();
     }
 
     public int GetEffectiveAttack()
     {
-        return Mathf.RoundToInt(Attack * (1f + NumberPassiveAttackBonusPercent / 100f));
+        return Mathf.RoundToInt(Attack * (1f + (NumberPassiveAttackBonusPercent + AttackBuffPercent) / 100f));
+    }
+
+    public int AttackBuffPercent => attackBuffs.Values.Sum(buff => buff.percent);
+
+    public void ApplyAttackBuff(BattleAttackBuff source, int percent, int turns)
+    {
+        if (percent <= 0 || turns <= 0) return;
+        attackBuffs.TryGetValue(source, out var existing);
+        attackBuffs[source] = (Mathf.Max(existing.percent, percent), Mathf.Max(existing.turns, turns));
+    }
+
+    public void TickAttackBuffs()
+    {
+        foreach (var source in attackBuffs.Keys.ToArray())
+        {
+            var buff = attackBuffs[source];
+            if (buff.turns <= 1) attackBuffs.Remove(source);
+            else attackBuffs[source] = (buff.percent, buff.turns - 1);
+        }
     }
 
     public void SetNumberPassiveAttackBonus(int percent)

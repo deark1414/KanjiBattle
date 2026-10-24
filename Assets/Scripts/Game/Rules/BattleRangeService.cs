@@ -10,6 +10,7 @@ public static class BattleRangeService
     public static bool CanTargetCell(SkillType skill, Vector2Int from, Vector2Int to,
         int cols, int rows, ISet<Vector2Int> friendlyCells = null)
     {
+        skill = BattleActionRules.GeometrySkill(skill);
         if (to.x < 0 || to.x >= cols || to.y < 0 || to.y >= rows) return false;
         int distance = Distance(from, to);
         if (skill == SkillType.WaterHeal) return distance <= 1;
@@ -42,6 +43,7 @@ public static class BattleRangeService
         int cols,
         int rows)
     {
+        skillType = BattleActionRules.GeometrySkill(skillType);
         if (skillType is SkillType.DoubleSlash or SkillType.ScatterShot)
             return GetEffectCells(skillType, caster, target, cols, rows);
         var cells = new List<Vector2Int>();
@@ -87,6 +89,7 @@ public static class BattleRangeService
         int cols,
         int rows)
     {
+        skillType = BattleActionRules.GeometrySkill(skillType);
         var cells = new List<Vector2Int>();
         switch (skillType)
         {

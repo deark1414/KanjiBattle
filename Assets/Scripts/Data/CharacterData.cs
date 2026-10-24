@@ -34,7 +34,10 @@ public enum SkillType
     ExperienceBonus,
     ChainLightning,
     WindShift,
-    IronAdapt
+    IronAdapt,
+    Warrior,
+    Sentinel,
+    Forge
 }
 
 public enum CharacterCategory
@@ -114,7 +117,7 @@ public class CharacterData : ScriptableObject
         result.hideFlags = HideFlags.HideAndDontSave;
         result.characterId = recipe.Id;
         result.characterName = recipe.Name;
-        result.category = recipe.Skill == SkillType.DoubleSlash ? CharacterCategory.Weapon : CharacterCategory.Ranged;
+        result.category = recipe.Category;
         result.skillType = recipe.Skill;
         result.skillChance = 100;
         result.skillPower = 1f;
@@ -125,9 +128,10 @@ public class CharacterData : ScriptableObject
             attack += material.GetAttack(battleLevel);
             defense += material.GetDefense(battleLevel);
         }
-        result.baseHP = Mathf.Max(1, Mathf.RoundToInt(hp / materials.Count * 3.5f));
-        result.baseAttack = Mathf.Max(1, Mathf.RoundToInt(attack / materials.Count * 1.5f));
-        result.baseDefense = Mathf.Max(0, Mathf.RoundToInt(defense / materials.Count * 1.2f));
+        Vector3 multipliers = recipe.StatMultipliers;
+        result.baseHP = Mathf.Max(1, Mathf.RoundToInt(hp / materials.Count * multipliers.x));
+        result.baseAttack = Mathf.Max(1, Mathf.RoundToInt(attack / materials.Count * multipliers.y));
+        result.baseDefense = Mathf.Max(0, Mathf.RoundToInt(defense / materials.Count * multipliers.z));
         result.hpGrowth = result.attackGrowth = result.defenseGrowth = 0;
         return result;
     }

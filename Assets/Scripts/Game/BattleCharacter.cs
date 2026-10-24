@@ -23,6 +23,9 @@ public class BattleCharacter : MonoBehaviour
     public bool WindSlow { get => state.WindSlow; set => state.WindSlow = value; }
     public int MovementModifier => (WindBoost ? 1 : 0) - (WindSlow ? 1 : 0);
     public IronForm IronForm { get => state.IronForm; set => state.IronForm = value; }
+    public int AttackBuffPercent => state.AttackBuffPercent;
+    public void ApplyAttackBuff(BattleAttackBuff source, int percent, int turns) => state.ApplyAttackBuff(source, percent, turns);
+    public void TickAttackBuffs() => state.TickAttackBuffs();
 
     [Header("UI")]
     [SerializeField] private Image background;
@@ -185,7 +188,7 @@ if (background != null)
             dmg = reduced;
         }
 
-        if (origin != BattleDamageOrigin.Transferred && data != null && data.skillType == SkillType.Shield)
+        if (origin != BattleDamageOrigin.Transferred && data != null && BattleDamageRules.HasShield(data.skillType))
         {
             dmg = BattleDamageRules.ReduceByShield(dmg);
             bm?.PlayDefensiveVfx(this, SkillType.Shield);

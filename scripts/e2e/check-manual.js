@@ -54,14 +54,24 @@ async function main() {
     assert.deepEqual((await state()).formation, [31,32,33,23,10,20]);
     await page.goto(base); await ready();
     assert.equal(await page.locator('#preset').inputValue(), 'elements');
+    for (const [preset,ids] of [['soldiers',[10,13,11,13,1,20]],['forge',[19,12,2,10,20,14]]]) {
+      await page.locator('#preset').selectOption(preset); await page.locator('#reset').click(); await ready();
+      assert.deepEqual((await state()).formation, ids);
+      await click(control => control.path.endsWith('/DeployButton'));
+      assert.equal((await state()).battle.plan.groups.length, 2);
+      assert.equal((await state()).battle.conflicts, 0);
+      await click(control => control.path.endsWith('/CancelDeployment'));
+      await page.goto(base); await ready();
+      assert.equal(await page.locator('#preset').inputValue(), preset);
+    }
     await page.setViewportSize({ width: 390, height: 844 }); await page.waitForTimeout(500);
     const frame = await page.locator('#game').boundingBox();
     const canvas = await page.frameLocator('#game').locator('#unity-canvas').boundingBox();
     assert(canvas.width >= frame.width * 0.98 && canvas.height >= frame.height * 0.98);
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     assert.deepEqual(errors, []);
-    await page.screenshot({ path: 'tmp/e2e/manual-elements-mobile.png' });
-    console.log('Passed: fixture initialization, real fusion clicks, support/defense/animal/element presets, preserve/reset, reload, mobile layout.');
+    await page.screenshot({ path: 'tmp/e2e/manual-forge-mobile.png' });
+    console.log('Passed: fixture initialization, fusion/element/animal/support/defense/soldier/forge presets, preserve/reset, reload, mobile layout.');
     await context.close();
   } finally { await browser.close(); }
 }

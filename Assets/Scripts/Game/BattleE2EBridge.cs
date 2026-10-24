@@ -19,7 +19,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public string path; public string text; public string kind; public int id;
         public bool enabled; public bool selected; public bool visible; public bool reachable; public Box rect;
     }
-    [Serializable] public sealed class Unit { public int id; public int originalId; public bool transformed; public int slot; public string name; public bool ally; public int x; public int y; public int hp; public int maxHP; public int level; }
+    [Serializable] public sealed class Unit { public int id; public int originalId; public bool transformed; public int slot; public string name; public bool ally; public int x; public int y; public int hp; public int maxHP; public int level; public int attackBuff; }
     [Serializable] public sealed class Cell { public int x; public int y; public Box rect; }
     [Serializable] public sealed class BattleState
     {
@@ -67,6 +67,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "defeatCow": FindFirstObjectByType<BattleManager>().DefeatExperienceUnit(); break;
                 case "elementProbe": FindFirstObjectByType<BattleManager>().ProbeElementSkills(); break;
                 case "recruitElements": ProbeRecruitment(new[] { 31, 32, 33 }, 100); break;
+                case "fusionSupportProbe": FindFirstObjectByType<BattleManager>().ProbeFusionSupport(); break;
                 default: throw new ArgumentException("Unknown E2E action: " + request.action);
             }
         }
@@ -109,6 +110,9 @@ public sealed class BattleE2EBridge : MonoBehaviour
         PlayerInventory.Instance.SetPlayerLevelForDebug(20);
         GameManager.Instance.SetBattleSpeedIndex(GameManager.Instance.BattleSpeedTier);
         PrepareFormation(false);
+        if (kind is "soldiers" or "forge")
+            BattleDeploymentRules.Save(FormationUI.Instance.GetFormation().Select(data => data.characterId).ToArray(),
+                new[] { new Vector2Int(0,5), new(0,6), new(3,5), new(3,6), new(5,6), new(5,5) });
         UnityEngine.Random.InitState(1729);
         PlayerProgressStore.Save();
     }
@@ -127,6 +131,8 @@ public sealed class BattleE2EBridge : MonoBehaviour
         if (kind == "animals-double") names = new[] { "丑", "丑", "午", "酉", "剣", "水" };
         if (kind == "animals-enemy") names = new[] { "午", "酉", "寅", "剣", "槍", "水" };
         if (kind == "elements") names = new[] { "電", "風", "鉄", "午", "剣", "水" };
+        if (kind == "soldiers") names = new[] { "剣", "盾", "槍", "盾", "一", "水" };
+        if (kind == "forge") names = new[] { "火", "槌", "二", "剣", "水", "甲" };
         if (PlayerProgressStore.GetString(FixtureKey) == "locked") names = names.Take(4).ToArray();
         CharacterData[] party = names.Select(name => database.characters.First(data => data.characterName == name)).ToArray();
         foreach (CharacterData data in party) PlayerInventory.Instance.AddCharacter(data);
@@ -180,6 +186,14 @@ public sealed class BattleE2EBridge : MonoBehaviour
             fixtureStage.enemyLevel = 20;
         }
         fixtureStage.slotCount = party.Length;
+        if (kind is "soldiers" or "forge")
+        {
+            fixtureStage.stageName = kind == "soldiers" ? "戦士・衛兵の確認" : "鍛冶と双剣の確認";
+            fixtureStage.chapterId = 2;
+            fixtureStage.enemyPool = new List<CharacterData>
+            { database.GetById(10), database.GetById(10), database.GetById(10), database.GetById(11) };
+            fixtureStage.enemyLevel = 20;
+        }
         fixtureStage.trapCount = 0;
         fixtureStage.reinforcementEnemy = new List<CharacterData>();
         fixtureStage.reinforcementInterval = 0;

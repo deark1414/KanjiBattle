@@ -6,9 +6,7 @@ public enum IronForm { Sword, Spear, Shield }
 
 public static class ElementSkillExecutor
 {
-    public static SkillType AttackSkill(BattleCharacter unit) => unit.data.skillType != SkillType.IronAdapt
-        ? unit.data.skillType : unit.IronForm == IronForm.Spear ? SkillType.Spear
-            : unit.IronForm == IronForm.Sword ? SkillType.Slash : SkillType.None;
+    public static SkillType AttackSkill(BattleCharacter unit) => BattleActionRules.GetAttackSkill(unit);
 
     public static void SelectIronForm(BattleCharacter unit, BattleManager battle)
     {

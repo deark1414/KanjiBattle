@@ -590,6 +590,7 @@ public partial class BattleManager : MonoBehaviour
             ElementSkillExecutor.ApplyWind(this, true, impassableCells);
 
             ApplyNumberPassivesAtTurnStart("味方", allies, turn, true);
+            FusionSupportExecutor.BeginSideTurn(this, true, turn);
 
             foreach (var ally in new List<BattleCharacter>(allies))
             {
@@ -597,8 +598,10 @@ public partial class BattleManager : MonoBehaviour
                 yield return BattleWait(ElementActionDelay(ally));
             }
             ElementSkillExecutor.EndSideTurn(this, true);
+            FusionSupportExecutor.EndSideTurn(this, true);
 
             ApplyNumberPassivesAtTurnStart("敵", enemies, turn, false);
+            FusionSupportExecutor.BeginSideTurn(this, false, turn);
             ElementSkillExecutor.ApplyWind(this, false, impassableCells);
 
             foreach (var enemy in new List<BattleCharacter>(enemies))
@@ -607,6 +610,7 @@ public partial class BattleManager : MonoBehaviour
                 yield return BattleWait(ElementActionDelay(enemy));
             }
             ElementSkillExecutor.EndSideTurn(this, false);
+            FusionSupportExecutor.EndSideTurn(this, false);
 
             // 土の罠による継続ダメージ
             foreach (var bc in new List<BattleCharacter>(allies))
@@ -1031,6 +1035,7 @@ public partial class BattleManager : MonoBehaviour
             case SkillType.ShadowCopy:
                 return SupportSkillExecutor.FindCopyTarget(character, this);
             case SkillType.DoubleSlash:
+            case SkillType.Warrior:
             case SkillType.Slash:
                 return TargetingService.FindSwordTarget(this, character);
             case SkillType.ScatterShot:
@@ -1038,6 +1043,7 @@ public partial class BattleManager : MonoBehaviour
             case SkillType.Arrow:
                 return TargetingService.FindArrowTarget(this, character);
             case SkillType.Spear:
+            case SkillType.Sentinel:
                 return TargetingService.FindSpearTarget(this, character);
             case SkillType.StunBlow:
             case SkillType.WoodPush:

@@ -27,7 +27,7 @@ public static class SkillExecutor
         }
 
         if (skillType is SkillType.Counter or SkillType.AreaCounter or SkillType.NumberPassive
-            or SkillType.BellEcho or SkillType.GuardAlly or SkillType.Shield or SkillType.Armor or SkillType.ExperienceBonus or SkillType.WindShift)
+            or SkillType.BellEcho or SkillType.GuardAlly or SkillType.Shield or SkillType.Armor or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge)
         {
             return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.PassiveOrReactiveSkill);
         }
@@ -84,7 +84,7 @@ public static class SkillExecutor
             return SupportSkillExecutor.Execute(caster, target, bm);
         if (skillType is SkillType.DoubleSlash or SkillType.ScatterShot)
             return FusionSkillExecutor.Execute(caster, target, bm);
-        if (skillType == SkillType.Slash)
+        if (skillType is SkillType.Slash or SkillType.Warrior)
         {
             var context = new SkillContext(bm, caster, target);
             if (!CanSwordSlashHit(context))
@@ -93,10 +93,10 @@ public static class SkillExecutor
             }
 
             // 範囲内の複数体が倒れても演出の向きがぶれないよう、ダメージ前に開始する。
-            bm?.PlaySkillVfx(caster, target, skillType);
+            bm?.PlaySkillVfx(caster, target, SkillType.Slash);
             return ExecuteSwordSlash(context);
         }
-        if (skillType == SkillType.Spear)
+        if (skillType is SkillType.Spear or SkillType.Sentinel)
         {
             var context = new SkillContext(bm, caster, target);
             if (!CanSpearPierceHit(context))
@@ -106,7 +106,7 @@ public static class SkillExecutor
 
             // 槍は命中で対象が即座に破棄されることがあるため、座標を参照できる
             // ダメージ処理前に演出を開始する。
-            bm?.PlaySkillVfx(caster, target, skillType);
+            bm?.PlaySkillVfx(caster, target, SkillType.Spear);
             return ExecuteSpearPierce(context);
         }
         if (skillType == SkillType.Gun)

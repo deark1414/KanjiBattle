@@ -37,7 +37,7 @@ public static class SkillDescription
             builder.Append($"\n肩代わり率: {data.skillPower * 100:0.#}%");
         if (skillType == SkillType.ExperienceBonus)
             builder.Append($"\n経験値倍率: ×{data.skillPower:0.#}");
-        if (data.skillPower > 0f && skillType is not (SkillType.NumberPassive or SkillType.BellEcho or SkillType.ShadowCopy or SkillType.GuardAlly or SkillType.Shield or SkillType.ExperienceBonus or SkillType.WindShift))
+        if (data.skillPower > 0f && skillType is not (SkillType.NumberPassive or SkillType.BellEcho or SkillType.ShadowCopy or SkillType.GuardAlly or SkillType.Shield or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge))
         {
             builder.Append($"\n威力補正: x{data.skillPower:0.##}");
         }
@@ -63,6 +63,7 @@ public static class SkillDescription
             && skillType != SkillType.Shield
             && skillType != SkillType.ExperienceBonus
             && skillType != SkillType.WindShift
+            && skillType != SkillType.Forge
             && skillType != SkillType.Armor;
     }
 
@@ -92,6 +93,9 @@ public static class SkillDescription
             SkillType.ChainLightning => "連鎖電撃",
             SkillType.WindShift => "風向操作",
             SkillType.IronAdapt => "武装変形",
+            SkillType.Warrior => "斬撃・堅守・鼓舞",
+            SkillType.Sentinel => "貫通・堅守・守護回復",
+            SkillType.Forge => "鍛造",
             SkillType.Wall => "壁",
             SkillType.Soil => "土罠",
             SkillType.Fireball => "火球",
@@ -131,6 +135,9 @@ public static class SkillDescription
             SkillType.ChainLightning => "3マス以内の敵へ電撃。隣接8マスの未命中の敵へ最大4体まで連鎖し、威力は毎回75%になる。味方には命中しない。",
             SkillType.WindShift => "ターン開始時、移動を増やせば攻撃圏へ届く味方がいれば自分と味方1体の移動+1。それ以外は敵1体の移動-1。最低移動1、そのターンのみ、同効果は重複しない。",
             SkillType.IronAdapt => "行動開始時、HP半分以下なら被害25%軽減の盾。それ以外は扇状に敵2体以上で剣、槍が届けば槍、届かなければ剣で接近。形態は次の行動まで維持する。",
+            SkillType.Warrior => "剣と同じ扇状攻撃と被害20%軽減。第1・4・7…ターンに自分と最寄り味方1体の攻撃+20%、2ターン。同じ鼓舞は重複しない。",
+            SkillType.Sentinel => "槍と同じ2マス貫通攻撃と被害20%軽減。毎ターン開始時、自分と隣接8マスの味方をそれぞれ最大HPの4%回復。",
+            SkillType.Forge => "第1・4・7…ターンに味方の剣・槍・槌・盾と対応する武器系融合の攻撃+25%、3ターン。同じ鍛造は重複せず更新。自分は対象外、武器は生成しない。",
             SkillType.Wall => "高い耐久で前線を支える。",
             SkillType.Soil => "周囲5x5の候補から最大2マスに土の罠を設置する。土以外が踏むと設置者の攻撃力に応じたダメージを受け、立ち続けるとターンごとに再びダメージを受ける。",
             SkillType.Fireball => "周囲2マスの敵に防御無視の火球を放つ。味方と水を越える。",

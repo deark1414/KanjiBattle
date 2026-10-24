@@ -4,6 +4,42 @@ const groups = state => state.battle.plan?.groups || [];
 const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y})=>({id,x,y}));
 
 module.exports = [
+  ...["soldiers","forge"].flatMap(fixture=>[
+    {
+      id:`${fixture}-abilities`,name:`${fixture}: 隣接融合と支援効果・持続・対象制限`,fixture,
+      async run(game) {
+        let state=await game.deploy();
+        assert.equal(groups(state).length,2); assert.equal(state.battle.conflicts,0);
+        assert(!state.battle.fusionSummary.includes(fixture==="soldiers"?"戦士":"鍛冶"));
+        await game.start();
+        state=await game.request("fusionSupportProbe");
+        assert(state.battle.logs.some(log=>log.includes("支援融合の能力チェック完了")));
+        assert(state.discovered.includes(fixture==="soldiers"?-1003:-1005));
+        await game.screenshot("support-fusion-abilities");
+      }
+    },
+    {
+      id:`${fixture}-battle`,name:`${fixture}: 支援融合の実戦・原編成復元`,fixture,
+      viewport:fixture==="forge"?{width:390,height:844}:undefined,
+      async run(game) {
+        const initial=await game.deploy(); await game.start();
+        const logs=new Set();
+        const result=await game.wait(state=>{
+          for(const log of state.battle.logs || []) logs.add(log);
+          return state.battle.result;
+        },"Support fusion battle timed out.",120000);
+        assert([...logs].some(log=>log.includes(fixture==="soldiers"?"鼓舞":"鍛造")));
+        assert(!result.battle.resultTextOverflow);
+        await game.screenshot("support-fusion-result");
+        await game.named("RetryStageButton");
+        const state=await game.wait(current=>current.battle.deploying,"Support fusion retry did not open.");
+        assert.deepEqual(state.battle.originalIds,initial.battle.originalIds);
+        assert.equal(allies(state).length,6);
+        assert(allies(state).every(unit=>unit.hp===unit.maxHP && unit.attackBuff===0));
+        assert.equal(groups(state).length,2);
+      }
+    }
+  ]),
   {
     id:"element-abilities",name:"電の連鎖減衰と上限・鉄3形態・風の有効期間",fixture:"elements",
     async run(game) {
