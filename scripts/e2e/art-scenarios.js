@@ -1,6 +1,6 @@
 const assert=require('node:assert/strict');
 module.exports=[
-  ...[['art-standard','standard',-1001],['art-dice','fusion-dice',-1011],['art-sand-mobile','fusion-sand',-1013]].map(([id,fixture,fusion])=>({
+  ...[['art-standard','standard',-1001],['art-warrior','soldiers',-1003],['art-magnet','fusion-magnet',-1007],['art-dice','fusion-dice',-1011],['art-sand-mobile','fusion-sand',-1013]].map(([id,fixture,fusion])=>({
     id,name:`キャラクター原画: ${fixture} のコマ・召喚・消去`,fixture,
     viewport:id.endsWith('mobile')?{width:390,height:844}:undefined,
     async run(game){

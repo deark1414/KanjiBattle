@@ -9,20 +9,22 @@ header{background:white;border-bottom:1px solid #cbd5cf;padding:20px 24px}h1{fon
 main{padding:20px 24px;max-width:1600px;margin:auto}h2{font-size:18px;margin:0 0 10px}.overview{width:100%;border-collapse:collapse;background:white;margin-bottom:24px}.overview th,.overview td{padding:9px 12px;border-bottom:1px solid #dae0dc;text-align:left;vertical-align:top}.overview th{width:230px}.done{color:#246346}.pending{color:#8b461d}
 .toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:12px}select,input{min-height:38px;border:1px solid #b7c5bc;border-radius:4px;background:white;padding:7px 10px;font:inherit;color:inherit}input{width:210px;max-width:100%}#count{color:#53675b}
 .scroll{overflow:auto;max-height:76vh;border:1px solid #cbd5cf;background:white}.comparison{border-collapse:collapse;width:100%;min-width:1060px;table-layout:fixed}.comparison th{position:sticky;top:0;z-index:2;background:#e7eeea;text-align:left;padding:10px;border-bottom:1px solid #bccbc1}.comparison td{border-bottom:1px solid #d8e1db;padding:10px;vertical-align:middle}.comparison th:nth-child(1){width:110px}.comparison th:nth-child(2),.comparison th:nth-child(3){width:160px}.comparison th:nth-child(4),.comparison th:nth-child(5){width:145px}.comparison th:nth-child(6){width:225px}
-.name{font-size:20px;font-weight:650}small{display:block;font-size:12px;color:#5c6d63}.pieces{display:flex;justify-content:center;align-items:center;gap:4px;height:94px;background:#eaf0ed}.pieces img{width:68px;height:82px;object-fit:contain}.motif{display:flex;justify-content:center;align-items:center;height:112px;background:#eaf0ed}.motif img,.motif canvas{width:112px;height:112px;object-fit:contain;image-rendering:pixelated}.pieces img{image-rendering:pixelated}.missing{color:#79877e;text-align:center}.path{font-size:11px;overflow-wrap:anywhere;color:#607168;margin-top:4px}.status{white-space:nowrap;font-weight:600}.note{color:#596a60;font-size:13px;margin:12px 0 0}a{color:inherit}a:focus-visible{outline:3px solid #28815d;outline-offset:3px}#error{color:#ae2d32}
+.name{font-size:20px;font-weight:650}small{display:block;font-size:12px;color:#5c6d63}.pieces{display:flex;justify-content:center;align-items:center;gap:4px;height:94px;background:#eaf0ed}.pieces img{width:68px;height:82px;object-fit:contain}.motif{display:flex;justify-content:center;align-items:center;height:112px;background:#eaf0ed}.motif img,.motif canvas{width:112px;height:112px;object-fit:contain;image-rendering:pixelated}.pieces img{image-rendering:auto}.missing{color:#79877e;text-align:center}.path{font-size:11px;overflow-wrap:anywhere;color:#607168;margin-top:4px}.status{white-space:nowrap;font-weight:600}.note{color:#596a60;font-size:13px;margin:12px 0 0}a{color:inherit}a:focus-visible{outline:3px solid #28815d;outline-offset:3px}#error{color:#ae2d32}
 @media(max-width:600px){header{padding:14px 12px}h1{font-size:19px}main{padding:16px 12px}.overview th{width:112px}.overview td,.overview th{padding:8px}.toolbar{gap:8px}select{max-width:100%}input{width:150px}.scroll{max-height:70vh}}
 </style>
-<header><h1>キャラクター画像 制作・実装比較表</h1><p>2026-10-25時点 ／ 以前のモチーフ20組を再利用・コマ変更なし</p></header>
+<header><h1>キャラクター画像 制作・実装比較表</h1><p>2026-10-25時点 ／ 旧モチーフ20組を維持・コマは旧意匠へ統一</p></header>
 <main>
 <h2>できていること・残っていること</h2>
 <table class="overview"><tbody>
 <tr><th>コマ・モチーフ制作</th><td><span class="done">制作済み</span>：45組。味方コマ45・敵コマ45・モチーフ45。</td></tr>
 <tr><th>ゲームへの接続</th><td><span class="done">45組の参照を確認済み</span>：通常26＋敵専用の竜、融合17、砂の分身1。</td></tr>
-<tr><th>ドット絵・画像仕様</th><td><span class="done">新規25モチーフとコマはグリッド確認済み</span>。以前の20モチーフは元画像と表示範囲を維持。</td></tr>
+<tr><th>ドット絵・画像仕様</th><td><span class="done">新規25モチーフは128px論理グリッドに細密化</span>。コマは以前と同じ512px。既存20モチーフは元画像と表示範囲を維持。</td></tr>
 <tr><th>召喚・選択時の表示</th><td><span class="done">代表シナリオで確認済み</span>：出現してコマへ戻る。編成では選択対象のみ表示。</td></tr>
 <tr><th>砂の表記と分身</th><td><span class="done">修正・動作確認済み</span>：本体も分身も「砂」、砂山のモチーフ。</td></tr>
 <tr><th>全キャラの個別目視</th><td><span class="pending">未完</span>：全45組の召喚・敵表示・重なり・攻撃との整合を個別に見切ってはいない。</td></tr>
-<tr><th>既存モチーフの再利用</th><td><span class="done">20組を以前の画像へ接続</span>。鎧→甲・矢→弓・鳥→酉の旧画像も含む。コマは現在のものを維持。</td></tr>
+<tr><th>コマの意匠</th><td><span class="done">以前の木地・墨文字・敵の下向き形状へ統一</span>。同名15系列は元画像をそのまま使用。他は同じ意匠で描画。</td></tr>
+<tr><th>既存モチーフの再利用</th><td><span class="done">20組を以前の画像で維持</span>。鎧→甲・矢→弓・鳥→酉の旧画像も含む。</td></tr>
+<tr><th>指定4種の修正</th><td><span class="done">双剣・戦士は既存と揃えた直剣、磁石はU字型、賽子は数字と揃えた木製へ変更</span>。</td></tr>
 <tr><th>攻撃エフェクトとの整合</th><td><span class="pending">未完</span>：少なくとも剣・槌・槍は従来の攻撃素材を使用。召喚と別の画像系統。</td></tr>
 <tr><th>進化・超融合・究極融合</th><td><span class="pending">今回の画像セットには未収録</span>。</td></tr>
 <tr><th>外部公開</th><td><span class="pending">今回分は未公開</span>：最新版はローカルプレビューのみ。</td></tr>
@@ -31,7 +33,7 @@ main{padding:20px 24px;max-width:1600px;margin:auto}h2{font-size:18px;margin:0 0
 <div class="toolbar"><select id="group" aria-label="画像の区分"><option value="">すべて</option><option>既存系列</option><option>役割・題材変更</option><option>新キャラ</option><option>融合</option><option>分身</option></select><input id="search" type="search" aria-label="キャラクター名" placeholder="キャラクター名"><span id="count"></span></div>
 <div class="scroll"><table class="comparison"><thead><tr><th>キャラ・区分</th><th>以前のコマ<br><small>味方／敵</small></th><th>現在使用中のコマ<br><small>味方／敵</small></th><th>以前のモチーフ</th><th>現在使用中のモチーフ</th><th>制作・接続・残り</th></tr></thead><tbody id="rows"></tbody></table></div>
 <p class="note">「以前」は今回のコマ・モチーフ制作に入る前の画像。「役割・題材変更」の旧画像は参考であり、そのまま現キャラへ戻す対象とは限りません。画像の参照が正しいことと、デザインの採用が確定していることは別です。</p>
-<p class="note">再利用後の参照監査：2026-10-25、全45組が一致。召喚・選択表示の自動テストは関連4件が成功（全60件の再実行ではありません）。個別目視は各行を一律「未完」とし、代表テストの成功を全キャラの確認完了に読み替えていません。</p>
+<p class="note">旧意匠への統一後の参照監査：2026-10-25、全45組が一致。双剣・戦士・磁石・賽子を含む関連7件が成功（登録62件の全件再実行ではありません）。各行の全体的な個別目視は未完とし、代表テストの成功を全キャラの確認完了に読み替えていません。</p>
 <p id="error" role="alert"></p>
 </main>
 <script>

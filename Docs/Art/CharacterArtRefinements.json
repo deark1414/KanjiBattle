@@ -1,0 +1,53 @@
+{
+  "date": "2026-10-25",
+  "tool": "Built-in image_gen",
+  "generated": [
+    {
+      "id": -1001,
+      "key": "DualSwordsReviewed",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/DualSwords.png",
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_10.png"
+      ],
+      "change": "Image 1 is the edit target. Replace BOTH curved single-edged katana blades with TWO IDENTICAL straight, symmetrical, double-edged tsurugi swords matching the blue-green steel blade, central ridge, small dark guard and dark handle in reference Image 2. Two whole swords crossed in an X, both tips, guards and handles fully visible. The pair MUST look like two copies of reference Image 2, not katanas, scimitars, sabres or gold-guard anime swords. Preserve the two-sword crossed composition, but use finer pixel detail.",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent in-game motif sprite for KanjiBattle. Style: fine, deliberate hand-shaded Japanese fantasy pixel art, approximately 128x128 logical sprite enlarged cleanly; clearly finer detail than chunky 64px pixel icons, but still genuine square-pixel edges, no smooth vector edges or painterly blur. Match the existing reference game's material palette and restrained outlines. Keep one isolated sprite composition centered with 12 percent safe transparent margin, complete silhouette, no text or labels, no UI, no backdrop, no cast floor shadow, no halo. Image 1 is the edit target. Replace BOTH curved single-edged katana blades with TWO IDENTICAL straight, symmetrical, double-edged tsurugi swords matching the blue-green steel blade, central ridge, small dark guard and dark handle in reference Image 2. Two whole swords crossed in an X, both tips, guards and handles fully visible. The pair MUST look like two copies of reference Image 2, not katanas, scimitars, sabres or gold-guard anime swords. Preserve the two-sword crossed composition, but use finer pixel detail.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-22508cfd-0a32-4f2c-93a3-dd8e84c4a04c.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/DualSwordsReviewed.png"
+    },
+    {
+      "id": -1003,
+      "key": "WarriorReviewed",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Warrior.png",
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_10.png"
+      ],
+      "change": "Image 1 is the edit target. Keep this single full-body Japanese warrior, pose, clothing colors and wooden shield. Replace ONLY the curved katana with a STRAIGHT symmetrical DOUBLE-EDGED tsurugi sword matching the blue-green blade, central ridge and small dark guard in reference Image 2. Blade must remain straight from guard to centered pointed tip, no curve, no single-edged katana. Preserve the rest of the character, refining pixel detail rather than changing the outfit.",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent in-game motif sprite for KanjiBattle. Style: fine, deliberate hand-shaded Japanese fantasy pixel art, approximately 128x128 logical sprite enlarged cleanly; clearly finer detail than chunky 64px pixel icons, but still genuine square-pixel edges, no smooth vector edges or painterly blur. Match the existing reference game's material palette and restrained outlines. Keep one isolated sprite composition centered with 12 percent safe transparent margin, complete silhouette, no text or labels, no UI, no backdrop, no cast floor shadow, no halo. Image 1 is the edit target. Keep this single full-body Japanese warrior, pose, clothing colors and wooden shield. Replace ONLY the curved katana with a STRAIGHT symmetrical DOUBLE-EDGED tsurugi sword matching the blue-green blade, central ridge and small dark guard in reference Image 2. Blade must remain straight from guard to centered pointed tip, no curve, no single-edged katana. Preserve the rest of the character, refining pixel detail rather than changing the outfit.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-0609904b-50e2-4cdd-82d3-ae8224e91c90.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/WarriorReviewed.png"
+    },
+    {
+      "id": -1007,
+      "key": "MagnetReviewed",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Magnet.png"
+      ],
+      "change": "Image 1 is the edit target, but replace this ambiguous rock/lodestone completely with ONE instantly recognizable classic U-shaped horseshoe magnet: strong simple U silhouette, deep muted red iron body, two short silver-grey exposed pole tips at the top, empty clear gap between arms, upright three-quarter view. No rocks, filings, floating particles, letters, N/S labels, electric arcs, glow or background. Fine pixel shading and grounded material, clear familiar object.",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent in-game motif sprite for KanjiBattle. Style: fine, deliberate hand-shaded Japanese fantasy pixel art, approximately 128x128 logical sprite enlarged cleanly; clearly finer detail than chunky 64px pixel icons, but still genuine square-pixel edges, no smooth vector edges or painterly blur. Match the existing reference game's material palette and restrained outlines. Keep one isolated sprite composition centered with 12 percent safe transparent margin, complete silhouette, no text or labels, no UI, no backdrop, no cast floor shadow, no halo. Image 1 is the edit target, but replace this ambiguous rock/lodestone completely with ONE instantly recognizable classic U-shaped horseshoe magnet: strong simple U silhouette, deep muted red iron body, two short silver-grey exposed pole tips at the top, empty clear gap between arms, upright three-quarter view. No rocks, filings, floating particles, letters, N/S labels, electric arcs, glow or background. Fine pixel shading and grounded material, clear familiar object.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-f6431693-de5f-407c-88b5-3e6b4bfb3b08.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/MagnetReviewed.png"
+    },
+    {
+      "id": -1011,
+      "key": "DiceReviewed",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Dice.png",
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_01.png"
+      ],
+      "change": "Image 1 is the edit target. Keep a compact group of THREE dice, but change their material and pixel language to match the golden honey WOODEN number-die motif in reference Image 2: warm golden wood grain, caramel bevelled edges, dark brown recessed circular pips. Not ivory/bone, no red pips. Three main visible faces show respectively ONE central pip, TWO diagonal pips, THREE diagonal pips, evoking the game's 一 二 三 number characters. Preserve a compact three-die grouping and true transparency. Match the reference's wooden number-piece design closely, with moderate fine pixel detail.",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent in-game motif sprite for KanjiBattle. Style: fine, deliberate hand-shaded Japanese fantasy pixel art, approximately 128x128 logical sprite enlarged cleanly; clearly finer detail than chunky 64px pixel icons, but still genuine square-pixel edges, no smooth vector edges or painterly blur. Match the existing reference game's material palette and restrained outlines. Keep one isolated sprite composition centered with 12 percent safe transparent margin, complete silhouette, no text or labels, no UI, no backdrop, no cast floor shadow, no halo. Image 1 is the edit target. Keep a compact group of THREE dice, but change their material and pixel language to match the golden honey WOODEN number-die motif in reference Image 2: warm golden wood grain, caramel bevelled edges, dark brown recessed circular pips. Not ivory/bone, no red pips. Three main visible faces show respectively ONE central pip, TWO diagonal pips, THREE diagonal pips, evoking the game's 一 二 三 number characters. Preserve a compact three-die grouping and true transparency. Match the reference's wooden number-piece design closely, with moderate fine pixel detail.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-387e3db2-e1b3-4c27-abcc-919523b4c99b.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/DiceReviewed.png"
+    }
+  ]
+}

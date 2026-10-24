@@ -10,7 +10,7 @@ const reviewed=require('./reviewed-motif-crops.json').entries;
 async function main(){
   assert.equal(entries.length,45);assert.equal(new Set(entries.map(e=>e.id)).size,45);
   const report={sets:entries.length,pngs:0,checks:[],errors:[]};
-  for(const entry of entries)for(const [key,size]of [['resource',512],['piece',256],['enemyPiece',256]]){
+  for(const entry of entries)for(const [key,size]of [['resource',512],['piece',512],['enemyPiece',512]]){
     const png=PNG.sync.read(fs.readFileSync(path.join(root,'Assets/Resources',entry[key]+'.png')));
     const legacy=key==='resource'&&reviewed.find(e=>e.id===entry.id);
     if(legacy){
@@ -28,13 +28,19 @@ async function main(){
     }
     assert(solid>size*size*.015,entry.name+' blank '+key);assert(clear>size*size*.1,entry.name+' no transparency');
     assert.equal(edge,0,entry.name+' clipped '+key);report.pngs++;
-    const block=key==='resource'?8:2;
+    const classic=key!=='resource'&&reviewed.find(e=>e.id===entry.id&&e.name===entry.name);
+    if(classic){
+      const original=key==='piece'?classic.icon:classic.icon.replace('icon_','icon_enemy_');
+      assert(fs.readFileSync(path.join(root,'Assets/Resources',entry[key]+'.png')).equals(fs.readFileSync(path.join(root,original))),entry.name+' must use original piece');
+    }
+    if(key!=='resource')continue;
+    const block=4;
     for(let y=0;y<size;y++)for(let x=0;x<size;x++)for(let channel=0;channel<4;channel++)
       assert.equal(png.data[(y*size+x)*4+channel],png.data[((y-y%block)*size+x-x%block)*4+channel],entry.name+' inconsistent pixel grid');
   }
   assert.equal(entries.filter(e=>reviewed.some(old=>old.id===e.id)).length,20);
   report.checks.push('45 complete sets; 135 nonblank PNGs with alpha; 20 reviewed motifs retain exact resource and crop references');
-  report.checks.push('25 new motifs use a 64px logical grid; all 90 unchanged pieces use a 128px logical grid');
+  report.checks.push('25 new motifs use a 128px logical grid; all 90 pieces are 512px classic wood pieces; unchanged-name legacy pieces match original bytes');
   const server=await serve(0);const browser=await chromium.launch();
   try{
     const page=await browser.newPage({viewport:{width:1440,height:1000}});

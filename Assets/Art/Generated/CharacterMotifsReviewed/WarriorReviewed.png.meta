@@ -1,0 +1,598 @@
+fileFormatVersion: 2
+guid: 3921f63f48b93406588e2ab8eb149185
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8033573317368420135
+    second: WarriorReviewed_0
+  - first:
+      213: -2557706620349975486
+    second: WarriorReviewed_1
+  - first:
+      213: -136641245900695308
+    second: WarriorReviewed_2
+  - first:
+      213: -1678539311995701832
+    second: WarriorReviewed_3
+  - first:
+      213: 4358927261162957755
+    second: WarriorReviewed_4
+  - first:
+      213: -6879190238765265157
+    second: WarriorReviewed_5
+  - first:
+      213: -934080690754044396
+    second: WarriorReviewed_6
+  - first:
+      213: -8862392791531520877
+    second: WarriorReviewed_7
+  - first:
+      213: 8598830687011420606
+    second: WarriorReviewed_8
+  - first:
+      213: -3023520174728677302
+    second: WarriorReviewed_9
+  - first:
+      213: -2568060886006804100
+    second: WarriorReviewed_10
+  - first:
+      213: -5726602511617994217
+    second: WarriorReviewed_11
+  - first:
+      213: -4116536077784610265
+    second: WarriorReviewed_12
+  - first:
+      213: -5756102242887403432
+    second: WarriorReviewed_13
+  - first:
+      213: -4260519213780772519
+    second: WarriorReviewed_14
+  - first:
+      213: -7699491024234484193
+    second: WarriorReviewed_15
+  - first:
+      213: 8935707451686327213
+    second: WarriorReviewed_16
+  - first:
+      213: -2056472619669466555
+    second: WarriorReviewed_17
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: WarriorReviewed_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1233
+        height: 1232
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d8e23da1a3038090800000000000000
+      internalID: -8033573317368420135
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_1
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 1181
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 244ff5e4163318cd0800000000000000
+      internalID: -2557706620349975486
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_2
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 1162
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f81c64c28d8a1ef0800000000000000
+      internalID: -136641245900695308
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_3
+      rect:
+        serializedVersion: 2
+        x: 1151
+        y: 807
+        width: 21
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b5b7f69361a4b8e0800000000000000
+      internalID: -1678539311995701832
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_4
+      rect:
+        serializedVersion: 2
+        x: 1157
+        y: 803
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbb626bdf350e7c30800000000000000
+      internalID: 4358927261162957755
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_5
+      rect:
+        serializedVersion: 2
+        x: 1159
+        y: 785
+        width: 16
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfecf04ece43880a0800000000000000
+      internalID: -6879190238765265157
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_6
+      rect:
+        serializedVersion: 2
+        x: 1161
+        y: 771
+        width: 74
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41ebd0c8f8a7903f0800000000000000
+      internalID: -934080690754044396
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_7
+      rect:
+        serializedVersion: 2
+        x: 1164
+        y: 793
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 39cf7c806b4720580800000000000000
+      internalID: -8862392791531520877
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_8
+      rect:
+        serializedVersion: 2
+        x: 1141
+        y: 361
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb93b0783fe255770800000000000000
+      internalID: 8598830687011420606
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_9
+      rect:
+        serializedVersion: 2
+        x: 1165
+        y: 361
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a48f11e9b6c4a06d0800000000000000
+      internalID: -3023520174728677302
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_10
+      rect:
+        serializedVersion: 2
+        x: 1127
+        y: 220
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c715df7fa3a6c5cd0800000000000000
+      internalID: -2568060886006804100
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_11
+      rect:
+        serializedVersion: 2
+        x: 1131
+        y: 227
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71256254b550780b0800000000000000
+      internalID: -5726602511617994217
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_12
+      rect:
+        serializedVersion: 2
+        x: 1178
+        y: 131
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 72a81926f302fd6c0800000000000000
+      internalID: -4116536077784610265
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_13
+      rect:
+        serializedVersion: 2
+        x: 818
+        y: 69
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 858fdd9d1873e10b0800000000000000
+      internalID: -5756102242887403432
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_14
+      rect:
+        serializedVersion: 2
+        x: 834
+        y: 69
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 959ded729589fd4c0800000000000000
+      internalID: -4260519213780772519
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_15
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 68
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1ee13505b9e52590800000000000000
+      internalID: -7699491024234484193
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_16
+      rect:
+        serializedVersion: 2
+        x: 866
+        y: 11
+        width: 17
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da3139a7592020c70800000000000000
+      internalID: 8935707451686327213
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorReviewed_17
+      rect:
+        serializedVersion: 2
+        x: 874
+        y: 37
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 542d84e4c01f573e0800000000000000
+      internalID: -2056472619669466555
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID:
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      WarriorReviewed_0: -8033573317368420135
+      WarriorReviewed_1: -2557706620349975486
+      WarriorReviewed_10: -2568060886006804100
+      WarriorReviewed_11: -5726602511617994217
+      WarriorReviewed_12: -4116536077784610265
+      WarriorReviewed_13: -5756102242887403432
+      WarriorReviewed_14: -4260519213780772519
+      WarriorReviewed_15: -7699491024234484193
+      WarriorReviewed_16: 8935707451686327213
+      WarriorReviewed_17: -2056472619669466555
+      WarriorReviewed_2: -136641245900695308
+      WarriorReviewed_3: -1678539311995701832
+      WarriorReviewed_4: 4358927261162957755
+      WarriorReviewed_5: -6879190238765265157
+      WarriorReviewed_6: -934080690754044396
+      WarriorReviewed_7: -8862392791531520877
+      WarriorReviewed_8: 8598830687011420606
+      WarriorReviewed_9: -3023520174728677302
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

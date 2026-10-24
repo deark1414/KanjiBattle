@@ -408,7 +408,7 @@
     {
       "id": -1001,
       "name": "双剣",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/DualSwords.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/DualSwordsReviewed.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1001",
       "piece": "UI/CharacterPieces/Piece_F1001",
       "enemyPiece": "UI/CharacterPieces/Piece_F1001_Enemy",
@@ -438,7 +438,7 @@
     {
       "id": -1003,
       "name": "戦士",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Warrior.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/WarriorReviewed.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1003",
       "piece": "UI/CharacterPieces/Piece_F1003",
       "enemyPiece": "UI/CharacterPieces/Piece_F1003_Enemy",
@@ -498,7 +498,7 @@
     {
       "id": -1007,
       "name": "磁石",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Magnet.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/MagnetReviewed.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1007",
       "piece": "UI/CharacterPieces/Piece_F1007",
       "enemyPiece": "UI/CharacterPieces/Piece_F1007_Enemy",
@@ -558,7 +558,7 @@
     {
       "id": -1011,
       "name": "賽子",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Dice.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/DiceReviewed.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1011",
       "piece": "UI/CharacterPieces/Piece_F1011",
       "enemyPiece": "UI/CharacterPieces/Piece_F1011_Enemy",

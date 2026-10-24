@@ -1,6 +1,6 @@
 {
   "date": "2026-10-25",
-  "note": "以前のモチーフ20組を再利用。コマ・以前の画像ファイルは変更なし。参照とクロップ情報を更新。",
+  "note": "以前のモチーフ20組を維持。コマは旧意匠へ統一。新規モチーフは128px論理解像度、双剣・戦士・磁石・賽子の意匠を修正。",
   "rows": [
     {
       "id": 1,
@@ -29,7 +29,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.27352472089314195,
         "v": 0.27352472089314195,
@@ -37,7 +37,9 @@
         "height": 0.4529505582137161,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 2,
@@ -66,7 +68,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.2543859649122807,
         "v": 0.2543859649122807,
@@ -74,7 +76,9 @@
         "height": 0.4920255183413078,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 3,
@@ -103,7 +107,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.24720893141945774,
         "v": 0.22647527910685805,
@@ -111,7 +115,9 @@
         "height": 0.5063795853269537,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 10,
@@ -140,7 +146,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.0733652312599681,
         "v": 0.13397129186602874,
@@ -148,7 +154,9 @@
         "height": 0.5653907496012759,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 11,
@@ -177,7 +185,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.0703125,
         "v": 0.46875,
@@ -185,7 +193,9 @@
         "height": 0.1015625,
         "rotation": 35
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 12,
@@ -214,7 +224,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.1371610845295056,
         "v": 0.15948963317384368,
@@ -222,7 +232,9 @@
         "height": 0.7065390749601276,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 13,
@@ -251,7 +263,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.12903225806451613,
         "v": 0.03125,
@@ -259,7 +271,9 @@
         "height": 0.94140625,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 14,
@@ -288,7 +302,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.0875,
         "v": 0.1171875,
@@ -296,7 +310,9 @@
         "height": 0.7421875,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": 15,
@@ -325,7 +341,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.15625,
         "v": 0.2404692082111437,
@@ -333,7 +349,9 @@
         "height": 0.4941348973607038,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 16,
@@ -362,7 +380,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.1467304625199362,
         "v": 0.0430622009569378,
@@ -370,7 +388,9 @@
         "height": 0.8708133971291866,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 17,
@@ -399,7 +419,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.21896162528216703,
         "v": 0.4446952595936795,
@@ -407,7 +427,9 @@
         "height": 0.11060948081264109,
         "rotation": 35
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": 18,
@@ -436,7 +458,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.019936204146730464,
         "v": 0.06698564593301437,
@@ -444,7 +466,9 @@
         "height": 0.8580542264752791,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 19,
@@ -473,7 +497,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.3544018058690745,
         "v": 0.09029345372460496,
@@ -481,7 +505,9 @@
         "height": 0.744920993227991,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 20,
@@ -510,7 +536,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.3524229074889868,
         "v": 0.26953125,
@@ -518,7 +544,9 @@
         "height": 0.54296875,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 21,
@@ -547,7 +575,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.18580542264752792,
         "v": 0.11323763955342903,
@@ -555,7 +583,9 @@
         "height": 0.7567783094098883,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 22,
@@ -584,7 +614,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.08373205741626795,
         "v": 0.32296650717703346,
@@ -592,7 +622,9 @@
         "height": 0.2958532695374801,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 23,
@@ -621,7 +653,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.0430622009569378,
         "v": 0.20813397129186606,
@@ -629,7 +661,9 @@
         "height": 0.5637958532695375,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": 24,
@@ -658,7 +692,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.017543859649122806,
         "v": 0.05023923444976075,
@@ -666,7 +700,9 @@
         "height": 0.9098883572567783,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": 25,
@@ -695,7 +731,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.12280701754385964,
         "v": 0.1307814992025519,
@@ -703,7 +739,9 @@
         "height": 0.6602870813397129,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": 26,
@@ -732,7 +770,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "以前のモチーフへ接続済み／全体の個別目視は未完",
+      "remaining": "旧モチーフを維持／コマは旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0.029505582137161084,
         "v": 0.12041467304625197,
@@ -740,7 +778,9 @@
         "height": 0.7081339712918661,
         "rotation": 0
       },
-      "reusedMotif": true
+      "reusedMotif": true,
+      "classicPieceReused": true,
+      "pieceStyle": "旧画像をそのまま使用"
     },
     {
       "id": 27,
@@ -763,7 +803,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -771,7 +811,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": 28,
@@ -794,7 +836,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -802,7 +844,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": 29,
@@ -825,7 +869,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -833,7 +877,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": 30,
@@ -856,7 +902,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -864,7 +910,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": 31,
@@ -887,7 +935,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -895,7 +943,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": 32,
@@ -918,7 +968,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -926,7 +976,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": 33,
@@ -949,7 +1001,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -957,7 +1009,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1001,
@@ -966,7 +1020,7 @@
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1001.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1001_Enemy.png",
       "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1001.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/DualSwords.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/DualSwordsReviewed.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -980,7 +1034,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "指定の意匠へ修正済み／全体の個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -988,7 +1042,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1002,
@@ -1011,7 +1067,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1019,7 +1075,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1003,
@@ -1028,7 +1086,7 @@
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1003.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1003_Enemy.png",
       "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1003.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Warrior.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/WarriorReviewed.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -1042,7 +1100,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "指定の意匠へ修正済み／全体の個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1050,7 +1108,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1004,
@@ -1073,7 +1133,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1081,7 +1141,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1005,
@@ -1104,7 +1166,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1112,7 +1174,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1006,
@@ -1135,7 +1199,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1143,7 +1207,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1007,
@@ -1152,7 +1218,7 @@
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1007.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1007_Enemy.png",
       "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1007.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Magnet.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/MagnetReviewed.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -1166,7 +1232,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "指定の意匠へ修正済み／全体の個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1174,7 +1240,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1008,
@@ -1197,7 +1265,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1205,7 +1273,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1009,
@@ -1228,7 +1298,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1236,7 +1306,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1010,
@@ -1259,7 +1331,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1267,7 +1339,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1011,
@@ -1276,7 +1350,7 @@
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1011.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1011_Enemy.png",
       "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1011.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Dice.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/DiceReviewed.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -1290,7 +1364,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "指定の意匠へ修正済み／全体の個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1298,7 +1372,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1012,
@@ -1321,7 +1397,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1329,7 +1405,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1013,
@@ -1352,7 +1430,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1360,7 +1438,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1014,
@@ -1383,7 +1463,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1391,7 +1471,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1015,
@@ -1414,7 +1496,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1422,7 +1504,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1016,
@@ -1445,7 +1529,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1453,7 +1537,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -1017,
@@ -1476,7 +1562,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "全キャラ個別の召喚・敵表示・攻撃との整合確認",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1484,7 +1570,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     },
     {
       "id": -20000,
@@ -1507,7 +1595,7 @@
       "created": true,
       "connected": true,
       "individualVisualCheck": "未完",
-      "remaining": "砂の名前・分身の出現は確認済み",
+      "remaining": "モチーフ細密化・コマ旧意匠へ統一／個別目視は未完",
       "currentCrop": {
         "u": 0,
         "v": 0,
@@ -1515,7 +1603,9 @@
         "height": 1,
         "rotation": 0
       },
-      "reusedMotif": false
+      "reusedMotif": false,
+      "classicPieceReused": false,
+      "pieceStyle": "旧意匠に合わせた512pxコマ"
     }
   ]
 }

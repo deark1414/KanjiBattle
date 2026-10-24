@@ -2,9 +2,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
+const { renderClassicPieces } = require('./render-classic-pieces');
 
 const root = path.resolve(__dirname, '../..');
 const manifest = require('../../Docs/Art/CharacterArtPixelProduction.json');
+const refinements = require('../../Docs/Art/CharacterArtRefinements.json');
 const oldCatalog = require('./reviewed-motif-crops.json');
 const characters = require('../../Assets/Data/characters.json');
 const fusionNames = ['双剣','散弾','戦士','衛兵','鍛冶','波','磁石','山','炭','要塞','賽子','雨','砂','草','繭','風鈴','灯'];
@@ -23,6 +25,12 @@ async function main() {
     if (!fs.existsSync(path.join(root,local))) fs.copyFileSync(item.path,path.join(root,local));
     generated.set(item.id,local);
   }
+  for(const item of refinements.generated){
+    const local=`Assets/Art/Generated/CharacterMotifsReviewed/${item.key}.png`;
+    fs.mkdirSync(path.dirname(path.join(root,local)),{recursive:true});
+    if(!fs.existsSync(path.join(root,local)))fs.copyFileSync(item.path,path.join(root,local));
+    generated.set(item.id,local);
+  }
   const browser = await chromium.launch();
   try {
     const page = await browser.newPage();
@@ -35,8 +43,13 @@ async function main() {
     const checks = [];
     for (const item of roster) {
       const inherited = oldCatalog.entries.find(entry => entry.id === item.id);
+      const token=String(item.id).replace('-','F');
+      const allyPath=`${pieceDirectory}/Piece_${token}.png`;
+      const enemyPath=`${pieceDirectory}/Piece_${token}_Enemy.png`;
+      const pieces=await renderClassicPieces(page,item,inherited,root);
+      fs.writeFileSync(path.join(root,allyPath),Buffer.from(pieces[0],'base64'));
+      fs.writeFileSync(path.join(root,enemyPath),Buffer.from(pieces[1],'base64'));
       if (inherited) {
-        const token=String(item.id).replace('-','F');
         const piece=`${pieceDirectory}/Piece_${token}`.replace('Assets/Resources/','');
         const enemyPiece=piece+'_Enemy';
         const source='Assets/Resources/'+inherited.resource+'.png';
@@ -65,49 +78,16 @@ async function main() {
         if(!opaque || !clear)throw Error(`Not an isolated transparent image: ${item.name}`);
         const motif=document.createElement('canvas');motif.width=motif.height=512;
         const mc=motif.getContext('2d');mc.imageSmoothingEnabled=false;
-        const w=right-left+1,h=bottom-top+1,s=54/Math.max(w,h);
-        const logical=document.createElement('canvas');logical.width=logical.height=64;
+        const w=right-left+1,h=bottom-top+1,s=108/Math.max(w,h);
+        const logical=document.createElement('canvas');logical.width=logical.height=128;
         const lc=logical.getContext('2d');lc.imageSmoothingEnabled=false;
         const dw=Math.max(1,Math.round(w*s)),dh=Math.max(1,Math.round(h*s));
-        lc.drawImage(image,left,top,w,h,Math.floor((64-dw)/2),Math.floor((64-dh)/2),dw,dh);
+        lc.drawImage(image,left,top,w,h,Math.floor((128-dw)/2),Math.floor((128-dh)/2),dw,dh);
         mc.drawImage(logical,0,0,512,512);
-        const pieces=[];
-        for(const enemy of [false,true]){
-          const c=document.createElement('canvas');c.width=c.height=128;const ctx=c.getContext('2d');ctx.scale(.25,.25);
-          const polygon=(points)=>{ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath();};
-          ctx.save();ctx.shadowColor='#140d0780';ctx.shadowBlur=0;ctx.shadowOffsetY=4;
-          polygon([[256,20],[425,116],[473,481],[39,481],[87,116]]);ctx.fillStyle=enemy?'#5e1b14':'#684626';ctx.fill();ctx.restore();
-          polygon([[256,29],[418,121],[460,470],[52,470],[94,121]]);
-          ctx.fillStyle=enemy?'#a1372b':'#c9ad71';ctx.fill();
-          ctx.save();ctx.clip();
-          ctx.strokeStyle=enemy?'#e89e6b16':'#81562115';ctx.lineWidth=1.3;
-          for(let n=0;n<25;n++){const x=60+n*17;ctx.beginPath();ctx.moveTo(x,40);ctx.bezierCurveTo(x+18,180,x-14,320,x+5,480);ctx.stroke();}
-          ctx.restore();
-          polygon([[256,47],[402,132],[441,451],[71,451],[110,132]]);ctx.strokeStyle=enemy?'#f2c590':'#fff0bb';ctx.lineWidth=2;ctx.stroke();
-          if(item.id<0 && item.id!==-20000){polygon([[256,57],[394,138],[431,442],[81,442],[118,138]]);ctx.strokeStyle=enemy?'#ffe0ad':'#7c5b29';ctx.lineWidth=2;ctx.stroke();}
-          const chars=Array.from(item.name);
-          const areas=chars.length===1?[{x:100,y:145,w:312,h:278}]:chars.map((_,i)=>({x:150,y:143+i*147,w:212,h:142}));
-          chars.forEach((ch,i)=>{
-            const area=areas[i];ctx.font='300px PieceBrush';const m=ctx.measureText(ch);
-            const width=m.actualBoundingBoxLeft+m.actualBoundingBoxRight,height=m.actualBoundingBoxAscent+m.actualBoundingBoxDescent;
-            const scale=Math.min(area.w/width,area.h/height);
-            ctx.save();ctx.translate(area.x+area.w/2,area.y+area.h/2);ctx.scale(scale,scale);
-            ctx.fillStyle=enemy?'#fff2d7':'#301c11';
-            ctx.fillText(ch,(m.actualBoundingBoxLeft-m.actualBoundingBoxRight)/2,(m.actualBoundingBoxAscent-m.actualBoundingBoxDescent)/2);ctx.restore();
-          });
-          const small=document.createElement('canvas');small.width=small.height=256;
-          const output=small.getContext('2d');output.imageSmoothingEnabled=false;output.drawImage(c,0,0,256,256);
-          pieces.push(small.toDataURL('image/png').split(',')[1]);
-        }
-        return {motif:motif.toDataURL('image/png').split(',')[1],pieces,opaque,clear,bounds:{left,top,right,bottom}};
+        return {motif:motif.toDataURL('image/png').split(',')[1],opaque,clear,bounds:{left,top,right,bottom}};
       },{item,png});
-      const token=String(item.id).replace('-','F');
       const motifPath=`${motifDirectory}/Motif_${token}.png`;
-      const allyPath=`${pieceDirectory}/Piece_${token}.png`;
-      const enemyPath=`${pieceDirectory}/Piece_${token}_Enemy.png`;
       fs.writeFileSync(path.join(root,motifPath),Buffer.from(result.motif,'base64'));
-      fs.writeFileSync(path.join(root,allyPath),Buffer.from(result.pieces[0],'base64'));
-      fs.writeFileSync(path.join(root,enemyPath),Buffer.from(result.pieces[1],'base64'));
       entries.push({...item,source,resource:motifPath.replace('Assets/Resources/','').replace('.png',''),
         piece:allyPath.replace('Assets/Resources/','').replace('.png',''),
         enemyPiece:enemyPath.replace('Assets/Resources/','').replace('.png',''),
@@ -116,7 +96,7 @@ async function main() {
     }
     fs.writeFileSync(path.join(root,'Assets/Resources/UI/PieceMotifs/catalog.json'),JSON.stringify({entries},null,2)+'\n');
     fs.writeFileSync(path.join(root,'tmp/character-art/production-checks.json'),JSON.stringify(checks,null,2)+'\n');
-    console.log(`Prepared ${entries.length} art sets; preserved ${checks.filter(c=>c.reused).length} reviewed motifs and their existing pieces.`);
+    console.log(`Prepared ${entries.length} art sets; preserved ${checks.filter(c=>c.reused).length} reviewed motifs; all pieces use the classic design.`);
   } finally {await browser.close();}
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

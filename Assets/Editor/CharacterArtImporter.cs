@@ -52,12 +52,12 @@ namespace KanjiBattle.Editor
             importer.alphaIsTransparency = true;
             importer.mipmapEnabled = false;
             importer.isReadable = false;
-            importer.filterMode = FilterMode.Point;
+            importer.filterMode = sprite ? FilterMode.Bilinear : FilterMode.Point;
             importer.wrapMode = TextureWrapMode.Clamp;
-            importer.maxTextureSize = sprite ? 256 : 512;
+            importer.maxTextureSize = 512;
             importer.textureCompression = TextureImporterCompression.Uncompressed;
             var web = importer.GetPlatformTextureSettings("WebGL");
-            web.name = "WebGL"; web.overridden = true; web.maxTextureSize = sprite ? 256 : 512;
+            web.name = "WebGL"; web.overridden = true; web.maxTextureSize = 512;
             web.format = TextureImporterFormat.RGBA32;
             web.textureCompression = TextureImporterCompression.Uncompressed;
             importer.SetPlatformTextureSettings(web);
