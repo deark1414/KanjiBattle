@@ -11,7 +11,7 @@
 | 鈴・再響 | `BellEcho.png`＋`BellNote.png` | 波紋を拡大し、独立した音符を2～3個ランダムに外側へ散らして消す |
 | 繭・保護 | `ThreadWrap.png`→消去→`CocoonGuard.png` | 共用の巻き付きが消えた後、別画像の白い繭に囲まれた状態が残る |
 | 風 | `WindGust.png` | 左から右へ流れる風の筋。動作例は追風、向風は反転して使用可能 |
-| 磁石 | `MagnetBody.png`＋`MagneticPull.png` | U字磁石の両極を対象に向け、先端から3つの半円波紋を出した後、敵を1マス引き寄せる |
+| 磁石 | `MagnetBody.png`＋`MagneticPull.png` | 参考画像2枚目のように両極それぞれの先端から小さな波紋を最大3つずつ出し、敵を1マス引き寄せる。中央の大きな波紋は使わない |
 | 雨 | `RainDrops.png`＋`RainRipple.png` | 既存の水滴が降り、対象の足元で波紋を繰り返す。雲は出さない |
 | 鍛冶 | `ForgeHammer.png`＋`ForgeSparks.png` | ハンマーで叩き、接触時に火花、接触後に対象が赤熱してから元の色へ戻る。継続的な炎は出さない |
 | 要塞 | `MortarShell.png`＋`MortarImpact.png` | 既存砲弾が放物線を描き、着弾時に土煙・破片が広がる |

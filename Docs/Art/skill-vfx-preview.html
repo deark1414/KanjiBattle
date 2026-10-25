@@ -41,10 +41,21 @@ function cocoonState(seconds){const t=seconds%4.2,wrap=t>=.25&&t<1.2?Math.min(1,
 const clamp=x=>Math.max(0,Math.min(1,x));
 function forgeState(t){return{hammer:t>=.18&&t<.9,heat:t<.7?0:clamp(Math.min((t-.7)/.16,(2.4-t)/.7)),impact:windowAlpha(t,.69,1.05)};}
 function magnetState(t){return{pull:clamp((t-.75)/.8),waves:t>=.25&&t<1.7};}
+function magnetWaves(a,b,t){
+ const theta=Math.atan2(b.y-a.y,b.x-a.x),rotation=theta-Math.atan2(-1,.25),result=[];
+ if(!magnetState(t).waves)return result;
+ // Pole centers are measured in the cropped, upright magnet image.
+ for(const [pole,tip]of [[0,{x:-12.8,y:-29.24}],[1,{x:16,y:-15.48}]])for(let i=0;i<3;i++){
+  const q=(t-.25-i*.16)/.8;if(q<0||q>1)continue;
+  const distance=8+q*42;
+  result.push({pole,x:a.x+tip.x*Math.cos(rotation)-tip.y*Math.sin(rotation)+Math.cos(theta)*distance,y:a.y+tip.x*Math.sin(rotation)+tip.y*Math.cos(rotation)+Math.sin(theta)*distance,height:13+q*10,alpha:Math.sin(q*Math.PI)*.95,rotation:theta});
+ }
+ return result;
+}
 function magnetEffect(ctx,a,b,t){
- const theta=Math.atan2(b.y-a.y,b.x-a.x),d={x:Math.cos(theta),y:Math.sin(theta)},r=layouts.MagnetBody.bounds;
+ const theta=Math.atan2(b.y-a.y,b.x-a.x),r=layouts.MagnetBody.bounds;
  ctx.save();ctx.translate(a.x,a.y);ctx.rotate(theta-Math.atan2(-1,.25));ctx.drawImage(images.MagnetBody,r.x,r.y,r.w,r.h,-40,-43,80,86);ctx.restore();
- if(magnetState(t).waves)for(let i=0;i<3;i++){const q=(t-.25-i*.18)/.95;if(q<0||q>1)continue;const p={x:a.x+d.x*(38+q*180),y:a.y+d.y*(38+q*180)};ctx.save();ctx.translate(p.x,p.y);ctx.rotate(theta);overlay(ctx,'MagneticPull',{x:0,y:0},Math.sin(q*Math.PI)*.9,42+q*46);ctx.restore();}
+ for(const wave of magnetWaves(a,b,t)){ctx.save();ctx.translate(wave.x,wave.y);ctx.rotate(wave.rotation);overlay(ctx,'MagneticPull',{x:0,y:0},wave.alpha,wave.height);ctx.restore();}
 }
 let hotPiece;
 function forgeEffect(ctx,b,t){const state=forgeState(t);if(state.heat){ctx.save();ctx.globalAlpha=state.heat*.65;ctx.drawImage(hotPiece,b.x-27,b.y-32,54,64);ctx.restore();}if(state.hammer){const q=clamp((t-.18)/.52),rotation=-.8+q*q*2.33,r=layouts.ForgeHammer.bounds;ctx.save();ctx.globalAlpha=clamp((.9-t)/.1);ctx.translate(b.x-48,b.y-48);ctx.rotate(rotation);ctx.drawImage(images.ForgeHammer,r.x,r.y,r.w,r.h,-7.2,-64.8,72,72);ctx.restore();}if(state.impact)overlay(ctx,'ForgeSparks',{x:b.x,y:b.y-2},state.impact,58);}

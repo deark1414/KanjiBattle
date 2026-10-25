@@ -84,6 +84,11 @@ async function main(){
     assert.equal(await page.locator('article[data-key=CocoonGuard] canvas').evaluate(c=>c.toDataURL()),protectedImage,'Protection state should remain after wrap disappears');
     for(const angle of [0,90,180,270]){
       await page.evaluate(a=>supportVfxPreview.renderAt(.44,a),angle);
+      const magnetic=await page.evaluate(()=>magnetWaves(point(150,140),point(500,140),.7));
+      assert.equal(magnetic.length,6);
+      assert.equal(magnetic.filter(w=>w.pole===0).length,3);
+      assert.equal(magnetic.filter(w=>w.pole===1).length,3);
+      assert(magnetic.every(w=>w.height<=23&&w.x>12&&w.x<628&&w.y>12&&w.y<268),'Pole ripples clipped or oversized');
       const anchors=await page.evaluate(()=>[point(100,140),point(290,140),point(420,140),point(540,140),point(140,140),point(500,140)]);
       assert(anchors.every(p=>p.x>=27&&p.x<=613&&p.y>=32&&p.y<=248),'Piece clipped after rotation: '+angle);
       const noteBounds=await page.evaluate(()=>{const points=[point(230,140),point(410,140)],boxes=[];for(let cycle=0;cycle<40;cycle++)for(let lane=0;lane<2;lane++)for(const n of supportVfxPreview.bellNotes(.9,cycle,lane)){const radius=Math.hypot(n.width,n.height)/2,p=points[lane];boxes.push({left:p.x+n.x-radius,right:p.x+n.x+radius,top:p.y+n.y-radius,bottom:p.y+n.y+radius});}return boxes;});
