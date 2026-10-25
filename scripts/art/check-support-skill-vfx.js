@@ -12,7 +12,7 @@ const layout=require('../../Assets/Art/Drafts/VFX/SupportSkills/layout.json');
 async function main(){
   fs.mkdirSync(directory,{recursive:true});
   const report={status:'draft-only',assets:[],checks:[],errors:[]};
-  assert.equal(manifest.generated.length,14);
+  assert.equal(manifest.generated.length,16);
   assert.deepEqual(new Set(layout.entries.map(e=>e.key)),new Set(manifest.generated.map(e=>e.key)));
   for(const entry of manifest.generated.filter(e=>e.reuse)){
     assert.deepEqual(fs.readFileSync(path.join(root,entry.source)),execFileSync('git',['show','HEAD:'+entry.source],{cwd:root,maxBuffer:20*1024*1024}),'Reused production source changed: '+entry.key);
@@ -51,7 +51,11 @@ async function main(){
     await page.waitForFunction(()=>window.supportVfxPreview?.ready);
     await page.waitForFunction(()=>[...document.querySelectorAll('.still img')].every(i=>i.complete&&i.naturalWidth>0));
     assert.equal(await page.locator('.scene').count(),10);
-    assert.equal(await page.locator('.still img').count(),14);
+    assert.equal(await page.locator('.still img').count(),16);
+    const order=await page.evaluate(()=>({before:supportVfxPreview.forgeState(.6),hit:supportVfxPreview.forgeState(.8),hot:supportVfxPreview.forgeState(1.2),cool:supportVfxPreview.forgeState(2.5),emit:supportVfxPreview.magnetState(.4),pull:supportVfxPreview.magnetState(1.2)}));
+    assert(order.before.hammer&&order.before.heat===0);
+    assert(order.hit.impact>0&&order.hit.heat>0&&order.hot.heat===1&&order.cool.heat===0);
+    assert(order.emit.waves&&order.emit.pull===0&&order.pull.pull>0);
     await page.evaluate(()=>supportVfxPreview.setBellSeed(12345));
     const bursts=await page.evaluate(()=>Array.from({length:40},(_,cycle)=>supportVfxPreview.bellNotes(.5,cycle,0)));
     assert(bursts.every(notes=>notes.length===2||notes.length===3));
@@ -117,7 +121,8 @@ async function main(){
     await page.evaluate(()=>{supportVfxPreview.renderAt(.8);document.querySelector('.controls').remove();document.querySelector('main').style.cssText='display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px';for(const a of document.querySelectorAll('article')){a.querySelector('canvas').style.display='none';a.querySelector('.row').style.gridTemplateColumns='1fr';}});
     await page.screenshot({path:path.join(directory,'three-sprites.png'),fullPage:true});
     assert.deepEqual(report.errors,[]);
-    report.checks.push('14 RGBA sprites including 2 reused originals; fixed sizes, transparent margin, 128px grid and clear bell/cocoon centers');
+    report.checks.push('16 RGBA sprites including 4 unchanged reused originals; fixed sizes, transparent margin, 128px grid and clear bell/cocoon centers');
+    report.checks.push('Forge hammer precedes impact/heat and cooling; magnet wave emission precedes pull');
     report.checks.push('40 bell bursts vary with 2-3 separate notes; no reroll while paused, no kanji overlap or clipping in four directions; replay changes scatter');
     report.checks.push('10 skill examples change at 0/90/180/270 degrees using single-image states');
     report.checks.push('shared thread wrap is followed by a clear gap, then persistent cocoon protection; no overlap across 420 samples');

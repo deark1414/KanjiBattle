@@ -117,25 +117,37 @@
     {
       "key": "MagneticPull",
       "name": "磁石",
-      "axis": "right",
-      "logicalHeight": 64,
-      "description": "青白い3本の湾曲した磁力線。右側へ収束し、磁石への吸引を表現。",
+      "axis": "overlay",
+      "logicalHeight": 128,
+      "description": "U字磁石の両極から対象へ広がる半円波紋",
       "logicalWidth": 128,
-      "prompt": "Use case: stylized-concept. Asset type: ONE isolated transparent game VFX sprite for a Japanese kanji strategy game. Redesign magnetic attraction as MAGNETIC FIELD LINES, not iron filings. Three clean thin continuous arcing field lines run from LEFT toward RIGHT: one central near-horizontal strand, one bows gently above it and one bows gently below, converging narrowly at the RIGHT tip, visually suggesting a magnetic pull. Restrained pale ice-blue/ivory cores, muted blue edging, a few restrained coral-red pixels near the right end to suggest magnetic poles. NOT a solid beam. Smooth broad arcs rendered as crisp pixel stair-steps, NOT random sharp zigzag chain lightning. Tiny sparse angular sparks at the converging end are okay. Strong readable simple silhouette at 128px logical width; deliberately blocky pixel art, limited palette, opaque thin line cores, no smooth painted texture or broad bloom. Wide horizontal composition, content width about 75 percent of canvas and height about 22 percent, centered with at least 12 percent true clear padding on all sides. Genuine transparent RGBA outside and between the three lines. No magnet object, arrows, letters, text, game pieces, diagram labels, background, magic circle, sci-fi laser, iron sand, dust, grainy particles or checkerboard. One complete reusable image, NOT animation frames or a sprite sheet.",
-      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-315556f9-9dc5-4063-a946-f5da6f12057c.png",
-      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MagneticFieldLines.png",
+      "prompt": "One isolated transparent pixel art game VFX sprite: ONE thin crescent-shaped semicircular magnetic ripple facing RIGHT, like a single closing parenthesis ). Smooth broad semicircle with crisp pixel stair steps, top and bottom tips at the LEFT and curved apex at the RIGHT. Pale ice blue and ivory line core with narrow muted blue edge, simple limited palette, 128px logical pixel art, not smooth vector. A single arc ONLY, no extra parallel arcs, no magnet object, no arrowhead, no particles, no runes, no text, no background, no glow cloud. True RGBA transparent on both sides and inside the curve, generous 15 percent padding. Thin line about 2 logical pixels. Intended to be duplicated at runtime into 3 expanding wavefronts emitted from the poles of a U magnet toward an enemy. One complete sprite, not a sheet.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-2d403487-07da-47a6-91a3-828d7d926c3d.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MagneticRipple.png",
       "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagneticPull.png",
       "previousVersion": {
         "key": "MagneticPull",
         "name": "磁石",
         "axis": "right",
         "logicalHeight": 64,
-        "description": "A directional MAGNETIC ATTRACTION STREAM made of tiny DARK IRON FILINGS and a few pale grey glints in THREE loose slightly curving lanes. Filings flow LEFT TO RIGHT and become more gathered near RIGHT. Short distinct grain clusters, restrained cool iron-grey, a little charcoal outline for light-ground visibility, a few pale silver flecks for dark-ground visibility. No actual magnet object, no electric bolt, no luminous beam, no concentric rings, no runes or arrows. Sparse horizontal transparent stream, clear natural material instead of science-fiction graphics, complete with safety padding.",
+        "description": "青白い3本の湾曲した磁力線。右側へ収束し、磁石への吸引を表現。",
         "logicalWidth": 128,
-        "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A directional MAGNETIC ATTRACTION STREAM made of tiny DARK IRON FILINGS and a few pale grey glints in THREE loose slightly curving lanes. Filings flow LEFT TO RIGHT and become more gathered near RIGHT. Short distinct grain clusters, restrained cool iron-grey, a little charcoal outline for light-ground visibility, a few pale silver flecks for dark-ground visibility. No actual magnet object, no electric bolt, no luminous beam, no concentric rings, no runes or arrows. Sparse horizontal transparent stream, clear natural material instead of science-fiction graphics, complete with safety padding.",
-        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-0889ad3b-620b-4dde-a9ee-d004ad54ba18.png",
-        "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MagneticPull.png",
-        "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagneticPull.png"
+        "prompt": "Use case: stylized-concept. Asset type: ONE isolated transparent game VFX sprite for a Japanese kanji strategy game. Redesign magnetic attraction as MAGNETIC FIELD LINES, not iron filings. Three clean thin continuous arcing field lines run from LEFT toward RIGHT: one central near-horizontal strand, one bows gently above it and one bows gently below, converging narrowly at the RIGHT tip, visually suggesting a magnetic pull. Restrained pale ice-blue/ivory cores, muted blue edging, a few restrained coral-red pixels near the right end to suggest magnetic poles. NOT a solid beam. Smooth broad arcs rendered as crisp pixel stair-steps, NOT random sharp zigzag chain lightning. Tiny sparse angular sparks at the converging end are okay. Strong readable simple silhouette at 128px logical width; deliberately blocky pixel art, limited palette, opaque thin line cores, no smooth painted texture or broad bloom. Wide horizontal composition, content width about 75 percent of canvas and height about 22 percent, centered with at least 12 percent true clear padding on all sides. Genuine transparent RGBA outside and between the three lines. No magnet object, arrows, letters, text, game pieces, diagram labels, background, magic circle, sci-fi laser, iron sand, dust, grainy particles or checkerboard. One complete reusable image, NOT animation frames or a sprite sheet.",
+        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-315556f9-9dc5-4063-a946-f5da6f12057c.png",
+        "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MagneticFieldLines.png",
+        "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagneticPull.png",
+        "previousVersion": {
+          "key": "MagneticPull",
+          "name": "磁石",
+          "axis": "right",
+          "logicalHeight": 64,
+          "description": "A directional MAGNETIC ATTRACTION STREAM made of tiny DARK IRON FILINGS and a few pale grey glints in THREE loose slightly curving lanes. Filings flow LEFT TO RIGHT and become more gathered near RIGHT. Short distinct grain clusters, restrained cool iron-grey, a little charcoal outline for light-ground visibility, a few pale silver flecks for dark-ground visibility. No actual magnet object, no electric bolt, no luminous beam, no concentric rings, no runes or arrows. Sparse horizontal transparent stream, clear natural material instead of science-fiction graphics, complete with safety padding.",
+          "logicalWidth": 128,
+          "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A directional MAGNETIC ATTRACTION STREAM made of tiny DARK IRON FILINGS and a few pale grey glints in THREE loose slightly curving lanes. Filings flow LEFT TO RIGHT and become more gathered near RIGHT. Short distinct grain clusters, restrained cool iron-grey, a little charcoal outline for light-ground visibility, a few pale silver flecks for dark-ground visibility. No actual magnet object, no electric bolt, no luminous beam, no concentric rings, no runes or arrows. Sparse horizontal transparent stream, clear natural material instead of science-fiction graphics, complete with safety padding.",
+          "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-0889ad3b-620b-4dde-a9ee-d004ad54ba18.png",
+          "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MagneticPull.png",
+          "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagneticPull.png"
+        }
       }
     },
     {
@@ -209,6 +221,30 @@
       "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MortarShell.png",
       "logicalWidth": 128,
       "logicalHeight": 32
+    },
+    {
+      "key": "ForgeHammer",
+      "name": "鍛冶のハンマー",
+      "source": "Assets/Resources/VFX/Weapons/HammerMotion.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/VFX/Weapons/HammerMotion.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ForgeHammer.png",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用"
+    },
+    {
+      "key": "MagnetBody",
+      "name": "U字磁石",
+      "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1007.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_F1007.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagnetBody.png",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用"
     }
   ],
   "sequence": {
@@ -232,6 +268,17 @@
     "Mortar": [
       "MortarShell",
       "MortarImpact"
+    ],
+    "Forge": [
+      "ForgeHammer",
+      "ForgeSparks",
+      "heat",
+      "cool"
+    ],
+    "Magnet": [
+      "MagnetBody",
+      "MagneticPull",
+      "pull"
     ]
   },
   "bellEmission": {
