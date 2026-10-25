@@ -28,6 +28,15 @@ Create animated transparent sprite assets that make the simple kanji characters 
 - 新規6画像はいずれも単画像・128px相当の透過ドット絵。元の雨滴・弾の原画は加工せず、確認用の別コピーを同じ出力処理へ通す。素材・参照・生成プロンプト・寸法・軸を記録する。フレーム切替なしで位置・回転・拡大・透過だけを動かす。
 - 制作後の計14素材・10動作例をPC／スマホと4方向で検査。透過・安全余白・固定寸法・ドットの整合・再生操作が成功し、再利用元2枚の未変更も確認。雨の波紋は対象の足元に収まるよう縮小。草案のまま保持し、Unity戦闘への接続は未実施。
 
+## 追加草案第3弾: 2026-10-25
+
+- 波・草・炭・灯・影・賽子を追加する。既存10動作例は維持し、実ゲームへの接続は承認後。
+- 波は右へ進む低い水の波頭で前方の敵を押す。草は根を抜かず地面から若芽が広がり、同じ草のコマが分裂して現れる。
+- 炭は被弾後の赤い熾火と小さな火の粉で強化を表す。灯は既存の蝋燭モチーフと合わせられる暖色の小さな炎の揺らぎを使い、近くの味方を守る瞬間に出す。
+- 影は人型でない薄い影煙から対象のコマへ変化する。賽子は既存の賽子モチーフを転がし、確定した目に応じ回復・防御・攻撃の演出へつなぐ。星状の小さな金の輝きは決定時だけ使う。
+- 新規6素材は128px論理グリッドの透過単画像。フレーム切替は使わず、位置・拡大・回転・透過で動かす。草案のまま保持し、元モチーフ・コマ・本番VFXは変更しない。
+- 草案は合計23素材・16動作例。透過・余白・固定寸法・ドット整合、4方向、PC／スマホ、賽子の6出目と効果分類の検査に成功。追加・変更の25系統中16系統を制作済みで残り9系統。内訳と対象範囲は`Docs/Art/SkillVfxProgress.md`。
+
 ## Runtime Presentation Update: 2026-09-20
 
 - In battle, default to one approved opaque representative sprite per effect and animate that single sprite with runtime position, rotation, scale, and fade. This avoids the frame-switching and slice-boundary failures previously observed in WebGL. When an attack defeats a character, keep that character visible until its skill VFX has completed, while removing it from gameplay targeting immediately.

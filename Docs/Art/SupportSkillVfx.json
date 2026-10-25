@@ -245,6 +245,90 @@
       "logicalHeight": 128,
       "reuse": true,
       "prompt": "既存承認素材を変更せず再利用"
+    },
+    {
+      "key": "WaveCrest",
+      "name": "波",
+      "axis": "right",
+      "logicalWidth": 128,
+      "logicalHeight": 64,
+      "detail": "A low ocean wave crest moving LEFT to RIGHT, one compact curled blue-teal water lip and ivory foam crest at the RIGHT, a short shallow trailing sheet of water on LEFT. Side view, roughly three times wider than tall. No ocean background, no beach, no giant tsunami.",
+      "prompt": "Use case: stylized-concept. One isolated transparent game VFX sprite for a Japanese kanji strategy game. Deliberate crisp 128px logical pixel art, limited palette, no painterly detail or smooth gradients. True RGBA transparent exterior with at least 12 percent empty safe padding on all sides. Single complete sprite, NOT frames or animation sheet. No text, UI, labels, game pieces or background. A low ocean wave crest moving LEFT to RIGHT, one compact curled blue-teal water lip and ivory foam crest at the RIGHT, a short shallow trailing sheet of water on LEFT. Side view, roughly three times wider than tall. No ocean background, no beach, no giant tsunami.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-f0159ed1-8a7b-473b-a934-8a0df518fbf7.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/WaveCrest.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/WaveCrest.png"
+    },
+    {
+      "key": "GrassSprout",
+      "name": "草",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "detail": "A small open oval perimeter of fresh grass shoots growing from ground, uneven few green blades and tiny soil flecks along bottom and side edges. Large completely transparent open center for a game piece. Grass growing upright rooted in soil, NOT uprooted bunch, no roots hanging, no flowers, no decorative vines, no ground tile.",
+      "prompt": "Use case: stylized-concept. One isolated transparent game VFX sprite for a Japanese kanji strategy game. Deliberate crisp 128px logical pixel art, limited palette, no painterly detail or smooth gradients. True RGBA transparent exterior with at least 12 percent empty safe padding on all sides. Single complete sprite, NOT frames or animation sheet. No text, UI, labels, game pieces or background. A small open oval perimeter of fresh grass shoots growing from ground, uneven few green blades and tiny soil flecks along bottom and side edges. Large completely transparent open center for a game piece. Grass growing upright rooted in soil, NOT uprooted bunch, no roots hanging, no flowers, no decorative vines, no ground tile.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-bb719e37-9fae-4f30-a8ee-6b5fc45a70e1.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/GrassSprout.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GrassSprout.png"
+    },
+    {
+      "key": "CoalEmbers",
+      "name": "炭",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "detail": "A sparse small burst of glowing dull red and orange coal embers, a few tiny dark charcoal chips with red fissures and 6 floating orange cinders. A completely transparent open center for a game piece. Blackened charcoal material, not large flames, not fireball, not magic ring. Restrained material effect.",
+      "prompt": "Use case: stylized-concept. One isolated transparent game VFX sprite for a Japanese kanji strategy game. Deliberate crisp 128px logical pixel art, limited palette, no painterly detail or smooth gradients. True RGBA transparent exterior with at least 12 percent empty safe padding on all sides. Single complete sprite, NOT frames or animation sheet. No text, UI, labels, game pieces or background. A sparse small burst of glowing dull red and orange coal embers, a few tiny dark charcoal chips with red fissures and 6 floating orange cinders. A completely transparent open center for a game piece. Blackened charcoal material, not large flames, not fireball, not magic ring. Restrained material effect.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-f10f8fe4-bfea-4c52-9db3-3fb56219d116.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/CoalEmbers.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CoalEmbers.png"
+    },
+    {
+      "key": "LanternFlame",
+      "name": "灯",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "detail": "A small warm ivory-gold protective candle flame wisp, three narrow delicate upward curving tongues around an invisible upright oval, transparent large central opening. Calm warm flame, not a raging fire. No candle object, no lantern object, no glass bubble, no magic ring, no scenery, no large soft glow.",
+      "prompt": "Use case: stylized-concept. One isolated transparent game VFX sprite for a Japanese kanji strategy game. Deliberate crisp 128px logical pixel art, limited palette, no painterly detail or smooth gradients. True RGBA transparent exterior with at least 12 percent empty safe padding on all sides. Single complete sprite, NOT frames or animation sheet. No text, UI, labels, game pieces or background. A small warm ivory-gold protective candle flame wisp, three narrow delicate upward curving tongues around an invisible upright oval, transparent large central opening. Calm warm flame, not a raging fire. No candle object, no lantern object, no glass bubble, no magic ring, no scenery, no large soft glow.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-e4a3afb8-4a55-4c94-a9f9-0d349f3bde8d.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/LanternFlame.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/LanternFlame.png"
+    },
+    {
+      "key": "ShadowMist",
+      "name": "影",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "detail": "A very simple low puff of dark charcoal grey translucent shadow smoke, uneven curled left and right edges around a large transparent upright central space. Only a few large pixel clusters. No human silhouette, no face, no doll, no eyes, no creature, no purple neon. A shadow transformation effect that reveals the copied game piece inside.",
+      "prompt": "Use case: stylized-concept. One isolated transparent game VFX sprite for a Japanese kanji strategy game. Deliberate crisp 128px logical pixel art, limited palette, no painterly detail or smooth gradients. True RGBA transparent exterior with at least 12 percent empty safe padding on all sides. Single complete sprite, NOT frames or animation sheet. No text, UI, labels, game pieces or background. A very simple low puff of dark charcoal grey translucent shadow smoke, uneven curled left and right edges around a large transparent upright central space. Only a few large pixel clusters. No human silhouette, no face, no doll, no eyes, no creature, no purple neon. A shadow transformation effect that reveals the copied game piece inside.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-90a41425-38a9-48c2-a703-144ad7a6d4fc.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/ShadowMist.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ShadowMist.png"
+    },
+    {
+      "key": "DiceSparkles",
+      "name": "賽子",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "detail": "A sparse cluster of FIVE tiny warm gold and ivory four-point glints in an uneven oval around a completely clear open center. One glint larger than the others, no symmetry. Simple crisp little pixel stars marking a dice result. No dice object, no circle, no coins, no letters, no thick aura, no giant glow.",
+      "prompt": "Use case: stylized-concept. One isolated transparent game VFX sprite for a Japanese kanji strategy game. Deliberate crisp 128px logical pixel art, limited palette, no painterly detail or smooth gradients. True RGBA transparent exterior with at least 12 percent empty safe padding on all sides. Single complete sprite, NOT frames or animation sheet. No text, UI, labels, game pieces or background. A sparse cluster of FIVE tiny warm gold and ivory four-point glints in an uneven oval around a completely clear open center. One glint larger than the others, no symmetry. Simple crisp little pixel stars marking a dice result. No dice object, no circle, no coins, no letters, no thick aura, no giant glow.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-b0046ab0-2006-4166-b77e-16686ca24f4e.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceSparkles.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceSparkles.png"
+    },
+    {
+      "key": "DiceBody",
+      "name": "賽子の本体",
+      "axis": "overlay",
+      "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1011.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_F1011.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceBody.png",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "reuse": true,
+      "prompt": "既存承認モチーフを変更せず再利用"
     }
   ],
   "sequence": {
