@@ -15,6 +15,7 @@ public sealed class CharacterCodexUI : MonoBehaviour
         public bool fusion, enemy;
     }
     private static CharacterCodexUI active;
+    public static bool IsCodexScreenOpen => active!=null&&active.gameObject.activeInHierarchy&&!active.results;
     private readonly List<Item> items = new();
     private RectTransform listContent, detailContent;
     private TextMeshProUGUI heading;
@@ -121,6 +122,7 @@ public sealed class CharacterCodexUI : MonoBehaviour
                 detail = (entry.owners.Length > 1 ? $"素材　{materials}\n\n" : "") + entry.result.Summary });
         }
         window.Draw();
+        TutorialDirector.Instance?.RequestOnce("records",window.gameObject,()=>active==window);
     }
     private static CharacterCodexUI Open(Transform source, string title, bool screen = false)
     {

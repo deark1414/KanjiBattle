@@ -23,6 +23,7 @@ const frame = document.querySelector('#game');
 const status = document.querySelector('#status');
 const preset = document.querySelector('#preset');
 preset.add(new Option('城下ツリー・初期3体','tree'));
+preset.add(new Option('初回導入・チュートリアル','tutorial'));
 const advanced = [['wave','波'],['magnet','磁石'],['mountain','山'],['coal','炭'],['fortress','要塞'],['dice','賽子'],['rain','雨'],['sand','砂'],['grass','草'],['cocoon','繭'],['windchime','風鈴'],['lantern','灯']];
 for (const [key,label] of advanced) preset.add(new Option(label,'fusion-'+key));
 const controls = [...document.querySelectorAll('button,select')];
@@ -74,7 +75,7 @@ document.querySelector('#defeat').onclick=()=>execute('nextDefeat').catch(()=>{}
   }
   await new Promise(resolve=>setTimeout(resolve,4500));
   const selected=new URLSearchParams(location.search).get('preset');
-  const valid=['standard','defeat','locked','support','defense','animals','elements','soldiers','forge','tree',...advanced.map(([key])=>'fusion-'+key)];
+  const valid=['standard','defeat','locked','support','defense','animals','elements','soldiers','forge','tree','tutorial',...advanced.map(([key])=>'fusion-'+key)];
   const explicit=valid.includes(selected);
   preset.value=explicit?selected:(localStorage.getItem(key)||'standard');
   await execute(explicit || !localStorage.getItem(key)?'seed':'resume',preset.value);

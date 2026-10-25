@@ -19,7 +19,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a8f9237dba00b460b8d915962812b47b, type: 2}
   - {fileID: 11400000, guid: a8f9237dba00b460b8d915962812b47b, type: 2}
   - {fileID: 11400000, guid: a8f9237dba00b460b8d915962812b47b, type: 2}
-  rewardStagePoints: 4
+  rewardStagePoints: 6
   slotCount: 8
   restrictFormationSlots: 0
   enemyPositions:

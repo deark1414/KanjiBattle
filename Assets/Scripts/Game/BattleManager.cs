@@ -199,6 +199,7 @@ public partial class BattleManager : MonoBehaviour
             deploymentView.Refresh(selectedDeploymentCharacter);
             RefreshFusionPreview();
             RefreshPlayerSkillStatus();
+            RequestDeploymentGuides();
         }
     }
 
@@ -1383,6 +1384,7 @@ public partial class BattleManager : MonoBehaviour
         resultText.fontSizeMax = 48f;
 
         Canvas.ForceUpdateCanvases();
+        RequestResultGuide(isWin);
     }
 
     private void ConfigureResultModal(bool hasBondResults)

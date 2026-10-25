@@ -10,6 +10,10 @@ KanjiBattle currently treats Unity prefabs as structural templates and applies m
 
 ## Main Runtime Layout Owners
 
+- `FullScreenGuideView` / `GuideSettingsLayout`（初回説明・設定）
+  - 既存コマと背景を使った全面表示、縦横の図・文字領域、設定項目の物理的な可読サイズを管理する。
+  - 共通テーマは全面説明の文字・ボタン・画像を上書きしない。表示順と既読保存は`TutorialDirector`が管理する。
+
 - `CastleTreeView`（城下）
   - ツリーの固定詳細欄、5枝のノードと接続線、縦スクロールを管理する。
   - 縦画面では枝タブで1列表示、横画面では5列を表示する。

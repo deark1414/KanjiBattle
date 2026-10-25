@@ -27,6 +27,7 @@ public partial class BattleManager
             playerSkill.Reset(playerSkillPlan);
             ClosePlayerSkillSelection();
         }, ClosePlayerSkillSelection);
+        TutorialDirector.Instance?.RequestOnce("player-skill",gameObject,()=>IsDeploying&&playerSkillView!=null);
     }
     private void ClosePlayerSkillSelection()
     {

@@ -48,6 +48,9 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public int treeSlots;
         public string[] treeOwned;
         public bool treeOverflow;
+        public string guideId;
+        public string[] guideSeen;
+        public bool openingEnabled,guideOverflow;
     }
 
     private StageData fixtureStage;
@@ -68,7 +71,11 @@ public sealed class BattleE2EBridge : MonoBehaviour
             {
                 case "seed": Seed(request.value); break;
                 case "resume":
-                    if(PlayerProgressStore.GetString(FixtureKey)=="tree")
+                    if(PlayerProgressStore.GetString(FixtureKey)=="tutorial")
+                    {
+                        if(request.value!="tutorial")UIManager.Instance.ShowFormation();
+                    }
+                    else if(PlayerProgressStore.GetString(FixtureKey)=="tree")
                     {
                         if(request.value=="tree")UIManager.Instance.ShowFacility();
                         else PrepareTreeCampaign(Mathf.Clamp(GameManager.Instance.GetHighestClearedStageId()+1,1,40));
@@ -79,6 +86,19 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "fundFusion": GameManager.Instance.AddStagePoints(10); break;
                 case "corruptPlan": PlayerProgressStore.SetString("KanjiBattle.Fusion.AdjacentChoices.v2", "{broken"); PlayerProgressStore.Save(); break;
                 case "snapshot": break;
+                case "tutorialRoute":
+                    switch(request.value)
+                    {
+                        case "formation": UIManager.Instance.ShowFormation();break;
+                        case "top": UIManager.Instance.ShowTop();break;
+                        case "castle": UIManager.Instance.ShowFacility();break;
+                        case "codex": UIManager.Instance.ShowCodex();break;
+                        default: throw new Exception("Unknown tutorial route.");
+                    }
+                    break;
+                case "tutorialEnable":
+                    TutorialProgress.ResetProgress();PlayerProgressStore.SetString(FixtureKey,"tutorial");PlayerProgressStore.Save();
+                    TutorialDirector.Instance.SuppressForDebug(false);break;
                 case "treeFresh":
                     ResetTreeFixture();break;
                 case "treeFunds": GameManager.Instance.AddStagePoints(int.Parse(request.value));break;
@@ -130,6 +150,14 @@ public sealed class BattleE2EBridge : MonoBehaviour
 
     private void Seed(string kind)
     {
+        TutorialDirector.Instance?.SuppressForDebug(true);
+        if(kind=="tutorial")
+        {
+            Seed("standard");ResetTreeFixture();TutorialProgress.ResetProgress();TutorialProgress.OpeningEnabled=true;
+            FormationUI.Instance.ClearAllSlots();FormationUI.Instance.RememberCurrentFormation();
+            PlayerProgressStore.SetString(FixtureKey,"tutorial");PlayerProgressStore.Save();
+            TutorialDirector.Instance.SuppressForDebug(false);TutorialDirector.Instance.BeginStartup();return;
+        }
         if(kind=="tree")
         {
             Seed("standard");ResetTreeFixture();GameManager.Instance.AddStagePoints(30);return;
@@ -299,6 +327,8 @@ public sealed class BattleE2EBridge : MonoBehaviour
         FacilityData fusion = FacilityManager.Instance.GetFacilities().First(data => data.effectType == FacilityEffectType.Fusion);
         return new Snapshot
         {
+            guideId=TutorialDirector.Instance?.CurrentId??"",guideSeen=TutorialProgress.Seen,openingEnabled=TutorialProgress.OpeningEnabled,
+            guideOverflow=FindObjectsByType<FullScreenGuideView>(FindObjectsSortMode.None).Any(view=>view.GetComponentsInChildren<TMP_Text>().Any(text=>text.isTextOverflowing)),
             treeSlots=GameManager.Instance.GetFacilityFormationSlots(),
             treeOwned=CastleTree.Nodes.Where(CastleTree.Owned).Select(n=>n.id).ToArray(),
             treeOverflow=FindObjectsByType<CastleTreeView>(FindObjectsSortMode.None).Any(view=>view.GetComponentsInChildren<TMP_Text>().Any(text=>text.isTextOverflowing)),
