@@ -319,16 +319,114 @@
       "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceSparkles.png"
     },
     {
-      "key": "DiceBody",
-      "name": "賽子の本体",
+      "key": "CoalCold",
+      "name": "消火した炭",
       "axis": "overlay",
-      "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1011.png",
-      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_F1011.png",
-      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceBody.png",
       "logicalWidth": 128,
       "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/CoalCold.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CoalCold.png",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-e4a97258-be5d-472f-b588-8a97464cc17a.png",
+      "prompt": "Use case: precise-object-edit. Edit target: the provided pixel art pile of burning charcoal. Create its EXTINGUISHED / COLD state. Preserve exactly the same arrangement, silhouettes, number of charcoal lumps, camera view, proportions, grey highlights, deliberate blocky pixel resolution and centered transparent composition. Change ONLY the orange/yellow glowing fissures and red hot areas into dark charcoal grey crevices. No glowing pixels, no orange or red, no flames, no sparks, no smoke. Do not rearrange or add pieces of charcoal. Do not add a ground plane. True RGBA transparent background, preserve safe padding. The cold version must register with the hot reference so a state switch looks like the same charcoal simply igniting. One complete sprite, not frames or a sheet.",
+      "refs": [
+        "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1009.png"
+      ]
+    },
+    {
+      "key": "CoalHot",
+      "name": "燃焼した炭",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1009.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CoalHot.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_F1009.png",
       "reuse": true,
-      "prompt": "既存承認モチーフを変更せず再利用"
+      "prompt": "既存の燃焼モチーフを変更せず再利用"
+    },
+    {
+      "key": "DiceFace1",
+      "name": "出目1",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceFace1.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace1.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_01.png",
+      "reusedFrom": "Assets/Resources/UI/PieceMotifs/Motif_01.png",
+      "sourceSha256": "b73c7cfd76a4da05867673706c6fdac3fa74e847f468aacd15a21b39ee425823",
+      "reuse": true,
+      "prompt": "元の数字モチーフを変更せず再利用"
+    },
+    {
+      "key": "DiceFace2",
+      "name": "出目2",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceFace2.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace2.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_02.png",
+      "reusedFrom": "Assets/Resources/UI/PieceMotifs/Motif_02.png",
+      "sourceSha256": "32ac26e50742cd7bf9736a57b47ca302a28aeb3777864ad1becead7a2d2a6926",
+      "reuse": true,
+      "prompt": "元の数字モチーフを変更せず再利用"
+    },
+    {
+      "key": "DiceFace3",
+      "name": "出目3",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceFace3.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace3.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_03.png",
+      "reusedFrom": "Assets/Resources/UI/PieceMotifs/Motif_03.png",
+      "sourceSha256": "8e6a949628377cd3c685b5ab9fdbf19a4a3508ee43d0f8f77b8c511e448ef9fd",
+      "reuse": true,
+      "prompt": "元の数字モチーフを変更せず再利用"
+    },
+    {
+      "key": "DiceFace4",
+      "name": "出目4",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceFace4.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace4.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_04.png",
+      "reusedFrom": "Assets/Resources/UI/PieceMotifs/Motif_04.png",
+      "sourceSha256": "3ab963a75c72eb17766e3476047d4763474b409308cd4974473ea66a2ac8343f",
+      "reuse": true,
+      "prompt": "元の数字モチーフを変更せず再利用"
+    },
+    {
+      "key": "DiceFace5",
+      "name": "出目5",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceFace5.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace5.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_05.png",
+      "reusedFrom": "Assets/Resources/UI/PieceMotifs/Motif_05.png",
+      "sourceSha256": "2facd806bea56323df6daccc90916f15f7bf2cee6eab7c7285f1f8af15c87e78",
+      "reuse": true,
+      "prompt": "元の数字モチーフを変更せず再利用"
+    },
+    {
+      "key": "DiceFace6",
+      "name": "出目6",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceFace6.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace6.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_06.png",
+      "reusedFrom": "Assets/Resources/UI/PieceMotifs/Motif_06.png",
+      "sourceSha256": "0163a98d34be7fa9f20a24b4eaf3aae5070778955a4d21fdb223aac1795e622c",
+      "reuse": true,
+      "prompt": "元の数字モチーフを変更せず再利用"
     }
   ],
   "sequence": {
@@ -363,6 +461,17 @@
       "MagnetBody",
       "MagneticPull",
       "pull"
+    ],
+    "Coal": [
+      "CoalCold",
+      "hit",
+      "CoalHot",
+      "CoalEmbers"
+    ],
+    "Dice": [
+      "DiceFace1..6 randomized",
+      "settled face",
+      "DiceSparkles"
     ]
   },
   "bellEmission": {
@@ -370,5 +479,19 @@
     "maxCount": 3,
     "randomScope": "発動ごとに固定した装飾専用乱数",
     "centralClearRadius": 42
-  }
+  },
+  "archived": [
+    {
+      "key": "DiceBody",
+      "name": "賽子の本体",
+      "axis": "overlay",
+      "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1011.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_F1011.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceBody.png",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "reuse": true,
+      "prompt": "既存承認モチーフを変更せず再利用"
+    }
+  ]
 }

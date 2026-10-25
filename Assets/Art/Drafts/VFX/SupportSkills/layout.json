@@ -427,15 +427,141 @@
       "end": null
     },
     {
-      "key": "DiceBody",
-      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceBody.png",
+      "key": "CoalCold",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CoalCold.png",
       "width": 512,
       "height": 512,
       "bounds": {
         "x": 48,
-        "y": 40,
+        "y": 100,
         "w": 416,
-        "h": 428
+        "h": 312
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "CoalHot",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CoalHot.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 100,
+        "w": 416,
+        "h": 312
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceFace1",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace1.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 48,
+        "w": 416,
+        "h": 416
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceFace2",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace2.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 48,
+        "w": 416,
+        "h": 416
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceFace3",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace3.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 48,
+        "w": 416,
+        "h": 416
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceFace4",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace4.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 56,
+        "w": 416,
+        "h": 400
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceFace5",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace5.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 56,
+        "w": 416,
+        "h": 400
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceFace6",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace6.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 48,
+        "w": 416,
+        "h": 416
       },
       "pivot": [
         0.5,

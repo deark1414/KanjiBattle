@@ -37,6 +37,12 @@ Create animated transparent sprite assets that make the simple kanji characters 
 - 新規6素材は128px論理グリッドの透過単画像。フレーム切替は使わず、位置・拡大・回転・透過で動かす。草案のまま保持し、元モチーフ・コマ・本番VFXは変更しない。
 - 草案は合計23素材・16動作例。透過・余白・固定寸法・ドット整合、4方向、PC／スマホ、賽子の6出目と効果分類の検査に成功。追加・変更の25系統中16系統を制作済みで残り9系統。内訳と対象範囲は`Docs/Art/SkillVfxProgress.md`。
 
+## 炭の状態切替・賽子の出目: 2026-10-25
+
+- 炭は消火と燃焼の2状態を切り替える。既存の燃焼モチーフは維持し、その同じ炭の配置・形のまま火と赤熱だけを除いた消火画像を作る。被弾後に燃焼へ切り替え、火の粉は切替時だけ。連番アニメではなく状態ごとの単画像とする。
+- 賽子は既存の数字モチーフ1〜6をそのまま使う。装飾専用の固定シードでランダムな切替列を作り、徐々に切替間隔を長くして出目を確定。確定した画像を静止保持し、その周囲に光を重ねる。表示中の画像と見出しの数値・効果を一致させる。一時停止や方向変更では乱数を引き直さない。
+- 元のモチーフは上書きせず、草案コピーを制作する。ゲームへの接続は承認後。
+
 ## Runtime Presentation Update: 2026-09-20
 
 - In battle, default to one approved opaque representative sprite per effect and animate that single sprite with runtime position, rotation, scale, and fade. This avoids the frame-switching and slice-boundary failures previously observed in WebGL. When an attack defeats a character, keep that character visible until its skill VFX has completed, while removing it from gameplay targeting immediately.
