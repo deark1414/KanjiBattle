@@ -4,6 +4,16 @@
 
 Create animated transparent sprite assets that make the simple kanji characters feel powerful. The animation must remain readable on both smartphone and desktop screens and must not create visible atlas seams.
 
+## 電・糸・鈴の単画像草案: 2026-10-25
+
+- 対象は電の連鎖電撃、糸の引き寄せ、鈴の再響。各効果は透過PNG1枚のみで表し、フレーム列やスプライトシートを新設しない。単画像を位置・回転・伸縮・透明度で動かす現行方針を優先する。
+- 電は左端から右端へ進む細長い折れ線状の稲妻。黄白色の芯と控えめな黄土色の縁。敵同士を順につなぐ使い方を想定し、放射状の爆発や巨大な発光を付けない。
+- 糸は左から右へ張る白～生成りの一本の糸。糸巻き・針・キャラは含めず、細い撚りと小さなたるみで糸と読ませる。画像の左右端が接続点。対象との距離に合わせて長さを変え、引き寄せ後に消す。
+- 鈴は正円の音の波紋。淡い真鍮色の2～3本の輪と中央の透明な空間。鈴そのものや音符は描かず、味方の漢字を隠さない。中心ピボットで拡大・消去し、再発動した味方に表示する。
+- 共通: 意図的な128px相当のドット絵、透過、四辺の安全余白、文字なし。原画・確認用画像は`Assets/Art/Drafts/VFX/SupportSkills/`へ分離。元のVFX・モチーフ・コマは変更しない。
+- この工程は画像と動作プレビューの制作。ゲームへの接続はレビュー承認後。生成元と全プロンプト、使用する軸・ピボット、透過・寸法の確認記録を保存する。
+- 草案3枚を制作。`Docs/Art/skill-vfx-preview.html`で単画像の伸縮・回転・拡大と、PC／スマホの表示を確認。透過・余白・固定寸法・4方向・再生操作の検査に成功。制作記録は`Docs/Art/SupportSkillVfx.md`と同名JSON。Unityへの接続・戦闘内検証はまだ行っていない。
+
 ## Runtime Presentation Update: 2026-09-20
 
 - In battle, default to one approved opaque representative sprite per effect and animate that single sprite with runtime position, rotation, scale, and fade. This avoids the frame-switching and slice-boundary failures previously observed in WebGL. When an attack defeats a character, keep that character visible until its skill VFX has completed, while removing it from gameplay targeting immediately.

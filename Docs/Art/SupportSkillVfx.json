@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-25",
+  "status": "レビュー前・ゲーム未接続",
+  "tool": "Built-in image_gen",
+  "mode": "single-sprite",
+  "generated": [
+    {
+      "key": "ChainLightning",
+      "name": "電",
+      "axis": "right",
+      "prompt": "Asset type: one transparent game VFX sprite, not an animation sheet. Deliberate hand-placed 128x128 logical pixel art enlarged with crisp square pixels, limited palette, opaque material clusters, no smooth gradients or painterly texture. Genuine RGBA transparency, no matte, no checkerboard, no backdrop, no UI, no text. At least 12 percent clear padding on every side. One single reusable CHAIN LIGHTNING LINK sprite for a Japanese kanji strategy game's skill effect. A long thin horizontal jagged lightning filament from LEFT to RIGHT, endpoints on the same horizontal centerline. One continuous irregular angular zigzag, pale warm ivory-yellow opaque core, narrow muted ochre edge, at most two very short subsidiary sparks close to the main line. Clearly electricity, not a sword, arrow, rope, beam, explosion or sci-fi laser. No giant glow, no bloom, no particles scattered far away, no vertical fork silhouette. Intended to be stretched between TWO enemy positions and briefly flashed, with the same image reused for each chain link. Full horizontal filament occupies middle 70-75 percent of canvas width and only about 15 percent of canvas height. Ends stop well before edges.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8855ea9c-01c2-4f79-b341-df4b10439897.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/ChainLightning.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ChainLightning.png",
+      "logicalWidth": 128,
+      "logicalHeight": 32
+    },
+    {
+      "key": "PullThread",
+      "name": "糸",
+      "axis": "right",
+      "prompt": "Asset type: one transparent game VFX sprite, not an animation sheet. Deliberate hand-placed 128x128 logical pixel art enlarged with crisp square pixels, limited palette, opaque material clusters, no smooth gradients or painterly texture. Genuine RGBA transparency, no matte, no checkerboard, no backdrop, no UI, no text. At least 12 percent clear padding on every side. One single reusable taut THREAD TETHER sprite for a Japanese kanji strategy game. A thin continuous warm WHITE/IVORY cotton thread running horizontally LEFT to RIGHT, with a barely perceptible loose gentle sag in its middle and only tiny visible twist marks. Endpoints at same centerline height. Plain material, clearly string: narrow soft grey outline/shadow pixels immediately touching the white thread so it reads on dark and light boards. No glow, no magic, no electricity, no hooks, no needle, no spool, no knot, no bow, no hands, no second dangling cord, no characters. Intended to connect caster and target and contract during a pull. Full thread occupies middle 70-75 percent of width, about 4-6 percent of height. One thin readable continuous line, not a thick rope.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-2ddc4ad2-866a-4674-a3df-8ed81a54899e.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/PullThread.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/PullThread.png",
+      "logicalWidth": 128,
+      "logicalHeight": 32
+    },
+    {
+      "key": "BellEcho",
+      "name": "鈴",
+      "axis": "radial",
+      "prompt": "Asset type: one transparent game VFX sprite, not an animation sheet. Deliberate hand-placed 128x128 logical pixel art enlarged with crisp square pixels, limited palette, opaque material clusters, no smooth gradients or painterly texture. Genuine RGBA transparency, no matte, no checkerboard, no backdrop, no UI, no text. At least 12 percent clear padding on every side. One single reusable SOUND RIPPLE sprite for a bell ally-echo skill in a Japanese kanji strategy game. THREE thin clean concentric CIRCULAR rings, same precise shared center, neutral face-on orientation. Restrained pale warm brass-gold and ivory highlights with a muted ochre edge. Large completely TRANSPARENT center hole at least 45 percent of the outer diameter, so a kanji unit remains visible inside it. Rings only, not a disk, no filled center, no radial rays, no runes, no magic sigil, no letters, no bell object, no music notes, no sparks, no stars, no bloom, no soft halo, no sci-fi radar. Perfectly round rings rather than perspective ellipses, intentional crisp pixel stair steps. Intended to expand once and fade around an ally that repeats its skill. Full outer ring safely inside middle 70-75 percent of square canvas.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8fe1bb7d-90e5-4870-91c1-480cdc88c849.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellEcho.png",
+      "logicalWidth": 128,
+      "logicalHeight": 128
+    }
+  ]
+}

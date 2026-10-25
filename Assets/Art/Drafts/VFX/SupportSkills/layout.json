@@ -1,0 +1,70 @@
+{
+  "entries": [
+    {
+      "key": "ChainLightning",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ChainLightning.png",
+      "width": 512,
+      "height": 128,
+      "bounds": {
+        "x": 48,
+        "y": 40,
+        "w": 416,
+        "h": 44
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": [
+        0.09765625,
+        0.5
+      ],
+      "end": [
+        0.90234375,
+        0.5
+      ]
+    },
+    {
+      "key": "PullThread",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/PullThread.png",
+      "width": 512,
+      "height": 128,
+      "bounds": {
+        "x": 48,
+        "y": 52,
+        "w": 416,
+        "h": 20
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": [
+        0.09765625,
+        0.5
+      ],
+      "end": [
+        0.90234375,
+        0.5
+      ]
+    },
+    {
+      "key": "BellEcho",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellEcho.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 48,
+        "w": 416,
+        "h": 416
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    }
+  ]
+}
