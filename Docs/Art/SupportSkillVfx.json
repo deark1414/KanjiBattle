@@ -119,12 +119,24 @@
       "name": "磁石",
       "axis": "right",
       "logicalHeight": 64,
-      "description": "A directional MAGNETIC ATTRACTION STREAM made of tiny DARK IRON FILINGS and a few pale grey glints in THREE loose slightly curving lanes. Filings flow LEFT TO RIGHT and become more gathered near RIGHT. Short distinct grain clusters, restrained cool iron-grey, a little charcoal outline for light-ground visibility, a few pale silver flecks for dark-ground visibility. No actual magnet object, no electric bolt, no luminous beam, no concentric rings, no runes or arrows. Sparse horizontal transparent stream, clear natural material instead of science-fiction graphics, complete with safety padding.",
+      "description": "青白い3本の湾曲した磁力線。右側へ収束し、磁石への吸引を表現。",
       "logicalWidth": 128,
-      "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A directional MAGNETIC ATTRACTION STREAM made of tiny DARK IRON FILINGS and a few pale grey glints in THREE loose slightly curving lanes. Filings flow LEFT TO RIGHT and become more gathered near RIGHT. Short distinct grain clusters, restrained cool iron-grey, a little charcoal outline for light-ground visibility, a few pale silver flecks for dark-ground visibility. No actual magnet object, no electric bolt, no luminous beam, no concentric rings, no runes or arrows. Sparse horizontal transparent stream, clear natural material instead of science-fiction graphics, complete with safety padding.",
-      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-0889ad3b-620b-4dde-a9ee-d004ad54ba18.png",
-      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MagneticPull.png",
-      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagneticPull.png"
+      "prompt": "Use case: stylized-concept. Asset type: ONE isolated transparent game VFX sprite for a Japanese kanji strategy game. Redesign magnetic attraction as MAGNETIC FIELD LINES, not iron filings. Three clean thin continuous arcing field lines run from LEFT toward RIGHT: one central near-horizontal strand, one bows gently above it and one bows gently below, converging narrowly at the RIGHT tip, visually suggesting a magnetic pull. Restrained pale ice-blue/ivory cores, muted blue edging, a few restrained coral-red pixels near the right end to suggest magnetic poles. NOT a solid beam. Smooth broad arcs rendered as crisp pixel stair-steps, NOT random sharp zigzag chain lightning. Tiny sparse angular sparks at the converging end are okay. Strong readable simple silhouette at 128px logical width; deliberately blocky pixel art, limited palette, opaque thin line cores, no smooth painted texture or broad bloom. Wide horizontal composition, content width about 75 percent of canvas and height about 22 percent, centered with at least 12 percent true clear padding on all sides. Genuine transparent RGBA outside and between the three lines. No magnet object, arrows, letters, text, game pieces, diagram labels, background, magic circle, sci-fi laser, iron sand, dust, grainy particles or checkerboard. One complete reusable image, NOT animation frames or a sprite sheet.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-315556f9-9dc5-4063-a946-f5da6f12057c.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MagneticFieldLines.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagneticPull.png",
+      "previousVersion": {
+        "key": "MagneticPull",
+        "name": "磁石",
+        "axis": "right",
+        "logicalHeight": 64,
+        "description": "A directional MAGNETIC ATTRACTION STREAM made of tiny DARK IRON FILINGS and a few pale grey glints in THREE loose slightly curving lanes. Filings flow LEFT TO RIGHT and become more gathered near RIGHT. Short distinct grain clusters, restrained cool iron-grey, a little charcoal outline for light-ground visibility, a few pale silver flecks for dark-ground visibility. No actual magnet object, no electric bolt, no luminous beam, no concentric rings, no runes or arrows. Sparse horizontal transparent stream, clear natural material instead of science-fiction graphics, complete with safety padding.",
+        "logicalWidth": 128,
+        "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A directional MAGNETIC ATTRACTION STREAM made of tiny DARK IRON FILINGS and a few pale grey glints in THREE loose slightly curving lanes. Filings flow LEFT TO RIGHT and become more gathered near RIGHT. Short distinct grain clusters, restrained cool iron-grey, a little charcoal outline for light-ground visibility, a few pale silver flecks for dark-ground visibility. No actual magnet object, no electric bolt, no luminous beam, no concentric rings, no runes or arrows. Sparse horizontal transparent stream, clear natural material instead of science-fiction graphics, complete with safety padding.",
+        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-0889ad3b-620b-4dde-a9ee-d004ad54ba18.png",
+        "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MagneticPull.png",
+        "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagneticPull.png"
+      }
     },
     {
       "key": "RainRipple",
