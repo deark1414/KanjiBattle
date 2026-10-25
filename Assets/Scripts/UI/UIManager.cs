@@ -47,6 +47,7 @@ public class UIManager : MonoBehaviour
 
     private void HideAll()
     {
+        CharacterCodexUI.CloseAny();
         SkillTooltipPresenter.HideAll();
         CloseSettings();
         CloseProgressInfo();
@@ -227,6 +228,8 @@ public class UIManager : MonoBehaviour
         PlayerInventory.Instance?.ResetProgress();
         FacilityManager.Instance?.ResetProgress();
         ResearchBondService.Instance.ResetProgress();
+        CharacterRecords.ResetProgress();
+        BattleFusionRules.ResetProgress();
         GameManager.Instance?.ResetProgress();
         GameManager.Instance?.ResetRuntimeFacilityEffects();
         SetResetDataButtonText("削除しました");

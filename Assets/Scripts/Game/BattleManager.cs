@@ -50,6 +50,7 @@ public partial class BattleManager : MonoBehaviour
     private HashSet<Vector2Int> soilTrapCells = new HashSet<Vector2Int>();
     private readonly HashSet<Vector2Int> impassableCells = new();
     private readonly Dictionary<Vector2Int, int> soilTrapDamageByCell = new();
+    private readonly Dictionary<Vector2Int, (int token, bool ally)> soilTrapRecords = new();
     private readonly Dictionary<Vector2Int, GameObject> soilTrapVfxObjects = new();
     private readonly Dictionary<Vector2Int, GameObject> soilTrapTintObjects = new();
 
@@ -144,6 +145,8 @@ public partial class BattleManager : MonoBehaviour
         }
         GameAudio.Instance.EnsureBgm();
         ResetBattle();
+        battleRecords.Clear();
+        soilTrapRecords.Clear();
         rows = BattleDeploymentRules.Rows;
         cols = BattleDeploymentRules.Columns;
         currentStage = stage;
@@ -549,6 +552,7 @@ public partial class BattleManager : MonoBehaviour
         }
 
         bc.Init(data, pos, ally, levelOverride ?? level);
+        RegisterBattleRecord(bc);
 
         if (!ally && data != null && data.characterId > 0)
         {
@@ -823,6 +827,7 @@ public partial class BattleManager : MonoBehaviour
         int before = character.currentHP;
         character.currentHP = Mathf.Min(maxHp, character.currentHP + heal);
         int actualHeal = character.currentHP - before;
+        RecordHeal(character, actualHeal);
         if (actualHeal <= 0) return;
 
         character.UpdateHPBar();
@@ -1146,11 +1151,16 @@ public partial class BattleManager : MonoBehaviour
         if (character == null || character.isDead || character.data == null) return;
         if (!soilTrapDamageByCell.TryGetValue(character.gridPos, out int damage)) return;
 
+        int before = character.currentHP;
+        soilTrapRecords.TryGetValue(character.gridPos, out var owner);
+
         character.TakeDamage(
             damage,
             this,
             isBasicAttack: false,
             actionLabel: $"{character.data.characterName} は{message}");
+        if (owner.ally && !character.isAlly)
+            battleRecords.Credit(owner.token, damage: Mathf.Min(before, Mathf.Max(0, before - character.currentHP)));
     }
 
     private IEnumerator ResolveSoilTrapAfterMovement(BattleCharacter character, Vector2Int landingPos, int stepCount)
@@ -1282,6 +1292,7 @@ public partial class BattleManager : MonoBehaviour
 
     private void ShowResult(string message, Color color, bool isWin = false)
     {
+        if (!battleRecords.Complete(isWin)) return;
         GameAudio.Instance.Play(isWin ? GameSound.Win : GameSound.Lose);
         int effectiveReward = 0;
         PlayerExperienceResult experienceResult = default;
@@ -1326,6 +1337,7 @@ public partial class BattleManager : MonoBehaviour
         UnityUIRuntimeTheme.EnsureJapaneseCapableFont(resultText);
         ConfigureResultModal(bondResults.Count > 0);
         ConfigureResultActions();
+        ConfigureRecordButton();
         ConfigureResultBondIndicators(bondResults);
 
         resultText.transform.SetAsLastSibling();
@@ -3054,7 +3066,10 @@ public partial class BattleManager : MonoBehaviour
             int dmg = Mathf.RoundToInt(self.GetEffectiveAttack(this) * self.GetEffectiveSkillPower());
             string type = (bc.isAlly == self.isAlly) ? "味方" : "敵";
             AddLog($"{self.data.characterName} の銃が{type} {bc.data.characterName} を撃った！({dmg}ダメージ)", bc.isAlly == self.isAlly ? Color.cyan : Color.red);
+            int previousHP = bc.currentHP;
             bc.TakeDamage(dmg, this, isBasicAttack: false);
+            if (self.isAlly && !bc.isAlly)
+                battleRecords.Credit(self.RecordToken, damage: Mathf.Min(previousHP, Mathf.Max(0, previousHP - bc.currentHP)));
         }
         // 最後に方向更新
         if (affected.Count > 0)
@@ -3065,7 +3080,7 @@ public partial class BattleManager : MonoBehaviour
     public void GenerateSoilTraps(BattleCharacter caster)
     {
         if (caster == null) return;
-        GenerateSoilTraps(caster.gridPos, caster.GetEffectiveAttack(this));
+        GenerateSoilTraps(caster.gridPos, caster.GetEffectiveAttack(this), caster);
     }
 
     public void GenerateSoilTraps(Vector2Int center)
@@ -3073,7 +3088,7 @@ public partial class BattleManager : MonoBehaviour
         GenerateSoilTraps(center, BattleTrapRules.MinimumSoilTrapDamage);
     }
 
-    private void GenerateSoilTraps(Vector2Int center, int casterAttack)
+    private void GenerateSoilTraps(Vector2Int center, int casterAttack, BattleCharacter source = null)
     {
         // 候補マスを収集
         List<Vector2Int> candidates = new List<Vector2Int>();
@@ -3105,6 +3120,7 @@ public partial class BattleManager : MonoBehaviour
             Vector2Int pos = candidates[i];
             soilTrapCells.Add(pos);
             soilTrapDamageByCell[pos] = trapDamage;
+            if (source != null) soilTrapRecords[pos] = (source.RecordToken, source.isAlly);
             placedCells.Add(pos);
             CreateSoilTrapCellTint(pos);
             CreateSoilTrapVfx(pos);

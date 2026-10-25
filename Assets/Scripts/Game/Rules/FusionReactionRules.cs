@@ -6,11 +6,12 @@ public static class FusionReactionRules
     public static bool IsProjectile(SkillType skill) => skill is SkillType.Arrow or SkillType.Gun
         or SkillType.Stone or SkillType.Fireball or SkillType.ScatterShot;
 
-    public static bool TryProtect(BattleCharacter target, BattleCharacter attacker, BattleManager battle, bool skillHit)
+    public static bool TryProtect(BattleCharacter target, BattleCharacter attacker, BattleManager battle, bool skillHit, int incomingDamage = 0)
     {
         if (target.CocoonShield)
         {
             target.CocoonShield = false;
+            battle?.RecordProtection(target, incomingDamage, false);
             battle?.SetCocoonMarker(target, false);
             battle?.PlayElementEffect(target, "保護", Color.white);
             battle?.AddLog($"{target.DisplayName} の繭が攻撃を防いだ！");
@@ -21,6 +22,7 @@ public static class FusionReactionRules
             && unit.currentHP > 0 && unit.isAlly == target.isAlly && unit.data.skillType == SkillType.Lantern
             && BattleRangeService.Distance(unit.gridPos, target.gridPos) == 1);
         if (!protectedByLamp || !SkillExecutor.RollSkillActivation(70)) return false;
+        battle.RecordProtection(target, incomingDamage, true);
         battle.PlayElementEffect(target, "回避", new Color(1f, .85f, .45f));
         battle.AddLog($"{target.DisplayName} は灯に守られ遠距離攻撃を回避！");
         return true;

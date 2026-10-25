@@ -89,6 +89,7 @@ public partial class BattleManager
                 Destroy(material.gameObject);
             }
             SpawnCharacter(data, position, true, level);
+            RegisterFusionRecord(gridMap[position], group, originals);
             BattleFusionRules.Discover(recipe.Id);
             AddLog($"{string.Join("＋", group.members.Select(index => deployedAllies[index].characterName))} → {recipe.Name}", Color.yellow);
         }

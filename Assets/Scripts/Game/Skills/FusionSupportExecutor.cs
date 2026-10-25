@@ -22,6 +22,7 @@ public static class FusionSupportExecutor
                     int amount = Mathf.Min(target.maxHP - target.currentHP, Mathf.Max(1, Mathf.RoundToInt(target.maxHP * 0.04f)));
                     if (amount <= 0) continue;
                     target.currentHP += amount;
+                    battle.RecordHeal(source, amount);
                     target.UpdateHPBar();
                     battle.PlayDamageVfx(target, amount, isHealing: true);
                     battle.PlaySupportBurst(target, "RainDrops", .6f, .65f);

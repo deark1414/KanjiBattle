@@ -38,6 +38,10 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public int level; public int experience; public int baseBattleExperience; public int[] roster;
         public int visibleMotifs;
         public int[] visibleMotifIds;
+        public CharacterRecord[] records;
+        public string[] codexTitles;
+        public bool codexOverflow;
+        public string[] codexOverflowNames;
     }
 
     private StageData fixtureStage;
@@ -63,6 +67,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "fundFusion": GameManager.Instance.AddStagePoints(10); break;
                 case "corruptPlan": PlayerProgressStore.SetString("KanjiBattle.Fusion.AdjacentChoices.v2", "{broken"); PlayerProgressStore.Save(); break;
                 case "snapshot": break;
+                case "recordsProbe": FindFirstObjectByType<BattleManager>().ProbeBattleRecords(); break;
                 case "supportVfxProbe": FindFirstObjectByType<BattleManager>().ProbeSupportVfx(request.value); break;
                 case "supportProbe": FindFirstObjectByType<BattleManager>().ProbeSupportSkills(); break;
                 case "defenseProbe": FindFirstObjectByType<BattleManager>().ProbeDefenseSkills(); break;
@@ -100,6 +105,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         FacilityManager.Instance.ResetProgress();
         PlayerInventory.Instance.ResetProgress();
         ResearchBondService.Instance.ResetProgress();
+        CharacterRecords.ResetProgress();
         PlayerProgressStore.Delete("KanjiBattle.Deployment.Positions.v1");
         PlayerProgressStore.SetString(FixtureKey, kind);
         GameManager.Instance.RegisterClearedStage(kind == "locked" ? 19 : 40);
@@ -237,6 +243,14 @@ public sealed class BattleE2EBridge : MonoBehaviour
             visibleMotifs = FindObjectsByType<PieceMotifPresentation>(FindObjectsSortMode.None).Count(motif => motif.IsVisible),
             visibleMotifIds = FindObjectsByType<PieceMotifPresentation>(FindObjectsSortMode.None).Where(motif => motif.IsVisible).Select(motif => motif.CharacterId).ToArray(),
             battle = battle.CaptureE2EState(),
+            records = PlayerInventory.Instance.GetUnlockedCharacters().Select(data => CharacterRecords.Get(data.characterId)).ToArray(),
+            codexTitles = CharacterCodexUI.Catalog().Select(item => item.title + ":" + item.status).ToArray(),
+            codexOverflow = FindObjectsByType<CharacterCodexUI>(FindObjectsSortMode.None).Any(window =>
+                window.GetComponentsInChildren<TMP_Text>().Any(text => text.name != "Description" && text.isTextOverflowing)),
+            codexOverflowNames = FindObjectsByType<CharacterCodexUI>(FindObjectsSortMode.None)
+                .SelectMany(window => window.GetComponentsInChildren<TMP_Text>())
+                .Where(text => text.name != "Description" && text.isTextOverflowing)
+                .Select(text => text.transform.parent.name + "/" + text.name + ":" + text.text).ToArray(),
             formation = FormationUI.Instance == null || FormationUI.Instance.GetFormation() == null ? new int[0]
                 : FormationUI.Instance.GetFormation().Select(data => data == null ? 0 : data.characterId).ToArray(),
             owned = PlayerInventory.Instance.GetUnlockedCharacters().Select(data => data.characterId).OrderBy(id => id).ToArray(),

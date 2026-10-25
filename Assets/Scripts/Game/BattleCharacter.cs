@@ -33,6 +33,8 @@ public class BattleCharacter : MonoBehaviour
     public BattleCharacter Summoner { get; set; }
     public int LineageId { get; set; }
     public int EligibleTurn { get; set; }
+    public int RecordToken { get; set; }
+    public int CocoonRecordToken { get; set; }
     public void SetBattleVitals(int hp, int current, int attack, int defense)
     { state.SetVitals(hp, current, attack, defense); UpdateHPBar(); }
 
@@ -180,7 +182,9 @@ if (background != null)
     {
         if (isDead || dmg <= 0) return;
         if (origin == BattleDamageOrigin.Direct && attacker != null && attacker.isAlly != isAlly
-            && FusionReactionRules.TryProtect(this, attacker, bm, !isBasicAttack)) return;
+            && FusionReactionRules.TryProtect(this, attacker, bm, !isBasicAttack, dmg)) return;
+
+        int incomingDamage = dmg;
 
         bool canMitigate = origin is not (BattleDamageOrigin.Transferred or BattleDamageOrigin.Returned);
 
@@ -228,6 +232,7 @@ if (background != null)
         if (canMitigate && data != null && data.skillType == SkillType.Coal && !CoalAwake)
             dmg = Mathf.Max(1, Mathf.FloorToInt(dmg * 0.5f));
 
+        int preventedDamage = Mathf.Max(0, incomingDamage - dmg);
         if (origin == BattleDamageOrigin.Direct && bm != null)
         {
             BattleCharacter protector = BattleDamageRules.FindProtector(this, bm.gridMap.Values);
@@ -235,6 +240,7 @@ if (background != null)
             if (shared > 0)
             {
                 dmg -= shared;
+                bm.RecordGuard(protector, shared);
                 bm.PlaySupportBurst(this, "GuardShell", .6f, .8f);
                 bm.PlaySupportBurst(protector, "GuardShell", .6f, .7f);
                 protector.TakeDamage(shared, bm, attacker, ignoreDefense: true,
@@ -250,6 +256,7 @@ if (background != null)
         }
 
         int actualLoss = Mathf.Min(Mathf.Max(0, currentHP), dmg);
+        bm?.RecordDamage(this, attacker, actualLoss, preventedDamage);
         currentHP -= dmg;
         UpdateHPBar();
         bm?.PlayDamageVfx(this, dmg);

@@ -20,6 +20,7 @@ public static class AdvancedFusionExecutor
             {
                 if (target.CocoonShield) return false;
                 target.CocoonShield = true;
+                target.CocoonRecordToken = caster.RecordToken;
                 battle.SetCocoonMarker(target, true);
                 battle.PlayElementEffect(target, "繭", Color.white);
                 battle.AddLog($"{caster.DisplayName} が {target.DisplayName} に繭の保護を付与");

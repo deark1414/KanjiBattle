@@ -267,6 +267,7 @@ public static class SkillExecutor
                     ctx.Target.currentHP = Mathf.Min(ctx.Target.currentHP + heal, maxHP);
                     ctx.Target.UpdateHPBar();
                     int actualHeal = ctx.Target.currentHP - beforeHP;
+                    ctx.BattleManager.RecordHeal(ctx.Caster, actualHeal);
                     ctx.BattleManager.PlayDamageVfx(ctx.Target, actualHeal, isHealing: true);
                     ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} が {ctx.Target.DisplayName} を {actualHeal} 回復！");
                     appliedAnyEffect = true;

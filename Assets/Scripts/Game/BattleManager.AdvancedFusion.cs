@@ -9,7 +9,7 @@ public partial class BattleManager
     public int CurrentBattleTurn => fusionTurn;
     private readonly Dictionary<int, int> grassSplits = new();
     private sealed class RainZone
-    { public bool ally; public Vector2Int center; public int remaining = 2; }
+    { public bool ally; public Vector2Int center; public int remaining = 2; public int recordToken; }
     private readonly List<RainZone> rainZones = new();
     private readonly Dictionary<Vector2Int, GameObject> rainMarkers = new();
 
@@ -90,7 +90,7 @@ public partial class BattleManager
         foreach (var friend in gridMap.Values.Where(friend => friend != null && !friend.isDead
             && friend.currentHP > 0 && friend.isAlly == dice.isAlly).ToArray())
         {
-            if (face <= 2) HealFusion(friend, .06f);
+            if (face <= 2) HealFusion(friend, .06f, dice.RecordToken);
             else if (face <= 4) friend.DiceDefensePercent = 20;
             else friend.ApplyAttackBuff(BattleAttackBuff.Dice, 20, 1);
         }
@@ -98,17 +98,18 @@ public partial class BattleManager
         AddLog($"{dice.DisplayName} の賽子【{face}】！ {(face <= 2 ? "全体回復" : face <= 4 ? "防御+20%" : "攻撃+20%")}");
     }
 
-    private void HealFusion(BattleCharacter unit, float rate)
+    private void HealFusion(BattleCharacter unit, float rate, int recordToken)
     {
         int amount = Mathf.Min(unit.maxHP - unit.currentHP, Mathf.Max(1, Mathf.RoundToInt(unit.maxHP * rate)));
         if (amount <= 0) return;
         unit.currentHP += amount; unit.UpdateHPBar(); PlayDamageVfx(unit, amount, isHealing: true);
+        if (unit.isAlly) battleRecords.Credit(recordToken, healed: amount);
         PlaySupportBurst(unit, "RainDrops", .6f, .65f);
     }
 
     public void CastRain(BattleCharacter caster, Vector2Int center)
     {
-        var zone = new RainZone { ally = caster.isAlly, center = center };
+        var zone = new RainZone { ally = caster.isAlly, center = center, recordToken = caster.RecordToken };
         HealRainZone(zone); rainZones.Add(zone); RefreshRainMarkers();
         AddLog($"{caster.DisplayName} が回復の雨を設置（3回・重複可）");
     }
@@ -117,7 +118,7 @@ public partial class BattleManager
     {
         foreach (var unit in gridMap.Values.Where(unit => unit != null && !unit.isDead && unit.currentHP > 0
             && unit.isAlly == zone.ally && BattleRangeService.Distance(zone.center, unit.gridPos) <= 1).ToArray())
-            HealFusion(unit, .03f);
+            HealFusion(unit, .03f, zone.recordToken);
     }
 
     private void RefreshRainMarkers()
@@ -171,6 +172,7 @@ public partial class BattleManager
         fusionRuntimeData.Add(data);
         SpawnCharacter(data, empty.Value, source.isAlly, source.level);
         BattleCharacter copy = gridMap[empty.Value];
+        RegisterCopyRecord(copy, source);
         copy.SetBattleVitals(hp, sand ? hp : source.currentHP, attack, defense);
         copy.IsGenerated = true; copy.Summoner = sand ? source : null;
         copy.LineageId = source.LineageId; copy.EligibleTurn = fusionTurn + 1;

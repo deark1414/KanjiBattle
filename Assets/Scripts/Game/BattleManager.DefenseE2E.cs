@@ -1,4 +1,5 @@
 #if KANJI_BATTLE_E2E
+using System.Linq;
 using UnityEngine;
 
 public partial class BattleManager
@@ -28,6 +29,12 @@ public partial class BattleManager
         shield.TakeDamage(100, this, attacker, ignoreDefense: true, isBasicAttack: true);
         Check(shieldHP - shield.currentHP == 60 && guardHP - guard.currentHP == 20, "mitigation then one guard share");
         Check(second.currentHP == otherHP, "no duplicate or chained sharing");
+        var shieldRecord = battleRecords.Entries.Single(row => row.token == shield.RecordToken).result;
+        var guardRecord = battleRecords.Entries.Single(row => row.token == guard.RecordToken).result;
+        Check(shieldRecord.received == 360 && shieldRecord.prevented == 120,
+            "records separate actual HP loss from mitigation");
+        Check(guardRecord.received == 120 && guardRecord.guarded == 120 && guardRecord.prevented == 0,
+            "guard sharing is not counted as prevention");
 
         guardHP = guard.currentHP; shieldHP = shield.currentHP;
         shield.TakeDamage(100, this, attacker, ignoreDefense: true, origin: BattleDamageOrigin.Reflected);

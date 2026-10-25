@@ -35,6 +35,7 @@ public static class BattleRuleRegression
         ElementSkillRegression.Run();
         FusionSupportRegression.Run();
         CompleteFusionRegression.Run();
+        CharacterRecordRegression.RunFromCommandLine();
     }
 
     private static void VerifyDeployment()
