@@ -376,15 +376,10 @@ public class PlayerInventory : MonoBehaviour
 
     private void EnsureStarterCharacter()
     {
-        if (ownedCharacters.Count > 0)
+        foreach(int id in new[]{1,10,20})
         {
-            return;
-        }
-
-        CharacterData starter = GetCharacterDatabase()?.GetById(1);
-        if (starter != null)
-        {
-            ownedCharacters[starter] = new CharacterInfo();
+            CharacterData starter = GetCharacterDatabase()?.GetById(id);
+            if (starter != null && !ownedCharacters.ContainsKey(starter)) ownedCharacters[starter] = new CharacterInfo();
         }
     }
 

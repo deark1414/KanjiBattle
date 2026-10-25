@@ -10,6 +10,12 @@ KanjiBattle currently treats Unity prefabs as structural templates and applies m
 
 ## Main Runtime Layout Owners
 
+- `CastleTreeView`（城下）
+  - ツリーの固定詳細欄、5枝のノードと接続線、縦スクロールを管理する。
+  - 縦画面では枝タブで1列表示、横画面では5列を表示する。
+  - グローバルテーマはこの配下の文字・画像・ボタン・スクロール位置を上書きしない。
+  - 旧`FacilityListUI`は既存シーン参照を保ち、初回表示時にツリーへ引き継ぐ。
+
 - `UnityUIRuntimeTheme`
   - Global canvas scaler setup.
   - Shared panel, button, scroll view, and text styling.

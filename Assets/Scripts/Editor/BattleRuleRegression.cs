@@ -37,6 +37,7 @@ public static class BattleRuleRegression
         CompleteFusionRegression.Run();
         CharacterRecordRegression.RunFromCommandLine();
         PlayerSkillRegression.Run();
+        CastleTreeRegression.Run();
     }
 
     private static void VerifyDeployment()

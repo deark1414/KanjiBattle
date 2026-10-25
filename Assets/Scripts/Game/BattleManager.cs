@@ -172,10 +172,11 @@ public partial class BattleManager : MonoBehaviour
         }
 
         int enemyIndex = 0;
+        var enemyPositions = CampaignFormationRules.EnemyPositions(stage);
         foreach (var enemy in stage.enemyPool ?? new List<CharacterData>())
         {
             if (enemy == null) continue;
-            var pos = BattleDeploymentRules.DefaultPosition(enemyIndex++, false);
+            var pos = enemyPositions[enemyIndex++];
             SpawnCharacter(enemy, pos, false);
         }
 

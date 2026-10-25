@@ -362,6 +362,7 @@ public class FacilityManager : MonoBehaviour
                     break;
                 case FacilityEffectType.FormationSlot:
                     GameManager.Instance?.ApplyFormationSlotIncrease(level);
+                    CastleTree.AdoptLegacySlots(1+level);
                     break;
                 case FacilityEffectType.BattleSpeed:
                     GameManager.Instance?.ApplyBattleSpeedTier(level);

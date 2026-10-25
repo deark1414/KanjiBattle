@@ -45,6 +45,9 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public string[] codexTitles;
         public bool codexOverflow;
         public string[] codexOverflowNames;
+        public int treeSlots;
+        public string[] treeOwned;
+        public bool treeOverflow;
     }
 
     private StageData fixtureStage;
@@ -64,12 +67,31 @@ public sealed class BattleE2EBridge : MonoBehaviour
             switch (request.action)
             {
                 case "seed": Seed(request.value); break;
-                case "resume": PrepareFormation(request.value == "alternate"); break;
+                case "resume":
+                    if(PlayerProgressStore.GetString(FixtureKey)=="tree")
+                    {
+                        if(request.value=="tree")UIManager.Instance.ShowFacility();
+                        else PrepareTreeCampaign(Mathf.Clamp(GameManager.Instance.GetHighestClearedStageId()+1,1,40));
+                    }
+                    else PrepareFormation(request.value == "alternate");break;
                 case "nextDefeat": fixtureStage.enemyLevel = 2000; break;
                 case "gate20": GameManager.Instance.RegisterClearedStage(20); GameManager.Instance.SpendStagePoints(GameManager.Instance.StagePoints); break;
                 case "fundFusion": GameManager.Instance.AddStagePoints(10); break;
                 case "corruptPlan": PlayerProgressStore.SetString("KanjiBattle.Fusion.AdjacentChoices.v2", "{broken"); PlayerProgressStore.Save(); break;
                 case "snapshot": break;
+                case "treeFresh":
+                    ResetTreeFixture();break;
+                case "treeFunds": GameManager.Instance.AddStagePoints(int.Parse(request.value));break;
+                case "treeAdvance": GameManager.Instance.RegisterClearedStage(int.Parse(request.value));break;
+                case "treePurchase": if(!CastleTree.Purchase(request.value))throw new Exception("Tree purchase blocked: "+request.value);break;
+                case "treeCampaign": PrepareTreeCampaign(int.Parse(request.value));break;
+                case "treeCampaignDefault": PrepareTreeCampaign(int.Parse(request.value),false);break;
+                case "treeSpecialProbe":
+                    var limited=ScriptableObject.CreateInstance<StageData>();limited.slotCount=2;limited.restrictFormationSlots=true;
+                    if(GameManager.Instance.GetFormationCapacity(limited)!=2)throw new Exception("Special stage limit ignored.");
+                    limited.restrictFormationSlots=false;
+                    if(GameManager.Instance.GetFormationCapacity(limited)!=GameManager.Instance.GetFacilityFormationSlots())throw new Exception("Normal stage was capped.");
+                    Destroy(limited);break;
                 case "recordsProbe": FindFirstObjectByType<BattleManager>().ProbeBattleRecords(); break;
                 case "playerSkillProbe": FindFirstObjectByType<BattleManager>().ProbePlayerSkill(request.value); break;
                 case "playerSkillTraps": FindFirstObjectByType<BattleManager>().SeedPlayerSkillLethalTraps(); break;
@@ -79,11 +101,11 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "supportVfxProbe": FindFirstObjectByType<BattleManager>().ProbeSupportVfx(request.value); break;
                 case "supportProbe": FindFirstObjectByType<BattleManager>().ProbeSupportSkills(); break;
                 case "defenseProbe": FindFirstObjectByType<BattleManager>().ProbeDefenseSkills(); break;
-                case "recruitSupport": ProbeRecruitment(new[] { 27, 28, 29 }, 35); break;
-                case "recruitCow": ProbeRecruitment(new[] { 30 }, 80); break;
+                case "recruitSupport": ProbeTreeRecruitment(new[] { 27, 28, 29 }); break;
+                case "recruitCow": ProbeTreeRecruitment(new[] { 30 }); break;
                 case "defeatCow": FindFirstObjectByType<BattleManager>().DefeatExperienceUnit(); break;
                 case "elementProbe": FindFirstObjectByType<BattleManager>().ProbeElementSkills(); break;
-                case "recruitElements": ProbeRecruitment(new[] { 31, 32, 33 }, 100); break;
+                case "recruitElements": ProbeTreeRecruitment(new[] { 31, 32, 33 }); break;
                 case "fusionSupportProbe": FindFirstObjectByType<BattleManager>().ProbeFusionSupport(); break;
                 case "advancedFusionProbe": FindFirstObjectByType<BattleManager>().ProbeAdvancedFusion(); break;
                 default: throw new ArgumentException("Unknown E2E action: " + request.action);
@@ -108,11 +130,16 @@ public sealed class BattleE2EBridge : MonoBehaviour
 
     private void Seed(string kind)
     {
+        if(kind=="tree")
+        {
+            Seed("standard");ResetTreeFixture();GameManager.Instance.AddStagePoints(30);return;
+        }
         UIManager.Instance.ShowTop();
         GameManager.Instance.ResetProgress();
         FacilityManager.Instance.ResetProgress();
         PlayerInventory.Instance.ResetProgress();
         ResearchBondService.Instance.ResetProgress();
+        CastleTree.ResetProgress();
         CharacterRecords.ResetProgress();
         PlayerSkillRules.ResetProgress();
         PlayerProgressStore.Delete("KanjiBattle.Deployment.Positions.v1");
@@ -167,6 +194,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         foreach (CharacterData data in party) PlayerInventory.Instance.AddCharacter(data);
         StageData source = Resources.FindObjectsOfTypeAll<StageData>().First(stage => stage.stageId == 21 && stage != fixtureStage);
         fixtureStage = Instantiate(source);
+        fixtureStage.enemyPositions.Clear();
         fixtureStage.name = "E2E_FixtureStage";
         fixtureStage.hideFlags = HideFlags.DontSave;
         fixtureStage.enemyPool = new List<CharacterData> { database.characters.First(data => data.characterName == "一") };
@@ -241,12 +269,39 @@ public sealed class BattleE2EBridge : MonoBehaviour
         FormationUI.Instance.RememberCurrentFormation();
     }
 
+    private void ResetTreeFixture()
+    {
+        UIManager.Instance.ShowTop();GameManager.Instance.ResetProgress();FacilityManager.Instance.ResetProgress();
+        CastleTree.ResetProgress();PlayerInventory.Instance.ResetProgress();CharacterRecords.ResetProgress();
+        PlayerSkillRules.ResetProgress();BattleFusionRules.ResetProgress();
+        PlayerProgressStore.Delete("KanjiBattle.Deployment.Positions.v1");PlayerProgressStore.SetString(FixtureKey,"tree");
+        PlayerProgressStore.Save();GameManager.Instance.SetBattleSpeedIndex(0);UIManager.Instance.ShowFacility();
+    }
+
+    private void PrepareTreeCampaign(int stageId,bool selectParty=true)
+    {
+        var stages=Resources.FindObjectsOfTypeAll<StageDatabase>().First();
+        var stage=stages.GetStageById(stageId);
+        if(stageId>1)GameManager.Instance.RegisterClearedStage(stageId-1);
+        fixtureStage=stage;
+        if(!selectParty){FormationUI.Instance.ClearAllSlots();FormationUI.Instance.RememberCurrentFormation();}
+        GameManager.Instance.SetSelectedStage(stage);UIManager.Instance.ShowFormation();
+        if(!selectParty)return;
+        FormationUI.Instance.SetupSlots(GameManager.Instance.GetFormationCapacity(stage));FormationUI.Instance.ClearAllSlots();
+        var party=PlayerInventory.Instance.GetUnlockedCharacters().OrderBy(data=>data.characterId).Take(GameManager.Instance.GetFormationCapacity(stage)).ToArray();
+        for(int i=0;i<party.Length;i++)FormationUI.Instance.SetCharacterToSlot(i,party[i]);
+        FormationUI.Instance.RememberCurrentFormation();
+    }
+
     private Snapshot Capture()
     {
         BattleManager battle = FindObjectsByType<BattleManager>(FindObjectsInactive.Include, FindObjectsSortMode.None).First();
         FacilityData fusion = FacilityManager.Instance.GetFacilities().First(data => data.effectType == FacilityEffectType.Fusion);
         return new Snapshot
         {
+            treeSlots=GameManager.Instance.GetFacilityFormationSlots(),
+            treeOwned=CastleTree.Nodes.Where(CastleTree.Owned).Select(n=>n.id).ToArray(),
+            treeOverflow=FindObjectsByType<CastleTreeView>(FindObjectsSortMode.None).Any(view=>view.GetComponentsInChildren<TMP_Text>().Any(text=>text.isTextOverflowing)),
             controls = FindObjectsByType<Selectable>(FindObjectsSortMode.None).Where(control => control.gameObject.activeInHierarchy)
                 .Select(CaptureControl).ToArray(),
             visibleMotifs = FindObjectsByType<PieceMotifPresentation>(FindObjectsSortMode.None).Count(motif => motif.IsVisible),
@@ -273,23 +328,25 @@ public sealed class BattleE2EBridge : MonoBehaviour
         };
     }
 
-    private static void ProbeRecruitment(int[] ids, int threshold)
+    private static void ProbeTreeRecruitment(int[] ids)
     {
         CharacterDatabase database = Resources.Load<CharacterDatabase>("CharacterDatabase");
-        ResearchBondService bonds = ResearchBondService.Instance;
+        void Acquire(CastleTree.Node node)
+        {
+            if(CastleTree.Owned(node))return;
+            if(node.parent!=null)Acquire(CastleTree.Nodes.Single(n=>n.id==node.parent));
+            if(!CastleTree.Purchase(node.id))throw new Exception("Tree recruitment failed: "+node.id);
+        }
+        int experience=PlayerInventory.Instance.PlayerExperience;
         foreach (int id in ids)
         {
             CharacterData data = database.GetById(id);
-            if (PlayerInventory.Instance.IsOwned(data) || bonds.GetBondThreshold(data) != threshold)
-                throw new InvalidOperationException("Invalid new-character recruitment mapping: " + id);
-            bonds.RegisterDefeated(data);
-            if (!bonds.GetDefeatedCandidates().Contains(data))
-                throw new InvalidOperationException("New character missing from defeated candidates: " + id);
-            for (int win = 0; win < threshold && !bonds.CanRecruit(data); win++)
-                bonds.ResolveVictory(new[] { id });
-            if (PlayerInventory.Instance.IsOwned(data) || !bonds.CanRecruit(data) || !bonds.Recruit(data))
-                throw new InvalidOperationException("New character could not be recruited: " + id);
+            ResearchBondService.Instance.RegisterDefeated(data);
+            if(ResearchBondService.Instance.ResolveVictory(new[]{id}).Count!=0||ResearchBondService.Instance.CanRecruit(data))
+                throw new Exception("Legacy bond path is still active.");
+            Acquire(CastleTree.Nodes.Single(n=>n.kind==CastleTree.Kind.Character&&n.target==id));
         }
+        if(experience!=PlayerInventory.Instance.PlayerExperience)throw new Exception("Recruitment must not award experience.");
     }
 
     private static Control CaptureControl(Selectable selectable)

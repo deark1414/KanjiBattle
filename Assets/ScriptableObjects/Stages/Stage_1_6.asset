@@ -17,16 +17,24 @@ MonoBehaviour:
   chapterId: 2
   enemyPool:
   - {fileID: 11400000, guid: a45a3f137c1464a39a5bcd33f5e6348f, type: 2}
+  - {fileID: 11400000, guid: a8f9237dba00b460b8d915962812b47b, type: 2}
   - {fileID: 11400000, guid: a45a3f137c1464a39a5bcd33f5e6348f, type: 2}
+  - {fileID: 11400000, guid: a8f9237dba00b460b8d915962812b47b, type: 2}
   rewardStagePoints: 5
-  slotCount: 3
-  trapDamage: 8
+  slotCount: 8
+  restrictFormationSlots: 0
+  enemyPositions:
+  - {x: 2, y: 1}
+  - {x: 3, y: 1}
+  - {x: 1, y: 1}
+  - {x: 4, y: 1}
+  trapDamage: 6
   trapCount: 1
   reinforcementEnemy: []
   reinforcementInterval: 0
   reinforcementCount: 0
   reinforcementLimit: 0
   isBossStage: 0
-  enemyLevel: 7
+  enemyLevel: 5
   prerequisite: {fileID: 11400000, guid: e795022a51344401f8f2827eadddd5c2, type: 2}
   isCleared: 0

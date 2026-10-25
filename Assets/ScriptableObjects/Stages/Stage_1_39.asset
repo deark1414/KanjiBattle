@@ -16,21 +16,37 @@ MonoBehaviour:
   stageId: 39
   chapterId: 8
   enemyPool:
+  - {fileID: 11400000, guid: fb244f76b9d3d4d5aaa484dfa332eefa, type: 2}
+  - {fileID: 11400000, guid: 900ecc4fc8132484191c54303b8cbe88, type: 2}
+  - {fileID: 11400000, guid: b6b59b79b5715430181760d04ccedb0f, type: 2}
+  - {fileID: 11400000, guid: 927571de945b1422898eae1f5cfc1827, type: 2}
   - {fileID: 11400000, guid: 8bec765616db044dba5e0eca122b205b, type: 2}
   - {fileID: 11400000, guid: c4bdf81b972a942e4929848d9a47b771, type: 2}
-  - {fileID: 11400000, guid: fb244f76b9d3d4d5aaa484dfa332eefa, type: 2}
-  - {fileID: 11400000, guid: 8bec765616db044dba5e0eca122b205b, type: 2}
-  - {fileID: 11400000, guid: c4bdf81b972a942e4929848d9a47b771, type: 2}
-  - {fileID: 11400000, guid: fb244f76b9d3d4d5aaa484dfa332eefa, type: 2}
+  - {fileID: 11400000, guid: 5461d3926e577437db81e4171e34682a, type: 2}
+  - {fileID: 11400000, guid: 1e8376bc251e144439579c16721a02dd, type: 2}
+  - {fileID: 11400000, guid: f5b98ab44ef824bbd826cb14c9818c47, type: 2}
+  - {fileID: 11400000, guid: fb39b40fb570248c29fb2bf28db54d54, type: 2}
   rewardStagePoints: 14
-  slotCount: 6
-  trapDamage: 40
+  slotCount: 8
+  restrictFormationSlots: 0
+  enemyPositions:
+  - {x: 2, y: 1}
+  - {x: 3, y: 1}
+  - {x: 1, y: 1}
+  - {x: 4, y: 1}
+  - {x: 2, y: 0}
+  - {x: 3, y: 0}
+  - {x: 1, y: 0}
+  - {x: 4, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 1}
+  trapDamage: 23
   trapCount: 2
   reinforcementEnemy: []
   reinforcementInterval: 0
   reinforcementCount: 0
   reinforcementLimit: 0
   isBossStage: 0
-  enemyLevel: 48
+  enemyLevel: 36
   prerequisite: {fileID: 11400000, guid: 5c17eab1ca3a6439ca230b2db6924fae, type: 2}
   isCleared: 0

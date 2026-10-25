@@ -4,6 +4,7 @@ const groups = state => state.battle.plan?.groups || [];
 const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y})=>({id,x,y}));
 
 module.exports = [
+  ...require("./castle-tree-scenarios"),
   ...require("./player-skill-scenarios"),
   ...require("./codex-navigation-scenarios"),
   ...require("./record-scenarios"),
@@ -75,7 +76,7 @@ module.exports = [
     }
   })),
   {
-    id:"element-recruitment",name:"電風鉄の縁と加入・旧数字の除外・再読込",fixture:"standard",
+    id:"element-recruitment",name:"電風鉄のツリー加入・旧数字の除外・再読込",fixture:"standard",
     async run(game) {
       let state=await game.request("recruitElements");
       for(const id of [31,32,33]) assert(state.owned.includes(id));
@@ -135,7 +136,7 @@ module.exports = [
     }
   },
   {
-    id:"animals-recruitment",name:"丑の縁候補・勝利累積・加入と保存",fixture:"standard",
+    id:"animals-recruitment",name:"丑のツリー加入と保存",fixture:"standard",
     async run(game) {
       let state=await game.request("recruitCow");
       assert(state.owned.includes(30)); assert.equal(state.experience,0);
@@ -180,7 +181,7 @@ module.exports = [
     }
   },
   {
-    id:"support-recruitment", name:"新3体の縁候補・勝利累積・加入処理と保存", fixture:"standard",
+    id:"support-recruitment", name:"鈴糸影のツリー加入・旧縁廃止・保存", fixture:"standard",
     async run(game) {
       let state=await game.request("recruitSupport");
       for(const id of [27,28,29]) assert(state.owned.includes(id));

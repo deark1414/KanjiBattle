@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     private StageData selectedStage;
 
     private float stagePointMultiplier = 1f;
-    private int facilityFormationSlots = 1;
+    private int facilityFormationSlots = CastleTree.InitialSlots;
     private int battleSpeedTier;
 
     public int StagePoints => stagePoints;
@@ -137,7 +137,9 @@ public class GameManager : MonoBehaviour
     public int GetEffectiveStagePointReward(int baseReward) => Mathf.Max(1, Mathf.FloorToInt(baseReward * stagePointMultiplier));
 
     public void ApplyFormationSlotIncrease(int slots) => facilityFormationSlots = Mathf.Max(facilityFormationSlots, 1 + Mathf.Max(0, slots));
-    public int GetFacilityFormationSlots() => facilityFormationSlots;
+    public int GetFacilityFormationSlots() => Mathf.Clamp(Mathf.Max(facilityFormationSlots, CastleTree.Slots), CastleTree.InitialSlots, CastleTree.MaximumSlots);
+    public int GetFormationCapacity(StageData stage) => stage != null && stage.restrictFormationSlots
+        ? Mathf.Min(GetFacilityFormationSlots(), Mathf.Max(1,stage.slotCount)) : GetFacilityFormationSlots();
 
     public void ApplyBattleSpeedTier(int tier) => battleSpeedTier = Mathf.Max(battleSpeedTier, Mathf.Clamp(tier, 0, 8));
 
@@ -150,7 +152,7 @@ public class GameManager : MonoBehaviour
     public void ResetRuntimeFacilityEffects()
     {
         stagePointMultiplier = 1f;
-        facilityFormationSlots = 1;
+        facilityFormationSlots = CastleTree.InitialSlots;
         battleSpeedTier = 0;
         selectedBattleSpeedIndex = Mathf.Clamp(selectedBattleSpeedIndex, 0, battleSpeedTier);
         OnProgressionChanged?.Invoke();

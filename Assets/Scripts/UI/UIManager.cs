@@ -243,6 +243,7 @@ public class UIManager : MonoBehaviour
         CharacterRecords.ResetProgress();
         BattleFusionRules.ResetProgress();
         PlayerSkillRules.ResetProgress();
+        CastleTree.ResetProgress();
         GameManager.Instance?.ResetProgress();
         GameManager.Instance?.ResetRuntimeFacilityEffects();
         SetResetDataButtonText("削除しました");

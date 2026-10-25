@@ -362,7 +362,7 @@ public class CharacterListUI : MonoBehaviour
 
         informationRegion.Configure(
             "軍勢の状況",
-            $"加入済み {ownedCount} 駒　/　縁候補 {candidateCount} 駒　/　緑の縁印は加入可能");
+            $"加入済み {ownedCount} 駒　/　編成 {GameManager.Instance?.GetFacilityFormationSlots() ?? CastleTree.InitialSlots} 枠");
     }
 
     private void ConfigurePracticePresentation(IReadOnlyList<CharacterData> owned)

@@ -18,6 +18,8 @@ public class StageData : ScriptableObject
 
     [Header("フォーメーション設定")]
     public int slotCount = 3;   // このステージで使えるスロット数
+    public bool restrictFormationSlots;
+    public List<Vector2Int> enemyPositions = new();
 
     [Header("トラップ設定")]
     public int trapDamage = 10;  // ダメージ

@@ -35,9 +35,7 @@ public class FormationUI : MonoBehaviour
         // 基本は施設の編成枠だが、ステージが制限を持っている場合は小さい方を採用
         if (GameManager.Instance != null && GameManager.Instance.GetSelectedStage() != null)
         {
-            int stageSlots = GameManager.Instance.GetSelectedStage().slotCount;
-            int facilitySlots = GameManager.Instance.GetFacilityFormationSlots();
-            int totalSlots = Mathf.Min(stageSlots, facilitySlots);
+            int totalSlots = GameManager.Instance.GetFormationCapacity(GameManager.Instance.GetSelectedStage());
             SetupSlots(totalSlots);
         }
 
@@ -77,26 +75,29 @@ public class FormationUI : MonoBehaviour
         // Keep the active formation visually separate from both the deploy band
         // above and the owned-piece list below. The old fixed 146px tiles leaked
         // into neighboring regions on short landscape viewports.
-        slotRect.anchorMin = new Vector2(0.04f, 0.505f);
-        slotRect.anchorMax = new Vector2(0.96f, 0.645f);
+        slotRect.anchorMin = new Vector2(0.04f, 0.48f);
+        slotRect.anchorMax = new Vector2(0.96f, 0.65f);
         slotRect.offsetMin = Vector2.zero;
         slotRect.offsetMax = Vector2.zero;
 
         Canvas.ForceUpdateCanvases();
         // Reserve a visible top margin before the piece artwork. Without it the
         // selected piece appeared glued to the deployment band above.
-        float cellHeight = Mathf.Clamp(slotRect.rect.height - 24f, 82f, 112f);
+        int count = Mathf.Max(1, slotButtons.Count);
+        int columns = Mathf.Min(count, UnityUIRuntimeTheme.IsPortraitNarrowScreen() ? 3 : 6);
+        int rows = Mathf.CeilToInt(count / (float)columns);
+        float cellHeight = Mathf.Min(112f, Mathf.Max(24f, (slotRect.rect.height - 8f - (rows - 1) * 8f) / rows));
 
         var grid = slotRect.GetComponent<GridLayoutGroup>();
         if (grid != null)
         {
             grid.enabled = true;
-            grid.cellSize = new Vector2(164f, cellHeight);
-            grid.spacing = new Vector2(12f, 10f);
-            grid.padding = new RectOffset(4, 4, 30, 4);
+            grid.cellSize = new Vector2(Mathf.Min(164f, (slotRect.rect.width - 8f - (columns - 1) * 8f) / columns), cellHeight);
+            grid.spacing = new Vector2(8f, 8f);
+            grid.padding = new RectOffset(4, 4, 4, 4);
             grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            grid.constraintCount = 5;
-            grid.childAlignment = TextAnchor.UpperCenter;
+            grid.constraintCount = columns;
+            grid.childAlignment = TextAnchor.MiddleCenter;
         }
 
         var fitter = slotRect.GetComponent<ResponsiveGridFitter>();
@@ -125,7 +126,8 @@ public class FormationUI : MonoBehaviour
         slotButtons.Clear();
         formationSlots = new CharacterData[slotCount];  // ← 修正
 
-        for (int i = 0; i < slotCount; i++)
+        int ownedSlots = GameManager.Instance != null ? GameManager.Instance.GetFacilityFormationSlots() : slotCount;
+        for (int i = 0; i < Mathf.Max(slotCount, ownedSlots); i++)
         {
             var slot = Instantiate(slotButtonPrefab, slotParent);
             slot.name = $"Slot{i+1}";
@@ -137,16 +139,17 @@ public class FormationUI : MonoBehaviour
             if (text != null)
             {
                 UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
-                text.text = "空";
+                text.text = i < slotCount ? "空" : "×";
                 text.enableAutoSizing = true;
                 text.fontSizeMin = UnityUIRuntimeTheme.MinimumTextSize;
-                text.fontSizeMax = 22f;
+                text.fontSizeMax = i < slotCount ? 22f : 48f;
                 text.alignment = TMPro.TextAlignmentOptions.Center;
-                text.color = new Color(1f, 0.95f, 0.82f);
+                text.color = i < slotCount ? new Color(1f, 0.95f, 0.82f) : new Color(1f, 0.48f, 0.42f);
                 text.raycastTarget = false;
             }
 
             int index = i;
+            slot.GetComponent<Button>().interactable = i < slotCount;
             slot.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() =>
             {
                 // クリックでキャラ解除
@@ -156,6 +159,7 @@ public class FormationUI : MonoBehaviour
 
         RestoreLastBattleFormation(false);
         EnsureStarterFormation();
+        ApplySlotAreaLayout();
         RefreshInformationRegion();
     }
 
@@ -343,8 +347,8 @@ public class FormationUI : MonoBehaviour
         // Align the utility action with the bottom of the piece art. This keeps
         // the row visually coherent while leaving a small breathing space above
         // the active formation.
-        host.anchorMin = new Vector2(0.76f, 0.560f);
-        host.anchorMax = new Vector2(0.92f, 0.620f);
+        host.anchorMin = new Vector2(0.76f, 0.670f);
+        host.anchorMax = new Vector2(0.92f, 0.730f);
         host.offsetMin = Vector2.zero;
         host.offsetMax = Vector2.zero;
         var layout = host.GetComponent<HorizontalLayoutGroup>();
@@ -354,6 +358,7 @@ public class FormationUI : MonoBehaviour
         }
 
         clearAllButton = EnsureButton(host, "ClearFormationButton", "全解除");
+        LayoutPrimaryActionButton(clearAllButton, Vector2.zero, Vector2.one);
         Transform restore = host.Find("RestoreLastFormationButton");
         if (restore != null)
         {
@@ -513,7 +518,7 @@ public class FormationUI : MonoBehaviour
                 ? $"第{stage.stageId:00}局  {stage.stageName}"
                 : "出陣編成";
             body = capacity > 0
-                ? $"編成 {selected} / {capacity}　所有駒を選ぶと、ここに現在の能力とスキル概要を表示します。"
+                ? $"編成 {selected} / {capacity}　所有 {slotButtons.Count}枠" + (stage != null && stage.restrictFormationSlots ? $"　制限 {stage.slotCount}枠" : "")
                 : "出陣する駒を選んでください。";
         }
         informationRegion.Configure(title, body);
@@ -707,12 +712,14 @@ public class FormationUI : MonoBehaviour
             return;
         }
 
-        foreach (CharacterData character in PlayerInventory.Instance.GetUnlockedCharacters())
+        int index=0;
+        foreach(int id in new[]{1,10,20})
         {
-            if (character != null && character.characterId == 1)
+            foreach (CharacterData character in PlayerInventory.Instance.GetUnlockedCharacters())
             {
-                SetCharacterToSlot(0, character);
-                return;
+                if(character==null||character.characterId!=id)continue;
+                if(index>=formationSlots.Length)return;
+                SetCharacterToSlot(index++,character);
             }
         }
     }
