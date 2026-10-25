@@ -514,7 +514,7 @@
     {
       "id": -1008,
       "name": "山",
-      "source": "Assets/Art/Generated/CharacterMotifsReviewed/MountainOrganicPixel.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/MountainTwinSummit.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1008",
       "piece": "UI/CharacterPieces/Piece_F1008",
       "enemyPiece": "UI/CharacterPieces/Piece_F1008_Enemy",
@@ -545,7 +545,7 @@
     {
       "id": -1010,
       "name": "要塞",
-      "source": "Assets/Art/Generated/CharacterMotifsReviewed/FortressAlignedCannons.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/FortressThickCorner.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1010",
       "piece": "UI/CharacterPieces/Piece_F1010",
       "enemyPiece": "UI/CharacterPieces/Piece_F1010_Enemy",

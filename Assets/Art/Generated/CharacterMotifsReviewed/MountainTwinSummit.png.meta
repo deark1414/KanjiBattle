@@ -1,0 +1,780 @@
+fileFormatVersion: 2
+guid: e9f2e04d0708f4ba39fc30dbfb96dcf7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8309024800244967486
+    second: MountainTwinSummit_0
+  - first:
+      213: -8523115813885443922
+    second: MountainTwinSummit_1
+  - first:
+      213: -3475170639087743584
+    second: MountainTwinSummit_2
+  - first:
+      213: 8926952930260186300
+    second: MountainTwinSummit_3
+  - first:
+      213: 3883610611160139114
+    second: MountainTwinSummit_4
+  - first:
+      213: 7152288412214406259
+    second: MountainTwinSummit_5
+  - first:
+      213: -3115046604210584749
+    second: MountainTwinSummit_6
+  - first:
+      213: -4631901266994659260
+    second: MountainTwinSummit_7
+  - first:
+      213: 2135368775887971779
+    second: MountainTwinSummit_8
+  - first:
+      213: 8609982819174475865
+    second: MountainTwinSummit_9
+  - first:
+      213: -2925359244281845439
+    second: MountainTwinSummit_10
+  - first:
+      213: -724648409372076311
+    second: MountainTwinSummit_11
+  - first:
+      213: 3934385721292692637
+    second: MountainTwinSummit_12
+  - first:
+      213: 7624985486514046275
+    second: MountainTwinSummit_13
+  - first:
+      213: 4991903105494897710
+    second: MountainTwinSummit_14
+  - first:
+      213: 8231643351565826474
+    second: MountainTwinSummit_15
+  - first:
+      213: 6981172342364623500
+    second: MountainTwinSummit_16
+  - first:
+      213: 369645113797987479
+    second: MountainTwinSummit_17
+  - first:
+      213: 750937758952331383
+    second: MountainTwinSummit_18
+  - first:
+      213: 6272092097041653242
+    second: MountainTwinSummit_19
+  - first:
+      213: -7827030127696489579
+    second: MountainTwinSummit_20
+  - first:
+      213: 3627488732255474954
+    second: MountainTwinSummit_21
+  - first:
+      213: -4332249192291412738
+    second: MountainTwinSummit_22
+  - first:
+      213: -6014194260661738392
+    second: MountainTwinSummit_23
+  - first:
+      213: 1212382967829570871
+    second: MountainTwinSummit_24
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MountainTwinSummit_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 54
+        width: 1229
+        height: 1043
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c7dc7f97f960bc80800000000000000
+      internalID: -8309024800244967486
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_1
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 933
+        width: 111
+        height: 269
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea008dd135fc7b980800000000000000
+      internalID: -8523115813885443922
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_2
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 1062
+        width: 305
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0adce4b47b6b5cfc0800000000000000
+      internalID: -3475170639087743584
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_3
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 963
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb47ace9468e2eb70800000000000000
+      internalID: 8926952930260186300
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_4
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 942
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a65432c464b55e530800000000000000
+      internalID: 3883610611160139114
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_5
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 900
+        width: 41
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37cae2d9a68024360800000000000000
+      internalID: 7152288412214406259
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_6
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 923
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 353cd312e9125c4d0800000000000000
+      internalID: -3115046604210584749
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_7
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 891
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4400a1aa65e28bfb0800000000000000
+      internalID: -4631901266994659260
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_8
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 883
+        width: 33
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c56347869a52ad10800000000000000
+      internalID: 2135368775887971779
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_9
+      rect:
+        serializedVersion: 2
+        x: 697
+        y: 883
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9586c13a1cdcc7770800000000000000
+      internalID: 8609982819174475865
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_10
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 867
+        width: 15
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 149ec2c34490767d0800000000000000
+      internalID: -2925359244281845439
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_11
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 288
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9e6535c6c1881f5f0800000000000000
+      internalID: -724648409372076311
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_12
+      rect:
+        serializedVersion: 2
+        x: 1147
+        y: 261
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9c150fd7feb99630800000000000000
+      internalID: 3934385721292692637
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_13
+      rect:
+        serializedVersion: 2
+        x: 1149
+        y: 258
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 345cd2da6e361d960800000000000000
+      internalID: 7624985486514046275
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_14
+      rect:
+        serializedVersion: 2
+        x: 1027
+        y: 194
+        width: 17
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e24513c1d6dc64540800000000000000
+      internalID: 4991903105494897710
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_15
+      rect:
+        serializedVersion: 2
+        x: 1206
+        y: 224
+        width: 17
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa979cfd30cac3270800000000000000
+      internalID: 8231643351565826474
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_16
+      rect:
+        serializedVersion: 2
+        x: 1178
+        y: 210
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c82dc6ee14b12e060800000000000000
+      internalID: 6981172342364623500
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_17
+      rect:
+        serializedVersion: 2
+        x: 788
+        y: 188
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79c43e4c54e312500800000000000000
+      internalID: 369645113797987479
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_18
+      rect:
+        serializedVersion: 2
+        x: 938
+        y: 192
+        width: 6
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77818c2c9eddb6a00800000000000000
+      internalID: 750937758952331383
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_19
+      rect:
+        serializedVersion: 2
+        x: 943
+        y: 196
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afdd3b20882fa0750800000000000000
+      internalID: 6272092097041653242
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_20
+      rect:
+        serializedVersion: 2
+        x: 1091
+        y: 180
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 593de58719dc06390800000000000000
+      internalID: -7827030127696489579
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_21
+      rect:
+        serializedVersion: 2
+        x: 1101
+        y: 176
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a05d1d068cd675230800000000000000
+      internalID: 3627488732255474954
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_22
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 144
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ef45ff61052c0e3c0800000000000000
+      internalID: -4332249192291412738
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_23
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 110
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 864601b3f2a498ca0800000000000000
+      internalID: -6014194260661738392
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MountainTwinSummit_24
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 65
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7352731c2ef33d010800000000000000
+      internalID: 1212382967829570871
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID:
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      MountainTwinSummit_0: -8309024800244967486
+      MountainTwinSummit_1: -8523115813885443922
+      MountainTwinSummit_10: -2925359244281845439
+      MountainTwinSummit_11: -724648409372076311
+      MountainTwinSummit_12: 3934385721292692637
+      MountainTwinSummit_13: 7624985486514046275
+      MountainTwinSummit_14: 4991903105494897710
+      MountainTwinSummit_15: 8231643351565826474
+      MountainTwinSummit_16: 6981172342364623500
+      MountainTwinSummit_17: 369645113797987479
+      MountainTwinSummit_18: 750937758952331383
+      MountainTwinSummit_19: 6272092097041653242
+      MountainTwinSummit_2: -3475170639087743584
+      MountainTwinSummit_20: -7827030127696489579
+      MountainTwinSummit_21: 3627488732255474954
+      MountainTwinSummit_22: -4332249192291412738
+      MountainTwinSummit_23: -6014194260661738392
+      MountainTwinSummit_24: 1212382967829570871
+      MountainTwinSummit_3: 8926952930260186300
+      MountainTwinSummit_4: 3883610611160139114
+      MountainTwinSummit_5: 7152288412214406259
+      MountainTwinSummit_6: -3115046604210584749
+      MountainTwinSummit_7: -4631901266994659260
+      MountainTwinSummit_8: 2135368775887971779
+      MountainTwinSummit_9: 8609982819174475865
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:
