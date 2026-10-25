@@ -119,6 +119,7 @@ public partial class BattleManager : MonoBehaviour
     {
         ClearDeploymentView();
         StopAllCoroutines();
+        FinishPlayerSkill();
         ClearSupportSkillVfx();
         CleanupBattleVfx();
     }
@@ -182,8 +183,9 @@ public partial class BattleManager : MonoBehaviour
         GenerateStageTraps(stage);
 
         UpdateSpeedButtonLabel();
+        PreparePlayerSkill();
         PrepareFusionPlan();
-        if (useSavedDeployment && !HasFusionConflict)
+        if (useSavedDeployment && !HasFusionConflict && PlayerSkillReady)
         {
             ApplyFusionPlan();
             StartCoroutine(StartBattleAfterSetup());
@@ -191,16 +193,17 @@ public partial class BattleManager : MonoBehaviour
         else
         {
             deploymentView = new BattleDeploymentView(transform, gridCells, SelectDeploymentCell, ConfirmDeployment, CancelDeployment,
-                CanUseFusion ? OpenFusionSelection : null);
+                CanUseFusion ? OpenFusionSelection : null, OpenPlayerSkillSelection);
             selectedDeploymentCharacter = null;
             deploymentView.Refresh(selectedDeploymentCharacter);
             RefreshFusionPreview();
+            RefreshPlayerSkillStatus();
         }
     }
 
     private void SelectDeploymentCell(Vector2Int cell)
     {
-        if (fusionView != null) return;
+        if (fusionView != null || playerSkillView != null) return;
         if (!IsDeploying || !BattleDeploymentRules.IsAllyCell(cell) || impassableCells.Contains(cell)) return;
         gridMap.TryGetValue(cell, out BattleCharacter occupant);
         if (occupant != null && !occupant.isAlly) return;
@@ -238,12 +241,13 @@ public partial class BattleManager : MonoBehaviour
 
     private void ConfirmDeployment()
     {
-        if (!IsDeploying || fusionView != null) return;
+        if (!IsDeploying || fusionView != null || playerSkillView != null || !PlayerSkillReady) return;
         RefreshFusionPlan();
         if (HasFusionConflict) { OpenFusionSelection(); return; }
         BattleDeploymentRules.Save(allies.Select(character => character.data.characterId).ToList(),
             allies.Select(character => character.gridPos).ToList());
         if (CanUseFusion) BattleFusionRules.Save(deployedAllies, fusionChoices);
+        PlayerSkillRules.Save(playerSkillPlan, PlayerSkillClearedStage);
         ApplyFusionPlan();
         ClearDeploymentView();
         isPaused = false;
@@ -258,6 +262,7 @@ public partial class BattleManager : MonoBehaviour
 
     private void ClearDeploymentView()
     {
+        ClosePlayerSkillSelection();
         CloseFusionSelection();
         fusionPreview?.Dispose();
         fusionPreview = null;
@@ -530,6 +535,8 @@ public partial class BattleManager : MonoBehaviour
         deploymentView?.BringToFront();
         RefreshFusionPreview();
         fusionView?.BringToFront();
+        RefreshPlayerSkillStatus();
+        playerSkillView?.BringToFront();
     }
 
 
@@ -584,7 +591,7 @@ public partial class BattleManager : MonoBehaviour
     private IEnumerator BattleLoop()
     {
         int turn = 1;
-        const int maxTurns = 50;
+        const int maxTurns = PlayerSkillRules.MaxTurns;
 
         while (true)
         {
@@ -594,8 +601,10 @@ public partial class BattleManager : MonoBehaviour
                 yield return null; // 1フレーム待機
             }
             
+            if (ResolveBattleBeforePlayerSkill()) yield break;
             AddLog($"--- ターン {turn} ---");
             fusionTurn = turn;
+            BeginPlayerSkillTurn(turn);
             BeginAdvancedFusionTurn(true, turn);
 
             ElementSkillExecutor.ApplyWind(this, true, impassableCells);
@@ -623,6 +632,7 @@ public partial class BattleManager : MonoBehaviour
             }
             ElementSkillExecutor.EndSideTurn(this, false);
             FusionSupportExecutor.EndSideTurn(this, false);
+            EndPlayerSkillTurn();
 
             // 土の罠による継続ダメージ
             foreach (var bc in new List<BattleCharacter>(allies))
@@ -1292,6 +1302,7 @@ public partial class BattleManager : MonoBehaviour
 
     private void ShowResult(string message, Color color, bool isWin = false)
     {
+        FinishPlayerSkill();
         if (!battleRecords.Complete(isWin)) return;
         GameAudio.Instance.Play(isWin ? GameSound.Win : GameSound.Lose);
         int effectiveReward = 0;

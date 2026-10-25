@@ -242,6 +242,7 @@ public class UIManager : MonoBehaviour
         ResearchBondService.Instance.ResetProgress();
         CharacterRecords.ResetProgress();
         BattleFusionRules.ResetProgress();
+        PlayerSkillRules.ResetProgress();
         GameManager.Instance?.ResetProgress();
         GameManager.Instance?.ResetRuntimeFacilityEffects();
         SetResetDataButtonText("削除しました");

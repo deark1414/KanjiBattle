@@ -233,6 +233,7 @@ if (background != null)
             dmg = Mathf.Max(1, Mathf.FloorToInt(dmg * 0.5f));
 
         int preventedDamage = Mathf.Max(0, incomingDamage - dmg);
+        if (canMitigate && bm != null) dmg = bm.ApplyPlayerSkillGuard(this, dmg);
         if (origin == BattleDamageOrigin.Direct && bm != null)
         {
             BattleCharacter protector = BattleDamageRules.FindProtector(this, bm.gridMap.Values);
@@ -475,6 +476,7 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
     public int GetEffectiveAttack(BattleManager bm)
     {
         int attack = state.GetEffectiveAttack();
+        if (bm != null) attack = bm.ApplyPlayerSkillAttack(this, attack);
         if (!isAlly || FacilityManager.Instance == null)
         {
             return attack;

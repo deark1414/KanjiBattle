@@ -29,6 +29,9 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public string[] logs;
         public string resultText; public bool resultTextOverflow;
         public string[] supportTextures; public int supportVfxCount;
+        public PlayerSkillRules.Plan playerSkillPlan;
+        public bool playerSkillOpen, playerSkillFired, playerSkillActive;
+        public int playerSkillRemaining;
     }
     [Serializable] private sealed class Snapshot
     {
@@ -68,6 +71,11 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "corruptPlan": PlayerProgressStore.SetString("KanjiBattle.Fusion.AdjacentChoices.v2", "{broken"); PlayerProgressStore.Save(); break;
                 case "snapshot": break;
                 case "recordsProbe": FindFirstObjectByType<BattleManager>().ProbeBattleRecords(); break;
+                case "playerSkillProbe": FindFirstObjectByType<BattleManager>().ProbePlayerSkill(request.value); break;
+                case "playerSkillTraps": FindFirstObjectByType<BattleManager>().SeedPlayerSkillLethalTraps(); break;
+                case "playerSkillGate":
+                    PlayerProgressStore.SetInt("KanjiBattle.HighestClearedStageId",0); GameManager.Instance.LoadProgress(); break;
+                case "corruptPlayerSkill": PlayerProgressStore.SetString(PlayerSkillRules.SaveKey,"{broken"); PlayerProgressStore.Save(); break;
                 case "supportVfxProbe": FindFirstObjectByType<BattleManager>().ProbeSupportVfx(request.value); break;
                 case "supportProbe": FindFirstObjectByType<BattleManager>().ProbeSupportSkills(); break;
                 case "defenseProbe": FindFirstObjectByType<BattleManager>().ProbeDefenseSkills(); break;
@@ -106,6 +114,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         PlayerInventory.Instance.ResetProgress();
         ResearchBondService.Instance.ResetProgress();
         CharacterRecords.ResetProgress();
+        PlayerSkillRules.ResetProgress();
         PlayerProgressStore.Delete("KanjiBattle.Deployment.Positions.v1");
         PlayerProgressStore.SetString(FixtureKey, kind);
         GameManager.Instance.RegisterClearedStage(kind == "locked" ? 19 : 40);

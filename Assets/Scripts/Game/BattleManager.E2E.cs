@@ -82,6 +82,9 @@ public partial class BattleManager
         return new BattleE2EBridge.BattleState
         {
             active = gameObject.activeInHierarchy,
+            playerSkillPlan = playerSkillPlan.Copy(), playerSkillOpen = playerSkillView != null,
+            playerSkillFired = playerSkill.Fired, playerSkillActive = playerSkill.Active,
+            playerSkillRemaining = playerSkill.Remaining,
             supportVfxCount = supportRoots.Count,
             supportTextures = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(
                 System.Linq.Enumerable.Where(GetComponentsInChildren<UnityEngine.UI.RawImage>(),

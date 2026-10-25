@@ -53,7 +53,7 @@ public partial class BattleManager
 
     private void OpenFusionSelection()
     {
-        if (!IsDeploying || !CanUseFusion || fusionView != null || fusionResolution.alternatives.Count == 0) return;
+        if (!IsDeploying || !CanUseFusion || fusionView != null || playerSkillView != null || fusionResolution.alternatives.Count == 0) return;
         fusionView = new BattleFusionView(transform, deployedAllies, fusionChoices, fusionResolution.alternatives, () =>
         {
             CloseFusionSelection();
