@@ -124,6 +124,61 @@
       "prompt": "Use case: precise-object-edit. Asset type: transparent motif sprite for a Japanese kanji strategy game. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, crisp square pixel edges, grounded restrained materials, not coarse 32px icons or smooth vector art. Full isolated subject centered with at least 10 percent true transparent margin on all sides. No text, kanji, labels, UI or backdrop. Preserve genuine alpha, no checkerboard. Remove the CLOUD completely because a separate cloud character may be added later. Show only falling RAIN: a compact cluster of clear blue and cyan raindrops and short downward rain streaks at varied heights, gently showering into a few small subtle ripples/splashes at the bottom. Fill the former cloud's area with spaced falling raindrops rather than leaving an empty top half. No clouds, no sky, no mist, no vapor, no weather icon frame, no sun, no vegetation, no landscape, no glowing ring, no huge pool. Keep the blue water material and fine pixel-art style, true transparent gaps between the drops, an easily read rain-shower silhouette.",
       "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-44a805be-770a-4964-aa53-4891bf94c098.png",
       "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/RainNoCloud.png"
+    },
+    {
+      "id": 27,
+      "key": "BellPlain",
+      "change": "Simplify this Japanese round suzu bell to a plain unadorned brass sphere: only its simple suspension loop and the functional dark opening/slit. REMOVE ALL engraved patterns, scrollwork, relief ornaments, red cords, knots and tassels. No ribbon, no decorations. Natural restrained brass highlights, one plain recognizable bell, not a Western handbell. Preserve fine pixel resolution.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Bell.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this existing transparent game motif. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, square pixel edges, matching existing KanjiBattle motifs, not blurry painting or coarse 32px icons. Single isolated composition centered with 10 percent true transparent margin, no backdrop, no text or letters, no frame or UI, no surrounding halo. Simplify this Japanese round suzu bell to a plain unadorned brass sphere: only its simple suspension loop and the functional dark opening/slit. REMOVE ALL engraved patterns, scrollwork, relief ornaments, red cords, knots and tassels. No ribbon, no decorations. Natural restrained brass highlights, one plain recognizable bell, not a Western handbell. Preserve fine pixel resolution.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-de0c541f-7aef-4cc1-8805-bbb8740de9c9.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/BellPlain.png"
+    },
+    {
+      "id": 28,
+      "key": "ThreadPlain",
+      "change": "Simplify to a plain small wooden spool wound with white thread and one loose curling thread end. REMOVE the entire red binding cord, knot and every decorative accessory. Plain functional spool, clean understated wood, no elaborate carving, no needle, no stand, no separate cast shadow. Preserve the fine pixel-art thread detail and readable silhouette.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Thread.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this existing transparent game motif. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, square pixel edges, matching existing KanjiBattle motifs, not blurry painting or coarse 32px icons. Single isolated composition centered with 10 percent true transparent margin, no backdrop, no text or letters, no frame or UI, no surrounding halo. Simplify to a plain small wooden spool wound with white thread and one loose curling thread end. REMOVE the entire red binding cord, knot and every decorative accessory. Plain functional spool, clean understated wood, no elaborate carving, no needle, no stand, no separate cast shadow. Preserve the fine pixel-art thread detail and readable silhouette.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-3df3d8ef-1e85-4736-a3a8-ea1c19189fef.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/ThreadPlain.png"
+    },
+    {
+      "id": 30,
+      "key": "OxPlain",
+      "change": "Keep the same full-bodied dark ox, four legs, horns, natural anatomy, pose and pixel-art rendering. REMOVE the red rope halter, every rope on the head, hanging knots, tassel, accessories, collar, reins and any ornamental item. The result is simply one natural undecorated dark brown-black ox with horns and hooves. Do not replace with a cartoon, baby, human, statue or toy.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Ox.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this existing transparent game motif. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, square pixel edges, matching existing KanjiBattle motifs, not blurry painting or coarse 32px icons. Single isolated composition centered with 10 percent true transparent margin, no backdrop, no text or letters, no frame or UI, no surrounding halo. Keep the same full-bodied dark ox, four legs, horns, natural anatomy, pose and pixel-art rendering. REMOVE the red rope halter, every rope on the head, hanging knots, tassel, accessories, collar, reins and any ornamental item. The result is simply one natural undecorated dark brown-black ox with horns and hooves. Do not replace with a cartoon, baby, human, statue or toy.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-5405fc25-f478-471e-8902-af11632c8672.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/OxPlain.png"
+    },
+    {
+      "id": -1008,
+      "key": "MountainNatural",
+      "change": "Redesign this excessively sharp symmetric fantasy mountain into a natural asymmetrical mountain massif. A broad weathered rounded crest, NOT a needle, pyramid or sharp isolated triangular peak. Peak offset left of center. LEFT slope relatively steep and rocky with a short broken shoulder; RIGHT slope substantially longer and gentler, stepping into low foothills. Irregular believable erosion and ridgelines; restrained green lower slopes, grey rock and only modest snow on upper slopes if needed. No spike forest, no perfect cone or symmetric triangle. Remove all glow/halo. Maintain the game's fine pixel-art density and one isolated mountain silhouette.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Mountain.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this existing transparent game motif. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, square pixel edges, matching existing KanjiBattle motifs, not blurry painting or coarse 32px icons. Single isolated composition centered with 10 percent true transparent margin, no backdrop, no text or letters, no frame or UI, no surrounding halo. Redesign this excessively sharp symmetric fantasy mountain into a natural asymmetrical mountain massif. A broad weathered rounded crest, NOT a needle, pyramid or sharp isolated triangular peak. Peak offset left of center. LEFT slope relatively steep and rocky with a short broken shoulder; RIGHT slope substantially longer and gentler, stepping into low foothills. Irregular believable erosion and ridgelines; restrained green lower slopes, grey rock and only modest snow on upper slopes if needed. No spike forest, no perfect cone or symmetric triangle. Remove all glow/halo. Maintain the game's fine pixel-art density and one isolated mountain silhouette.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-6dc3c347-498e-4846-ac04-b93ba226c0ee.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/MountainNatural.png"
+    },
+    {
+      "id": -1002,
+      "key": "ScatterPumpTriple",
+      "change": "Replace this flared-muzzle antique blunderbuss entirely with an original fantasy THREE-BARREL PUMP-ACTION SHOTGUN, one single unified weapon. Three straight PARALLEL dark steel barrels in a triangular cluster, with THREE separate clearly countable round equal-sized muzzle openings, each a conventional cylindrical bore, NOT a bell or trumpet flare. Three-quarter side view aimed diagonally up-right, showing all three muzzle openings; walnut shoulder stock lower-left, simple receiver, visible trigger guard, and a clearly distinct ribbed sliding wooden PUMP FORE-END below the barrel assembly with understated slide rails. Readable functional pump-action silhouette, no flintlock hammer, no ornate gold filigree, no modern tactical attachments, no lasers, no projectiles, no hands. Grounded wood and gunmetal fantasy pixel art matching the reference density; whole weapon fully visible with padding. This is one imaginative triple-barrel weapon, not three floating separate guns.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/ScatterShot.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this existing transparent game motif. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, square pixel edges, matching existing KanjiBattle motifs, not blurry painting or coarse 32px icons. Single isolated composition centered with 10 percent true transparent margin, no backdrop, no text or letters, no frame or UI, no surrounding halo. Replace this flared-muzzle antique blunderbuss entirely with an original fantasy THREE-BARREL PUMP-ACTION SHOTGUN, one single unified weapon. Three straight PARALLEL dark steel barrels in a triangular cluster, with THREE separate clearly countable round equal-sized muzzle openings, each a conventional cylindrical bore, NOT a bell or trumpet flare. Three-quarter side view aimed diagonally up-right, showing all three muzzle openings; walnut shoulder stock lower-left, simple receiver, visible trigger guard, and a clearly distinct ribbed sliding wooden PUMP FORE-END below the barrel assembly with understated slide rails. Readable functional pump-action silhouette, no flintlock hammer, no ornate gold filigree, no modern tactical attachments, no lasers, no projectiles, no hands. Grounded wood and gunmetal fantasy pixel art matching the reference density; whole weapon fully visible with padding. This is one imaginative triple-barrel weapon, not three floating separate guns.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-54a7cabe-359b-40a8-9b5f-20cb96240dd8.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/ScatterPumpTriple.png"
     }
   ]
 }

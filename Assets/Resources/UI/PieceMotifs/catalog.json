@@ -303,7 +303,7 @@
     {
       "id": 27,
       "name": "鈴",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Bell.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/BellPlain.png",
       "resource": "UI/PieceMotifs/Ready/Motif_27",
       "piece": "UI/CharacterPieces/Piece_27",
       "enemyPiece": "UI/CharacterPieces/Piece_27_Enemy",
@@ -318,7 +318,7 @@
     {
       "id": 28,
       "name": "糸",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Thread.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/ThreadPlain.png",
       "resource": "UI/PieceMotifs/Ready/Motif_28",
       "piece": "UI/CharacterPieces/Piece_28",
       "enemyPiece": "UI/CharacterPieces/Piece_28_Enemy",
@@ -348,7 +348,7 @@
     {
       "id": 30,
       "name": "丑",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Ox.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/OxPlain.png",
       "resource": "UI/PieceMotifs/Ready/Motif_30",
       "piece": "UI/CharacterPieces/Piece_30",
       "enemyPiece": "UI/CharacterPieces/Piece_30_Enemy",
@@ -423,7 +423,7 @@
     {
       "id": -1002,
       "name": "散弾",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/ScatterShot.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/ScatterPumpTriple.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1002",
       "piece": "UI/CharacterPieces/Piece_F1002",
       "enemyPiece": "UI/CharacterPieces/Piece_F1002_Enemy",
@@ -513,7 +513,7 @@
     {
       "id": -1008,
       "name": "山",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Mountain.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/MountainNatural.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1008",
       "piece": "UI/CharacterPieces/Piece_F1008",
       "enemyPiece": "UI/CharacterPieces/Piece_F1008_Enemy",
