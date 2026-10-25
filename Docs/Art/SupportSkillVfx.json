@@ -486,6 +486,18 @@
       "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MountainRebound.png",
       "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-89e73424-142d-45df-8423-dce71716a4ec.png",
       "prompt": "Use case: stylized-concept. One isolated transparent pixel-art impact VFX sprite for a Japanese kanji strategy game. A small sparse crescent-shaped scatter of uneven GREY ROCK CHIPS rebounding from a stone surface: 7 to 10 jagged tiny slate-grey fragments with pale chipped faces and a few restrained beige dust pixels, heavier fragments near lower center and smaller ones flung upward and toward RIGHT. Large transparent open central space for a game piece, thin sparse distribution, no continuous ring. Deliberate coarse 128px logical pixel art, limited colors, crisp square pixel clusters. No mountain landscape, no ground tile, no light rays, no glowing outline, no fire, no magical forcefield, no text, no UI. Single complete sprite not frames, genuine transparent background, 15 percent clear margin on all sides."
+    },
+    {
+      "key": "GuardShell",
+      "name": "甲の甲羅",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_14.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_14.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GuardShell.png",
+      "reuse": true,
+      "prompt": "既存の甲羅モチーフを変更せず再利用。盾は使わない。"
     }
   ],
   "sequence": {
