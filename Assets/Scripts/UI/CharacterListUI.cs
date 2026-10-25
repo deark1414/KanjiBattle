@@ -75,13 +75,6 @@ public class CharacterListUI : MonoBehaviour
             .ToList();
 
         float cursorY = 12f;
-        var codexButton = CharacterCodexUI.Command(content, "OpenCodex", "図鑑", Vector2.zero, Vector2.one,
-            () => CharacterCodexUI.OpenCodex(transform));
-        var codexRect = (RectTransform)codexButton.transform;
-        codexRect.anchorMin = new Vector2(0, 1); codexRect.anchorMax = new Vector2(1, 1);
-        codexRect.pivot = new Vector2(.5f, 1); codexRect.sizeDelta = new Vector2(-40, 48);
-        codexRect.anchoredPosition = new Vector2(0, -cursorY);
-        cursorY += 64f;
         foreach (IGrouping<CharacterCategory, CharacterData> group in owned
                      .GroupBy(character => character.category)
                      .OrderBy(group => GetRosterGroupOrder(group.Key)))

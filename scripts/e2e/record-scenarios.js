@@ -14,7 +14,7 @@ module.exports = [
       await game.named('CloseCodex');
       await game.click(control=>control.text==='戻る','戻る');
       await game.click(control=>control.text==='軍勢','軍勢');
-      await game.named('OpenCodex');
+      await game.named('CodexTabButton');
       await game.screenshot('codex-normal');
       assert(game.state.codexTitles.includes('丑:加入済'));
       assert(game.state.codexTitles.includes('？:未遭遇'));
@@ -26,7 +26,7 @@ module.exports = [
         state=await game.request(); assert(!state.codexOverflow,'open codex survives rotation: '+state.codexOverflowNames);
         await game.screenshot('codex-rotated');
       }
-      await game.named('CloseCodex');
+      await game.click(control=>control.text==='軍勢','軍勢へ戻る');
       await game.page.reload(); await game.page.waitForFunction(()=>!!window.unityInstance,null,{timeout:120000});
       await game.page.waitForTimeout(1500);
       state = await game.request();
@@ -44,7 +44,7 @@ module.exports = [
       await game.named('OpenBattleRecords'); assert(!game.state.codexOverflow,'fusion record rows fit: '+game.state.codexOverflowNames);
       await game.screenshot('fusion-records'); await game.named('CloseCodex');
       await game.click(control=>control.text==='戻る','戻る'); await game.click(control=>control.text==='軍勢','軍勢');
-      await game.named('OpenCodex'); await game.named('FusionTab');
+      await game.named('CodexTabButton'); await game.named('FusionTab');
       assert(game.state.codexTitles.includes('賽子:発見済')); await game.screenshot('discovered-fusion');
     }
   },

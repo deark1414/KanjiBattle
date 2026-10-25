@@ -10,6 +10,7 @@ public class TabManager : MonoBehaviour
     [SerializeField] private Button homeButton;
     [SerializeField] private Button battleButton;
     [SerializeField] private Button facilityButton;
+    private Button codexButton;
 
     [Header("Tab Colors")]
     [SerializeField] private Color selectedColor = new Color(0.73f, 0.30f, 0.16f);
@@ -20,10 +21,22 @@ public class TabManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null) Instance = this;
+        EnsureCodexTab();
         EnsureNavigationLayer();
         EnsureButtonListeners();
         ApplyLabels();
         HighlightTop();
+    }
+
+    private void EnsureCodexTab()
+    {
+        if (codexButton != null || facilityButton == null) return;
+        codexButton = Instantiate(facilityButton, facilityButton.transform.parent);
+        codexButton.name = "CodexTabButton";
+        codexButton.onClick = new Button.ButtonClickedEvent();
+        codexButton.transform.SetAsLastSibling();
+        var layout = codexButton.GetComponent<LayoutElement>() ?? codexButton.gameObject.AddComponent<LayoutElement>();
+        layout.flexibleWidth = 1f;
     }
 
     private void EnsureNavigationLayer()
@@ -52,6 +65,7 @@ public class TabManager : MonoBehaviour
         if (homeButton != null) homeButton.onClick.AddListener(ShowHome);
         if (battleButton != null) battleButton.onClick.AddListener(ShowBattle);
         if (facilityButton != null) facilityButton.onClick.AddListener(ShowFacility);
+        if (codexButton != null) codexButton.onClick.AddListener(() => UIManager.Instance?.ShowCodex());
     }
 
     private void ApplyLabels()
@@ -59,6 +73,7 @@ public class TabManager : MonoBehaviour
         SetButtonLabel(homeButton, "軍勢");
         SetButtonLabel(battleButton, "行軍");
         SetButtonLabel(facilityButton, "城下");
+        SetButtonLabel(codexButton, "図鑑");
     }
 
     private static void SetButtonLabel(Button button, string label)
@@ -105,6 +120,7 @@ public class TabManager : MonoBehaviour
         ResetButtonColor(homeButton);
         ResetButtonColor(battleButton);
         ResetButtonColor(facilityButton);
+        ResetButtonColor(codexButton);
     }
 
     public void SetActiveTab(Button targetTab)
@@ -167,4 +183,5 @@ public class TabManager : MonoBehaviour
     public void HighlightTop() => SetActiveTab(homeButton);
     public void HighlightStage() => SetActiveTab(battleButton);
     public void HighlightFacility() => SetActiveTab(facilityButton);
+    public void HighlightCodex() => SetActiveTab(codexButton);
 }

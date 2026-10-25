@@ -45,7 +45,8 @@ public sealed class CharacterCodexUI : MonoBehaviour
     {
         bool compact = Screen.width > Screen.height && Screen.height < 500;
         Place(heading.rectTransform, new(.05f, compact ? .87f : .91f), new(.80f, .99f));
-        Place((RectTransform)transform.Find("CloseCodex"), new(.85f, compact ? .87f : .91f), new(.97f, .99f));
+        var close = transform.Find("CloseCodex") as RectTransform;
+        if (close != null) Place(close, new(.85f, compact ? .87f : .91f), new(.97f, .99f));
         string[] tabs = { "NormalTab", "FusionTab", "EnemyTab" };
         for (int i = 0; i < tabs.Length; i++)
         {
@@ -99,11 +100,12 @@ public sealed class CharacterCodexUI : MonoBehaviour
     }
     public static void OpenCodex(Transform source)
     {
-        var window = Open(source, "漢字図鑑"); if (window == null) return;
+        var window = Open(source, "漢字図鑑", true); if (window == null) return;
         window.items.AddRange(Catalog());
         Command(window.transform, "NormalTab", "通常", new(.05f, .83f), new(.34f, .90f), () => { window.category = 0; window.Draw(); });
         Command(window.transform, "FusionTab", "融合", new(.36f, .83f), new(.65f, .90f), () => { window.category = 1; window.Draw(); });
         Command(window.transform, "EnemyTab", "敵将", new(.67f, .83f), new(.95f, .90f), () => { window.category = 2; window.Draw(); });
+        window.ApplyLayout();
         window.Draw();
     }
     public static void OpenResults(Transform source, BattleRecordBook book, Action closed = null)
@@ -120,15 +122,20 @@ public sealed class CharacterCodexUI : MonoBehaviour
         }
         window.Draw();
     }
-    private static CharacterCodexUI Open(Transform source, string title)
+    private static CharacterCodexUI Open(Transform source, string title, bool screen = false)
     {
         CloseAny();
         Canvas canvas = source.GetComponentInParent<Canvas>()?.rootCanvas; if (canvas == null) return null;
-        var root = Surface(canvas.transform, "CharacterCodex", new(.055f, .075f, .07f, 1f), new(.025f, .11f), new(.975f, .88f));
-        var layer = root.AddComponent<Canvas>(); layer.overrideSorting = true; layer.sortingOrder = 1100;
-        root.AddComponent<GraphicRaycaster>(); active = root.AddComponent<CharacterCodexUI>();
+        var root = Surface(screen ? source : canvas.transform, screen ? "CharacterCodexScreen" : "CharacterCodex",
+            new(.055f, .075f, .07f, 1f), new(.025f, .11f), new(.975f, .88f));
+        if (!screen)
+        {
+            var layer = root.AddComponent<Canvas>(); layer.overrideSorting = true; layer.sortingOrder = 1100;
+            root.AddComponent<GraphicRaycaster>();
+        }
+        active = root.AddComponent<CharacterCodexUI>();
         active.heading = Text(root.transform, "Heading", title, new(.05f, .91f), new(.80f, .99f), 28);
-        Command(root.transform, "CloseCodex", "×", new(.85f, .91f), new(.97f, .99f), CloseAny);
+        if (!screen) Command(root.transform, "CloseCodex", "×", new(.85f, .91f), new(.97f, .99f), CloseAny);
         active.detailContent = Scroll(root.transform, "Detail", new(.05f, .43f), new(.95f, .81f));
         active.listContent = Scroll(root.transform, "Entries", new(.05f, .03f), new(.95f, .41f));
         active.ApplyLayout();

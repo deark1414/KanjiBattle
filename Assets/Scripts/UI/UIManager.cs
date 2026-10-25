@@ -123,6 +123,18 @@ public class UIManager : MonoBehaviour
         tabs?.HighlightFacility();
     }
 
+    public void ShowCodex()
+    {
+        HideAll();
+        ModernWafuuPresentation.SetGlobalStatusVisible(true);
+        GameAudio.Instance.PlayBgm(GameBgm.Top);
+        ModernWafuuPresentation.ApplyScreenChrome();
+        CharacterCodexUI.OpenCodex(TopPanel != null ? TopPanel.transform.parent : transform);
+        var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
+        tabs?.SetNavigationVisible(true);
+        tabs?.HighlightCodex();
+    }
+
     public void ShowSettings()
     {
         EnsureSettingsModal();
