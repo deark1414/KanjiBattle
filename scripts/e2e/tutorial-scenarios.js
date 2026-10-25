@@ -3,21 +3,44 @@ async function guide(game,id){
   await game.wait(state=>state.guideId===id,'Guide did not open: '+id);
   await game.page.waitForTimeout(180);await game.request();
   assert(!game.state.guideOverflow,'Guide copy must fit: '+id);
-  assert(game.state.controls.filter(c=>c.visible&&c.reachable).every(c=>c.path.includes('/FullScreenGuide/')),'Guide must block underlying actions');
+  const controls=game.state.controls.filter(c=>c.visible&&c.reachable);
+  if(game.state.guideStep>=0){
+    assert(game.state.guideInstructionSize>=21.9,'Instructions must remain large in CSS pixels, including Retina');
+    assert(controls.some(c=>c.path.endsWith('/'+game.state.guideTarget)),'Highlighted real control must be reachable');
+    assert.equal(controls.filter(c=>c.path.endsWith('/'+game.state.guideTarget)).length,1,'Exactly one real action is highlighted');
+    if(['DeployButton','ConfirmDeployment'].includes(game.state.guideTarget)){
+      const target=controls.find(c=>c.path.endsWith('/'+game.state.guideTarget));
+      assert(target.rect.h*game.page.viewportSize().height>=47,'Guided action must be a full-size tap target');
+    }
+    assert(controls.every(c=>c.path.includes('/GuidedTutorial/')||c.path.endsWith('/'+game.state.guideTarget)),'Only the highlighted action may pass through');
+  }else assert(controls.every(c=>c.path.includes('/FullScreenGuide/')),'Guide must block underlying actions');
 }
-async function dismiss(game,id){await guide(game,id);await game.named('GuideContinue');}
+async function dismiss(game,id){await guide(game,id);await game.named(game.state.guideStep>=0?'GuideSkip':'GuideContinue');}
+async function moveGuided(game){
+  await guide(game,'deployment');assert.equal(game.state.guideStep,0);assert.equal(game.state.battle.fusionSummary,'');
+  const confirm=game.state.controls.find(c=>c.path.endsWith('/ConfirmDeployment'));
+  assert(!confirm.reachable,'Opening battle must be blocked until placement is practiced');
+  await game.clickBox(confirm.rect);await game.request();assert.equal(game.state.guideStep,0);assert(game.state.battle.deploying);
+  await game.click(c=>c.path.endsWith('/DeploymentTarget'),'highlighted water');
+  await game.wait(s=>s.guideStep===1,'destination step');await guide(game,'deployment');
+  await game.screenshot('movement-demonstration');
+  await game.click(c=>c.path.endsWith('/DeploymentTarget'),'highlighted rear cell');
+  await game.wait(s=>s.guideStep===2,'confirm step');await guide(game,'deployment');
+  assert.equal(game.state.guideTarget,'ConfirmDeployment');
+  assert.equal(game.state.battle.units.find(u=>u.ally&&u.id===20).y,6,'Real water piece must have moved to the rear');
+}
 async function deployment(game){
   await game.deploy();await dismiss(game,'deployment');await dismiss(game,'fusion');
 }
 module.exports=[
-  ...[{width:1280,height:800},{width:390,height:844},{width:844,height:390}].map(viewport=>({
-    id:'tutorial-first-'+viewport.width,name:'初回の編成・自動戦闘・初勝利・加入 '+viewport.width,fixture:'tutorial',viewport,
+  ...[{width:1280,height:800},{width:390,height:844},{width:844,height:390},{width:390,height:844,dpr:2},{width:844,height:390,dpr:2}].map(viewport=>({
+    id:'tutorial-first-'+viewport.width+(viewport.dpr?'-retina':''),name:'初回の編成・自動戦闘・初勝利・加入 '+viewport.width+(viewport.dpr?' Retina':''),fixture:'tutorial',viewport:{width:viewport.width,height:viewport.height},deviceScaleFactor:viewport.dpr||1,
     async run(game){
       await guide(game,'opening');assert.deepEqual(game.state.formation.filter(Boolean),[1,10,20]);await game.screenshot('opening');
       await game.named('GuideSkip');await guide(game,'formation');await game.screenshot('formation-guide');
-      await game.named('GuideContinue');assert(game.state.guideSeen.includes('formation'));
-      await game.deploy();await guide(game,'deployment');await game.screenshot('deployment-guide');await game.named('GuideContinue');
-      await game.move(2,3,6);await game.start();await game.result();await guide(game,'victory');
+      await game.deploy();assert(game.state.guideSeen.includes('formation'));
+      await guide(game,'deployment');await game.screenshot('deployment-guide');await moveGuided(game);
+      await game.start();assert(game.state.guideSeen.includes('deployment'));await game.result();await guide(game,'victory');
       assert(game.state.battle.won);assert.equal(game.state.stagePoints,6);await game.screenshot('victory-guide');
       await game.named('GuideContinue');await guide(game,'castle');await game.named('GuideContinue');
       await game.named('TreeBranch_0');await game.named('TreeNode_c11');await game.named('TreePurchase');
@@ -36,7 +59,7 @@ module.exports=[
       assert.equal((await game.request()).guideId,'');
       await game.deploy();await guide(game,'deployment');
       await game.page.setViewportSize({width:390,height:844});await game.page.waitForTimeout(600);await game.request();
-      assert(!game.state.guideOverflow);await game.screenshot('guide-rotated');await game.named('GuideContinue');
+      assert(!game.state.guideOverflow);await game.screenshot('guide-rotated');await game.named('GuideSkip');
     }
   },
   {
@@ -53,7 +76,7 @@ module.exports=[
       await game.page.reload();await game.page.waitForFunction(()=>!!window.unityInstance,null,{timeout:120000});
       await game.page.waitForTimeout(4500);await game.request();assert.equal(game.state.guideId,'');assert(!game.state.openingEnabled);
       await game.request('treeCampaign','1');await game.page.waitForTimeout(200);await game.request();assert.equal(game.state.guideId,'');
-      await game.deploy();await guide(game,'deployment');await game.named('GuideContinue');await game.named('CancelDeployment');
+      await game.deploy();await guide(game,'deployment');await game.named('GuideSkip');await game.named('CancelDeployment');
       await game.named('SettingsStatus');await game.named('OpeningToggle');assert(game.state.openingEnabled);
       await game.page.reload();await game.page.waitForFunction(()=>!!window.unityInstance,null,{timeout:120000});
       await game.page.waitForTimeout(4500);await guide(game,'opening');await game.named('GuideSkip');

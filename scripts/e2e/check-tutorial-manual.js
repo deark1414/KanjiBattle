@@ -25,8 +25,8 @@ async function main(){
     await page.goto(base+'?preset=tutorial');
     await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('準備完了'),null,{timeout:120000});
     assert.deepEqual((await guide('opening')).formation.filter(Boolean),[1,10,20]);
-    await click('GuideSkip');await guide('formation');await click('GuideContinue');
-    await click('DeployButton');await guide('deployment');await click('GuideContinue');
+    await click('GuideSkip');await guide('formation');await click('DeployButton');
+    await guide('deployment');await click('GuideSkip');
     assert((await state()).battle.deploying);assert.deepEqual(errors,[]);
     await page.screenshot({path:'tmp/e2e/manual-tutorial-mobile.png'});
     console.log('Passed: manual tutorial URL, opening, initial party, formation, real deployment, portrait.');

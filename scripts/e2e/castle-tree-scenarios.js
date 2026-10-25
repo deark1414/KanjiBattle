@@ -6,6 +6,9 @@ module.exports=[
     async run(game){
       await game.request('treeFresh');await game.page.waitForTimeout(700);await game.request();
       assert.deepEqual(game.state.owned,[1,10,20]);assert.equal(game.state.treeSlots,3);
+      const first=game.state.controls.find(c=>c.path.endsWith('/TreeNode_c11'));
+      const sibling=game.state.controls.find(c=>c.path.endsWith('/TreeNode_c16'));
+      assert(Math.abs(first.rect.x-sibling.rect.x)>.05,'Sibling paths must branch horizontally, not form a list');
       await game.named('TreeBranch_0');await game.named('TreeNode_c11');
       assert(!game.state.controls.find(c=>c.path.endsWith('/TreePurchase')).enabled);
       await game.request('treeFunds','6');await game.page.waitForTimeout(600);
@@ -31,6 +34,7 @@ module.exports=[
       await game.request('treeAdvance','35');for(const id of expand)if(!game.state.treeOwned.includes(id))await game.request('treePurchase',id);
       assert.equal(game.state.treeSlots,8);
       await game.request('treeSpecialProbe');
+      await game.page.waitForTimeout(1200);
       await game.page.reload();await game.page.waitForFunction(()=>!!window.unityInstance,null,{timeout:120000});
       await game.page.waitForTimeout(4500);await game.request();assert.equal(game.state.treeSlots,8);assert(game.state.owned.includes(13));
       await game.named('FacilityTabButton');await game.screenshot('saved-tree');

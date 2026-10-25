@@ -11,13 +11,14 @@ public sealed class FullScreenGuideView : MonoBehaviour,IDisposable
     private float lastScale;
     private int lastWidth,lastHeight;
     private TutorialContent.Page currentPage;
+    private bool isMenu;
     public static FullScreenGuideView Open(TutorialContent.Page page,Action continued,Action secondary=null,string primary="わかった",string secondaryText="戻る")
     {
         var view=Create();
         view.currentPage=page;
         var title=view.Label(view.transform,"GuideTitle",page.title,new(.07f,.80f),new(.93f,.95f),32);
         title.textWrappingMode=TextWrappingModes.NoWrap;
-        var body=view.Label(view.transform,"GuideBody",page.body,new(.08f,.18f),new(.92f,.42f),21);
+        var body=view.Label(view.transform,"GuideBody",page.body,new(.06f,.18f),new(.94f,.43f),28);
         body.alignment=TextAlignmentOptions.Center;
         view.DrawActors(page);
         view.Command(view.transform,"GuideContinue",primary,new(secondary==null?.22f:.52f,.055f),new(.88f,.14f),continued);
@@ -27,6 +28,7 @@ public sealed class FullScreenGuideView : MonoBehaviour,IDisposable
     public static FullScreenGuideView OpenMenu(IReadOnlyList<TutorialContent.Page> pages,Action<TutorialContent.Page> chosen,Action close)
     {
         var view=Create();
+        view.isMenu=true;
         view.Label(view.transform,"GuideTitle","遊び方",new(.07f,.87f),new(.93f,.97f),28);
         for(int i=0;i<pages.Count;i++)
         {
@@ -57,8 +59,6 @@ public sealed class FullScreenGuideView : MonoBehaviour,IDisposable
             var (min,max)=ActorBounds(page,i);
             var icon=Surface(transform,"GuidePiece_"+data.characterId,Color.white,min,max).GetComponent<Image>();
             icon.sprite=data.icon;icon.preserveAspect=true;icon.raycastTarget=false;
-            Label(transform,"GuideRole_"+i,page.id=="deployment"?i==0?"前衛":"後衛":data.characterName,
-                new(min.x,min.y-.06f),new(max.x,min.y),18);
         }
         if(page.id=="fusion")
         {
@@ -68,9 +68,9 @@ public sealed class FullScreenGuideView : MonoBehaviour,IDisposable
     }
     private static (Vector2 min,Vector2 max) ActorBounds(TutorialContent.Page page,int index)
     {
-        bool shortScreen=Screen.height<500&&Screen.width>Screen.height;
+        bool shortScreen=UiReadability.Height<500&&UiReadability.Width>UiReadability.Height;
         float center=(index+.5f)/page.actors.Length;
-        Vector2 min=new(.09f+center*.82f-.11f,shortScreen?.60f:.48f),max=new(.09f+center*.82f+.11f,shortScreen?.81f:.74f);
+        Vector2 min=new(.09f+center*.82f-.13f,shortScreen?.54f:.44f),max=new(.09f+center*.82f+.13f,shortScreen?.82f:.78f);
         if(page.id=="deployment")
         {
             min.y=shortScreen?index==0?.66f:.59f:index==0?.58f:.49f;
@@ -96,22 +96,32 @@ public sealed class FullScreenGuideView : MonoBehaviour,IDisposable
     }
     private void Update()
     {
-        float scale=GetComponentInParent<Canvas>().rootCanvas.scaleFactor;
+        float scale=UiReadability.Scale(GetComponentInParent<Canvas>());
         if(!Mathf.Approximately(scale,lastScale)||lastWidth!=Screen.width||lastHeight!=Screen.height)Rescale();
     }
     private void Rescale()
     {
-        lastScale=GetComponentInParent<Canvas>().rootCanvas.scaleFactor;
+        lastScale=UiReadability.Scale(GetComponentInParent<Canvas>());
         lastWidth=Screen.width;lastHeight=Screen.height;
         foreach(var item in fontSizes)
         {
-            float size=item.Key.name=="GuideBody"&&Screen.width<600?18:item.Value;
+            float size=item.Key.name=="GuideBody"&&UiReadability.Width<600?24:item.Value;
             item.Key.fontSizeMax=size/lastScale;
-            item.Key.fontSizeMin=Mathf.Min(item.Value,14)/lastScale;
+            item.Key.fontSizeMin=Mathf.Min(item.Value,item.Key.name=="GuideBody"?22:18)/lastScale;
+        }
+        if(isMenu)
+        {
+            bool columns=UiReadability.Height<500&&UiReadability.Width>UiReadability.Height;
+            for(int i=0;i<TutorialContent.Pages.Count;i++)
+            {
+                float top=.84f-(columns?i/2:i)*(columns?.135f:.075f);
+                float left=columns?.06f+(i%2)*.46f:.08f;
+                Place(transform.Find("GuideHelp_"+TutorialContent.Pages[i].id) as RectTransform,new(left,top-(columns?.115f:.065f)),new(left+(columns?.42f:.84f),top));
+            }
         }
         if(currentPage==null)return;
-        bool shortScreen=Screen.height<500&&Screen.width>Screen.height;
-        Place(transform.Find("GuideBody") as RectTransform,new(.08f,.18f),new(.92f,shortScreen?.51f:.42f));
+        bool shortScreen=UiReadability.Height<500&&UiReadability.Width>UiReadability.Height;
+        Place(transform.Find("GuideBody") as RectTransform,new(.06f,.18f),new(.94f,shortScreen?.51f:.43f));
         Place(transform.Find("GuideTitle") as RectTransform,new(.07f,shortScreen?.83f:.80f),new(.93f,.97f));
         for(int i=0;i<currentPage.actors.Length;i++)
         {

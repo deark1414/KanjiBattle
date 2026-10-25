@@ -10,13 +10,16 @@ KanjiBattle currently treats Unity prefabs as structural templates and applies m
 
 ## Main Runtime Layout Owners
 
-- `FullScreenGuideView` / `GuideSettingsLayout`（初回説明・設定）
+- `GuidedTutorialView` / `FullScreenGuideView` / `GuideSettingsLayout`（初回説明・設定）
   - 既存コマと背景を使った全面表示、縦横の図・文字領域、設定項目の物理的な可読サイズを管理する。
   - 共通テーマは全面説明の文字・ボタン・画像を上書きしない。表示順と既読保存は`TutorialDirector`が管理する。
+  - 実操作の強調は対象の画面座標から遮蔽の穴を毎フレーム更新する。クリックを疑似実行せず、通常のボタン／マスの処理へ渡す。
+  - `UiReadability`とWebGLプラグインがCanvasの描画倍率をCSS pxへ補正する。通常・Retinaとも同じ見た目の文字・操作領域を使い、描画解像度は保持する。
 
 - `CastleTreeView`（城下）
-  - ツリーの固定詳細欄、5枝のノードと接続線、縦スクロールを管理する。
-  - 縦画面では枝タブで1列表示、横画面では5列を表示する。
+  - 5枝を同じマップに配置し、子孫の幅を確保して左右へ分岐させる。城下 → 分類の枝 → 実際の前提ノードを接続線でつなぐ。
+  - 縦横ともマップを上下左右へドラッグできる。分類タブは絞り込みではなく、該当する枝への移動として使う。
+  - 横持ちの低い画面では詳細を右に配置し、マップと文字の高さを確保する。ノードは短い状態、固定詳細欄は不足戦果や解放条件を表示する。
   - グローバルテーマはこの配下の文字・画像・ボタン・スクロール位置を上書きしない。
   - 旧`FacilityListUI`は既存シーン参照を保ち、初回表示時にツリーへ引き継ぐ。
 

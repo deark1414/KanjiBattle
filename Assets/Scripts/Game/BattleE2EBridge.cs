@@ -49,8 +49,12 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public string[] treeOwned;
         public bool treeOverflow;
         public string guideId;
+        public string guideTarget;
+        public int guideStep;
+        public float guideInstructionSize;
         public string[] guideSeen;
         public bool openingEnabled,guideOverflow;
+        public string[] guideOverflowNames,treeOverflowNames;
     }
 
     private StageData fixtureStage;
@@ -328,7 +332,12 @@ public sealed class BattleE2EBridge : MonoBehaviour
         return new Snapshot
         {
             guideId=TutorialDirector.Instance?.CurrentId??"",guideSeen=TutorialProgress.Seen,openingEnabled=TutorialProgress.OpeningEnabled,
-            guideOverflow=FindObjectsByType<FullScreenGuideView>(FindObjectsSortMode.None).Any(view=>view.GetComponentsInChildren<TMP_Text>().Any(text=>text.isTextOverflowing)),
+            guideTarget=TutorialDirector.Instance?.GuideTarget??"",guideStep=TutorialDirector.Instance?.GuideStep??-1,
+            guideInstructionSize=FindAnyObjectByType<GuidedTutorialView>()?.InstructionPixels??0,
+            guideOverflowNames=FindObjectsByType<GuidedTutorialView>(FindObjectsSortMode.None).SelectMany(view=>view.GetComponentsInChildren<TMP_Text>()).Where(text=>text.isTextOverflowing).Select(text=>text.name).ToArray(),
+            treeOverflowNames=FindObjectsByType<CastleTreeView>(FindObjectsSortMode.None).SelectMany(view=>view.GetComponentsInChildren<TMP_Text>()).Where(text=>text.isTextOverflowing).Select(text=>text.transform.parent.name+"/"+text.name).ToArray(),
+            guideOverflow=FindObjectsByType<FullScreenGuideView>(FindObjectsSortMode.None).Any(view=>view.GetComponentsInChildren<TMP_Text>().Any(text=>text.isTextOverflowing))
+                ||FindObjectsByType<GuidedTutorialView>(FindObjectsSortMode.None).Any(view=>view.GetComponentsInChildren<TMP_Text>().Any(text=>text.isTextOverflowing)),
             treeSlots=GameManager.Instance.GetFacilityFormationSlots(),
             treeOwned=CastleTree.Nodes.Where(CastleTree.Owned).Select(n=>n.id).ToArray(),
             treeOverflow=FindObjectsByType<CastleTreeView>(FindObjectsSortMode.None).Any(view=>view.GetComponentsInChildren<TMP_Text>().Any(text=>text.isTextOverflowing)),

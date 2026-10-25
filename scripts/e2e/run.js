@@ -73,7 +73,7 @@ async function main() {
     assert(selected.length > 0, "No matching scenario.");
     for (const scenario of selected) {
       const directory = path.join(output, scenario.id); fs.mkdirSync(directory, { recursive: true });
-      const context = await browser.newContext({ viewport: scenario.viewport || { width: 1280, height: 800 } });
+      const context = await browser.newContext({ viewport: scenario.viewport || { width: 1280, height: 800 },deviceScaleFactor:scenario.deviceScaleFactor||1 });
       await context.tracing.start({ screenshots: true, snapshots: true, sources: true });
       const page = await context.newPage();
       const game = new GameHarness(page, directory);
@@ -95,7 +95,12 @@ async function main() {
       } finally {
         result.durationMs = Date.now() - started;
         game.writeArtifacts();
-        await context.tracing.stop({ path: path.join(directory, "trace.zip") });
+        try { await context.tracing.stop({ path: path.join(directory, "trace.zip") }); }
+        catch(error) {
+          result.status="failed";
+          result.error=[result.error,"Trace export failed: "+(error.stack||String(error))].filter(Boolean).join("\n");
+          console.error(result.error);
+        }
         await context.close();
         report.results.push(result);
         console.log(`${result.status}: ${scenario.id} (${(result.durationMs / 1000).toFixed(1)}秒)`);

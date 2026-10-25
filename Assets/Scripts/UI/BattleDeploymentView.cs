@@ -15,6 +15,8 @@ public sealed class BattleDeploymentView : IDisposable
     private bool fusionReady = true, playerSkillReady = true;
     private readonly Dictionary<Vector2Int, Image> cells = new();
     public string FusionSummary => fusionSummary.text;
+    public Button ConfirmButton => confirmButton;
+    public Button CellButton(Vector2Int cell) => cells.TryGetValue(cell,out var image)?image.GetComponent<Button>():null;
 
     public BattleDeploymentView(Transform parent, Transform[,] grid, Action<Vector2Int> selectCell, Action confirm, Action cancel, Action fusion = null, Action playerSkill = null)
     {
@@ -23,7 +25,7 @@ public sealed class BattleDeploymentView : IDisposable
         Place(root.GetComponent<RectTransform>(), new Vector2(0.04f, 0.05f), new Vector2(0.96f, 0.31f));
         root.GetComponent<Image>().color = new Color(0.08f, 0.10f, 0.09f, 1f);
         selection = Text(root.transform, "SelectedPiece", "布陣", new Vector2(0.04f, 0.74f), new Vector2(0.69f, 0.98f));
-        fusionSummary = Text(root.transform, "FusionSummary", "融合なし", new Vector2(0.04f, 0.51f), new Vector2(0.96f, 0.72f));
+        fusionSummary = Text(root.transform, "FusionSummary", "", new Vector2(0.04f, 0.51f), new Vector2(0.96f, 0.72f));
         if (fusion != null)
         {
             fusionButton = Command(root.transform, "FusionSelection", "組合せ", new Vector2(0.72f, 0.75f), new Vector2(0.96f, 0.97f), fusion);
@@ -63,6 +65,9 @@ public sealed class BattleDeploymentView : IDisposable
 
     public void SetFusionState(string summary, bool ready, bool hasAlternatives)
     {
+        bool unlocked=FacilityManager.Instance!=null&&FacilityManager.Instance.IsFusionUnlocked();
+        fusionSummary.gameObject.SetActive(unlocked);
+        if(!unlocked)summary="";
         fusionSummary.text = summary;
         fusionSummary.color = ready ? new Color(1f, 0.93f, 0.65f) : new Color(1f, 0.65f, 0.42f);
         fusionReady = ready;

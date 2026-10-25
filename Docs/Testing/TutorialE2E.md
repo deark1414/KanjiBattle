@@ -1,21 +1,22 @@
 # 初回導入の自動確認
 
-更新日: 2026-10-25
+更新日: 2026-10-26
 
 ## 実行
 
 Unityの`TutorialRegression.BuildReview`で、既存の戦闘ルール・データ検証と専用WebGLビルドを行う。ビルド中は同じ出力先を使うブラウザテストを走らせない。
 
-`node scripts/e2e/run.js --only tutorial-first-1280,tutorial-first-390,tutorial-first-844,tutorial-cancel,tutorial-settings,tutorial-features,tutorial-records,tutorial-defeat,tutorial-repeat,tutorial-gallery-390,tutorial-gallery-844 --output tmp/e2e/tutorial-results`
+`node scripts/e2e/run.js --only tutorial-first-1280,tutorial-first-390,tutorial-first-844,tutorial-first-390-retina,tutorial-first-844-retina,tutorial-cancel,tutorial-settings,tutorial-features,tutorial-records,tutorial-defeat,tutorial-repeat,tutorial-gallery-390,tutorial-gallery-844 --output tmp/e2e/tutorial-results`
 
 全件のテスト一覧は`node scripts/e2e/run.js --list`、通常の回帰確認は`node scripts/e2e/run.js`。基盤は`node --test scripts/e2e/harness.test.js`。
 
-## 11シナリオ
+## 13シナリオ
 
 | ケース | 確認すること |
 |---|---|
-| tutorial-first-1280/390/844 | 実際の第1局を、初期3体で配置変更・開戦・勝利し、戦果6で槍を迎える。全画面の入力遮断、文字の収まり、既読を確認 |
-| tutorial-cancel | 未読の説明で画面離脱した場合は保存せず、次回に再表示。既読後は再表示しない。開いたままの縦横切替 |
+| tutorial-first-1280/390/844 | 実際の出陣・水選択・後列移動・開戦を行い、第1局で勝利し戦果6で槍を迎える。対象以外の入力遮断、開戦の飛ばし操作不可、未解放の融合表示なし、文字の収まり、操作完了時の既読を確認 |
+| tutorial-first-390-retina/844-retina | 描画倍率2でも同じ導入を実操作し、指示22 CSS px以上・出陣と開戦48 CSS px以上を維持することを確認 |
+| tutorial-cancel | 未読の説明で画面離脱した場合は保存せず、次回に再表示。「案内を終了」後は再表示しない。開いたままの縦横切替 |
 | tutorial-settings | オープニング非表示・再表示の保存、手動再生、説明一覧、再読込、既読維持。見直しで進行を変えない |
 | tutorial-features | 融合・プレイヤースキル・図鑑の初回説明。二回目は操作を遮らず、説明を読むだけでスキル設定を変えない |
 | tutorial-records | 成績の初回説明と、閉じて再び開いた場合の一回制限 |
@@ -31,7 +32,13 @@ Unityの`TutorialRegression.BuildReview`で、既存の戦闘ルール・デー�
 
 手動確認用ページ自体の接続・初期3体・説明・配置開始は`node scripts/e2e/check-tutorial-manual.js`でも確認する。
 
+城下の左右に外れた枝は、実際のポインタードラッグで移動して確認する。ブラウザへの保存は非同期のため、連続購入の保存テストは反映待ちを置いてから再読込する。保存直後の強制終了や、端末スリープ中の進行を保証するテストではない。
+
 ## 確認記録
+
+2026-10-26: 実操作ガイド・文字拡大・分岐マップへ改修。関連20種類の確認で見つかった横持ちの文字あふれと横移動のテスト操作を修正し、該当7件を`tmp/e2e/guided-layout-final`で再実行して成功した。さらに高精細画面のCSS px補正を追加し、通常／Retinaの初回導入・横持ちの全図解・城下の計7件を`tmp/e2e/guided-retina-final`で再確認して成功。分割実行の各ケースの最終結果は、追加したRetina2件を含む22種類で成功した。途中の失敗記録は消さずに残している。
+
+初回の実ボタン以外は操作できないこと、水が実際に後列へ移動すること、未解放の融合要約が空であること、縦横で案内文22 CSS px以上・出陣／開戦48 CSS px以上を確認した。手動確認ページの接続、テスト基盤10件、Unityの戦闘ルール・保存・データ検証も成功。新規プレイヤーへの伝わりやすさの評価、全ステージのバランス、外部公開は別の確認とする。
 
 2026-10-25: 専用11シナリオと、城下・プレイヤースキル・成績・融合の既存12シナリオを合わせた23件が成功。結果は`tmp/e2e/tutorial-final/index.html`に保存。縦長390×844、横長844×390、デスクトップ1280×800の画面も確認した。
 

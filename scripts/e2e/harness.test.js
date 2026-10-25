@@ -68,6 +68,16 @@ test("covered controls fail before a misleading click is sent", async () => {
   assert.equal(clicked, false);
 });
 
+test("offscreen tree branches are reached with real horizontal dragging", async () => {
+  const page=new EventEmitter();let dragged=false,pressed=false;
+  page.locator=()=>({boundingBox:async()=>({x:0,y:0,width:390,height:844})});
+  page.mouse={move:async(x)=>{if(pressed&&x>195)dragged=true;},down:async()=>{pressed=true;},up:async()=>{pressed=false;},click:async()=>{}};
+  page.waitForTimeout=async()=>{};
+  const game=new GameHarness(page,"/unused");
+  game.request=async()=>({controls:[{path:'/TreeNode_s1',enabled:true,visible:dragged,reachable:dragged,rect:{x:dragged?.2:-.3,y:.5,w:.4,h:.1}}]});
+  await game.named('TreeNode_s1');assert(dragged);
+});
+
 test("test-only C# entry points are excluded from normal players", () => {
   const root = path.resolve(__dirname, "../..");
   for (const file of ["BattleE2EBridge.cs", "BattleManager.E2E.cs", "BattleManager.DefenseE2E.cs"]) {

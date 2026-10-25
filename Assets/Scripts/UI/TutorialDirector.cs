@@ -17,11 +17,14 @@ public sealed class TutorialDirector : MonoBehaviour
     private readonly Queue<Request> pending = new();
     private Request active;
     private FullScreenGuideView view;
+    private GuidedTutorialView guided;
     private UIManager ui;
     private Coroutine startup;
     private bool suppressed;
     public string CurrentId { get; private set; } = "";
-    public bool IsOpen => view!=null;
+    public bool IsOpen => view!=null||guided!=null;
+    public int GuideStep => guided!=null?guided.Step:-1;
+    public string GuideTarget => guided!=null?guided.Target:"";
     public static TutorialDirector Ensure(UIManager owner)
     {
         if(Instance==null)Instance=owner.gameObject.AddComponent<TutorialDirector>();
@@ -63,13 +66,14 @@ public sealed class TutorialDirector : MonoBehaviour
     private void Update()
     {
         if(active!=null && !Relevant(active)){CloseView();ReleaseActive();}
-        if(view!=null||suppressed||startup!=null)return;
+        if(IsOpen||suppressed||startup!=null)return;
         while(pending.Count>0)
         {
             var request=pending.Dequeue();
             if(!Relevant(request)||TutorialProgress.HasSeen(request.id)){request.released?.Invoke();continue;}
             active=request;CurrentId=request.id;
-            view=FullScreenGuideView.Open(TutorialContent.Get(request.id),()=>Complete(),null,request.primary??"わかった");
+            if(request.id=="formation"||(request.id=="deployment"&&FindAnyObjectByType<BattleManager>()?.CanGuideDeployment==true))guided=GuidedTutorialView.Open(request.id,Complete);
+            else view=FullScreenGuideView.Open(TutorialContent.Get(request.id),()=>Complete(),null,request.primary??"わかった");
             break;
         }
     }
@@ -80,7 +84,7 @@ public sealed class TutorialDirector : MonoBehaviour
         var previous=active;if(previous==null)return;
         TutorialProgress.MarkSeen(previous.id);CloseView();ReleaseActive();previous.continued?.Invoke();
     }
-    private void CloseView(){if(view!=null)view.Dispose();view=null;CurrentId="";}
+    private void CloseView(){if(view!=null)view.Dispose();if(guided!=null)guided.Dispose();view=null;guided=null;CurrentId="";}
     public void CancelAll()
     {
         CloseView();ReleaseActive();

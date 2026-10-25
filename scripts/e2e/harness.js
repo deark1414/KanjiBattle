@@ -101,7 +101,13 @@ class GameHarness {
       assert(!matches.some(item => item.visible && !item.reachable), `Control is covered by another UI element: ${description}`);
       const canvas = await this.page.locator("#unity-canvas").boundingBox();
       await this.page.mouse.move(canvas.x + canvas.width * 0.5, canvas.y + canvas.height * 0.5);
-      await this.page.mouse.wheel(0, matches[0].rect.y > 0.5 ? 220 : -220);
+      const centerX=matches[0].rect.x+matches[0].rect.w/2;
+      if(centerX<.04||centerX>.96){
+        await this.page.mouse.down();
+        await this.page.mouse.move(canvas.x+canvas.width*(centerX<.5?.78:.22),canvas.y+canvas.height*.5,{steps:12});
+        await this.page.mouse.up();
+      }
+      else await this.page.mouse.wheel(0, matches[0].rect.y > 0.5 ? 220 : -220);
       await this.page.waitForTimeout(200);
     }
     assert(control?.visible, `Control is clipped: ${description}`);
