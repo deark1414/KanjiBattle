@@ -1,6 +1,7 @@
 const fs=require('node:fs');
 const path=require('node:path');
 const assert=require('node:assert/strict');
+const {execFileSync}=require('node:child_process');
 const {chromium}=require('playwright');
 const {PNG}=require(path.join(path.dirname(require.resolve('playwright-core/package.json')),'lib/utilsBundle.js'));
 const root=path.resolve(__dirname,'../..');
@@ -11,7 +12,11 @@ const layout=require('../../Assets/Art/Drafts/VFX/SupportSkills/layout.json');
 async function main(){
   fs.mkdirSync(directory,{recursive:true});
   const report={status:'draft-only',assets:[],checks:[],errors:[]};
-  assert.equal(manifest.generated.length,6);
+  assert.equal(manifest.generated.length,14);
+  assert.deepEqual(new Set(layout.entries.map(e=>e.key)),new Set(manifest.generated.map(e=>e.key)));
+  for(const entry of manifest.generated.filter(e=>e.reuse)){
+    assert.deepEqual(fs.readFileSync(path.join(root,entry.source)),execFileSync('git',['show','HEAD:'+entry.source],{cwd:root,maxBuffer:20*1024*1024}),'Reused production source changed: '+entry.key);
+  }
   assert.equal(manifest.generated.find(e=>e.key==='BellEcho').source,'Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png');
   for(const entry of layout.entries){
     const png=PNG.sync.read(fs.readFileSync(path.join(root,entry.sprite)));
@@ -32,7 +37,7 @@ async function main(){
       if(entry.key==='BellEcho'||entry.key==='CocoonGuard')
       for(let y=230;y<282;y++)for(let x=230;x<282;x++)assert(png.data[(y*png.width+x)*4+3]<=1,entry.key+' center must stay clear (at most 1/255 alpha)');
     }else{
-      assert(entry.bounds.w>entry.bounds.h*5,'Directional sprite is not horizontal');
+      assert(entry.bounds.w>entry.bounds.h*(effect.logicalHeight===64?2:5),'Directional sprite is not horizontal: '+entry.key);
       assert.deepEqual(entry.pivot,[.5,.5]);assert(entry.start[0]<entry.end[0]);
     }
     report.assets.push({key:entry.key,width:png.width,height:png.height,solid,clear});
@@ -45,8 +50,8 @@ async function main(){
     await page.goto(process.env.KANJI_SUPPORT_VFX_URL||'http://127.0.0.1:8799/Docs/Art/skill-vfx-preview.html');
     await page.waitForFunction(()=>window.supportVfxPreview?.ready);
     await page.waitForFunction(()=>[...document.querySelectorAll('.still img')].every(i=>i.complete&&i.naturalWidth>0));
-    assert.equal(await page.locator('.scene').count(),4);
-    assert.equal(await page.locator('.still img').count(),6);
+    assert.equal(await page.locator('.scene').count(),10);
+    assert.equal(await page.locator('.still img').count(),14);
     await page.evaluate(()=>supportVfxPreview.setBellSeed(12345));
     const bursts=await page.evaluate(()=>Array.from({length:40},(_,cycle)=>supportVfxPreview.bellNotes(.5,cycle,0)));
     assert(bursts.every(notes=>notes.length===2||notes.length===3));
@@ -112,9 +117,9 @@ async function main(){
     await page.evaluate(()=>{supportVfxPreview.renderAt(.8);document.querySelector('.controls').remove();document.querySelector('main').style.cssText='display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px';for(const a of document.querySelectorAll('article')){a.querySelector('canvas').style.display='none';a.querySelector('.row').style.gridTemplateColumns='1fr';}});
     await page.screenshot({path:path.join(directory,'three-sprites.png'),fullPage:true});
     assert.deepEqual(report.errors,[]);
-    report.checks.push('6 RGBA sprites; fixed sizes, transparent margin, 128px grid and clear bell/cocoon centers');
+    report.checks.push('14 RGBA sprites including 2 reused originals; fixed sizes, transparent margin, 128px grid and clear bell/cocoon centers');
     report.checks.push('40 bell bursts vary with 2-3 separate notes; no reroll while paused, no kanji overlap or clipping in four directions; replay changes scatter');
-    report.checks.push('4 skill examples change at 0/90/180/270 degrees using single-image states');
+    report.checks.push('10 skill examples change at 0/90/180/270 degrees using single-image states');
     report.checks.push('shared thread wrap is followed by a clear gap, then persistent cocoon protection; no overlap across 420 samples');
     report.checks.push('desktop/mobile nonblank, no overflow, no stretched circles, controls work');
   }finally{

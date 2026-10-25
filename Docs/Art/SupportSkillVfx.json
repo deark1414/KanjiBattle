@@ -101,6 +101,102 @@
       "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellNote.png",
       "logicalWidth": 128,
       "logicalHeight": 128
+    },
+    {
+      "key": "WindGust",
+      "name": "風",
+      "axis": "right",
+      "logicalHeight": 64,
+      "description": "A low wide HORIZONTAL WIND GUST moving LEFT TO RIGHT. Three thin pale ivory/muted mint wind ribbons of unequal length with narrow long trailing tips at LEFT and gently curled fuller leading tips at RIGHT. Sparse, airy transparent gaps. No closed rings, no tornado, no cloud, no leaves, no arrows, no text. Low wide directional silhouette, full content inside central 75 percent width and 40 percent height. A movement buff/debuff effect, not an attack beam.",
+      "logicalWidth": 128,
+      "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A low wide HORIZONTAL WIND GUST moving LEFT TO RIGHT. Three thin pale ivory/muted mint wind ribbons of unequal length with narrow long trailing tips at LEFT and gently curled fuller leading tips at RIGHT. Sparse, airy transparent gaps. No closed rings, no tornado, no cloud, no leaves, no arrows, no text. Low wide directional silhouette, full content inside central 75 percent width and 40 percent height. A movement buff/debuff effect, not an attack beam.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8c8dd60d-f4fe-454d-831c-94f298f1f7ac.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/WindGust.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/WindGust.png"
+    },
+    {
+      "key": "MagneticPull",
+      "name": "磁石",
+      "axis": "right",
+      "logicalHeight": 64,
+      "description": "A directional MAGNETIC ATTRACTION STREAM made of tiny DARK IRON FILINGS and a few pale grey glints in THREE loose slightly curving lanes. Filings flow LEFT TO RIGHT and become more gathered near RIGHT. Short distinct grain clusters, restrained cool iron-grey, a little charcoal outline for light-ground visibility, a few pale silver flecks for dark-ground visibility. No actual magnet object, no electric bolt, no luminous beam, no concentric rings, no runes or arrows. Sparse horizontal transparent stream, clear natural material instead of science-fiction graphics, complete with safety padding.",
+      "logicalWidth": 128,
+      "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A directional MAGNETIC ATTRACTION STREAM made of tiny DARK IRON FILINGS and a few pale grey glints in THREE loose slightly curving lanes. Filings flow LEFT TO RIGHT and become more gathered near RIGHT. Short distinct grain clusters, restrained cool iron-grey, a little charcoal outline for light-ground visibility, a few pale silver flecks for dark-ground visibility. No actual magnet object, no electric bolt, no luminous beam, no concentric rings, no runes or arrows. Sparse horizontal transparent stream, clear natural material instead of science-fiction graphics, complete with safety padding.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-0889ad3b-620b-4dde-a9ee-d004ad54ba18.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MagneticPull.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagneticPull.png"
+    },
+    {
+      "key": "RainRipple",
+      "name": "雨",
+      "axis": "radial",
+      "description": "A small gentle WATER RIPPLE PATCH for a healing rain zone. Two or three thin broken concentric low-angle elliptical ripples of clear cyan and muted blue-green water, unequal broken arcs and a few tiny nearby droplets. Transparent empty middle, no solid pool, no disc, no grass or ground, no cloud, no sky, no cross, no letters or icons, no radiant magical aura. A quiet shallow oval surface ripple, not a violent splash. Only the water lines are visible, rest true transparent. Compact whole effect with generous padding.",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A small gentle WATER RIPPLE PATCH for a healing rain zone. Two or three thin broken concentric low-angle elliptical ripples of clear cyan and muted blue-green water, unequal broken arcs and a few tiny nearby droplets. Transparent empty middle, no solid pool, no disc, no grass or ground, no cloud, no sky, no cross, no letters or icons, no radiant magical aura. A quiet shallow oval surface ripple, not a violent splash. Only the water lines are visible, rest true transparent. Compact whole effect with generous padding.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-62e88a57-066c-42e7-93f7-05229b2af142.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/RainRipple.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/RainRipple.png"
+    },
+    {
+      "key": "ForgeSparks",
+      "name": "鍛冶",
+      "axis": "burst",
+      "description": "A small localized BLACKSMITH HAMMER STRIKE SPARK BURST: seven to ten short angular warm yellow-orange sparks and just a few small charcoal/iron chips shooting from a compact center. Uneven natural lengths and directions, a bright tiny white-gold contact fleck. Sparse material, readable discrete pixel clusters. No hammer, no anvil, no sword, no person, no flame column, no fireball, no smoke cloud, no circular magic seal, no neon glow, no words. A quick strengthening/forging contact spark, not a large damage explosion. Complete isolated little burst centered with wide transparent padding.",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A small localized BLACKSMITH HAMMER STRIKE SPARK BURST: seven to ten short angular warm yellow-orange sparks and just a few small charcoal/iron chips shooting from a compact center. Uneven natural lengths and directions, a bright tiny white-gold contact fleck. Sparse material, readable discrete pixel clusters. No hammer, no anvil, no sword, no person, no flame column, no fireball, no smoke cloud, no circular magic seal, no neon glow, no words. A quick strengthening/forging contact spark, not a large damage explosion. Complete isolated little burst centered with wide transparent padding.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-23baadf0-bf8d-402b-94b5-6dfc3bebac0b.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/ForgeSparks.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ForgeSparks.png"
+    },
+    {
+      "key": "MortarImpact",
+      "name": "要塞",
+      "axis": "burst",
+      "description": "A compact GROUNDED MORTAR SHELL IMPACT effect: a small irregular warm-grey and earthy ochre dust puff with a few dark stone chips kicked outward and a very small subdued amber impact flash at its center. Perspective suitable for a top-down strategy board. No projectile, no cannon, no building, no crater disc, no mushroom cloud, no giant yellow fireball, no broad glow, no scenery, no letters. Cluster should remain small and readable with empty transparent gaps between dust lobes and debris. One opaque representative moment of a restrained impact, not multiple frames.",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A compact GROUNDED MORTAR SHELL IMPACT effect: a small irregular warm-grey and earthy ochre dust puff with a few dark stone chips kicked outward and a very small subdued amber impact flash at its center. Perspective suitable for a top-down strategy board. No projectile, no cannon, no building, no crater disc, no mushroom cloud, no giant yellow fireball, no broad glow, no scenery, no letters. Cluster should remain small and readable with empty transparent gaps between dust lobes and debris. One opaque representative moment of a restrained impact, not multiple frames.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-69a72061-28ff-41ac-bb4c-aefb9a50cdc7.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MortarImpact.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MortarImpact.png"
+    },
+    {
+      "key": "SandBloom",
+      "name": "砂",
+      "axis": "burst",
+      "description": "A small SAND SUMMON PUFF: pale gold-beige fine sand grains rising in two uneven loose curling wisps around a clear empty central area. Subtle low mound-like dust at the bottom, larger sparse grain clusters near it, finer particles rising above. No human figure, no golem, no hands, no face, no whole sand character, no magic circle, no glowing rim, no grass or floor. Lightweight sandy material with warm grey shading, not smoke, fire or a dust tornado. A compact localized appearance effect that can expand and fade to reveal a game piece. Whole effect with wide clear padding.",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A small SAND SUMMON PUFF: pale gold-beige fine sand grains rising in two uneven loose curling wisps around a clear empty central area. Subtle low mound-like dust at the bottom, larger sparse grain clusters near it, finer particles rising above. No human figure, no golem, no hands, no face, no whole sand character, no magic circle, no glowing rim, no grass or floor. Lightweight sandy material with warm grey shading, not smoke, fire or a dust tornado. A compact localized appearance effect that can expand and fade to reveal a game piece. Whole effect with wide clear padding.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-7849a9c8-f186-4476-bd75-a0c8cdf44195.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/SandBloom.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/SandBloom.png"
+    },
+    {
+      "key": "RainDrops",
+      "name": "雨の水滴",
+      "axis": "down",
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/VFX/Animated/WaterHeal/frame_03.png",
+      "source": "Assets/Resources/VFX/Animated/WaterHeal/frame_03.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/RainDrops.png",
+      "logicalWidth": 128,
+      "logicalHeight": 128
+    },
+    {
+      "key": "MortarShell",
+      "name": "要塞の砲弾",
+      "axis": "right",
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/VFX/Animated/Gun/frame_02.png",
+      "source": "Assets/Resources/VFX/Animated/Gun/frame_02.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MortarShell.png",
+      "logicalWidth": 128,
+      "logicalHeight": 32
     }
   ],
   "sequence": {
@@ -116,6 +212,14 @@
     "BellEcho": [
       "BellEcho",
       "BellNote"
+    ],
+    "Rain": [
+      "RainDrops",
+      "RainRipple"
+    ],
+    "Mortar": [
+      "MortarShell",
+      "MortarImpact"
     ]
   },
   "bellEmission": {

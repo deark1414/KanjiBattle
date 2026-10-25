@@ -16,6 +16,18 @@ Create animated transparent sprite assets that make the simple kanji characters 
 - この工程は画像と動作プレビューの制作。ゲームへの接続はレビュー承認後。生成元と全プロンプト、使用する軸・ピボット、透過・寸法の確認記録を保存する。
 - 草案6枚・4種類のスキル例を制作。`Docs/Art/skill-vfx-preview.html`で単画像の伸縮・回転・拡大と、PC／スマホの表示を確認。透過・余白・固定寸法・4方向・再生操作、音符の発動ごとのばらつきと漢字への重なり防止、繭の巻き付き消去後に保護だけが残る順序の検査に成功。制作記録は`Docs/Art/SupportSkillVfx.md`と同名JSON。Unityへの接続・戦闘内検証はまだ行っていない。
 
+## 追加6スキルの草案: 2026-10-25
+
+- 次の対象は風・磁石・雨・鍛冶・要塞・砂。既存の電・糸・鈴・繭は維持し、同じ動作プレビューへ追加する。実ゲームへの接続は承認後。
+- 風: 左から右へ流れる細い白緑の風筋。追風と向風は同じ画像の向き・位置で区別し、追風では対象の移動に添える。
+- 磁石: 鉄粉が一定方向へ集まる3本程度の湾曲した筋。敵から磁石側への吸引方向を示す。レーザーや巨大な魔法陣にはしない。
+- 雨: 回復範囲に小さな青緑の波紋を残し、既存の`WaterHeal/frame_03`の水滴を複製して下向きに降らせる。雲・十字・文字は描かない。
+- 鍛冶: 短い火花と小さな鉄片が弾ける素材。対象の武器キャラの位置で短く表示する。燃焼や継続ダメージと誤認させないよう、火球や大きな炎は避ける。
+- 要塞: 投射物は既存の`Gun/frame_02`を再利用して弧を描かせ、着弾には小さな土煙・破片・控えめな火芯の素材を新作する。斜め上へ飛ぶ光線にはしない。
+- 砂: 細かな砂粒が舞い上がる小さな砂煙。新しい分身の位置で拡大・消去し、後に砂のコマが現れる。人型の砂人形や新しいキャラ絵は描かない。
+- 新規6画像はいずれも単画像・128px相当の透過ドット絵。元の雨滴・弾の原画は加工せず、確認用の別コピーを同じ出力処理へ通す。素材・参照・生成プロンプト・寸法・軸を記録する。フレーム切替なしで位置・回転・拡大・透過だけを動かす。
+- 制作後の計14素材・10動作例をPC／スマホと4方向で検査。透過・安全余白・固定寸法・ドットの整合・再生操作が成功し、再利用元2枚の未変更も確認。雨の波紋は対象の足元に収まるよう縮小。草案のまま保持し、Unity戦闘への接続は未実施。
+
 ## Runtime Presentation Update: 2026-09-20
 
 - In battle, default to one approved opaque representative sprite per effect and animate that single sprite with runtime position, rotation, scale, and fade. This avoids the frame-switching and slice-boundary failures previously observed in WebGL. When an attack defeats a character, keep that character visible until its skill VFX has completed, while removing it from gameplay targeting immediately.
