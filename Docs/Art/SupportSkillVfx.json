@@ -427,6 +427,65 @@
       "sourceSha256": "0163a98d34be7fa9f20a24b4eaf3aae5070778955a4d21fdb223aac1795e622c",
       "reuse": true,
       "prompt": "元の数字モチーフを変更せず再利用"
+    },
+    {
+      "key": "ReviewSword",
+      "name": "共用の剣",
+      "source": "Assets/Resources/VFX/Weapons/SwordMotion.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/VFX/Weapons/SwordMotion.png",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ReviewSword.png",
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用"
+    },
+    {
+      "key": "ReviewSpear",
+      "name": "共用の槍",
+      "source": "Assets/Resources/VFX/Animated/Spear/frame_03.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/VFX/Animated/Spear/frame_03.png",
+      "axis": "right",
+      "logicalWidth": 128,
+      "logicalHeight": 32,
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ReviewSpear.png",
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用"
+    },
+    {
+      "key": "GuardShield",
+      "name": "共用の盾",
+      "source": "Assets/Resources/VFX/Animated/Shield/frame_02.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/VFX/Animated/Shield/frame_02.png",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GuardShield.png",
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用"
+    },
+    {
+      "key": "BonusOx",
+      "name": "丑の経験値ボーナス",
+      "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_30.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_30.png",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BonusOx.png",
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用"
+    },
+    {
+      "key": "MountainRebound",
+      "name": "山の反発石片",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MountainRebound.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MountainRebound.png",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-89e73424-142d-45df-8423-dce71716a4ec.png",
+      "prompt": "Use case: stylized-concept. One isolated transparent pixel-art impact VFX sprite for a Japanese kanji strategy game. A small sparse crescent-shaped scatter of uneven GREY ROCK CHIPS rebounding from a stone surface: 7 to 10 jagged tiny slate-grey fragments with pale chipped faces and a few restrained beige dust pixels, heavier fragments near lower center and smaller ones flung upward and toward RIGHT. Large transparent open central space for a game piece, thin sparse distribution, no continuous ring. Deliberate coarse 128px logical pixel art, limited colors, crisp square pixel clusters. No mountain landscape, no ground tile, no light rays, no glowing outline, no fire, no magical forcefield, no text, no UI. Single complete sprite not frames, genuine transparent background, 15 percent clear margin on all sides."
     }
   ],
   "sequence": {

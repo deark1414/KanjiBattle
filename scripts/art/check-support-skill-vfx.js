@@ -13,7 +13,7 @@ const layout=require('../../Assets/Art/Drafts/VFX/SupportSkills/layout.json');
 async function main(){
   fs.mkdirSync(directory,{recursive:true});
   const report={status:'draft-only',assets:[],checks:[],errors:[]};
-  assert.equal(manifest.generated.length,30);
+  assert.equal(manifest.generated.length,35);
   assert.deepEqual(new Set(layout.entries.map(e=>e.key)),new Set(manifest.generated.map(e=>e.key)));
   for(const entry of manifest.generated.filter(e=>e.reuse)){
     const bytes=fs.readFileSync(path.join(root,entry.source));
@@ -53,8 +53,12 @@ async function main(){
     await page.goto(process.env.KANJI_SUPPORT_VFX_URL||'http://127.0.0.1:8799/Docs/Art/skill-vfx-preview.html');
     await page.waitForFunction(()=>window.supportVfxPreview?.ready);
     await page.waitForFunction(()=>[...document.querySelectorAll('.still img')].every(i=>i.complete&&i.naturalWidth>0));
-    assert.equal(await page.locator('.scene').count(),16);
-    assert.equal(await page.locator('.still img').count(),30);
+    assert.equal(await page.locator('.scene').count(),25);
+    assert.equal(await page.locator('.still img').count(),46);
+    assert.deepEqual(await page.evaluate(()=>[.4,1.2,2.1].map(t=>supportVfxPreview.ironState(t))),['剣','槍','盾']);
+    const timings=await page.evaluate(()=>({guardBefore:supportVfxPreview.guardState(.3),guardHit:supportVfxPreview.guardState(.6),guardTransfer:supportVfxPreview.guardState(1),mountainHit:supportVfxPreview.mountainState(.4),mountainReturn:supportVfxPreview.mountainState(1)}));
+    assert(!timings.guardBefore.impact&&!timings.guardBefore.transfer&&timings.guardHit.impact&&!timings.guardHit.transfer&&timings.guardTransfer.transfer);
+    assert(timings.mountainHit.incoming&&!timings.mountainHit.returning&&!timings.mountainReturn.incoming&&timings.mountainReturn.returning);
     await page.evaluate(()=>supportVfxPreview.setDiceSeed(12345));
     const dice=await page.evaluate(()=>Array.from({length:100},(_,i)=>supportVfxPreview.diceState(i*2.8+1.2)));
     assert.deepEqual([...new Set(dice.map(d=>d.face))].sort(),[1,2,3,4,5,6]);
@@ -119,6 +123,8 @@ async function main(){
       assert(anchors.every(p=>p.x>=27&&p.x<=613&&p.y>=32&&p.y<=248),'Piece clipped after rotation: '+angle);
       const noteBounds=await page.evaluate(()=>{const points=[point(230,140),point(410,140)],boxes=[];for(let cycle=0;cycle<40;cycle++)for(let lane=0;lane<2;lane++)for(const n of supportVfxPreview.bellNotes(.9,cycle,lane)){const radius=Math.hypot(n.width,n.height)/2,p=points[lane];boxes.push({left:p.x+n.x-radius,right:p.x+n.x+radius,top:p.y+n.y-radius,bottom:p.y+n.y+radius});}return boxes;});
       assert(noteBounds.every(b=>b.left>=0&&b.right<=640&&b.top>=0&&b.bottom<=280),'Musical notes clipped: '+angle);
+      const chimeBounds=await page.evaluate(()=>{const boxes=[];for(let cycle=0;cycle<40;cycle++)for(let i=0;i<3;i++){const p=point(160+i*160,140);for(const n of supportVfxPreview.bellNotes(.9,cycle,i+2)){const r=Math.hypot(n.width,n.height)/2;boxes.push({x:p.x+n.x*.72,y:p.y+n.y*.72,r:r*.72});}}return boxes;});
+      assert(chimeBounds.every(b=>b.x-b.r>=0&&b.x+b.r<=640&&b.y-b.r>=0&&b.y+b.r<=280),'Wind chime notes clipped: '+angle);
       const before=await page.locator('.scene').evaluateAll(cs=>cs.map(c=>c.toDataURL()));
       await page.evaluate(a=>supportVfxPreview.renderAt(1.18,a),angle);
       const after=await page.locator('.scene').evaluateAll(cs=>cs.map(c=>c.toDataURL()));
@@ -148,14 +154,17 @@ async function main(){
     assert(await page.getByRole('button',{name:'一時停止',exact:true}).isVisible());
     await page.getByRole('button',{name:'270°',exact:true}).click();
     assert.equal(await page.getByRole('button',{name:'270°',exact:true}).getAttribute('aria-pressed'),'true');
+    await page.getByRole('combobox',{name:'スキル選択'}).selectOption('skill-DoubleSlash');
+    assert(Math.abs((await page.locator('article[data-key=DoubleSlash]').boundingBox()).y)<2,'Skill jump failed');
     await page.setViewportSize({width:1100,height:380});
     await page.evaluate(()=>{supportVfxPreview.renderAt(.8);document.querySelector('.controls').remove();document.querySelector('main').style.cssText='display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px';for(const a of document.querySelectorAll('article')){a.querySelector('canvas').style.display='none';a.querySelector('.row').style.gridTemplateColumns='1fr';}});
     await page.screenshot({path:path.join(directory,'three-sprites.png'),fullPage:true});
     assert.deepEqual(report.errors,[]);
-    report.checks.push('30 RGBA sprites including 11 unchanged reused originals; fixed sizes, transparent margin, 128px grid and clear bell/cocoon centers');
+    report.checks.push('35 RGBA sprites including 15 unchanged reused originals; fixed sizes, transparent margin, 128px grid and clear bell/cocoon centers');
     report.checks.push('Forge hammer precedes impact/heat and cooling; magnet wave emission precedes pull');
     report.checks.push('40 bell bursts vary with 2-3 separate notes; no reroll while paused, no kanji overlap or clipping in four directions; replay changes scatter');
-    report.checks.push('16 skill examples change at 0/90/180/270 degrees; seeded dice face images match outcomes and three effect types, remain fixed on pause and after settling; coal stays hot after the ignition burst');
+    report.checks.push('25 skill examples change at 0/90/180/270 degrees; seeded dice face images match outcomes and three effect types, remain fixed on pause and after settling; coal stays hot after the ignition burst');
+    report.checks.push('Iron changes sword/spear/shield; guard impact precedes transfer; mountain impact precedes return; wind chime notes fit in all four directions');
     report.checks.push('shared thread wrap is followed by a clear gap, then persistent cocoon protection; no overlap across 420 samples');
     report.checks.push('desktop/mobile nonblank, no overflow, no stretched circles, controls work');
   }finally{

@@ -569,6 +569,102 @@
       ],
       "start": null,
       "end": null
+    },
+    {
+      "key": "ReviewSword",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ReviewSword.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 120,
+        "w": 416,
+        "h": 268
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "ReviewSpear",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ReviewSpear.png",
+      "width": 512,
+      "height": 128,
+      "bounds": {
+        "x": 48,
+        "y": 32,
+        "w": 416,
+        "h": 60
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": [
+        0.09765625,
+        0.5
+      ],
+      "end": [
+        0.90234375,
+        0.5
+      ]
+    },
+    {
+      "key": "GuardShield",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GuardShield.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 136,
+        "y": 24,
+        "w": 240,
+        "h": 464
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "BonusOx",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BonusOx.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 76,
+        "w": 416,
+        "h": 356
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "MountainRebound",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MountainRebound.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 52,
+        "w": 416,
+        "h": 408
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
     }
   ]
 }
