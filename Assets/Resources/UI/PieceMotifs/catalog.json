@@ -545,7 +545,7 @@
     {
       "id": -1010,
       "name": "要塞",
-      "source": "Assets/Art/Generated/CharacterMotifsReviewed/FortressThickCorner.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/FortressFrontCannons.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1010",
       "piece": "UI/CharacterPieces/Piece_F1010",
       "enemyPiece": "UI/CharacterPieces/Piece_F1010_Enemy",

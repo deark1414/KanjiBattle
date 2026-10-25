@@ -1,6 +1,6 @@
 {
   "date": "2026-10-25",
-  "note": "旧20モチーフ・コマを維持。要塞は右壁に厚みと側面を追加。山は高さの違う二峰と浅い鞍部へ変更し64pxを維持。",
+  "note": "旧20モチーフ・コマを維持。要塞は承認された正面図とこちら向きの大砲へ統一。山は高さの違う二峰と浅い鞍部、64pxを維持。スキル演出の追加制作は別工程。",
   "rows": [
     {
       "id": 1,
@@ -1319,7 +1319,7 @@
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1010.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1010_Enemy.png",
       "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1010.png",
-      "source": "Assets/Art/Generated/CharacterMotifsReviewed/FortressThickCorner.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/FortressFrontCannons.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
