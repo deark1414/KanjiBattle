@@ -1,6 +1,6 @@
 const assert=require('node:assert/strict');
 module.exports=[
-  ...[['art-standard','standard',-1001],['art-warrior','soldiers',-1003],['art-magnet','fusion-magnet',-1007],['art-dice','fusion-dice',-1011],['art-sand-mobile','fusion-sand',-1013]].map(([id,fixture,fusion])=>({
+  ...[['art-standard','standard',-1001],['art-warrior','soldiers',-1003],['art-magnet','fusion-magnet',-1007],['art-dice','fusion-dice',-1011],['art-cocoon','fusion-cocoon',-1015],['art-candle','fusion-lantern',-1017],['art-rain','fusion-rain',-1012],['art-sand-mobile','fusion-sand',-1013]].map(([id,fixture,fusion])=>({
     id,name:`キャラクター原画: ${fixture} のコマ・召喚・消去`,fixture,
     viewport:id.endsWith('mobile')?{width:390,height:844}:undefined,
     async run(game){
@@ -21,15 +21,25 @@ module.exports=[
       await game.screenshot('pieces');
     }
   })),
-  {
-    id:'art-selection',name:'キャラクター原画: 編成の選択時だけモチーフを表示',fixture:'support',
+  ...[['art-selection','鈴',27],['art-shadow-selection','影',29]].map(([id,characterName,characterId])=>({
+    id,name:`キャラクター原画: ${characterName}の選択時だけモチーフを表示`,fixture:'support',
     async run(game){
       let state=await game.request();assert.equal(state.visibleMotifs,0);
-      await game.click(control=>control.path.includes('CharacterEntry')&&control.text.startsWith('鈴'),'鈴の編成項目');
+      // Use the roster scrollbar, not wheel input outside its clipped viewport.
+      for(let attempt=0;attempt<4;attempt++){
+        const target=state.controls.find(control=>control.path.includes('CharacterEntry')&&control.text.startsWith(characterName));
+        if(target?.visible&&target.reachable)break;
+        const scrollbar=state.controls.find(control=>control.path.includes('CharacterList/Scrollbar')&&control.kind==='Scrollbar');
+        assert(scrollbar?.reachable,'Roster scrollbar is not reachable.');
+        await game.clickBox({...scrollbar.rect,y:scrollbar.rect.y+scrollbar.rect.h*0.95,h:scrollbar.rect.h*0.02});
+        await game.page.waitForTimeout(500);
+        state=await game.request();
+      }
+      await game.click(control=>control.path.includes('CharacterEntry')&&control.text.startsWith(characterName),characterName+'の編成項目');
       state=await game.wait(state=>state.visibleMotifs>0,'Selected roster motif did not appear.',5000);
-      assert(state.visibleMotifIds.every(id=>id===27));await game.screenshot('selection');
+      assert(state.visibleMotifIds.every(id=>id===characterId));await game.screenshot('selection');
       await game.wait(state=>state.visibleMotifs===0,'Roster motif did not return to a piece.',5000);
       await game.screenshot('selection-settled');
     }
-  }
+  }))
 ];

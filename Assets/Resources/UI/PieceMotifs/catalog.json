@@ -333,7 +333,7 @@
     {
       "id": 29,
       "name": "影",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Shadow.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/ShadowSimple.png",
       "resource": "UI/PieceMotifs/Ready/Motif_29",
       "piece": "UI/CharacterPieces/Piece_29",
       "enemyPiece": "UI/CharacterPieces/Piece_29_Enemy",
@@ -558,7 +558,7 @@
     {
       "id": -1011,
       "name": "賽子",
-      "source": "Assets/Art/Generated/CharacterMotifsReviewed/DiceGeometryV2.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/DiceDiagonal.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1011",
       "piece": "UI/CharacterPieces/Piece_F1011",
       "enemyPiece": "UI/CharacterPieces/Piece_F1011_Enemy",
@@ -573,7 +573,7 @@
     {
       "id": -1012,
       "name": "雨",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Rain.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/RainNoCloud.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1012",
       "piece": "UI/CharacterPieces/Piece_F1012",
       "enemyPiece": "UI/CharacterPieces/Piece_F1012_Enemy",
@@ -618,7 +618,7 @@
     {
       "id": -1015,
       "name": "繭",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Cocoon.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/SilkwormCocoon.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1015",
       "piece": "UI/CharacterPieces/Piece_F1015",
       "enemyPiece": "UI/CharacterPieces/Piece_F1015_Enemy",
@@ -648,7 +648,7 @@
     {
       "id": -1017,
       "name": "灯",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Lantern.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/Candle.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1017",
       "piece": "UI/CharacterPieces/Piece_F1017",
       "enemyPiece": "UI/CharacterPieces/Piece_F1017_Enemy",
