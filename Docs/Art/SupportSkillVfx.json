@@ -28,27 +28,39 @@
     },
     {
       "key": "BellEcho",
-      "sourceName": "BellEchoNotes",
+      "name": "鈴",
       "axis": "radial",
-      "refs": [
-        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png"
-      ],
-      "prompt": "Asset: a single isolated RGBA game effect image, not a sprite sheet or animation frames. Localized edit of this transparent pixel-art sound-wave sprite. Preserve the three perfectly concentric CIRCULAR warm gold rings, shared center, thickness, square-pixel rendering, transparent center and overall centered layout. Add exactly TWO small clearly readable MUSICAL EIGHTH NOTES in the same pale gold/ivory pixel palette: one near the upper-right arc, one near the lower-left arc. Each has one solid rounded notehead, straight stem and short flag, NOT random squiggles or treble clefs. Place the notes in the ring band area, touching or slightly overlapping the outer two rings, but keep them INSIDE the outer ring's existing left/right/top/bottom extents so the main circular bounding box and centered pivot stay unchanged. The notes should remain readable at small game size without filling the central hole. No additional text or letters, no staff lines, no glow or backdrop. Genuine transparency and at least 12 percent clear margin.",
+      "prompt": "Asset type: one transparent game VFX sprite, not an animation sheet. Deliberate hand-placed 128x128 logical pixel art enlarged with crisp square pixels, limited palette, opaque material clusters, no smooth gradients or painterly texture. Genuine RGBA transparency, no matte, no checkerboard, no backdrop, no UI, no text. At least 12 percent clear padding on every side. One single reusable SOUND RIPPLE sprite for a bell ally-echo skill in a Japanese kanji strategy game. THREE thin clean concentric CIRCULAR rings, same precise shared center, neutral face-on orientation. Restrained pale warm brass-gold and ivory highlights with a muted ochre edge. Large completely TRANSPARENT center hole at least 45 percent of the outer diameter, so a kanji unit remains visible inside it. Rings only, not a disk, no filled center, no radial rays, no runes, no magic sigil, no letters, no bell object, no music notes, no sparks, no stars, no bloom, no soft halo, no sci-fi radar. Perfectly round rings rather than perspective ellipses, intentional crisp pixel stair steps. Intended to expand once and fade around an ally that repeats its skill. Full outer ring safely inside middle 70-75 percent of square canvas.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8fe1bb7d-90e5-4870-91c1-480cdc88c849.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellEcho.png",
       "logicalWidth": 128,
       "logicalHeight": 128,
-      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-32aece48-a12e-4499-bb4f-d43d8a7c4caf.png",
-      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellEchoNotes.png",
-      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellEcho.png",
+      "restoredFrom": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png",
       "previousVersion": {
         "key": "BellEcho",
-        "name": "鈴",
+        "sourceName": "BellEchoNotes",
         "axis": "radial",
-        "prompt": "Asset type: one transparent game VFX sprite, not an animation sheet. Deliberate hand-placed 128x128 logical pixel art enlarged with crisp square pixels, limited palette, opaque material clusters, no smooth gradients or painterly texture. Genuine RGBA transparency, no matte, no checkerboard, no backdrop, no UI, no text. At least 12 percent clear padding on every side. One single reusable SOUND RIPPLE sprite for a bell ally-echo skill in a Japanese kanji strategy game. THREE thin clean concentric CIRCULAR rings, same precise shared center, neutral face-on orientation. Restrained pale warm brass-gold and ivory highlights with a muted ochre edge. Large completely TRANSPARENT center hole at least 45 percent of the outer diameter, so a kanji unit remains visible inside it. Rings only, not a disk, no filled center, no radial rays, no runes, no magic sigil, no letters, no bell object, no music notes, no sparks, no stars, no bloom, no soft halo, no sci-fi radar. Perfectly round rings rather than perspective ellipses, intentional crisp pixel stair steps. Intended to expand once and fade around an ally that repeats its skill. Full outer ring safely inside middle 70-75 percent of square canvas.",
-        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8fe1bb7d-90e5-4870-91c1-480cdc88c849.png",
-        "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png",
-        "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellEcho.png",
+        "refs": [
+          "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png"
+        ],
+        "prompt": "Asset: a single isolated RGBA game effect image, not a sprite sheet or animation frames. Localized edit of this transparent pixel-art sound-wave sprite. Preserve the three perfectly concentric CIRCULAR warm gold rings, shared center, thickness, square-pixel rendering, transparent center and overall centered layout. Add exactly TWO small clearly readable MUSICAL EIGHTH NOTES in the same pale gold/ivory pixel palette: one near the upper-right arc, one near the lower-left arc. Each has one solid rounded notehead, straight stem and short flag, NOT random squiggles or treble clefs. Place the notes in the ring band area, touching or slightly overlapping the outer two rings, but keep them INSIDE the outer ring's existing left/right/top/bottom extents so the main circular bounding box and centered pivot stay unchanged. The notes should remain readable at small game size without filling the central hole. No additional text or letters, no staff lines, no glow or backdrop. Genuine transparency and at least 12 percent clear margin.",
         "logicalWidth": 128,
-        "logicalHeight": 128
+        "logicalHeight": 128,
+        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-32aece48-a12e-4499-bb4f-d43d8a7c4caf.png",
+        "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellEchoNotes.png",
+        "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellEcho.png",
+        "previousVersion": {
+          "key": "BellEcho",
+          "name": "鈴",
+          "axis": "radial",
+          "prompt": "Asset type: one transparent game VFX sprite, not an animation sheet. Deliberate hand-placed 128x128 logical pixel art enlarged with crisp square pixels, limited palette, opaque material clusters, no smooth gradients or painterly texture. Genuine RGBA transparency, no matte, no checkerboard, no backdrop, no UI, no text. At least 12 percent clear padding on every side. One single reusable SOUND RIPPLE sprite for a bell ally-echo skill in a Japanese kanji strategy game. THREE thin clean concentric CIRCULAR rings, same precise shared center, neutral face-on orientation. Restrained pale warm brass-gold and ivory highlights with a muted ochre edge. Large completely TRANSPARENT center hole at least 45 percent of the outer diameter, so a kanji unit remains visible inside it. Rings only, not a disk, no filled center, no radial rays, no runes, no magic sigil, no letters, no bell object, no music notes, no sparks, no stars, no bloom, no soft halo, no sci-fi radar. Perfectly round rings rather than perspective ellipses, intentional crisp pixel stair steps. Intended to expand once and fade around an ally that repeats its skill. Full outer ring safely inside middle 70-75 percent of square canvas.",
+          "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8fe1bb7d-90e5-4870-91c1-480cdc88c849.png",
+          "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png",
+          "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellEcho.png",
+          "logicalWidth": 128,
+          "logicalHeight": 128
+        }
       }
     },
     {
@@ -75,6 +87,20 @@
       "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-e16ce263-4df1-4f63-b375-b4bbc5cb7a48.png",
       "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/CocoonGuard.png",
       "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CocoonGuard.png"
+    },
+    {
+      "key": "BellNote",
+      "name": "鈴の音符",
+      "axis": "particle",
+      "prompt": "Edit/reference extraction for a Japanese pixel-art game VFX asset: reproduce ONLY ONE of the small GOLD EIGHTH MUSICAL NOTES from this reference as a standalone sprite. REMOVE ALL concentric circles and every other shape. One recognizable solid round/oval notehead, one straight upright stem, one short curved flag at the top. Same warm pale brass/ivory gold with muted ochre edges, crisp deliberately blocky 64px logical pixel clusters, simple limited palette, not fine engraving or smooth vector. Upright neutral orientation, no angled staff, no double note, no extra symbols. Single note centered, generous 15 percent transparent margin. Genuine RGBA transparent exterior, no ring, no glow, no rays, no background, no text or labels. Entire note fully visible. Designed to be reused two or three times with runtime rotation/scale and outward drift.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Drafts/VFX/SupportSkills/Source/BellEchoNotes.png"
+      ],
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-5f9190c7-816c-4257-859c-34290b638119.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellNote.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellNote.png",
+      "logicalWidth": 128,
+      "logicalHeight": 128
     }
   ],
   "sequence": {
@@ -86,6 +112,16 @@
       "ThreadWrap",
       "clear",
       "CocoonGuard"
+    ],
+    "BellEcho": [
+      "BellEcho",
+      "BellNote"
     ]
+  },
+  "bellEmission": {
+    "minCount": 2,
+    "maxCount": 3,
+    "randomScope": "発動ごとに固定した装飾専用乱数",
+    "centralClearRadius": 42
   }
 }

@@ -11,7 +11,8 @@ const layout=require('../../Assets/Art/Drafts/VFX/SupportSkills/layout.json');
 async function main(){
   fs.mkdirSync(directory,{recursive:true});
   const report={status:'draft-only',assets:[],checks:[],errors:[]};
-  assert.equal(manifest.generated.length,5);
+  assert.equal(manifest.generated.length,6);
+  assert.equal(manifest.generated.find(e=>e.key==='BellEcho').source,'Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png');
   for(const entry of layout.entries){
     const png=PNG.sync.read(fs.readFileSync(path.join(root,entry.sprite)));
     assert.equal(png.width,entry.width);assert.equal(png.height,entry.height);
@@ -45,7 +46,22 @@ async function main(){
     await page.waitForFunction(()=>window.supportVfxPreview?.ready);
     await page.waitForFunction(()=>[...document.querySelectorAll('.still img')].every(i=>i.complete&&i.naturalWidth>0));
     assert.equal(await page.locator('.scene').count(),4);
-    assert.equal(await page.locator('.still img').count(),5);
+    assert.equal(await page.locator('.still img').count(),6);
+    await page.evaluate(()=>supportVfxPreview.setBellSeed(12345));
+    const bursts=await page.evaluate(()=>Array.from({length:40},(_,cycle)=>supportVfxPreview.bellNotes(.5,cycle,0)));
+    assert(bursts.every(notes=>notes.length===2||notes.length===3));
+    assert(bursts.some(notes=>notes.length===2)&&bursts.some(notes=>notes.length===3));
+    assert(new Set(bursts.map(notes=>JSON.stringify(notes))).size===40,'Scatter must vary between bursts');
+    for(const notes of bursts)for(const note of notes){
+      assert(Math.hypot(note.x,note.y)-Math.hypot(note.width,note.height)/2>42,'Musical note overlaps kanji');
+      assert(note.height>=14&&note.height<=18&&Math.abs(note.rotation)<.6);
+    }
+    const fixed=await page.evaluate(()=>supportVfxPreview.bellNotes(.5,3,1));
+    assert.deepEqual(await page.evaluate(()=>supportVfxPreview.bellNotes(.5,3,1)),fixed,'Paused burst must not reroll');
+    await page.evaluate(()=>supportVfxPreview.renderAt(.8));
+    const bellFrame=await page.locator('article[data-key=BellEcho] canvas').evaluate(c=>c.toDataURL());
+    await page.evaluate(()=>supportVfxPreview.renderAt(.8));
+    assert.equal(await page.locator('article[data-key=BellEcho] canvas').evaluate(c=>c.toDataURL()),bellFrame);
     for(const [name,time]of [['wrap',.8],['clear',1.24],['guard',1.85],['held',3]]){
       const state=await page.evaluate(t=>{supportVfxPreview.renderAt(t);return supportVfxPreview.cocoonState(t);},time);
       assert(name==='wrap'?state.wrap>0&&state.guard===0:name==='clear'?state.wrap===0&&state.guard===0:state.wrap===0&&state.guard===1,'Wrong cocoon phase: '+name);
@@ -61,6 +77,8 @@ async function main(){
       await page.evaluate(a=>supportVfxPreview.renderAt(.44,a),angle);
       const anchors=await page.evaluate(()=>[point(100,140),point(290,140),point(420,140),point(540,140),point(140,140),point(500,140)]);
       assert(anchors.every(p=>p.x>=27&&p.x<=613&&p.y>=32&&p.y<=248),'Piece clipped after rotation: '+angle);
+      const noteBounds=await page.evaluate(()=>{const points=[point(230,140),point(410,140)],boxes=[];for(let cycle=0;cycle<40;cycle++)for(let lane=0;lane<2;lane++)for(const n of supportVfxPreview.bellNotes(.9,cycle,lane)){const radius=Math.hypot(n.width,n.height)/2,p=points[lane];boxes.push({left:p.x+n.x-radius,right:p.x+n.x+radius,top:p.y+n.y-radius,bottom:p.y+n.y+radius});}return boxes;});
+      assert(noteBounds.every(b=>b.left>=0&&b.right<=640&&b.top>=0&&b.bottom<=280),'Musical notes clipped: '+angle);
       const before=await page.locator('.scene').evaluateAll(cs=>cs.map(c=>c.toDataURL()));
       await page.evaluate(a=>supportVfxPreview.renderAt(1.18,a),angle);
       const after=await page.locator('.scene').evaluateAll(cs=>cs.map(c=>c.toDataURL()));
@@ -70,6 +88,7 @@ async function main(){
     for(const [name,size]of [['desktop',{width:1280,height:1000}],['mobile',{width:390,height:844}]]){
       await page.setViewportSize(size);await page.evaluate(()=>supportVfxPreview.renderAt(.8));
       assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Page overflow: '+name);
+      assert(await page.locator('.still img').evaluateAll(images=>images.every(i=>getComputedStyle(i).objectFit==='contain')),'Static images must preserve their aspect ratio');
       for(const canvas of await page.locator('.scene').all()){
         const box=await canvas.boundingBox();
         assert(Math.abs(box.width/box.height-1280/560)<.02,'Canvas stretched: '+name);
@@ -83,7 +102,9 @@ async function main(){
     await page.getByRole('button',{name:'再生',exact:true}).click();
     assert(await page.getByRole('button',{name:'一時停止',exact:true}).isVisible());
     await page.getByRole('button',{name:'一時停止',exact:true}).click();
+    const oldNotes=await page.evaluate(()=>supportVfxPreview.bellNotes(.5,0,0));
     await page.getByRole('button',{name:'最初から再生',exact:true}).click();
+    assert.notDeepEqual(await page.evaluate(()=>supportVfxPreview.bellNotes(.5,0,0)),oldNotes,'Replay should vary the scatter');
     assert(await page.getByRole('button',{name:'一時停止',exact:true}).isVisible());
     await page.getByRole('button',{name:'270°',exact:true}).click();
     assert.equal(await page.getByRole('button',{name:'270°',exact:true}).getAttribute('aria-pressed'),'true');
@@ -91,7 +112,8 @@ async function main(){
     await page.evaluate(()=>{supportVfxPreview.renderAt(.8);document.querySelector('.controls').remove();document.querySelector('main').style.cssText='display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px';for(const a of document.querySelectorAll('article')){a.querySelector('canvas').style.display='none';a.querySelector('.row').style.gridTemplateColumns='1fr';}});
     await page.screenshot({path:path.join(directory,'three-sprites.png'),fullPage:true});
     assert.deepEqual(report.errors,[]);
-    report.checks.push('5 RGBA sprites; fixed sizes, transparent margin, 128px grid and clear bell/cocoon centers');
+    report.checks.push('6 RGBA sprites; fixed sizes, transparent margin, 128px grid and clear bell/cocoon centers');
+    report.checks.push('40 bell bursts vary with 2-3 separate notes; no reroll while paused, no kanji overlap or clipping in four directions; replay changes scatter');
     report.checks.push('4 skill examples change at 0/90/180/270 degrees using single-image states');
     report.checks.push('shared thread wrap is followed by a clear gap, then persistent cocoon protection; no overlap across 420 samples');
     report.checks.push('desktop/mobile nonblank, no overflow, no stretched circles, controls work');

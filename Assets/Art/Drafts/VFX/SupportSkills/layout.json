@@ -101,6 +101,24 @@
       ],
       "start": null,
       "end": null
+    },
+    {
+      "key": "BellNote",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellNote.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 88,
+        "y": 24,
+        "w": 332,
+        "h": 464
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
     }
   ]
 }
