@@ -235,7 +235,8 @@ if (background != null)
             if (shared > 0)
             {
                 dmg -= shared;
-                bm.PlayDefensiveVfx(protector, SkillType.Shield);
+                bm.PlaySupportBurst(this, "GuardShell", .6f, .8f);
+                bm.PlaySupportBurst(protector, "GuardShell", .6f, .7f);
                 protector.TakeDamage(shared, bm, attacker, ignoreDefense: true,
                     actionLabel: $"{protector.DisplayName} が {DisplayName} をかばった！",
                     origin: BattleDamageOrigin.Transferred);

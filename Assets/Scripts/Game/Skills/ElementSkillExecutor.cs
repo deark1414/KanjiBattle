@@ -20,6 +20,7 @@ public static class ElementSkillExecutor
             battle.AddLog($"{unit.DisplayName} が{label}へ変形");
         }
         unit.IronForm = form;
+        battle.RefreshSupportState(unit);
     }
 
     public static IronForm ChooseIronForm(int hp, int maxHP, int wedgeCount, bool spearTarget) =>
@@ -37,16 +38,19 @@ public static class ElementSkillExecutor
         if (battle == null || !Living(target) || target.isAlly == caster.isAlly
             || !BattleRangeService.CanTargetCell(SkillType.ChainLightning, caster.gridPos, target.gridPos, battle.Cols, battle.Rows)) return false;
         var hit = new HashSet<BattleCharacter>();
+        BattleCharacter previous = caster;
         float power = 1f;
         while (Living(caster) && Living(target) && hit.Count < 4)
         {
             hit.Add(target);
             Vector2Int last = target.gridPos;
+            battle.PlaySupportLink(previous, target, "ChainLightning", (hit.Count - 1) * .08f);
             battle.PlayElementEffect(target, "電", new Color(1f, 0.9f, 0.25f));
             target.TakeDamage(Mathf.Max(1, Mathf.RoundToInt(caster.GetEffectiveAttack(battle)
                 * caster.GetEffectiveSkillPower() * power)), battle, caster, actionLabel: $"{caster.DisplayName} の連鎖電撃");
             var next = battle.gridMap.Values.Where(unit => Living(unit) && unit.isAlly != caster.isAlly
                 && !hit.Contains(unit) && BattleRangeService.Distance(last, unit.gridPos) == 1).ToList();
+            previous = target;
             target = next.Count == 0 ? null : next[Random.Range(0, next.Count)];
             power *= 0.75f;
         }

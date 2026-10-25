@@ -39,6 +39,7 @@ public static class SupportSkillExecutor
         if (bell == null || !SkillExecutor.RollSkillActivation(SkillExecutor.GetSkillChance(bell.data, bell.data.skillType, bell.isAlly))) return;
         if (repeat(target))
         {
+            battle.PlaySupportEcho(bell, caster);
             bell.PlayCastEffect(new Color(1f, 0.88f, 0.35f));
             battle.ShowFloatingText(bell, "再響", new Color(1f, 0.88f, 0.35f));
             battle.AddLog($"{bell.DisplayName} の再響！ {caster.DisplayName} が再発動！");
@@ -52,6 +53,7 @@ public static class SupportSkillExecutor
         {
             string name = target.data.characterName;
             if (!caster.CopyBattleForm(target)) return false;
+            battle.PlaySupportBurst(caster, "ShadowMist", .7f);
             battle.AddLog($"{caster.OriginalData.characterName} が {name} に変身！");
             battle.ShowFloatingText(caster, "変身", new Color(0.8f, 0.65f, 1f));
             return true;
@@ -59,6 +61,8 @@ public static class SupportSkillExecutor
         if (caster.data.skillType != SkillType.ThreadPull) return false;
         int damage = Mathf.RoundToInt(caster.GetEffectiveAttack(battle) * caster.GetEffectiveSkillPower());
         caster.UpdateDirection(target.gridPos - caster.gridPos);
+        battle.PlaySupportLink(caster, target, "PullThread");
+        battle.PlaySupportBurst(target, "ThreadWrap", .65f);
         target.TakeDamage(damage, battle, caster, isBasicAttack: false, actionLabel: $"{caster.DisplayName} の引き糸");
         if (!target.isDead) battle.PullCharacter(caster, target);
         return true;

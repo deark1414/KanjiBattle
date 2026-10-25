@@ -669,13 +669,13 @@
     {
       "key": "GuardShell",
       "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GuardShell.png",
-      "width": 512,
-      "height": 512,
+      "width": 256,
+      "height": 256,
       "bounds": {
         "x": 48,
-        "y": 124,
-        "w": 416,
-        "h": 260
+        "y": 76,
+        "w": 160,
+        "h": 104
       },
       "pivot": [
         0.5,

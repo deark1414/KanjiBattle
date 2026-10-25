@@ -1,0 +1,1430 @@
+fileFormatVersion: 2
+guid: b2e37552b97a346f5bba5eb111353dcd
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 5230219658401672712
+    second: CoalEmbers_0
+  - first:
+      213: -8015335384141433867
+    second: CoalEmbers_1
+  - first:
+      213: -4377036021809730402
+    second: CoalEmbers_2
+  - first:
+      213: -2322617203547143679
+    second: CoalEmbers_3
+  - first:
+      213: 4543148893977870547
+    second: CoalEmbers_4
+  - first:
+      213: 1568704971995020253
+    second: CoalEmbers_5
+  - first:
+      213: -3968638351151334246
+    second: CoalEmbers_6
+  - first:
+      213: 6195444826900189662
+    second: CoalEmbers_7
+  - first:
+      213: 5722200549412659011
+    second: CoalEmbers_8
+  - first:
+      213: 4294650353410959841
+    second: CoalEmbers_9
+  - first:
+      213: 8350116529031712520
+    second: CoalEmbers_10
+  - first:
+      213: 758374841422442225
+    second: CoalEmbers_11
+  - first:
+      213: -1099202553472590758
+    second: CoalEmbers_12
+  - first:
+      213: -2426238245709546800
+    second: CoalEmbers_13
+  - first:
+      213: 8992034800196735495
+    second: CoalEmbers_14
+  - first:
+      213: 4136770835569224428
+    second: CoalEmbers_15
+  - first:
+      213: -8739997224100226887
+    second: CoalEmbers_16
+  - first:
+      213: -8043265242298959050
+    second: CoalEmbers_17
+  - first:
+      213: 1064359658085025651
+    second: CoalEmbers_18
+  - first:
+      213: -1720675068861830612
+    second: CoalEmbers_19
+  - first:
+      213: -4015426370692497928
+    second: CoalEmbers_20
+  - first:
+      213: 8423160175294408520
+    second: CoalEmbers_21
+  - first:
+      213: 5935935722373020196
+    second: CoalEmbers_22
+  - first:
+      213: -2575160010080540105
+    second: CoalEmbers_23
+  - first:
+      213: 7644429553535435320
+    second: CoalEmbers_24
+  - first:
+      213: 7125764192617782035
+    second: CoalEmbers_25
+  - first:
+      213: 5833924414725629222
+    second: CoalEmbers_26
+  - first:
+      213: -9208006683257833302
+    second: CoalEmbers_27
+  - first:
+      213: -154052933644679976
+    second: CoalEmbers_28
+  - first:
+      213: -7172642915757661300
+    second: CoalEmbers_29
+  - first:
+      213: -7248305063138899718
+    second: CoalEmbers_30
+  - first:
+      213: -960457569488346422
+    second: CoalEmbers_31
+  - first:
+      213: -8471724647171735434
+    second: CoalEmbers_32
+  - first:
+      213: 6573307672089134972
+    second: CoalEmbers_33
+  - first:
+      213: 9130518198302505949
+    second: CoalEmbers_34
+  - first:
+      213: -2604329053178936909
+    second: CoalEmbers_35
+  - first:
+      213: -3547978282530917316
+    second: CoalEmbers_36
+  - first:
+      213: -3443979632227895577
+    second: CoalEmbers_37
+  - first:
+      213: -3322936241623735569
+    second: CoalEmbers_38
+  - first:
+      213: -2682299183327775153
+    second: CoalEmbers_39
+  - first:
+      213: -8600680354595816324
+    second: CoalEmbers_40
+  - first:
+      213: 6342907423141867587
+    second: CoalEmbers_41
+  - first:
+      213: 5694548725256875333
+    second: CoalEmbers_42
+  - first:
+      213: -5245963792011859386
+    second: CoalEmbers_43
+  - first:
+      213: 2175293544185474306
+    second: CoalEmbers_44
+  - first:
+      213: -8649838956274725261
+    second: CoalEmbers_45
+  - first:
+      213: -8921724286093063783
+    second: CoalEmbers_46
+  - first:
+      213: 2082974948560996356
+    second: CoalEmbers_47
+  - first:
+      213: -6285821324421902396
+    second: CoalEmbers_48
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 8192
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: CoalEmbers_0
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 359
+        width: 106
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80eeb448119759840800000000000000
+      internalID: 5230219658401672712
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_1
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 415
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f371a86feec3c090800000000000000
+      internalID: -8015335384141433867
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_2
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 371
+        width: 66
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9c21febde4a143c0800000000000000
+      internalID: -4377036021809730402
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_3
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 415
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1028c5985f764cfd0800000000000000
+      internalID: -2322617203547143679
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_4
+      rect:
+        serializedVersion: 2
+        x: 255
+        y: 383
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d0824339d18c0f30800000000000000
+      internalID: 4543148893977870547
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_5
+      rect:
+        serializedVersion: 2
+        x: 307
+        y: 387
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddbf6255cd825c510800000000000000
+      internalID: 1568704971995020253
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_6
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 327
+        width: 62
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9cf1a542709ce8c0800000000000000
+      internalID: -3968638351151334246
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_7
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 375
+        width: 18
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed1dae4ce34aaf550800000000000000
+      internalID: 6195444826900189662
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_8
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 283
+        width: 58
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34f59490517596f40800000000000000
+      internalID: 5722200549412659011
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_9
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 347
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e9e09d0eb9a99b30800000000000000
+      internalID: 4294650353410959841
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_10
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 335
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 80f8d0a0eb291e370800000000000000
+      internalID: 8350116529031712520
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_11
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 311
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fee39576e9468a00800000000000000
+      internalID: 758374841422442225
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_12
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 319
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5c5018f919deb0f0800000000000000
+      internalID: -1099202553472590758
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_13
+      rect:
+        serializedVersion: 2
+        x: 187
+        y: 303
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0daf3089b25445ed0800000000000000
+      internalID: -2426238245709546800
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_14
+      rect:
+        serializedVersion: 2
+        x: 275
+        y: 299
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7025da942002acc70800000000000000
+      internalID: 8992034800196735495
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_15
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 267
+        width: 26
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ceaac4b4823c86930800000000000000
+      internalID: 4136770835569224428
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_16
+      rect:
+        serializedVersion: 2
+        x: 123
+        y: 287
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b81b97c4da45b680800000000000000
+      internalID: -8739997224100226887
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_17
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 223
+        width: 50
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63b368e80e4906090800000000000000
+      internalID: -8043265242298959050
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_18
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 267
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3770a65487d55ce00800000000000000
+      internalID: 1064359658085025651
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_19
+      rect:
+        serializedVersion: 2
+        x: 383
+        y: 275
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2aae92342fee18e0800000000000000
+      internalID: -1720675068861830612
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_20
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 267
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8fd33219df65648c0800000000000000
+      internalID: -4015426370692497928
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_21
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 243
+        width: 22
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 847e3a63d8315e470800000000000000
+      internalID: 8423160175294408520
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_22
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 167
+        width: 50
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42a789de61ea06250800000000000000
+      internalID: 5935935722373020196
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_23
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 215
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73aab575d91334cd0800000000000000
+      internalID: -2575160010080540105
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_24
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 207
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8324af05d28761a60800000000000000
+      internalID: 7644429553535435320
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_25
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 175
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31b5e2e77ccc3e260800000000000000
+      internalID: 7125764192617782035
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_26
+      rect:
+        serializedVersion: 2
+        x: 399
+        y: 191
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6252332885346f050800000000000000
+      internalID: 5833924414725629222
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_27
+      rect:
+        serializedVersion: 2
+        x: 383
+        y: 183
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa87efa25b6963080800000000000000
+      internalID: -9208006683257833302
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_28
+      rect:
+        serializedVersion: 2
+        x: 103
+        y: 159
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d4808d4ca1bcddf0800000000000000
+      internalID: -154052933644679976
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_29
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 155
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c83ea893547a57c90800000000000000
+      internalID: -7172642915757661300
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_30
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 87
+        width: 122
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af8c0ffb2f8d86b90800000000000000
+      internalID: -7248305063138899718
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_31
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 151
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac2efc4ede4cba2f0800000000000000
+      internalID: -960457569488346422
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_32
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 99
+        width: 62
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 670486a81536e6a80800000000000000
+      internalID: -8471724647171735434
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_33
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 139
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c77093a3084193b50800000000000000
+      internalID: 6573307672089134972
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_34
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 143
+        width: 10
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddb7f010ded16be70800000000000000
+      internalID: 9130518198302505949
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_35
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 119
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b14a0346809bdbd0800000000000000
+      internalID: -2604329053178936909
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_36
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 127
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c34b1fecc8c03cec0800000000000000
+      internalID: -3547978282530917316
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_37
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 123
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e6306f75c68430d0800000000000000
+      internalID: -3443979632227895577
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_38
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 115
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe2eeba081f82e1d0800000000000000
+      internalID: -3322936241623735569
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_39
+      rect:
+        serializedVersion: 2
+        x: 459
+        y: 111
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f467d6caa1f86cad0800000000000000
+      internalID: -2682299183327775153
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_40
+      rect:
+        serializedVersion: 2
+        x: 155
+        y: 71
+        width: 58
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7cb2ad29ce34a880800000000000000
+      internalID: -8600680354595816324
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_41
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 99
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3403f87f1b8860850800000000000000
+      internalID: 6342907423141867587
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_42
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 107
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54de61505e9170f40800000000000000
+      internalID: 5694548725256875333
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_43
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 95
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64a6298b9b79237b0800000000000000
+      internalID: -5245963792011859386
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_44
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 75
+        width: 14
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20d206704f1303e10800000000000000
+      internalID: 2175293544185474306
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_45
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 71
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37ec8ee4c4995f780800000000000000
+      internalID: -8649838956274725261
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_46
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 75
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9998277f70baf2480800000000000000
+      internalID: -8921724286093063783
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_47
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 75
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 408040dfda638ec10800000000000000
+      internalID: 2082974948560996356
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CoalEmbers_48
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 75
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cfc1442fc644c8a0800000000000000
+      internalID: -6285821324421902396
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID:
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      CoalEmbers_0: 5230219658401672712
+      CoalEmbers_1: -8015335384141433867
+      CoalEmbers_10: 8350116529031712520
+      CoalEmbers_11: 758374841422442225
+      CoalEmbers_12: -1099202553472590758
+      CoalEmbers_13: -2426238245709546800
+      CoalEmbers_14: 8992034800196735495
+      CoalEmbers_15: 4136770835569224428
+      CoalEmbers_16: -8739997224100226887
+      CoalEmbers_17: -8043265242298959050
+      CoalEmbers_18: 1064359658085025651
+      CoalEmbers_19: -1720675068861830612
+      CoalEmbers_2: -4377036021809730402
+      CoalEmbers_20: -4015426370692497928
+      CoalEmbers_21: 8423160175294408520
+      CoalEmbers_22: 5935935722373020196
+      CoalEmbers_23: -2575160010080540105
+      CoalEmbers_24: 7644429553535435320
+      CoalEmbers_25: 7125764192617782035
+      CoalEmbers_26: 5833924414725629222
+      CoalEmbers_27: -9208006683257833302
+      CoalEmbers_28: -154052933644679976
+      CoalEmbers_29: -7172642915757661300
+      CoalEmbers_3: -2322617203547143679
+      CoalEmbers_30: -7248305063138899718
+      CoalEmbers_31: -960457569488346422
+      CoalEmbers_32: -8471724647171735434
+      CoalEmbers_33: 6573307672089134972
+      CoalEmbers_34: 9130518198302505949
+      CoalEmbers_35: -2604329053178936909
+      CoalEmbers_36: -3547978282530917316
+      CoalEmbers_37: -3443979632227895577
+      CoalEmbers_38: -3322936241623735569
+      CoalEmbers_39: -2682299183327775153
+      CoalEmbers_4: 4543148893977870547
+      CoalEmbers_40: -8600680354595816324
+      CoalEmbers_41: 6342907423141867587
+      CoalEmbers_42: 5694548725256875333
+      CoalEmbers_43: -5245963792011859386
+      CoalEmbers_44: 2175293544185474306
+      CoalEmbers_45: -8649838956274725261
+      CoalEmbers_46: -8921724286093063783
+      CoalEmbers_47: 2082974948560996356
+      CoalEmbers_48: -6285821324421902396
+      CoalEmbers_5: 1568704971995020253
+      CoalEmbers_6: -3968638351151334246
+      CoalEmbers_7: 6195444826900189662
+      CoalEmbers_8: 5722200549412659011
+      CoalEmbers_9: 4294650353410959841
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

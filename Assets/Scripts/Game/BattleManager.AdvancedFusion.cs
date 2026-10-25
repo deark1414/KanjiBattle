@@ -15,29 +15,12 @@ public partial class BattleManager
 
     public void SetCocoonMarker(BattleCharacter target, bool active)
     {
-        var old = target.transform.Find("FusionProtectionMarker");
-        if (!active) { if (old != null) Destroy(old.gameObject); return; }
-        if (old != null) return;
-        var go = new GameObject("FusionProtectionMarker", typeof(RectTransform));
-        go.transform.SetParent(target.transform, false);
-        var rect = (RectTransform)go.transform;
-        rect.anchorMin = Vector2.one * .08f; rect.anchorMax = Vector2.one * .92f;
-        rect.offsetMin = rect.offsetMax = Vector2.zero;
-        for (int index = 0; index < 4; index++)
-        {
-            var edge = new GameObject("Edge", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            edge.transform.SetParent(rect, false);
-            var image = edge.GetComponent<Image>(); image.color = new Color(1f, .87f, .35f); image.raycastTarget = false;
-            var line = image.rectTransform;
-            line.anchorMin = index < 2 ? new Vector2(0f, index) : new Vector2(index - 2, 0f);
-            line.anchorMax = index < 2 ? new Vector2(1f, index) : new Vector2(index - 2, 1f);
-            line.sizeDelta = index < 2 ? new Vector2(0f, 1.5f) : new Vector2(1.5f, 0f);
-            line.anchoredPosition = Vector2.zero;
-        }
+        if (target != null) SetSupportCocoon(target, active);
     }
 
     private void ClearAdvancedFusionState()
     {
+        ClearSupportSkillVfx();
         fusionTurn = 0; grassSplits.Clear(); rainZones.Clear();
         foreach (GameObject marker in rainMarkers.Values) if (marker != null) Destroy(marker);
         rainMarkers.Clear();
@@ -72,14 +55,20 @@ public partial class BattleManager
                     {
                         var enemy = opponents[Random.Range(0, opponents.Count)];
                         Vector2Int next = enemy.gridPos + BattleRangeService.NormalizeDirection(unit.gridPos - enemy.gridPos);
-                        if (TryFusionDisplace(enemy, next)) AddLog($"{unit.DisplayName} の磁力で1マス引き寄せた！");
+                        if (TryFusionDisplace(enemy, next))
+                        {
+                            PlaySupportMagnet(unit, enemy);
+                            AddLog($"{unit.DisplayName} の磁力で1マス引き寄せた！");
+                        }
                     }
                     break;
                 case SkillType.Fortress:
                     if (turn % 2 == 1)
                         foreach (BattleCharacter enemy in opponents.OrderBy(_ => Random.value).Take(2).ToArray())
                         {
-                            PlayElementEffect(enemy, "砲撃", new Color(1f, .65f, .3f));
+                            StartCoroutine(SpriteProjectileVfxRoutine(unit.transform as RectTransform,
+                                enemy.transform as RectTransform, "Gun", useArc: true));
+                            PlaySupportBurst(enemy, "MortarImpact", .65f);
                             enemy.TakeDamage(Mathf.Max(1, Mathf.RoundToInt(unit.GetEffectiveAttack(this) * .5f)),
                                 this, unit, actionLabel: "要塞の迫撃砲");
                         }
@@ -105,7 +94,7 @@ public partial class BattleManager
             else if (face <= 4) friend.DiceDefensePercent = 20;
             else friend.ApplyAttackBuff(BattleAttackBuff.Dice, 20, 1);
         }
-        PlayElementEffect(dice, face.ToString(), new Color(1f, .85f, .4f));
+        PlaySupportDice(dice, face);
         AddLog($"{dice.DisplayName} の賽子【{face}】！ {(face <= 2 ? "全体回復" : face <= 4 ? "防御+20%" : "攻撃+20%")}");
     }
 
@@ -114,6 +103,7 @@ public partial class BattleManager
         int amount = Mathf.Min(unit.maxHP - unit.currentHP, Mathf.Max(1, Mathf.RoundToInt(unit.maxHP * rate)));
         if (amount <= 0) return;
         unit.currentHP += amount; unit.UpdateHPBar(); PlayDamageVfx(unit, amount, isHealing: true);
+        PlaySupportBurst(unit, "RainDrops", .6f, .65f);
     }
 
     public void CastRain(BattleCharacter caster, Vector2Int center)
@@ -141,11 +131,13 @@ public partial class BattleManager
         { if (rainMarkers[cell] != null) Destroy(rainMarkers[cell]); rainMarkers.Remove(cell); }
         foreach (var cell in cells.Where(cell => !rainMarkers.ContainsKey(cell)))
         {
-            var go = new GameObject("RainArea", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            var go = new GameObject("RainArea", typeof(RectTransform), typeof(CanvasRenderer), typeof(RawImage));
             go.transform.SetParent(gridCells[cell.x, cell.y], false); go.transform.SetAsFirstSibling();
             var rect = (RectTransform)go.transform; rect.anchorMin = Vector2.zero; rect.anchorMax = Vector2.one;
             rect.offsetMin = rect.offsetMax = Vector2.zero;
-            var image = go.GetComponent<Image>(); image.color = new Color(.15f, .75f, 1f, .22f); image.raycastTarget = false;
+            var image = go.GetComponent<RawImage>();
+            image.texture = Resources.Load<Texture2D>("VFX/SupportSkills/RainRipple");
+            image.color = new Color(1f, 1f, 1f, .7f); image.raycastTarget = false;
             rainMarkers[cell] = go;
         }
     }
@@ -182,6 +174,7 @@ public partial class BattleManager
         copy.SetBattleVitals(hp, sand ? hp : source.currentHP, attack, defense);
         copy.IsGenerated = true; copy.Summoner = sand ? source : null;
         copy.LineageId = source.LineageId; copy.EligibleTurn = fusionTurn + 1;
+        PlaySupportBurst(copy, sand ? "SandBloom" : "GrassSprout", .7f);
         AddLog($"{source.DisplayName} が{(sand ? "砂の分身を生成" : "分裂")}！");
         return copy;
     }

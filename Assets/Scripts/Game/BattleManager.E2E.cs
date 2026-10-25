@@ -82,6 +82,11 @@ public partial class BattleManager
         return new BattleE2EBridge.BattleState
         {
             active = gameObject.activeInHierarchy,
+            supportVfxCount = supportRoots.Count,
+            supportTextures = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Select(
+                System.Linq.Enumerable.Where(GetComponentsInChildren<UnityEngine.UI.RawImage>(),
+                    image => image.texture != null && image.color.a > .05f
+                        && image.GetComponentInParent<SupportSkillVfxLifetime>() != null), image => image.texture.name)),
             deploying = IsDeploying,
             fusionOpen = fusionView != null,
             conflicts = fusionResolution?.conflicts.Count ?? 0,

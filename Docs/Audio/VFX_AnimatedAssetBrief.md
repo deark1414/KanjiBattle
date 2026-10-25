@@ -51,6 +51,13 @@ Create animated transparent sprite assets that make the simple kanji characters 
 - 風鈴は既存の波紋と独立音符を全味方へ展開する。共用素材は変更せずコピーを使う。全て独立した確認用草案で、ゲームのダメージ・確率・戦闘ルールは変更しない。
 - 計36素材・25系統の動作例を制作。素材の透過・余白・ドット整合、4方向、PC／スマホ、肩代わり・返還の順序と鉄の3形態、風鈴の音符が見切れないことを検査。対象25系統の未制作は0、本番未接続の草案25系統という状態。
 
+## 甲羅の粗粒化と本番接続: 2026-10-25
+
+- 甲羅は既存の緑の甲羅の形を保ちつつ、64px相当の粗いドット・少ない色・大きい色面へ変更する。元モチーフは上書きしない。
+- 承認された追加スキル素材をResourcesへ昇格し、成功したスキル・実際の対象・実際の出目へ接続する。演出用乱数はUnityの戦闘乱数を消費しない。
+- 炭は被弾後の実際の燃焼状態、繭は実際の保護状態へ連動。防御オーバーレイは対象を追従し、死亡・戦闘終了で残らないようにする。
+- 未使用画像の削除は参照とGUIDを監査してから行う。旧仕様書・制作記録は現行資料と履歴を分け、根拠なく削除しない。
+
 ## Runtime Presentation Update: 2026-09-20
 
 - In battle, default to one approved opaque representative sprite per effect and animate that single sprite with runtime position, rotation, scale, and fade. This avoids the frame-switching and slice-boundary failures previously observed in WebGL. When an attack defeats a character, keep that character visible until its skill VFX has completed, while removing it from gameplay targeting immediately.

@@ -24,6 +24,7 @@ public static class FusionSupportExecutor
                     target.currentHP += amount;
                     target.UpdateHPBar();
                     battle.PlayDamageVfx(target, amount, isHealing: true);
+                    battle.PlaySupportBurst(target, "RainDrops", .6f, .65f);
                     battle.AddLog($"{source.DisplayName} の守護回復！ {target.DisplayName} を {amount} 回復");
                 }
             }
@@ -34,6 +35,7 @@ public static class FusionSupportExecutor
                     .OrderBy(unit => BattleRangeService.Distance(source.gridPos, unit.gridPos))
                     .ThenBy(unit => unit.InstanceId).FirstOrDefault();
                 recipient?.ApplyAttackBuff(BattleAttackBuff.Warrior, 20, 2);
+                if (recipient != null) battle.PlaySupportBurst(recipient, "BellEcho", .7f);
                 battle.PlayElementEffect(source, "鼓舞", new Color(1f, 0.7f, 0.35f));
                 battle.AddLog($"{source.DisplayName} の鼓舞！ 自分と味方の攻撃+20%");
             }
@@ -43,7 +45,7 @@ public static class FusionSupportExecutor
                 foreach (BattleCharacter target in friends.Where(unit => IsForgeTarget(unit.data)))
                 {
                     target.ApplyAttackBuff(BattleAttackBuff.Forge, 25, 3);
-                    battle.PlayElementEffect(target, "武器強化", new Color(1f, 0.7f, 0.35f));
+                    battle.PlaySupportForge(target);
                     count++;
                 }
                 if (count > 0) battle.AddLog($"{source.DisplayName} の鍛造！ 武器{count}体の攻撃+25%");

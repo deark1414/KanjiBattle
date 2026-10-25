@@ -42,6 +42,8 @@ public static class FusionReactionRules
             && (long)target.currentHP * 4 <= (long)target.maxHP * 3) battle?.SplitGrass(target);
         if (skill == SkillType.Mountain && !attacker.isDead && SkillExecutor.RollSkillActivation(30))
         {
+            battle?.PlaySupportBurst(target, "MountainRebound", .6f);
+            battle?.PlaySupportLink(target, attacker, "MortarShell", .1f);
             battle?.AddLog($"{target.DisplayName} の山びこ！ {loss}を返した");
             attacker.TakeDamage(loss, battle, target, ignoreDefense: true, origin: BattleDamageOrigin.Returned);
         }

@@ -12,7 +12,7 @@ const layout=require('../../Assets/Art/Drafts/VFX/SupportSkills/layout.json');
 
 async function main(){
   fs.mkdirSync(directory,{recursive:true});
-  const report={status:'draft-only',assets:[],checks:[],errors:[]};
+  const report={status:'reference-preview',assets:[],checks:[],errors:[]};
   assert.equal(manifest.generated.length,36);
   assert.deepEqual(new Set(layout.entries.map(e=>e.key)),new Set(manifest.generated.map(e=>e.key)));
   for(const entry of manifest.generated.filter(e=>e.reuse)){
@@ -161,7 +161,7 @@ async function main(){
     await page.evaluate(()=>{supportVfxPreview.renderAt(.8);document.querySelector('.controls').remove();document.querySelector('main').style.cssText='display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px';for(const a of document.querySelectorAll('article')){a.querySelector('canvas').style.display='none';a.querySelector('.row').style.gridTemplateColumns='1fr';}});
     await page.screenshot({path:path.join(directory,'three-sprites.png'),fullPage:true});
     assert.deepEqual(report.errors,[]);
-    report.checks.push('36 RGBA sprites including 16 unchanged reused originals; fixed sizes, transparent margin, 128px grid and clear bell/cocoon centers; guard uses shell instead of shield');
+    report.checks.push('36 RGBA sprites including 15 unchanged reused originals; fixed sizes, transparent margin, 64/128px grids and clear bell/cocoon centers; guard uses coarse shell instead of shield');
     report.checks.push('Forge hammer precedes impact/heat and cooling; magnet wave emission precedes pull');
     report.checks.push('40 bell bursts vary with 2-3 separate notes; no reroll while paused, no kanji overlap or clipping in four directions; replay changes scatter');
     report.checks.push('25 skill examples change at 0/90/180/270 degrees; seeded dice face images match outcomes and three effect types, remain fixed on pause and after settling; coal stays hot after the ignition burst');

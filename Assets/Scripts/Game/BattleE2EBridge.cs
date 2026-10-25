@@ -28,6 +28,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public int conflicts; public int previewLinks; public string fusionSummary;
         public string[] logs;
         public string resultText; public bool resultTextOverflow;
+        public string[] supportTextures; public int supportVfxCount;
     }
     [Serializable] private sealed class Snapshot
     {
@@ -62,6 +63,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "fundFusion": GameManager.Instance.AddStagePoints(10); break;
                 case "corruptPlan": PlayerProgressStore.SetString("KanjiBattle.Fusion.AdjacentChoices.v2", "{broken"); PlayerProgressStore.Save(); break;
                 case "snapshot": break;
+                case "supportVfxProbe": FindFirstObjectByType<BattleManager>().ProbeSupportVfx(request.value); break;
                 case "supportProbe": FindFirstObjectByType<BattleManager>().ProbeSupportSkills(); break;
                 case "defenseProbe": FindFirstObjectByType<BattleManager>().ProbeDefenseSkills(); break;
                 case "recruitSupport": ProbeRecruitment(new[] { 27, 28, 29 }, 35); break;

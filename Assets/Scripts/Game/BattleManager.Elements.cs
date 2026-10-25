@@ -9,6 +9,16 @@ public partial class BattleManager
     public void PlayElementEffect(BattleCharacter target, string label, Color color)
     {
         if (target == null) return;
+        string sprite = label switch
+        {
+            "追風" or "移動+1" or "向風" => "WindGust",
+            "鼓舞" => "BellEcho",
+            "回避" => "LanternFlame",
+            "燃焼" => "CoalEmbers",
+            _ => null
+        };
+        if (sprite != null) PlaySupportBurst(target, sprite, .65f);
+        if (label == "燃焼") RefreshSupportState(target);
         target.PlayCastEffect(color);
         ShowFloatingText(target, label, color);
         if (gridCells != null)

@@ -118,6 +118,7 @@ public partial class BattleManager : MonoBehaviour
     {
         ClearDeploymentView();
         StopAllCoroutines();
+        ClearSupportSkillVfx();
         CleanupBattleVfx();
     }
 
@@ -562,6 +563,7 @@ public partial class BattleManager : MonoBehaviour
         gridMap[pos] = bc;
         occupied.Add(pos);
         bc.UpdateDirection(ally ? Vector2Int.up : Vector2Int.down);
+        RefreshSupportState(bc);
         if (ally) allies.Add(bc); else enemies.Add(bc);
 
         // ボス召喚演出はラスボスステージの登場時だけ。通常ステージや通常の敵生成では出さない。

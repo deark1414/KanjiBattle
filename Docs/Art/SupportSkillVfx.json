@@ -1,6 +1,6 @@
 {
   "date": "2026-10-25",
-  "status": "レビュー前・ゲーム未接続",
+  "status": "ローカルゲーム接続済み・実戦演出調整中",
   "tool": "Built-in image_gen",
   "mode": "single-sprite-per-state",
   "generated": [
@@ -489,15 +489,29 @@
     },
     {
       "key": "GuardShell",
-      "name": "甲の甲羅",
+      "name": "粗いドットの甲羅",
       "axis": "overlay",
-      "logicalWidth": 128,
-      "logicalHeight": 128,
-      "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_14.png",
-      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_14.png",
+      "logicalWidth": 64,
+      "logicalHeight": 64,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/GuardShellCoarse.png",
       "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GuardShell.png",
-      "reuse": true,
-      "prompt": "既存の甲羅モチーフを変更せず再利用。盾は使わない。"
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-4f3af46a-4dfc-4f27-9dac-276e26da7c6a.png",
+      "prompt": "Edit target: this green turtle carapace image. Keep the same recognizable low domed green turtle shell, olive polygon seams, three-quarter front view, and no animal body. Simplify to MUCH COARSER intentional pixel art at exactly a 64x64 logical pixel style: large square pixel clusters, 8-12 flat colors total, broad simple polygon plates, hard pixel stair steps, NO fine mottling, no fine texture, no smooth gradients, no anti-aliasing, no glow or shadow halo. Existing shell is too detailed; make it read like an old game sprite. Entire shell fully visible centered with generous 15 percent transparent margin. Genuine RGBA transparent background. No text, no turtle legs or head, no shield handle, no scenery. One complete sprite, not a sheet.",
+      "refs": [
+        "Assets/Resources/UI/PieceMotifs/Ready/Motif_14.png"
+      ],
+      "previousVersion": {
+        "key": "GuardShell",
+        "name": "甲の甲羅",
+        "axis": "overlay",
+        "logicalWidth": 128,
+        "logicalHeight": 128,
+        "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_14.png",
+        "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_14.png",
+        "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GuardShell.png",
+        "reuse": true,
+        "prompt": "既存の甲羅モチーフを変更せず再利用。盾は使わない。"
+      }
     }
   ],
   "sequence": {

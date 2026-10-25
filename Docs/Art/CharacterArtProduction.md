@@ -16,7 +16,7 @@
 - 砂は砂山・砂粒のキャラクター。人型やゴーレムにせず、分身も表示名は「砂」とする。「砂偶」は使用しない。スキル名は「砂の分身」で、分身の性能・生成条件は変更しない。
 - コマは元の生成処理を参照した`render-classic-pieces.js`とYuji Boku書体で描画する。元画像を使う15系列は一切描き直さない。新規の二文字は縦組み。ライセンスを同梱する。
 - 双剣は既存の剣に合わせた青緑の直線的な両刃剣2本。戦士も同じ直剣を装備。磁石は赤いU字型と銀色の極。賽子は数字キャラに合わせた木製・茶色の目に変更。
-- 修正原画は内蔵image_genによる編集。参照・全プロンプト・原画保存先は`CharacterArtRefinements.json`、原画は`Assets/Art/Generated/CharacterMotifsReviewed/`に保存。既存画像や前案は削除しない。
+- 修正原画は内蔵image_genによる編集。参照・全プロンプト・原画保存先は`CharacterArtRefinements.json`、原画は`Assets/Art/Generated/CharacterMotifsReviewed/`に保存。採用元画像は維持する。2026-10-25の明示許可による旧案削除と復元方法は[画像整理記録](AssetCleanup.md)を参照。
 - 賽子は前段で形状と目の重複を修正。最新レビューでは各面の2・3の目を面内の対角線へ揃えた`DiceDiagonal.png`を採用。画面上の単なる斜めの列ではなく、面の頂点から反対側の頂点への線を基準とする。上面では奥と手前の頂点を結ぶ方向に並ぶ。配置ガイドは`References/DicePipPlacement.png`、最終画像の編集は内蔵image_genで実施。
 - 影は人型・顔・手足を廃止し、平たい暗色の影へ簡素化（`ShadowSimple.png`）。繭は葉・草・枝のない白い蚕の繭（`SilkwormCocoon.png`）。灯は行灯ではなく一本の蝋燭（`Candle.png`）。雨は雲を除き、雨粒と小さな波紋だけ（`RainNoCloud.png`）。キャラ名・スキル・性能・コマは変更しない。
 - 追加レビューで鈴は無地の真鍮製へ変更し、模様・赤い紐・房飾りを除去（`BellPlain.png`）。糸は白糸と木製糸巻きだけにし赤い結び紐を除去（`ThreadPlain.png`）。牛のモチーフは丑で使用中の画像を対象とし、手綱・房飾りを除去（`OxPlain.png`）。山は丸みのある稜線、左が急で右が長くなだらかな左右非対称へ変更（`MountainNatural.png`）。散弾はラッパ状の古式銃ではなく、3つの銃口が見える三銃身・木製ポンプ式へ変更（`ScatterPumpTriple.png`）。他の画像と性能は変更しない。
@@ -28,7 +28,7 @@
 - 現行の生成プロンプトと原画の記録: `CharacterArtPixelProduction.json`
 - 新規原画（使用しない再制作候補も保存）: `Assets/Art/Generated/CharacterMotifsPixel/`
 - 再利用する以前のモチーフ: `Assets/Resources/UI/PieceMotifs/Motif_*.png`のうち現名簿にある20組
-- 初回制作の履歴: `CharacterArtProduction.json`、`Assets/Art/Generated/CharacterMotifs/`
+- 初回制作の履歴: `CharacterArtProduction.json`。旧`Assets/Art/Generated/CharacterMotifs/`の27画像は削除済み。[画像整理記録](AssetCleanup.md)に対象とGitからの復元方法を記録。
 - 実行用のモチーフ: `Assets/Resources/UI/PieceMotifs/`
 - 実行用のコマ: `Assets/Resources/UI/CharacterPieces/`
 - 一覧確認: `Docs/Art/character-art-gallery.html`、ローカルURL `http://127.0.0.1:8797/`

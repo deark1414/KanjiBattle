@@ -108,7 +108,11 @@ public partial class BattleManager
         BeginSkillImpactWindow(0.5f);
         HighlightSkillRange(caster, target, skill, Color.yellow);
         caster.PlayCastEffect(Color.yellow);
-        if (skill == SkillType.DoubleSlash) PlayWeaponMotionVfx(caster, target, SkillType.Slash);
+        if (skill == SkillType.DoubleSlash)
+        {
+            PlayWeaponMotionVfx(caster, target, SkillType.Slash);
+            StartCoroutine(RepeatFusionSword(caster, target));
+        }
         foreach (Vector2Int cell in BattleRangeService.GetEffectCells(skill, caster.gridPos, target.gridPos, cols, rows))
         {
             if (!gridMap.TryGetValue(cell, out BattleCharacter victim) || victim == null || victim.isAlly == caster.isAlly || victim.isDead) continue;
@@ -118,6 +122,13 @@ public partial class BattleManager
                 StartCoroutine(SpriteProjectileVfxRoutine(caster.transform as RectTransform, victim.transform as RectTransform, "Gun", useArc: false));
         }
         GameAudio.Instance.PlaySkillSound(skill == SkillType.DoubleSlash ? SkillType.Slash : SkillType.Gun);
+    }
+
+    private System.Collections.IEnumerator RepeatFusionSword(BattleCharacter caster, BattleCharacter target)
+    {
+        yield return BattleWait(.16f);
+        if (caster != null && target != null && !caster.isDead)
+            PlayWeaponMotionVfx(caster, target, SkillType.Slash);
     }
 
     private void OnDestroy() => ClearFusionRuntimeData();

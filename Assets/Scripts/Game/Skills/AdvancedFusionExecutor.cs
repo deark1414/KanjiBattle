@@ -33,6 +33,7 @@ public static class AdvancedFusionExecutor
             .OrderByDescending(unit => unit.gridPos.x * direction.x + unit.gridPos.y * direction.y).ToArray();
         foreach (BattleCharacter victim in victims)
         {
+            battle.PlaySupportLink(caster, victim, "WaveCrest");
             battle.PlayElementEffect(victim, "波", new Color(.35f, .8f, 1f));
             victim.TakeDamage(Mathf.Max(1, Mathf.RoundToInt(caster.GetEffectiveAttack(battle)
                 * caster.GetEffectiveSkillPower() * .8f)), battle, caster, actionLabel: "波の押し流し");
