@@ -348,7 +348,7 @@
     {
       "id": 30,
       "name": "丑",
-      "source": "Assets/Art/Generated/CharacterMotifsReviewed/OxPlain.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/HolsteinPixel.png",
       "resource": "UI/PieceMotifs/Ready/Motif_30",
       "piece": "UI/CharacterPieces/Piece_30",
       "enemyPiece": "UI/CharacterPieces/Piece_30_Enemy",
@@ -358,7 +358,8 @@
       "height": 1,
       "aspect": 1,
       "scale": 1.18,
-      "rotation": 0
+      "rotation": 0,
+      "logicalSize": 64
     },
     {
       "id": 31,
@@ -378,7 +379,7 @@
     {
       "id": 32,
       "name": "風",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Wind.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/WindLeftToRight.png",
       "resource": "UI/PieceMotifs/Ready/Motif_32",
       "piece": "UI/CharacterPieces/Piece_32",
       "enemyPiece": "UI/CharacterPieces/Piece_32_Enemy",
@@ -513,7 +514,7 @@
     {
       "id": -1008,
       "name": "山",
-      "source": "Assets/Art/Generated/CharacterMotifsReviewed/MountainNatural.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/MountainOrganicPixel.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1008",
       "piece": "UI/CharacterPieces/Piece_F1008",
       "enemyPiece": "UI/CharacterPieces/Piece_F1008_Enemy",
@@ -523,7 +524,8 @@
       "height": 1,
       "aspect": 1,
       "scale": 1.18,
-      "rotation": 0
+      "rotation": 0,
+      "logicalSize": 64
     },
     {
       "id": -1009,
@@ -543,7 +545,7 @@
     {
       "id": -1010,
       "name": "要塞",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Fortress.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/FortressAlignedCannons.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1010",
       "piece": "UI/CharacterPieces/Piece_F1010",
       "enemyPiece": "UI/CharacterPieces/Piece_F1010_Enemy",
@@ -603,7 +605,7 @@
     {
       "id": -1014,
       "name": "草",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Grass.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/GrassRooted.png",
       "resource": "UI/PieceMotifs/Ready/Motif_F1014",
       "piece": "UI/CharacterPieces/Piece_F1014",
       "enemyPiece": "UI/CharacterPieces/Piece_F1014_Enemy",

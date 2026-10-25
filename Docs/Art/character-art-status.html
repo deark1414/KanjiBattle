@@ -18,7 +18,7 @@ main{padding:20px 24px;max-width:1600px;margin:auto}h2{font-size:18px;margin:0 0
 <table class="overview"><tbody>
 <tr><th>コマ・モチーフ制作</th><td><span class="done">制作済み</span>：45組。味方コマ45・敵コマ45・モチーフ45。</td></tr>
 <tr><th>ゲームへの接続</th><td><span class="done">45組の参照を確認済み</span>：通常26＋敵専用の竜、融合17、砂の分身1。</td></tr>
-<tr><th>ドット絵・画像仕様</th><td><span class="done">新規25モチーフは128px論理グリッドに細密化</span>。コマは以前と同じ512px。既存20モチーフは元画像と表示範囲を維持。</td></tr>
+<tr><th>ドット絵・画像仕様</th><td><span class="done">新規23モチーフは128px、丑と山は64px相当</span>。コマは以前と同じ512px。既存20モチーフは元画像と表示範囲を維持。</td></tr>
 <tr><th>召喚・選択時の表示</th><td><span class="done">代表シナリオで確認済み</span>：出現してコマへ戻る。編成では選択対象のみ表示。</td></tr>
 <tr><th>砂の表記と分身</th><td><span class="done">修正・動作確認済み</span>：本体も分身も「砂」、砂山のモチーフ。</td></tr>
 <tr><th>全キャラの個別目視</th><td><span class="pending">未完</span>：全45組の召喚・敵表示・重なり・攻撃との整合を個別に見切ってはいない。</td></tr>
@@ -27,6 +27,7 @@ main{padding:20px 24px;max-width:1600px;margin:auto}h2{font-size:18px;margin:0 0
 <tr><th>指定4種の修正</th><td><span class="done">双剣・戦士は既存と揃えた直剣、磁石はU字型、賽子は数字と揃えた木製へ変更</span>。</td></tr>
 <tr><th>追加5種の修正</th><td><span class="done">賽子の目を面の対角線へ統一。影は非人型、繭は植物なしの蚕の繭、灯は蝋燭、雨は雲なし</span>。</td></tr>
 <tr><th>シンプル化・形状修正</th><td><span class="done">鈴・糸・丑の装飾を除去。山は左右非対称の稜線、散弾は三銃身ポンプ式へ変更</span>。</td></tr>
+<tr><th>自然な表現への改訂</th><td><span class="done">丑はホルスタイン、山は岩肌の繰り返しを減らして粗いドットに。草は土に根付き、要塞の砲は平行、風は左から右へ</span>。</td></tr>
 <tr><th>攻撃エフェクトとの整合</th><td><span class="pending">未完</span>：少なくとも剣・槌・槍は従来の攻撃素材を使用。召喚と別の画像系統。</td></tr>
 <tr><th>進化・超融合・究極融合</th><td><span class="pending">今回の画像セットには未収録</span>。</td></tr>
 <tr><th>外部公開</th><td><span class="pending">今回分は未公開</span>：最新版はローカルプレビューのみ。</td></tr>
@@ -35,7 +36,7 @@ main{padding:20px 24px;max-width:1600px;margin:auto}h2{font-size:18px;margin:0 0
 <div class="toolbar"><select id="group" aria-label="画像の区分"><option value="">すべて</option><option>既存系列</option><option>役割・題材変更</option><option>新キャラ</option><option>融合</option><option>分身</option></select><input id="search" type="search" aria-label="キャラクター名" placeholder="キャラクター名"><span id="count"></span></div>
 <div class="scroll"><table class="comparison"><thead><tr><th>キャラ・区分</th><th>以前のコマ<br><small>味方／敵</small></th><th>現在使用中のコマ<br><small>味方／敵</small></th><th>以前のモチーフ</th><th>現在使用中のモチーフ</th><th>制作・接続・残り</th></tr></thead><tbody id="rows"></tbody></table></div>
 <p class="note">「以前」は今回のコマ・モチーフ制作に入る前の画像。「役割・題材変更」の旧画像は参考であり、そのまま現キャラへ戻す対象とは限りません。画像の参照が正しいことと、デザインの採用が確定していることは別です。</p>
-<p class="note">2026-10-25：全45組の画像参照を確認。最新の鈴・糸・丑・山・散弾は選択時表示または召喚・消去の5件が成功（登録70件の全件再実行ではありません）。各行の全体的な個別目視は未完とし、代表テストの成功を全キャラの確認完了に読み替えていません。</p>
+<p class="note">2026-10-25：全45組の画像参照を確認。最新の丑・山・草・要塞・風は選択時表示または召喚・消去の5件が成功（登録73件の全件再実行ではありません）。各行の全体的な個別目視は未完とし、代表テストの成功を全キャラの確認完了に読み替えていません。</p>
 <p id="error" role="alert"></p>
 </main>
 <script>

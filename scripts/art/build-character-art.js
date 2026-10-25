@@ -63,7 +63,9 @@ async function main() {
       const source = generated.get(item.id === -20000 ? -1013 : item.id);
       assert(source,`Missing motif for ${item.name}`);
       const png = fs.readFileSync(path.join(root,source)).toString('base64');
-      const result = await page.evaluate(async ({item,png}) => {
+      const logicalSize = refinements.generated.find(entry=>entry.id===item.id)?.logicalSize ?? 128;
+      assert([64,128].includes(logicalSize),'Unsupported motif logical size');
+      const result = await page.evaluate(async ({item,png,logicalSize}) => {
         const image = new Image(); image.src = `data:image/png;base64,${png}`; await image.decode();
         const source = document.createElement('canvas'); source.width=image.width;source.height=image.height;
         const sc = source.getContext('2d',{willReadFrequently:true});sc.drawImage(image,0,0);
@@ -78,20 +80,20 @@ async function main() {
         if(!opaque || !clear)throw Error(`Not an isolated transparent image: ${item.name}`);
         const motif=document.createElement('canvas');motif.width=motif.height=512;
         const mc=motif.getContext('2d');mc.imageSmoothingEnabled=false;
-        const w=right-left+1,h=bottom-top+1,s=108/Math.max(w,h);
-        const logical=document.createElement('canvas');logical.width=logical.height=128;
+        const w=right-left+1,h=bottom-top+1,s=Math.round(logicalSize*108/128)/Math.max(w,h);
+        const logical=document.createElement('canvas');logical.width=logical.height=logicalSize;
         const lc=logical.getContext('2d');lc.imageSmoothingEnabled=false;
         const dw=Math.max(1,Math.round(w*s)),dh=Math.max(1,Math.round(h*s));
-        lc.drawImage(image,left,top,w,h,Math.floor((128-dw)/2),Math.floor((128-dh)/2),dw,dh);
+        lc.drawImage(image,left,top,w,h,Math.floor((logicalSize-dw)/2),Math.floor((logicalSize-dh)/2),dw,dh);
         mc.drawImage(logical,0,0,512,512);
         return {motif:motif.toDataURL('image/png').split(',')[1],opaque,clear,bounds:{left,top,right,bottom}};
-      },{item,png});
+      },{item,png,logicalSize});
       const motifPath=`${motifDirectory}/Motif_${token}.png`;
       fs.writeFileSync(path.join(root,motifPath),Buffer.from(result.motif,'base64'));
       entries.push({...item,source,resource:motifPath.replace('Assets/Resources/','').replace('.png',''),
         piece:allyPath.replace('Assets/Resources/','').replace('.png',''),
         enemyPiece:enemyPath.replace('Assets/Resources/','').replace('.png',''),
-        u:0,v:0,width:1,height:1,aspect:1,scale:1.18,rotation:0});
+        u:0,v:0,width:1,height:1,aspect:1,scale:1.18,rotation:0,...(logicalSize===64?{logicalSize}: {})});
       checks.push({id:item.id,name:item.name,source,bounds:result.bounds,transparentPixels:result.clear});
     }
     fs.writeFileSync(path.join(root,'Assets/Resources/UI/PieceMotifs/catalog.json'),JSON.stringify({entries},null,2)+'\n');

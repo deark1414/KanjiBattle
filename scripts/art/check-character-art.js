@@ -34,13 +34,16 @@ async function main(){
       assert(fs.readFileSync(path.join(root,'Assets/Resources',entry[key]+'.png')).equals(fs.readFileSync(path.join(root,original))),entry.name+' must use original piece');
     }
     if(key!=='resource')continue;
-    const block=4;
+    const logicalSize=entry.logicalSize??128;
+    assert([64,128].includes(logicalSize),entry.name+' unsupported logical grid');
+    const block=512/logicalSize;
     for(let y=0;y<size;y++)for(let x=0;x<size;x++)for(let channel=0;channel<4;channel++)
       assert.equal(png.data[(y*size+x)*4+channel],png.data[((y-y%block)*size+x-x%block)*4+channel],entry.name+' inconsistent pixel grid');
   }
   assert.equal(entries.filter(e=>reviewed.some(old=>old.id===e.id)).length,20);
   report.checks.push('45 complete sets; 135 nonblank PNGs with alpha; 20 reviewed motifs retain exact resource and crop references');
-  report.checks.push('25 new motifs use a 128px logical grid; all 90 pieces are 512px classic wood pieces; unchanged-name legacy pieces match original bytes');
+  assert.deepEqual(entries.filter(entry=>entry.logicalSize===64).map(entry=>entry.id).sort((a,b)=>a-b),[-1008,30]);
+  report.checks.push('23 new motifs use a 128px logical grid; ox and mountain use 64px; all 90 pieces are 512px classic wood pieces; unchanged-name legacy pieces match original bytes');
   const server=await serve(0);const browser=await chromium.launch();
   try{
     const page=await browser.newPage({viewport:{width:1440,height:1000}});

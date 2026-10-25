@@ -1,6 +1,6 @@
 {
   "date": "2026-10-25",
-  "note": "以前のモチーフ20組・コマを維持。新規モチーフは128px論理解像度。最新レビューで鈴・糸・丑の装飾を削減、山は左右非対称、散弾は三銃身ポンプ式に変更。",
+  "note": "コマ・旧20モチーフを維持。丑はホルスタイン、山は不規則な地形にし両者のみ64px相当。草は土に根付き、要塞の砲は平行、風は左から右。その他新規23組は128px相当。",
   "rows": [
     {
       "id": 1,
@@ -888,7 +888,7 @@
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_30.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_30_Enemy.png",
       "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_30.png",
-      "source": "Assets/Art/Generated/CharacterMotifsReviewed/OxPlain.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/HolsteinPixel.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -912,7 +912,8 @@
       },
       "reusedMotif": false,
       "classicPieceReused": false,
-      "pieceStyle": "旧意匠に合わせた512pxコマ"
+      "pieceStyle": "旧意匠に合わせた512pxコマ",
+      "logicalSize": 64
     },
     {
       "id": 31,
@@ -954,7 +955,7 @@
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_32.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_32_Enemy.png",
       "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_32.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Wind.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/WindLeftToRight.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -1251,7 +1252,7 @@
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1008.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1008_Enemy.png",
       "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1008.png",
-      "source": "Assets/Art/Generated/CharacterMotifsReviewed/MountainNatural.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/MountainOrganicPixel.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -1275,7 +1276,8 @@
       },
       "reusedMotif": false,
       "classicPieceReused": false,
-      "pieceStyle": "旧意匠に合わせた512pxコマ"
+      "pieceStyle": "旧意匠に合わせた512pxコマ",
+      "logicalSize": 64
     },
     {
       "id": -1009,
@@ -1317,7 +1319,7 @@
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1010.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1010_Enemy.png",
       "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1010.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Fortress.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/FortressAlignedCannons.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
@@ -1449,7 +1451,7 @@
       "allyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1014.png",
       "enemyPiece": "Assets/Resources/UI/CharacterPieces/Piece_F1014_Enemy.png",
       "motif": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1014.png",
-      "source": "Assets/Art/Generated/CharacterMotifsPixel/Grass.png",
+      "source": "Assets/Art/Generated/CharacterMotifsReviewed/GrassRooted.png",
       "motifWidth": 512,
       "motifHeight": 512,
       "matchesCatalog": true,
