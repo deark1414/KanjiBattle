@@ -101,6 +101,8 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "corruptPlan": PlayerProgressStore.SetString("KanjiBattle.Fusion.AdjacentChoices.v2", "{broken"); PlayerProgressStore.Save(); break;
                 case "snapshot": break;
                 case "defeatSide": FindFirstObjectByType<BattleManager>().DefeatSideForE2E(request.value=="ally");break;
+                case "waterBalanceProbe": FindFirstObjectByType<BattleManager>().ProbeWaterBalanceForE2E();break;
+                case "stalemate": FindFirstObjectByType<BattleManager>().SeedStalemateForE2E();break;
                 case "tutorialRoute":
                     switch(request.value)
                     {

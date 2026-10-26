@@ -5,7 +5,7 @@ using UnityEngine;
 
 public static class PlayerSkillRules
 {
-    public const int MaxTurns = 50;
+    public const int MaxTurns = 20;
     public const string SaveKey = "KanjiBattle.PlayerSkill.Plan.v1";
     public enum Effect { None, Attack, Guard, Heal }
     public sealed class Definition
@@ -47,7 +47,12 @@ public static class PlayerSkillRules
     {
         string json = PlayerProgressStore.GetString(SaveKey);
         if (string.IsNullOrEmpty(json)) return new Plan();
-        try { return JsonUtility.FromJson<Plan>(json) ?? new Plan { skillId=-1 }; }
+        try
+        {
+            var plan=JsonUtility.FromJson<Plan>(json) ?? new Plan { skillId=-1 };
+            if(Get(plan.skillId)!=null&&plan.turn>MaxTurns&&plan.turn<=50)plan.turn=MaxTurns;
+            return plan;
+        }
         catch (ArgumentException) { return new Plan { skillId=-1 }; }
     }
     public static void Save(Plan plan, int cleared)

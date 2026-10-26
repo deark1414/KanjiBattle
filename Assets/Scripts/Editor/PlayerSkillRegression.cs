@@ -12,11 +12,16 @@ public static class PlayerSkillRegression
         {
             PlayerSkillRules.ResetProgress();
             Check(PlayerSkillRules.Load().skillId==0,"unset is no skill");
-            Check(PlayerSkillRules.IsValid(new(){skillId=1,turn=50},0),"initial attack and final turn");
+            Check(PlayerSkillRules.MaxTurns==20,"twenty-turn battle limit");
+            Check(PlayerSkillRules.IsValid(new(){skillId=1,turn=20},0),"initial attack and final turn");
             Check(!PlayerSkillRules.IsValid(new(){skillId=2,turn=1},4),"guard gated");
             Check(PlayerSkillRules.IsValid(new(){skillId=2,turn=1},5),"guard unlock");
             Check(!PlayerSkillRules.IsValid(new(){skillId=3,turn=1},9),"heal gated");
-            foreach(int turn in new[]{0,51,-1}) Check(!PlayerSkillRules.IsValid(new(){skillId=1,turn=turn},40),"invalid turn");
+            foreach(int turn in new[]{0,21,50,51,-1}) Check(!PlayerSkillRules.IsValid(new(){skillId=1,turn=turn},40),"invalid turn");
+            PlayerProgressStore.SetString(key,"{\"skillId\":1,\"turn\":50}");
+            Check(PlayerSkillRules.Load().turn==20,"legacy late activation moves to final turn");
+            PlayerProgressStore.SetString(key,"{\"skillId\":1,\"turn\":999}");
+            Check(!PlayerSkillRules.IsValid(PlayerSkillRules.Load(),40),"corrupt late turn stays invalid");
             Check(!PlayerSkillRules.IsValid(new(){skillId=99,turn=1},40),"unknown skill");
             PlayerSkillRules.Save(new(){skillId=1,turn=3},0);
             Check(PlayerSkillRules.Load().turn==3,"save restore");
@@ -30,7 +35,7 @@ public static class PlayerSkillRegression
             Check(state.ReduceDamage(100)==70&&state.ReduceDamage(1)==1,"guard and minimum damage");
             state.EndTurn();Check(state.ReduceDamage(100)==100,"guard expires after enemy turn");
             state.Reset(new(){skillId=3,turn=1});Check(state.Begin(1,true)&&state.Fired&&!state.Active,"instant has no lingering effect");
-            state.Reset(new(){skillId=1,turn=50});state.Finish();Check(!state.Begin(50,true),"no activation after result");
+            state.Reset(new(){skillId=1,turn=20});state.Finish();Check(!state.Begin(20,true),"no activation after result");
             state.Reset(new(){skillId=1,turn=1});Check(!state.Fired&&state.Begin(1,true),"retry resets once flag");
             PlayerProgressStore.SetString(key,"{broken");Check(!PlayerSkillRules.IsValid(PlayerSkillRules.Load(),40),"corrupt save requires confirmation");
             PlayerSkillRules.ResetProgress();Check(PlayerSkillRules.Load().skillId==0,"reset clears plan");

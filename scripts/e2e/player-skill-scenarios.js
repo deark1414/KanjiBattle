@@ -71,14 +71,14 @@ module.exports=[
     async run(game){
       await game.deploy();await game.named('PlayerSkillSelection');await game.named('PlayerSkillOption_1');
       await game.named('PlayerSkillTurn');await game.page.keyboard.press('End');await game.page.waitForTimeout(100);
-      await game.page.keyboard.press('Backspace');await game.page.keyboard.type('50',{delay:100});await game.page.waitForTimeout(250);
-      await game.named('ApplyPlayerSkill');assert.equal(game.state.battle.playerSkillPlan.turn,50);
+      await game.page.keyboard.press('Backspace');await game.page.keyboard.type('20',{delay:100});await game.page.waitForTimeout(250);
+      await game.named('ApplyPlayerSkill');assert.equal(game.state.battle.playerSkillPlan.turn,20);
       await game.start();let state=await game.result();
       assert(!state.battle.playerSkillFired);
       assert(!state.battle.logs.some(text=>text.includes('プレイヤースキル【')));
       await game.named('RepeatStageButton');
       state=await game.wait(s=>!s.battle.result&&s.battle.battleId!==state.battle.battleId,'repeat did not start');
-      assert.equal(state.battle.playerSkillPlan.turn,50);assert(!state.battle.playerSkillFired);
+      assert.equal(state.battle.playerSkillPlan.turn,20);assert(!state.battle.playerSkillFired);
     }
   },
   {

@@ -616,8 +616,11 @@ public partial class BattleManager : MonoBehaviour
 
             foreach (var ally in new List<BattleCharacter>(allies))
             {
+                yield return WaitBattleSeconds(0f);
+                if (ResolveBattleBeforePlayerSkill()) yield break;
                 if (ally != null) DoAction(ally, "味方");
                 yield return BattleWait(ElementActionDelay(ally));
+                if (ResolveBattleBeforePlayerSkill()) yield break;
             }
             ElementSkillExecutor.EndSideTurn(this, true);
             FusionSupportExecutor.EndSideTurn(this, true);
@@ -625,15 +628,15 @@ public partial class BattleManager : MonoBehaviour
             ApplyNumberPassivesAtTurnStart("敵", enemies, turn, false);
             BeginAdvancedFusionTurn(false, turn);
             FusionSupportExecutor.BeginSideTurn(this, false, turn);
-                yield return WaitBattleSeconds(0f);
-                if (ResolveBattleBeforePlayerSkill()) yield break;
             ElementSkillExecutor.ApplyWind(this, false, impassableCells);
 
-                if (ResolveBattleBeforePlayerSkill()) yield break;
             foreach (var enemy in new List<BattleCharacter>(enemies))
             {
+                yield return WaitBattleSeconds(0f);
+                if (ResolveBattleBeforePlayerSkill()) yield break;
                 if (enemy != null) DoAction(enemy, "敵");
                 yield return BattleWait(ElementActionDelay(enemy));
+                if (ResolveBattleBeforePlayerSkill()) yield break;
             }
             ElementSkillExecutor.EndSideTurn(this, false);
             FusionSupportExecutor.EndSideTurn(this, false);
@@ -641,11 +644,8 @@ public partial class BattleManager : MonoBehaviour
 
             // 土の罠による継続ダメージ
             foreach (var bc in new List<BattleCharacter>(allies))
-                yield return WaitBattleSeconds(0f);
-                if (ResolveBattleBeforePlayerSkill()) yield break;
             {
                 if (bc != null && soilTrapCells.Contains(bc.gridPos) && bc.data.skillType != SkillType.Soil)
-                if (ResolveBattleBeforePlayerSkill()) yield break;
                 {
                     ResolveSoilTrapDamage(bc, "土の罠が沈み込んだ！");
                 }
@@ -659,6 +659,8 @@ public partial class BattleManager : MonoBehaviour
             }
 
 
+            if (ResolveBattleBeforePlayerSkill()) yield break;
+
             // 敵ドラゴン専用：確率で回復
             foreach (var enemy in new List<BattleCharacter>(enemies))
             {
@@ -668,8 +670,6 @@ public partial class BattleManager : MonoBehaviour
                     && enemy.data.skillType == SkillType.Dragon && !enemy.isAlly)
                 {
                     if (Random.value < 0.3f) // 30% の確率
-            if (ResolveBattleBeforePlayerSkill()) yield break;
-
                     {
                         int heal = Mathf.RoundToInt(enemy.maxHP * 0.1f); // 最大HPの10%
                         int beforeHP = enemy.currentHP;
@@ -704,7 +704,7 @@ public partial class BattleManager : MonoBehaviour
             }
             if (turn >= maxTurns)
             {
-                ShowResult("引き分け", Color.gray, false);
+                ShowResult($"引き分け（{maxTurns}ターン経過）", Color.gray, false);
                 yield break;
             }
 
@@ -1227,6 +1227,7 @@ public partial class BattleManager : MonoBehaviour
         while (time < duration)
         {
             if (charRect == null) yield break;
+            if (isPaused) { yield return null; continue; }
             time += Time.deltaTime;
             float t = Mathf.Clamp01(time / duration);
 
@@ -1234,7 +1235,6 @@ public partial class BattleManager : MonoBehaviour
             charRect.position = Vector3.Lerp(startWorld, endWorld, t); 
             charRect.SetAsLastSibling();
 
-            if (isPaused) { yield return null; continue; }
             Canvas canvas = charRect.GetComponent<Canvas>();
             if (canvas != null)
             {

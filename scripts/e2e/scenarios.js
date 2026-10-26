@@ -4,6 +4,20 @@ const groups = state => state.battle.plan?.groups || [];
 const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y})=>({id,x,y}));
 
 module.exports = [
+  {
+    id:'battle-turn-limit',name:'水の基礎50%回復と20ターンでの引き分け・報酬なし',fixture:'standard',viewport:{width:390,height:844},
+    async run(game){
+      await game.request('treeFresh');await game.request('treeCampaignDefault','1');await game.deploy();
+      await game.request('waterBalanceProbe');await game.request('stalemate');
+      const points=game.state.stagePoints;
+      await game.start();await game.result();
+      assert(!game.state.battle.won);assert(game.state.battle.resultText.includes('20ターン経過'));
+      const turns=game.state.battle.logs.filter(text=>text.includes('--- ターン'));
+      assert(turns.includes('--- ターン 20 ---')&&!turns.includes('--- ターン 21 ---'));
+      assert.equal(game.state.stagePoints,points);assert(game.state.battle.resultText.includes('今回の獲得なし'));
+      assert(!game.state.battle.resultTextOverflow);await game.screenshot('turn-limit-result');
+    }
+  },
   ...[{width:390,height:844},{width:844,height:390}].map(viewport=>({
     id:'battle-pause-'+viewport.width,name:'戦闘の共通バー・ターン途中停止・行動途中の全滅判定 '+viewport.width,fixture:'animals',viewport,
     async run(game){
