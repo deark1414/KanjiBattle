@@ -17,7 +17,6 @@ MonoBehaviour:
   chapterId: 2
   enemyPool:
   - {fileID: 11400000, guid: ba2cceab41d834210a14946bc2fe9339, type: 2}
-  - {fileID: 11400000, guid: a45a3f137c1464a39a5bcd33f5e6348f, type: 2}
   - {fileID: 11400000, guid: a8f9237dba00b460b8d915962812b47b, type: 2}
   - {fileID: 11400000, guid: 5461d3926e577437db81e4171e34682a, type: 2}
   - {fileID: 11400000, guid: 0eaca48f611824f8abf71128035a7864, type: 2}
@@ -27,9 +26,8 @@ MonoBehaviour:
   enemyPositions:
   - {x: 2, y: 1}
   - {x: 3, y: 1}
-  - {x: 1, y: 1}
   - {x: 2, y: 0}
-  - {x: 4, y: 1}
+  - {x: 1, y: 1}
   trapDamage: 7
   trapCount: 1
   reinforcementEnemy: []

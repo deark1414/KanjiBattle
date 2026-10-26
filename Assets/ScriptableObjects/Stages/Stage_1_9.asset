@@ -17,7 +17,7 @@ MonoBehaviour:
   chapterId: 2
   enemyPool:
   - {fileID: 11400000, guid: a45a3f137c1464a39a5bcd33f5e6348f, type: 2}
-  - {fileID: 11400000, guid: 72ba58126cfe041d8ac0dc6cf96169fc, type: 2}
+  - {fileID: 11400000, guid: a8f9237dba00b460b8d915962812b47b, type: 2}
   - {fileID: 11400000, guid: 5461d3926e577437db81e4171e34682a, type: 2}
   - {fileID: 11400000, guid: 1e8376bc251e144439579c16721a02dd, type: 2}
   rewardStagePoints: 6
