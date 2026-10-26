@@ -5,7 +5,20 @@ const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y
 
 module.exports = [
   {
-    id:'battle-turn-limit',name:'水の基礎50%回復と20ターンでの引き分け・報酬なし',fixture:'standard',viewport:{width:390,height:844},
+    id:'water-growth',name:'水の30%から60%への育成・実回復量・敵は30%のまま',fixture:'standard',viewport:{width:390,height:844},
+    async run(game){
+      await game.request('treeFresh');await game.request('treeAdvance','25');await game.request('treeFunds','500');
+      for(const id of ['c20','c20','k3_4','k3_6'])await game.request('treePurchase',id);
+      await game.page.waitForTimeout(700);await game.request();
+      await game.named('TreeBranch_3');await game.named('TreeNode_c20');
+      assert(['u20_4','u20_6','k3_4','k3_6'].every(id=>game.state.investmentOwned.includes(id)));
+      assert(!game.state.treeOverflow);await game.screenshot('water-max-growth');
+      await game.request('treeCampaignDefault','1');await game.deploy();await game.request('waterBalanceProbe','max');
+      await game.screenshot('water-recovery-probe');
+    }
+  },
+  {
+    id:'battle-turn-limit',name:'水の基礎30%回復と20ターンでの引き分け・報酬なし',fixture:'standard',viewport:{width:390,height:844},
     async run(game){
       await game.request('treeFresh');await game.request('treeCampaignDefault','1');await game.deploy();
       await game.request('waterBalanceProbe');await game.request('stalemate');

@@ -168,7 +168,7 @@ public static class SkillDescription
             SkillType.Soil => "周囲5x5の候補から最大2マスに土の罠を設置する。土以外が踏むと設置者の攻撃力に応じたダメージを受け、立ち続けるとターンごとに再びダメージを受ける。",
             SkillType.Fireball => "周囲2マスの敵に防御無視の火球を放つ。味方と水を越える。",
             SkillType.WoodPush => "敵を攻撃し、後方へ押し出す。",
-            SkillType.WaterHeal => "自分と隣接味方のうち、HP割合が最も低い負傷者を最大HPの基礎50%回復する。育成で増加。回復不要なら攻撃する。",
+            SkillType.WaterHeal => "自分と隣接味方のうち、HP割合が最も低い負傷者を最大HPの30%回復する。育成で最大60%。回復不要なら攻撃する。",
             SkillType.HorseCharge => "敵へ突進し、距離を詰めながら攻撃する。",
             SkillType.BirdRetreat => "攻撃後に後退し、距離を取る。",
             SkillType.TigerTwinClaw => "近くの敵に連続攻撃を行う。",

@@ -490,6 +490,7 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
     public float GetEffectiveSkillPower()
     {
         float power = data != null ? data.skillPower : 1f;
+        if(data?.skillType==SkillType.WaterHeal)return CharacterInvestment.WaterRecoveryRatio(data,SkillEffectMultiplier);
         return power*SkillEffectMultiplier;
     }
 

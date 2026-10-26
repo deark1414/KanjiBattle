@@ -30,6 +30,16 @@ public static class CharacterInvestmentRegression
                 Check(upgrades.All(s=>CastleTreeArt.Investment(s)!=null),"existing icons");
             }
             Check(!CharacterInvestment.Upgrades(db.GetById(10)).Contains(CharacterInvestment.Stat.Chance),"no chance node for guaranteed roles");
+            var water=db.GetById(20);
+            float Recovery()=>CharacterInvestment.WaterRecoveryRatio(water,CharacterInvestment.Effect(water));
+            Check(Mathf.Abs(Recovery()-.3f)<.0001f,"water base recovery 30 percent");
+            CharacterInvestment.Record("u20_4",4);Check(Mathf.Abs(Recovery()-.4f)<.0001f,"water first tier adds ten points");
+            CharacterInvestment.Record("u20_6",8);Check(Mathf.Abs(Recovery()-.5f)<.0001f,"water second tier adds ten points");
+            CharacterInvestment.Record("k3_4",10);Check(Mathf.Abs(Recovery()-.55f)<.0001f,"water category adds five points");
+            CharacterInvestment.Record("k3_6",18);Check(Mathf.Abs(Recovery()-.6f)<.0001f,"water maximum recovery 60 percent");
+            Check(CharacterInvestment.WaterRecoveryRatio(water,2f)==.6f,"water recovery ceiling");
+            Check(CharacterInvestment.CurrentSummary(water).Contains("60%"),"water summary matches actual recovery");
+            CharacterInvestment.Clear();
             CharacterInvestment.Record("u10_4",4);CharacterInvestment.Record("u10_6",8);CharacterInvestment.Record("k0_4",10);
             CharacterInvestment.Record("u10_4",999);
             Check(CharacterInvestment.Refund==22,"actual payment once");

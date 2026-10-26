@@ -221,7 +221,7 @@
     "baseDefense": 10,
     "defenseGrowth": 1,
     "skillType": "WaterHeal",
-    "skillPower": 0.5,
+    "skillPower": 0.3,
     "skillChance": 15,
     "isBoss": false
   },

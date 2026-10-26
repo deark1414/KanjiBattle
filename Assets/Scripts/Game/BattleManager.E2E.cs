@@ -4,7 +4,7 @@ using UnityEngine;
 
 public partial class BattleManager
 {
-    internal void ProbeWaterBalanceForE2E()
+    internal void ProbeWaterBalanceForE2E(bool upgraded=false)
     {
         var water=allies.First(unit=>unit.data.skillType==SkillType.WaterHeal);
         int hp=water.currentHP,max=water.maxHP,attack=water.attack,defense=water.defense;
@@ -15,8 +15,9 @@ public partial class BattleManager
             {
                 water.isAlly=side;
                 water.SetBattleVitals(200,1,attack,defense);
-                if(!SkillExecutor.TryExecute(water,water,this)||water.currentHP!=101)
-                    throw new System.Exception("Water must heal 50% of target max HP without upgrades.");
+                int expected=side&&upgraded?121:61;
+                if(!SkillExecutor.TryExecute(water,water,this)||water.currentHP!=expected)
+                    throw new System.Exception("Water must heal 30% base or 60% with full allied upgrades.");
                 water.currentHP=190;
                 if(!SkillExecutor.TryExecute(water,water,this)||water.currentHP!=200)
                     throw new System.Exception("Water must not overheal.");

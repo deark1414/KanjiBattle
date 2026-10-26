@@ -98,6 +98,8 @@ public static class CharacterInvestment
         if(data.characterId<0||!HasChance(data.skillType))return 0;
         return (Owned(NodeId(data.characterId,Stat.Chance))?5:0)+(Owned(NodeId(data.characterId,Stat.ChanceII))?5:0);
     }
+    public static float WaterRecoveryRatio(CharacterData data,float effect)=>
+        Mathf.Min(.6f,data.skillPower+Mathf.Max(0,effect-1));
     public static int AdjustChance(CharacterData source,SkillType skill,int chance,bool ally)
     {
         if(!ally||source?.skillType==SkillType.ShadowCopy)return chance;
@@ -121,10 +123,10 @@ public static class CharacterInvestment
     {
         Stat.Chance or Stat.ChanceII=>"発動率 +5ポイント",
         Stat.Duration or Stat.DurationII=>"追風・向風 +1ターン",
-        _=>EffectLabel(data)+" +10%"
+        _=>data?.skillType==SkillType.WaterHeal?"回復率 +10ポイント":EffectLabel(data)+" +10%"
     };
     public static string CategoryDescription(int branch)=>new[]{"攻撃スキル威力 +5%", "軽減・肩代わり・反撃割合 +5%",
-        "結束・糸・変身・再響の効果 +5%", "攻撃・回復・土罠の効果 +5%（風は対象外）", "攻撃技能・育成支援の効果 +5%"}[branch];
+        "結束・糸・変身・再響の効果 +5%", "攻撃・土罠 +5%／水の回復率 +5ポイント", "攻撃技能・育成支援の効果 +5%"}[branch];
     public static string CurrentSummary(CharacterData data)
     {
         if(data==null)return "";
@@ -133,6 +135,7 @@ public static class CharacterInvestment
         {
             SkillType.BellEcho=> $"再発動率 {SkillExecutor.GetSkillChance(data,data.skillType,true)}%",
             SkillType.WindShift=>$"追風・向風 {WindDuration(data)}ターン",
+            SkillType.WaterHeal=>$"回復 最大HPの{WaterRecoveryRatio(data,effect)*100:0.#}%",
             SkillType.Shield=>$"被害軽減 {20*effect:0.#}%",
             SkillType.GuardAlly=>$"肩代わり {data.skillPower*100*effect:0.#}%",
             SkillType.ExperienceBonus=>$"勝利経験値 ×{1+(data.skillPower-1)*effect:0.##}",
