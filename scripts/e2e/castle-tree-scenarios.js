@@ -1,6 +1,7 @@
 const assert=require('node:assert/strict');
 const expand=['c11','s1','c13','c14','s2','c27','s3','c23','s4','c19','c31','c32','s5'];
 function assertTreeSpacing(state){
+  assert(state.treeLabelsForeground,'Roads must render behind category labels and pieces');
   const overlap=(a,b)=>Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x)>.0001&&
     Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y)>.0001;
   const nodes=state.controls.filter(c=>/\/(TreeNode_[^/]+|TreeBranch_\d+|TreeOrigin)$/.test(c.path));

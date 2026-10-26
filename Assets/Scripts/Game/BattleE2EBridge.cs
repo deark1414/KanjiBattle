@@ -48,6 +48,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public int treeSlots;
         public string[] treeOwned;
         public bool treeOverflow;
+        public bool treeLabelsForeground;
         public string[] treeVisible,treeFacilityIcons;
         public float treeZoom;
         public int investmentRefund;
@@ -360,6 +361,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
             treeSlots=GameManager.Instance.GetFacilityFormationSlots(),
             treeVisible=CastleTree.Nodes.Where(CastleTree.Visible).Select(n=>n.id).ToArray(),
             treeZoom=FindAnyObjectByType<CastleTreeView>()?.Zoom??0,
+            treeLabelsForeground=TreeLabelsForeground(),
             treeFacilityIcons=FindObjectsByType<CastleTreeView>(FindObjectsSortMode.None).SelectMany(view=>view.GetComponentsInChildren<Image>())
                 .Where(image=>image.name=="NodeIcon"&&image.sprite!=null&&image.transform.parent.name.StartsWith("TreeNode_f")).Select(image=>image.transform.parent.name.Substring(9)).ToArray(),
             treeOwned=CastleTree.Nodes.Where(CastleTree.Owned).Select(n=>n.id).ToArray(),
@@ -464,6 +466,18 @@ public sealed class BattleE2EBridge : MonoBehaviour
             Acquire(CastleTree.Nodes.Single(n=>n.kind==CastleTree.Kind.Character&&n.target==id));
         }
         if(experience!=PlayerInventory.Instance.PlayerExperience)throw new Exception("Recruitment must not award experience.");
+    }
+
+    private static bool TreeLabelsForeground()
+    {
+        var tree=FindAnyObjectByType<CastleTreeView>();
+        var content=tree?.transform.Find("TreeViewport/TreeContent");
+        if(content==null)return false;
+        var children=content.Cast<Transform>().Where(t=>t.gameObject.activeSelf).ToArray();
+        int lastRoad=children.Where(t=>t.name.StartsWith("Link_")||t.name.StartsWith("BranchLink_"))
+            .Select(t=>t.GetSiblingIndex()).DefaultIfEmpty(-1).Max();
+        return children.Where(t=>t.name.StartsWith("TreeBranch_")||t.name.StartsWith("TreeNode_")||t.name=="TreeOrigin")
+            .All(t=>t.GetSiblingIndex()>lastRoad);
     }
 
     private static Control CaptureControl(Selectable selectable)

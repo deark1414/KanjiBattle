@@ -109,8 +109,15 @@ public sealed class CastleTreeView : MonoBehaviour
         float maxY=map.Positions.Count==0?250:Mathf.Max(250,map.Positions.Values.Max(p=>Mathf.Abs(p.y))+90);
         content.sizeDelta=scroll.viewport.rect.size+new Vector2(maxX,maxY)*2*zoom/scale;
         foreach(var b in Enumerable.Range(0,5).Where(b=>nodes.Any(n=>n.branch==b)))
-        {
             Link("BranchLink_"+b,Vector2.zero,map.Hubs[b],colors[b]);
+        foreach(var node in nodes)
+        {
+            var start=node.parent!=null&&map.Positions.TryGetValue(node.parent,out var parent)?parent:map.Hubs[node.branch];
+            Link("Link_"+node.id,start,map.Positions[node.id],CastleTree.Owned(node)?colors[node.branch]:new(.33f,.42f,.36f));
+        }
+        // Draw all roads before labels and pieces so no branch crosses their faces.
+        foreach(var b in Enumerable.Range(0,5).Where(b=>nodes.Any(n=>n.branch==b)))
+        {
             var hub=Surface(content,"TreeBranch_"+b,new(.12f,.19f,.15f),Vector2.zero,Vector2.zero);
             MapRect((RectTransform)hub.transform,map.Hubs[b],CastleTreeMapLayout.HubSize(b));
             int branch=b;
@@ -120,11 +127,6 @@ public sealed class CastleTreeView : MonoBehaviour
                 selected=node.id;Center(map.Positions[node.id]);
             });
             Text(hub.transform,"Name",CastleTree.Branches[b],new(.02f,0),new(.98f,1),17).alignment=TextAlignmentOptions.Center;
-        }
-        foreach(var node in nodes)
-        {
-            var start=node.parent!=null&&map.Positions.TryGetValue(node.parent,out var parent)?parent:map.Hubs[node.branch];
-            Link("Link_"+node.id,start,map.Positions[node.id],CastleTree.Owned(node)?colors[node.branch]:new(.33f,.42f,.36f));
         }
         var home=Surface(content,"TreeOrigin",Color.clear,Vector2.zero,Vector2.zero);
         MapRect((RectTransform)home.transform,Vector2.zero,CastleTreeMapLayout.OriginSize);
