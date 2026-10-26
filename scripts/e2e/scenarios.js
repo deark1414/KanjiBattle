@@ -9,9 +9,9 @@ module.exports = [
     async run(game){
       await game.deploy();assert.equal(groups(game.state).length,1);
       assert.equal(game.state.battle.fusionFrameCount,2);assert(game.state.battle.fusionFramesValid);
-      assert.equal(game.state.battle.fusionGlowCount,2);assert(game.state.battle.fusionGlowsValid,'Glows must follow the piece sprite without covering the board or intercepting input');
+      assert.equal(game.state.battle.fusionGlowCount,0,'Remove the custom piece pulse and restore the original local glow');
       await game.screenshot('grass-border-only');
-      await game.page.waitForTimeout(650);await game.screenshot('grass-piece-glow');
+      await game.screenshot('grass-original-glow');
       await game.named('CancelDeployment');assert.equal(game.state.battle.fusionFrameCount,0);
       assert.equal(game.state.battle.fusionGlowCount,0);
       await game.deploy();assert.equal(game.state.battle.fusionFrameCount,2);assert(game.state.battle.fusionFramesValid);
@@ -466,12 +466,12 @@ module.exports = [
     async run(game) {
       await game.deploy(); let state=await game.adjacent();
       assert.equal(state.battle.previewLinks,1); assert.equal(groups(state).length,1);
-      assert.equal(state.battle.fusionFrameCount,2);assert(state.battle.fusionFramesValid,'Fusion highlights must be click-through borders contained inside their cells');
-      assert.equal(state.battle.fusionGlowCount,2);assert(state.battle.fusionGlowsValid);
+      assert.equal(state.battle.fusionFrameCount,2);assert(state.battle.fusionFramesValid,'Original low-opacity highlights must stay inside their cells and leave input unblocked');
+      assert.equal(state.battle.fusionGlowCount,0);
       await game.screenshot("fusion");
       await game.page.setViewportSize({width:viewport.height,height:viewport.width});await game.page.waitForTimeout(800);state=await game.request();
-      assert.equal(state.battle.fusionFrameCount,2);assert(state.battle.fusionFramesValid,'Borders stay inside cells after rotating the screen');
-      assert.equal(state.battle.fusionGlowCount,2);assert(state.battle.fusionGlowsValid);
+      assert.equal(state.battle.fusionFrameCount,2);assert(state.battle.fusionFramesValid,'Original glow stays inside cells after rotating the screen');
+      assert.equal(state.battle.fusionGlowCount,0);
       await game.screenshot('fusion-rotated');
       await game.page.setViewportSize(viewport);await game.page.waitForTimeout(800);await game.request();
       state=await game.start(); assert(allies(state).some(unit=>unit.id===-1001));
