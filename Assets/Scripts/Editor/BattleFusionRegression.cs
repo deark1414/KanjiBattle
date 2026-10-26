@@ -71,6 +71,9 @@ public static class BattleFusionRegression
             Check(!BattleRangeService.CanTargetCell(SkillType.ScatterShot, from, new(2, 1), 6, 7), "scatter range is limited");
             Check(BattleRangeService.GetEffectCells(SkillType.ScatterShot, from, target, 6, 7)
                 .SequenceEqual(new[] { new Vector2Int(2, 2), new Vector2Int(3, 2), new Vector2Int(1, 2) }), "scatter has three target-side cells");
+            Check(!FusionSkillExecutor.UsesFocusedShot(0) && FusionSkillExecutor.UsesFocusedShot(1)
+                && FusionSkillExecutor.UsesFocusedShot(2) && !FusionSkillExecutor.UsesFocusedShot(3),
+                "scatter automatically concentrates below three living enemies");
             Check(BattleRangeService.GetEffectCells(SkillType.DoubleSlash, from, new(2, 4), 6, 7)
                 .SequenceEqual(BattleRangeService.GetEffectCells(SkillType.Slash, from, new(2, 4), 6, 7)), "double slash shares sword geometry");
             Check(SkillExecutor.GetSkillChance(two, SkillType.DoubleSlash) == 100

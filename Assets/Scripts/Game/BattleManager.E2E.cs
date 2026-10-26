@@ -4,6 +4,73 @@ using UnityEngine;
 
 public partial class BattleManager
 {
+    internal void ProbeScatterModesForE2E()
+    {
+        if (!IsDeploying || enemies.Count < 4 || allies.Count < 2)
+            throw new System.InvalidOperationException("Scatter deployment fixture required.");
+        var snapshot=allies.Concat(enemies).Select(unit=>(unit,unit.data,unit.gridPos,unit.isAlly,unit.isDead,
+            unit.maxHP,unit.currentHP,unit.attack,unit.defense)).ToArray();
+        var terrain=impassableCells.ToArray();
+        var caster=allies[0];var friend=allies[1];var main=enemies[0];var left=enemies[1];var right=enemies[2];var near=enemies[3];
+        var db=Resources.Load<CharacterDatabase>("CharacterDatabase");
+        var definition=CharacterData.CreateBattleFusion(BattleFusionRules.GetRecipe(-1002),new[]{db.GetById(3),db.GetById(18)},20);
+        void Check(bool valid,string label)
+        { if(!valid)throw new System.InvalidOperationException("Scatter mode: "+label); }
+        void Place(BattleCharacter unit,Vector2Int cell)
+        { unit.gridPos=cell;gridMap[cell]=unit;unit.transform.position=gridCells[cell.x,cell.y].position; }
+        void Reset(bool side)
+        {
+            gridMap.Clear();impassableCells.Clear();
+            foreach(var unit in new[]{caster,friend,main,left,right,near})
+            { unit.isDead=false;unit.SetBattleVitals(1000,1000,100,0);unit.CocoonShield=false; }
+            caster.isAlly=friend.isAlly=side;main.isAlly=left.isAlly=right.isAlly=near.isAlly=!side;
+            main.data=db.GetById(10);
+            Place(caster,new(2,5));Place(main,new(2,2));
+        }
+        try
+        {
+            caster.data=definition;
+            foreach(bool side in new[]{true,false})
+            {
+                Reset(side);Place(friend,new(1,2));
+                Check(SkillExecutor.TryExecute(caster,main,this)&&main.currentHP==760&&friend.currentHP==1000,
+                    "one enemy concentrates three pellets without friendly fire");
+                Reset(side);Place(left,new(1,2));
+                Check(SkillExecutor.TryExecute(caster,main,this)&&main.currentHP==760&&left.currentHP==1000,
+                    "two enemies still concentrate on one target");
+                Reset(side);Place(left,new(1,2));Place(right,new(3,2));
+                Check(SkillExecutor.TryExecute(caster,main,this)&&new[]{main,left,right}.All(unit=>unit.currentHP==920),
+                    "three enemies receive eighty percent each");
+                Reset(side);Place(left,new(1,2));Place(right,new(3,2));right.isDead=true;
+                Check(SkillExecutor.TryExecute(caster,main,this)&&main.currentHP==760&&left.currentHP==1000,
+                    "dead pieces do not trigger spread mode");
+                Reset(side);Place(left,new(1,2));Place(right,new(3,2));right.currentHP=0;
+                Check(SkillExecutor.TryExecute(caster,main,this)&&main.currentHP==760,
+                    "zero-HP pieces do not trigger spread mode");
+                Reset(side);Place(left,new(1,2));Place(right,new(3,2));Place(near,new(2,4));
+                Check(TargetingService.FindEnemyTarget(this,caster,SkillType.ScatterShot)==main,
+                    "three distant targets take priority over a nearer single target");
+                Reset(side);main.data=db.GetById(15);
+                Check(SkillExecutor.TryExecute(caster,main,this)&&main.currentHP==1000,
+                    "focused shot does not bypass wall immunity");
+                Reset(side);gridMap.Remove(main.gridPos);Place(main,new(2,1));
+                Check(!SkillExecutor.TryExecute(caster,main,this)&&main.currentHP==1000,
+                    "focused shot keeps the existing range limit");
+            }
+            AddLog("散弾モードチェック完了");
+        }
+        finally
+        {
+            StopAllCoroutines();gridMap.Clear();
+            foreach(var row in snapshot)
+            {
+                row.unit.data=row.data;row.unit.isAlly=row.isAlly;row.unit.isDead=row.isDead;
+                row.unit.SetBattleVitals(row.maxHP,row.currentHP,row.attack,row.defense);Place(row.unit,row.gridPos);
+            }
+            impassableCells.Clear();impassableCells.UnionWith(terrain);Destroy(definition);
+        }
+    }
+
     internal void ProbeShootingDeadZoneForE2E()
     {
         if (!IsDeploying || enemies.Count < 2) throw new System.InvalidOperationException("Ranged deployment fixture required.");

@@ -5,6 +5,28 @@ const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y
 
 module.exports = [
   {
+    id:'scatter-auto-mode',name:'散弾の集弾・範囲自動選択と標的優先・両陣営・壁・味方保護',fixture:'elements',
+    async run(game){
+      await game.deploy();await game.request('scatterModeProbe');
+      assert(game.state.battle.logs.some(log=>log.includes('散弾モードチェック完了')));
+      await game.screenshot('scatter-auto-mode');
+    }
+  },
+  {
+    id:'scatter-auto-battle',name:'散弾の手動確認プリセット・実戦と再戦復元',fixture:'fusion-scattershot',
+    async run(game){
+      const initial=await game.deploy();assert.equal(groups(initial).length,1);
+      await game.start();
+      const result=await game.wait(state=>state.battle.result,'Scatter battle did not finish.',180000);
+      assert(result.discovered.includes(-1002));assert(!result.battle.resultTextOverflow);
+      await game.screenshot('scatter-result');
+      await game.named('RetryStageButton');
+      const restored=await game.wait(state=>state.battle.deploying,'Scatter retry did not open.');
+      assert.deepEqual(restored.battle.originalIds,initial.battle.originalIds);
+      assert(allies(restored).every(unit=>unit.id>0&&unit.hp===unit.maxHP));
+    }
+  },
+  {
     id:'ox-projectile-guard',name:'丑の遠距離吸収・甲や牛との非重複・軽減成績・両陣営・残HP上限',fixture:'animals-double',
     async run(game){
       await game.deploy();await game.request('projectileGuardProbe');

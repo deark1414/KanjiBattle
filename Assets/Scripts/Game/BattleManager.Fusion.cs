@@ -103,18 +103,21 @@ public partial class BattleManager
         fusionRuntimeData.Clear();
     }
 
-    public void PlayFusionSkillVfx(BattleCharacter caster, BattleCharacter target, SkillType skill)
+    public void PlayFusionSkillVfx(BattleCharacter caster, BattleCharacter target, SkillType skill, bool focused = false)
     {
         StartSkillCinematic(0.5f);
         BeginSkillImpactWindow(0.5f);
-        HighlightSkillRange(caster, target, skill, Color.yellow);
+        if (focused) StartCoroutine(HighlightCellsRoutine(new List<Vector2Int> { target.gridPos }, Color.yellow, .5f));
+        else HighlightSkillRange(caster, target, skill, Color.yellow);
         caster.PlayCastEffect(Color.yellow);
         if (skill == SkillType.DoubleSlash)
         {
             PlayWeaponMotionVfx(caster, target, SkillType.Slash);
             StartCoroutine(RepeatFusionSword(caster, target));
         }
-        foreach (Vector2Int cell in BattleRangeService.GetEffectCells(skill, caster.gridPos, target.gridPos, cols, rows))
+        var cells = focused ? new List<Vector2Int> { target.gridPos }
+            : BattleRangeService.GetEffectCells(skill, caster.gridPos, target.gridPos, cols, rows);
+        foreach (Vector2Int cell in cells)
         {
             if (!gridMap.TryGetValue(cell, out BattleCharacter victim) || victim == null || victim.isAlly == caster.isAlly || victim.isDead) continue;
             if (skill == SkillType.DoubleSlash)

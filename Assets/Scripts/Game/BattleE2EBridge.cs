@@ -150,6 +150,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "supportVfxProbe": FindFirstObjectByType<BattleManager>().ProbeSupportVfx(request.value); break;
                 case "supportProbe": FindFirstObjectByType<BattleManager>().ProbeSupportSkills(); break;
                 case "shootingDeadZoneProbe": FindFirstObjectByType<BattleManager>().ProbeShootingDeadZoneForE2E(); break;
+                case "scatterModeProbe": FindFirstObjectByType<BattleManager>().ProbeScatterModesForE2E(); break;
                 case "defenseProbe": FindFirstObjectByType<BattleManager>().ProbeDefenseSkills(); break;
                 case "projectileGuardProbe": FindFirstObjectByType<BattleManager>().ProbeProjectileGuard(); break;
                 case "recruitSupport": ProbeTreeRecruitment(new[] { 27, 28, 29 }); break;

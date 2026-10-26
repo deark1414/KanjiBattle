@@ -69,7 +69,8 @@ public static class TargetingService
             var lamps = candidates.FindAll(unit => unit.data.skillType == SkillType.Lantern);
             if (lamps.Count > 0) candidates = lamps;
         }
-        return FindNearest(self, candidates, false);
+        return skill == SkillType.ScatterShot ? FusionSkillExecutor.FindScatterTarget(bm,self,candidates)
+            : FindNearest(self, candidates, false);
     }
 
     public static BattleCharacter FindArrowTarget(BattleManager bm, BattleCharacter self) => FindEnemyTarget(bm, self, SkillType.Arrow);

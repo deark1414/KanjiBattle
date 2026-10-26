@@ -139,7 +139,7 @@ public static class SkillDescription
             SkillType.ThreadPull => "周囲2マスの敵1体にダメージを与え、自分の方へ1マス引き寄せる。移動先が水や他のコマで埋まっている場合はダメージのみ。",
             SkillType.ShadowCopy => "隣接する敵1体に変身し、攻撃・防御・行動・スキルを写す。現在HP・最大HPは変わらない。1戦に1回。ボス・進化・融合には変身できない。",
             SkillType.DoubleSlash => "正面と左右前の3マスに連続攻撃する。",
-            SkillType.ScatterShot => "周囲3マスの敵を狙い、その周辺へ散弾を放つ。",
+            SkillType.ScatterShot => "射程3マス。対象周辺3マスに生存敵3体なら各攻撃力80%の散弾、1～2体なら標的1体へ攻撃力240%の集弾を自動選択。3体を巻き込める標的を優先する。味方や倒れた駒は数えず、壁の遠距離無効は突破しない。",
             SkillType.Slash => "隣接した敵を正面に取り、正面・左前・右前の3マスを同時に薙ぐ。正面は全威力、左右前は70%の威力。",
             SkillType.StunBlow => "隣接した敵を攻撃し、短時間スタンさせる。",
             SkillType.Counter => "通常攻撃を受けた時、一定確率で攻撃者へ反撃する。",

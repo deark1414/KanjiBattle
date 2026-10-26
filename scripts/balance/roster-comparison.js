@@ -114,7 +114,8 @@ async function main() {
     const seeds = Number(option('--seeds', 3));
     assert(Number.isInteger(seeds) && seeds >= 1 && seeds <= 10);
     const guardProbe = args.includes('--guard-probe');
-    const fusionProbe = args.includes('--fusion-probe');
+    const scatterProbe = args.includes('--scatter-probe');
+    const fusionProbe = args.includes('--fusion-probe') || scatterProbe;
     const probe = args.includes('--projectile-probe') || args.includes('--origin-probe') || guardProbe || fusionProbe;
     if (probe) {
       const source = path.resolve(root, option('--source', 'tmp/balance/roster-screen'));
@@ -127,7 +128,7 @@ async function main() {
       const rearOx = args.includes('--rear-ox');
       const ids = fusionProbe ? [] : guardProbe ? [13,14,15,30] : originProbe ? [] : rearOx ? [30] : [10, 13, 14, 15, 30];
       const selected = sourceManifest.recipes.filter(recipe => {
-        if (fusionProbe) return ['磁石','雨','賽子'].includes(recipe.name);
+        if (fusionProbe) return (scatterProbe ? ['散弾'] : ['磁石','雨','賽子']).includes(recipe.name);
         if (guardProbe) return false;
         if (!originProbe) return !rearOx && recipe.id === -1017;
         const control = sourceJobs.find(job => job.profile === `fusion/${recipe.id}/materials`);
@@ -166,7 +167,7 @@ async function main() {
       characters: JSON.parse(fs.readFileSync(path.join(root, 'Assets/Data/characters.json'))),
       skills: JSON.parse(fs.readFileSync(path.join(root, 'Assets/Resources/skills.json'))) };
     fs.writeFileSync(path.join(directory, 'context.json'), JSON.stringify(context, null, 2));
-    console.log(probe ? `追加比較: ${fusionProbe ? '磁石・雨・賽子' : guardProbe ? '終盤の守備役' : args.includes('--origin-probe') ? '融合の通常起点' : '射撃対策・敵Lv33'}・${seeds}シード。`
+    console.log(probe ? `追加比較: ${scatterProbe ? '散弾の自動モード' : fusionProbe ? '磁石・雨・賽子' : guardProbe ? '終盤の守備役' : args.includes('--origin-probe') ? '融合の通常起点' : '射撃対策・敵Lv33'}・${seeds}シード。`
       : `無音の比較調査: 通常26種・融合17種の素材個別/融合後、各3局×${seeds}シード。`);
     await new Promise((resolve, reject) => {
       const child = spawn(process.env.UNITY_EDITOR || '/Applications/Unity/Hub/Editor/6000.4.4f1/Unity.app/Contents/MacOS/Unity',
