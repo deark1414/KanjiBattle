@@ -1,6 +1,24 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { party, summary } = require('./campaign-balance');
+const { party, summary, validateResults } = require('./campaign-balance');
+
+test('unowned Lv1 fixtures and missing proof are rejected, actual shared stats pass', () => {
+  const row = { stage: 10, seed: 1, profile: 'mixed', level: 8, party: [10],
+    initialUnits: [{ id: 10, level: 8, hp: 155, attack: 68, defense: 15 }] };
+  validateResults([row], [{ stage: 10, seed: 1, profile: 'mixed' }]);
+  assert.throws(() => validateResults([{ ...row, initialUnits: undefined }]));
+  assert.throws(() => validateResults([{ ...row, initialUnits: [{ ...row.initialUnits[0], level: 1 }] }]));
+  assert.throws(() => validateResults([{ ...row, initialUnits: [{ ...row.initialUnits[0], hp: 120 }] }]));
+  assert.throws(() => validateResults([], [{}]));
+});
+
+test('paid progression rejects unowned material and oversubscribed formation slots', () => {
+  const row = { level: 8, party: [10], economyEntry: { level: 8, slots: 3, owned: [10] },
+    initialUnits: [{ id: 10, level: 8, hp: 155, attack: 68, defense: 15, materials: [10] }] };
+  validateResults([row]);
+  assert.throws(() => validateResults([{ ...row, economyEntry: { ...row.economyEntry, owned: [] } }]));
+  assert.throws(() => validateResults([{ ...row, economyEntry: { ...row.economyEntry, slots: 0 } }]));
+});
 
 test('each profile uses the same material slot budget and no premature fusion', () => {
   for (let stage = 1; stage <= 40; stage++) {

@@ -8,6 +8,15 @@ using UnityEngine;
 
 public static class CampaignTreeAuthoring
 {
+    public static System.Collections.Generic.List<Vector2Int> Positions(int[] ids)
+    {
+        int[] columns={2,3,1,4,0,5};
+        var rearIds=new System.Collections.Generic.HashSet<int>{16,17,18,19,20,27,31,32};
+        int front=0,rear=0;
+        var cells=ids.Select(id=>rearIds.Contains(id)?new Vector2Int(columns[rear++],0):new Vector2Int(columns[front++],1)).ToList();
+        if(front>6||rear>6)throw new Exception("Deployment row overflow.");
+        return cells;
+    }
     public static void Apply()
     {
         var plans=JArray.Parse(File.ReadAllText("Assets/Data/campaign-plan.json"));
@@ -15,16 +24,12 @@ public static class CampaignTreeAuthoring
         var database=AssetDatabase.LoadAssetAtPath<CharacterDatabase>("Assets/Resources/CharacterDatabase.asset");
         var stages=AssetDatabase.LoadAssetAtPath<StageDatabase>("Assets/ScriptableObjects/Stages/StageDatabase.asset");
         if(plans.Count!=40||rows.Count!=40)throw new Exception("Expected 40 campaign stages.");
-        int[] columns={2,3,1,4,0,5};
-        var rearIds=new System.Collections.Generic.HashSet<int>{16,17,18,19,20,27,31,32};
         for(int index=0;index<40;index++)
         {
             var plan=plans[index];var row=rows.Single(token=>(int)token["stageId"]==index+1);
             var stage=stages.GetStageById(index+1);
             int[] ids=plan["enemies"].Values<int>().ToArray();
-            int front=0,rear=0;
-            var cells=ids.Select(id=>rearIds.Contains(id)?new Vector2Int(columns[rear++],0):new Vector2Int(columns[front++],1)).ToList();
-            if(front>6||rear>6)throw new Exception("Deployment row overflow.");
+            var cells=Positions(ids);
             stage.enemyPool=ids.Select(id=>database.GetById(id)??throw new Exception("Unknown character "+id)).ToList();
             stage.enemyLevel=(int)plan["level"];stage.slotCount=8;stage.restrictFormationSlots=false;
             stage.enemyPositions=cells;
