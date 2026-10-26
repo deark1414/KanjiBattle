@@ -8,6 +8,7 @@ public sealed class BattleFusionPreviewView : IDisposable
 {
     private readonly RectTransform root;
     private readonly Transform[,] grid;
+    private readonly List<GameObject> materialFrames = new();
     public int LinkCount => root.Cast<Transform>().Count(child => child.gameObject.activeSelf && child.name == "FusionLink");
 
     public BattleFusionPreviewView(Transform parent, Transform[,] grid)
@@ -21,6 +22,7 @@ public sealed class BattleFusionPreviewView : IDisposable
 
     public void Draw(BattleFusionRules.Plan plan, IReadOnlyList<Vector2Int> positions, IReadOnlyList<BattleFusionRules.Group> conflicts)
     {
+        ClearMaterialFrames();
         foreach (Transform child in root)
         {
             child.gameObject.SetActive(false);
@@ -40,13 +42,17 @@ public sealed class BattleFusionPreviewView : IDisposable
         foreach (int member in group.members)
         {
             Vector2Int cell = positions[member];
-            var cellRect = grid[cell.x, cell.y].parent as RectTransform;
-            Vector3[] corners = new Vector3[4]; cellRect.GetWorldCorners(corners);
-            Vector2 size = (Vector2)(root.InverseTransformPoint(corners[2]) - root.InverseTransformPoint(corners[0]));
-            Image ring = Image("FusionMaterial", Center(cell), size * 0.92f, new Color(color.r, color.g, color.b, 0.08f));
-            var outline = ring.gameObject.AddComponent<Outline>(); outline.effectColor = color;
-            float width = Mathf.Max(2f, size.x * (resolved && member == group.origin ? 0.045f : 0.02f));
-            outline.effectDistance = new Vector2(width, -width);
+            var frame = new GameObject("FusionMaterial", typeof(RectTransform));
+            frame.transform.SetParent(grid[cell.x, cell.y].parent, false);
+            materialFrames.Add(frame);
+            var rect = (RectTransform)frame.transform;
+            rect.anchorMin = new(.04f,.04f); rect.anchorMax = new(.96f,.96f);
+            rect.offsetMin = rect.offsetMax = Vector2.zero;
+            float width = (resolved && member == group.origin ? 3f : 2f) / UiReadability.Scale(root.GetComponentInParent<Canvas>());
+            Edge(rect,"Top",new(0,1),Vector2.one,new(0,-width),Vector2.zero,color);
+            Edge(rect,"Bottom",Vector2.zero,new(1,0),Vector2.zero,new(0,width),color);
+            Edge(rect,"Left",Vector2.zero,new(0,1),Vector2.zero,new(width,0),color);
+            Edge(rect,"Right",new(1,0),Vector2.one,new(-width,0),Vector2.zero,color);
         }
         for (int first = 0; first < group.members.Length; first++)
         for (int second = first + 1; second < group.members.Length; second++)
@@ -59,6 +65,21 @@ public sealed class BattleFusionPreviewView : IDisposable
         }
     }
 
+    private static void Edge(RectTransform parent,string name,Vector2 min,Vector2 max,Vector2 offsetMin,Vector2 offsetMax,Color color)
+    {
+        var go=new GameObject("FusionFrame"+name,typeof(RectTransform),typeof(CanvasRenderer),typeof(Image));
+        go.transform.SetParent(parent,false);
+        var rect=(RectTransform)go.transform;rect.anchorMin=min;rect.anchorMax=max;rect.offsetMin=offsetMin;rect.offsetMax=offsetMax;
+        var image=go.GetComponent<Image>();image.color=color;image.raycastTarget=false;
+    }
+
+    private void ClearMaterialFrames()
+    {
+        foreach(var frame in materialFrames)
+            if(frame!=null){frame.SetActive(false);UnityEngine.Object.Destroy(frame);}
+        materialFrames.Clear();
+    }
+
     private Image Image(string name, Vector2 position, Vector2 size, Color color)
     {
         var go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
@@ -69,6 +90,7 @@ public sealed class BattleFusionPreviewView : IDisposable
 
     public void Dispose()
     {
+        ClearMaterialFrames();
         if (root == null) return;
         root.gameObject.SetActive(false); UnityEngine.Object.Destroy(root.gameObject);
     }

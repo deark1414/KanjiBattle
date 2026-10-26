@@ -4,6 +4,17 @@ const groups = state => state.battle.plan?.groups || [];
 const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y})=>({id,x,y}));
 
 module.exports = [
+  ...[{width:390,height:844},{width:844,height:390}].map(viewport=>({
+    id:'fusion-border-grass-'+viewport.width,name:'草の未発見融合でも盤面を黄色く覆わず操作できる '+viewport.width,fixture:'fusion-grass',viewport,
+    async run(game){
+      await game.deploy();assert.equal(groups(game.state).length,1);
+      assert.equal(game.state.battle.fusionFrameCount,2);assert(game.state.battle.fusionFramesValid);
+      await game.screenshot('grass-border-only');
+      await game.named('CancelDeployment');assert.equal(game.state.battle.fusionFrameCount,0);
+      await game.deploy();assert.equal(game.state.battle.fusionFrameCount,2);assert(game.state.battle.fusionFramesValid);
+      await game.start();assert.equal(game.state.battle.fusionFrameCount,0);
+    }
+  })),
   {
     id:'water-growth',name:'水の30%から60%への育成・実回復量・敵は30%のまま',fixture:'standard',viewport:{width:390,height:844},
     async run(game){
@@ -451,7 +462,12 @@ module.exports = [
     async run(game) {
       await game.deploy(); let state=await game.adjacent();
       assert.equal(state.battle.previewLinks,1); assert.equal(groups(state).length,1);
+      assert.equal(state.battle.fusionFrameCount,2);assert(state.battle.fusionFramesValid,'Fusion highlights must be click-through borders contained inside their cells');
       await game.screenshot("fusion");
+      await game.page.setViewportSize({width:viewport.height,height:viewport.width});await game.page.waitForTimeout(800);state=await game.request();
+      assert.equal(state.battle.fusionFrameCount,2);assert(state.battle.fusionFramesValid,'Borders stay inside cells after rotating the screen');
+      await game.screenshot('fusion-rotated');
+      await game.page.setViewportSize(viewport);await game.page.waitForTimeout(800);await game.request();
       state=await game.start(); assert(allies(state).some(unit=>unit.id===-1001));
       const canvas=await game.page.locator("#unity-canvas").boundingBox();
       assert(canvas.width>=viewport.width*.98 && canvas.height>=viewport.height*.98);

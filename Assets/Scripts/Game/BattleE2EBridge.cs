@@ -27,6 +27,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public bool paused; public Box header;
         public int battleId; public int[] originalIds; public Unit[] units; public Cell[] cells; public BattleFusionRules.Plan plan;
         public int conflicts; public int previewLinks; public string fusionSummary;
+        public int fusionFrameCount; public bool fusionFramesValid;
         public string[] logs;
         public string resultText; public bool resultTextOverflow;
         public string[] supportTextures; public int supportVfxCount;

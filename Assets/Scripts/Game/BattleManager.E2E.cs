@@ -109,8 +109,20 @@ public partial class BattleManager
 
     internal BattleE2EBridge.BattleState CaptureE2EState()
     {
+        var frames=GetComponentsInChildren<RectTransform>().Where(rect=>rect.name=="FusionMaterial"&&rect.gameObject.activeInHierarchy).ToArray();
+        bool FrameValid(RectTransform frame)
+        {
+            var cell=frame.parent as RectTransform;
+            if(cell==null||gridCells==null||!gridCells.Cast<Transform>().Select(content=>content.parent).Contains(cell)||frame.GetComponent<UnityEngine.UI.Image>()!=null)return false;
+            var outer=BattleE2EBridge.Bounds(cell);var inner=BattleE2EBridge.Bounds(frame);
+            var edges=frame.GetComponentsInChildren<UnityEngine.UI.Image>();
+            return inner.x>=outer.x-.0001f&&inner.y>=outer.y-.0001f&&inner.x+inner.w<=outer.x+outer.w+.0001f
+                &&inner.y+inner.h<=outer.y+outer.h+.0001f&&edges.Length==4
+                &&edges.All(edge=>!edge.raycastTarget&&(edge.rectTransform.rect.width<=frame.rect.width*.25f||edge.rectTransform.rect.height<=frame.rect.height*.25f));
+        }
         return new BattleE2EBridge.BattleState
         {
+            fusionFrameCount=frames.Length,fusionFramesValid=frames.All(FrameValid),
             active = gameObject.activeInHierarchy,
             paused = isPaused,
             header = BattleE2EBridge.Bounds(transform.Find("BattleInformationHeader") as RectTransform),
