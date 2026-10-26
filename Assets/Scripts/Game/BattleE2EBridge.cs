@@ -149,6 +149,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "corruptPlayerSkill": PlayerProgressStore.SetString(PlayerSkillRules.SaveKey,"{broken"); PlayerProgressStore.Save(); break;
                 case "supportVfxProbe": FindFirstObjectByType<BattleManager>().ProbeSupportVfx(request.value); break;
                 case "supportProbe": FindFirstObjectByType<BattleManager>().ProbeSupportSkills(); break;
+                case "shootingDeadZoneProbe": FindFirstObjectByType<BattleManager>().ProbeShootingDeadZoneForE2E(); break;
                 case "defenseProbe": FindFirstObjectByType<BattleManager>().ProbeDefenseSkills(); break;
                 case "recruitSupport": ProbeTreeRecruitment(new[] { 27, 28, 29 }); break;
                 case "recruitCow": ProbeTreeRecruitment(new[] { 30 }); break;

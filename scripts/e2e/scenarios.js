@@ -4,6 +4,12 @@ const groups = state => state.battle.plan?.groups || [];
 const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y})=>({id,x,y}));
 
 module.exports = [
+  {
+    id:'shooting-dead-zone',name:'弓と銃は隣接攻撃不可・退避後に射撃・包囲時待機・銃の至近貫通なし（両陣営）',fixture:'elements',
+    async run(game){
+      await game.deploy();await game.request('shootingDeadZoneProbe');await game.screenshot('shooting-dead-zone');
+    }
+  },
   ...[{width:390,height:844},{width:844,height:390}].map(viewport=>({
     id:'fusion-border-grass-'+viewport.width,name:'草の未発見融合でも盤面を黄色く覆わず操作できる '+viewport.width,fixture:'fusion-grass',viewport,
     async run(game){

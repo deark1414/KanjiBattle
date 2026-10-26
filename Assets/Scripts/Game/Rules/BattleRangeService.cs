@@ -4,6 +4,8 @@ using UnityEngine;
 // Shared skill geometry for battle, previews, and regression checks.
 public static class BattleRangeService
 {
+    public static int MinimumRange(SkillType skill) => skill is SkillType.Arrow or SkillType.Gun ? 2 : 1;
+
     public static int Distance(Vector2Int from, Vector2Int to) =>
         Mathf.Max(Mathf.Abs(to.x - from.x), Mathf.Abs(to.y - from.y));
 
@@ -14,7 +16,7 @@ public static class BattleRangeService
         if (to.x < 0 || to.x >= cols || to.y < 0 || to.y >= rows) return false;
         int distance = Distance(from, to);
         if (skill == SkillType.WaterHeal) return distance <= 1;
-        if (distance == 0) return false;
+        if (distance < MinimumRange(skill)) return false;
         if (skill is SkillType.Stone or SkillType.Fireball or SkillType.ThreadPull) return distance <= 2;
         if (skill is SkillType.ScatterShot or SkillType.ChainLightning) return distance <= 3;
         if (skill is not (SkillType.Arrow or SkillType.Gun or SkillType.Spear)) return distance == 1;
@@ -79,7 +81,7 @@ public static class BattleRangeService
                 break;
         }
 
-        return FilterBoardCells(cells, caster, cols, rows);
+        return FilterAttackCells(cells, skillType, caster, cols, rows);
     }
 
     public static List<Vector2Int> GetEffectCells(
@@ -130,7 +132,15 @@ public static class BattleRangeService
                 break;
         }
 
-        return FilterBoardCells(cells, caster, cols, rows);
+        return FilterAttackCells(cells, skillType, caster, cols, rows);
+    }
+
+    private static List<Vector2Int> FilterAttackCells(List<Vector2Int> cells, SkillType skill,
+        Vector2Int caster, int cols, int rows)
+    {
+        var result = FilterBoardCells(cells, caster, cols, rows);
+        result.RemoveAll(cell => Distance(caster, cell) < MinimumRange(skill));
+        return result;
     }
 
     public static List<Vector2Int> GetSwordWedgeCells(Vector2Int caster, Vector2Int forward)

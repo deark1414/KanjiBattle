@@ -606,7 +606,7 @@ public static class SkillExecutor
         bool didHit = false;
         ctx.BattleManager.PlayGunLineVfx(ctx.Caster, chosenDir);
 
-        for (int d = 1; d <= ctx.BattleManager.Rows + ctx.BattleManager.Cols; d++)
+        for (int d = BattleRangeService.MinimumRange(SkillType.Gun); d <= ctx.BattleManager.Rows + ctx.BattleManager.Cols; d++)
         {
             Vector2Int pos = ctx.Caster.gridPos + chosenDir * d;
             if (pos.x < 0 || pos.x >= ctx.BattleManager.Cols || pos.y < 0 || pos.y >= ctx.BattleManager.Rows)

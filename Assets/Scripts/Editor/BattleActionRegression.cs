@@ -24,6 +24,19 @@ public static class BattleActionRegression
         Check(!BattleRangeService.CanTargetCell(SkillType.Fireball, origin, new(2, 2), 6, 7), "fireball cannot hit outside its preview range");
         Check(!BattleRangeService.CanTargetCell(SkillType.Stone, origin, new(6, 5), 6, 7), "out-of-board target rejected");
         Check(BattleRangeService.Distance(new(0, 0), new(2, 2)) == 2, "diagonal distance counts one step");
+        foreach (SkillType skill in new[] { SkillType.Arrow, SkillType.Gun })
+        {
+            Check(BattleRangeService.MinimumRange(skill) == 2, "shooting minimum range is two");
+            for (int x = -1; x <= 1; x++) for (int y = -1; y <= 1; y++)
+                Check(!BattleRangeService.CanTargetCell(skill, origin, origin + new Vector2Int(x, y), 6, 7),
+                    "shooter cannot target any adjacent cell or itself");
+            Check(BattleRangeService.CanTargetCell(skill, origin, origin + new Vector2Int(2, -2), 6, 7), "shooting at distance two");
+            foreach (var cell in BattleRangeService.GetSelectionCells(skill, origin, new(2, 0), 6, 7))
+                Check(BattleRangeService.Distance(origin, cell) >= 2, "selection excludes dead zone");
+            foreach (var cell in BattleRangeService.GetEffectCells(skill, origin, new(2, 0), 6, 7))
+                Check(BattleRangeService.Distance(origin, cell) >= 2, "penetrating effect excludes dead zone");
+        }
+        Check(BattleRangeService.CanTargetCell(SkillType.ScatterShot, origin, new(2, 4), 6, 7), "scattershot retains close-range specialty");
 
         var data = ScriptableObject.CreateInstance<CharacterData>();
         try
@@ -76,6 +89,19 @@ public static class BattleActionRegression
         List<Vector2Int> detour = BattleMovementPlanner.FindNextMove(start, targets, SkillType.None, CharacterCategory.Weapon,
             friends, enemies, water, 3, 4);
         Check(detour != null && !water.Contains(detour[detour.Count - 1]), "movement routes around water");
+        foreach (SkillType skill in new[] { SkillType.Arrow, SkillType.Gun })
+        {
+            start = new(2, 3); targets[0] = new(2, 2); enemies = new HashSet<Vector2Int>(targets);
+            water.Clear();
+            var retreat = BattleMovementPlanner.FindNextMove(start, targets, skill, CharacterCategory.Ranged,
+                friends, enemies, water, 6, 7);
+            Check(retreat != null && retreat.Count == 2
+                && BattleRangeService.CanTargetCell(skill, retreat[1], targets[0], 6, 7), "shooter retreats to a firing cell");
+            for (int x = -1; x <= 1; x++) for (int y = -1; y <= 1; y++)
+                if (x != 0 || y != 0) water.Add(start + new Vector2Int(x, y));
+            Check(BattleMovementPlanner.FindNextMove(start, targets, skill, CharacterCategory.Ranged,
+                friends, enemies, water, 6, 7) == null, "surrounded shooter cannot escape through obstacles");
+        }
     }
 
     private static void VerifyTargetSelection()
@@ -112,6 +138,18 @@ public static class BattleActionRegression
             Check(TargetingService.FindArrowTarget(bm, self) == enemy, "arrow targets through friendly unit");
             Check(TargetingService.FindGunTarget(bm, self) == enemy, "gun targets through friendly unit");
             Check(TargetingService.FindSpearTarget(bm, self) == null, "spear target blocked by friendly unit");
+            var adjacent = Create(new(1, 4), false);
+            foreach (SkillType skill in new[] { SkillType.Arrow, SkillType.Gun })
+            {
+                self.data.skillType = skill;
+                Check(TargetingService.FindEnemyTarget(bm, self, skill) == enemy, "shooters skip adjacent enemies");
+                Check(SkillExecutor.TryExecuteDetailed(self, adjacent, bm).Failure == SkillExecutionFailure.NoValidTarget,
+                    "direct skill execution rejects adjacent enemies");
+                enemy.isDead = true;
+                Check(TargetingService.FindEnemyTarget(bm, self, skill) == null, "adjacent enemy alone is not a shooting target");
+                enemy.isDead = false;
+            }
+            adjacent.isDead = true;
             Check(SkillExecutor.TryExecuteDetailed(self, friendly, bm).Failure == SkillExecutionFailure.NoValidTarget,
                 "reliable attack rejects friendly fire");
             self.data.skillType = SkillType.Spear;

@@ -1040,7 +1040,7 @@ public partial class BattleManager : MonoBehaviour
 
         // 通常攻撃
         BattleCharacter target = TargetingService.FindAdjacentEnemy(this, character);
-        if (target != null)
+        if (target != null && BattleRangeService.MinimumRange(ElementSkillExecutor.AttackSkill(character)) == 1)
         {
             character.PerformAttack(target, this);
             return;

@@ -4,6 +4,65 @@ using UnityEngine;
 
 public partial class BattleManager
 {
+    internal void ProbeShootingDeadZoneForE2E()
+    {
+        if (!IsDeploying || enemies.Count < 2) throw new System.InvalidOperationException("Ranged deployment fixture required.");
+        var units = allies.Concat(enemies).Select(unit => (unit, unit.gridPos, unit.isAlly,
+            unit.maxHP, unit.currentHP, unit.attack, unit.defense)).ToArray();
+        var terrain = impassableCells.ToArray(); var traps = trapCells.ToArray(); var soil = soilTrapCells.ToArray();
+        var caster = allies[0]; var near = enemies[0]; var far = enemies[1];
+        var original = caster.data; var definition = Instantiate(original);
+        void Check(bool valid, string label)
+        { if (!valid) throw new System.InvalidOperationException("Shooting dead zone: " + label); }
+        void Place(BattleCharacter unit, Vector2Int cell)
+        {
+            if (gridMap.TryGetValue(unit.gridPos, out var current) && current == unit) gridMap.Remove(unit.gridPos);
+            unit.gridPos = cell; gridMap[cell] = unit;
+            unit.transform.position = gridCells[cell.x, cell.y].position;
+        }
+        try
+        {
+            caster.data = definition; definition.category = CharacterCategory.Ranged;
+            trapCells.Clear(); soilTrapCells.Clear();
+            near.SetBattleVitals(10000, 10000, 1, 0); far.SetBattleVitals(10000, 10000, 1, 0);
+            foreach (bool side in new[] { true, false }) foreach (SkillType skill in new[] { SkillType.Arrow, SkillType.Gun })
+            {
+                definition.skillType = skill; caster.isAlly = side; near.isAlly = far.isAlly = !side;
+                gridMap.Clear(); impassableCells.Clear(); Place(caster, new(2, 3)); Place(near, new(2, 2));
+                int hp = near.currentHP;
+                DoAction(caster, "test");
+                Check(near.currentHP == hp && BattleRangeService.Distance(caster.gridPos, near.gridPos) >= 2,
+                    "adjacent enemy causes retreat instead of a basic attack: " + skill + "/" + side);
+                var firingCell = caster.gridPos;
+                DoAction(caster, "test");
+                Check(near.currentHP < hp && caster.gridPos == firingCell, "shoot on the next action after retreat");
+
+                gridMap.Clear(); Place(caster, new(2, 3)); Place(near, new(2, 2)); hp = near.currentHP;
+                for (int x = -1; x <= 1; x++) for (int y = -1; y <= 1; y++)
+                    if (x != 0 || y != 0) impassableCells.Add(caster.gridPos + new Vector2Int(x, y));
+                DoAction(caster, "test");
+                Check(caster.gridPos == new Vector2Int(2, 3) && near.currentHP == hp, "trapped shooter waits without attacking");
+
+                gridMap.Clear(); impassableCells.Clear();
+                Place(caster, new(2, 4)); Place(near, new(2, 3)); Place(far, new(2, 1));
+                hp = near.currentHP; int farHP = far.currentHP;
+                DoAction(caster, "test");
+                Check(near.currentHP == hp && far.currentHP < farHP, "distant target can be shot without hitting adjacent enemy");
+            }
+        }
+        finally
+        {
+            StopAllCoroutines(); caster.data = original; Destroy(definition); gridMap.Clear();
+            foreach (var row in units)
+            {
+                row.unit.isAlly = row.isAlly; row.unit.SetBattleVitals(row.maxHP, row.currentHP, row.attack, row.defense);
+                Place(row.unit, row.gridPos);
+            }
+            impassableCells.Clear(); impassableCells.UnionWith(terrain);
+            trapCells.Clear(); trapCells.UnionWith(traps); soilTrapCells.Clear(); soilTrapCells.UnionWith(soil);
+        }
+    }
+
     internal void ProbeWaterBalanceForE2E(bool upgraded=false)
     {
         var water=allies.First(unit=>unit.data.skillType==SkillType.WaterHeal);
