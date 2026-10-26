@@ -19,7 +19,7 @@ async function main(){
     }
     await page.goto(base+'?preset=tree');await ready();await page.waitForTimeout(600);
     let current=await state();assert.deepEqual(current.owned,[1,10,20]);assert.equal(current.treeSlots,3);assert.equal(current.stagePoints,30);
-    await click('TreeNode_c11');await click('TreePurchase');assert((await state()).owned.includes(11));
+    await click('TreeBranch_0');await click('TreeNode_c11');await click('TreePurchase');assert((await state()).owned.includes(11));
     await page.locator('#formation').click();await ready();assert.equal((await state()).formation.filter(Boolean).length,3);
     await click('DeployButton');assert.equal((await state()).battle.units.filter(u=>!u.ally).length,3);
     await click('CancelDeployment');await page.goto(base);await ready();assert((await state()).owned.includes(11));

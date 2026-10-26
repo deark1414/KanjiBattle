@@ -46,7 +46,7 @@ public sealed class CastleTreeView : MonoBehaviour
         zoomText=Text(toolbar,"Zoom","50%",new(.25f,0),new(.51f,1),18);zoomText.alignment=TextAlignmentOptions.Center;
         zoomIn=Command(toolbar,"TreeZoomIn","＋",new(.52f,0),new(.76f,1),()=>SetZoom(zoom+.1f),"拡大");
         Command(toolbar,"TreeCenter","◎",new(.77f,0),Vector2.one,()=>Center(Vector2.zero),"城下へ戻る");
-        respec=Command(transform,"TreeRespec","育成の振り直し",Vector2.zero,Vector2.one,ConfirmRespec);
+        respec=Command(transform,"TreeRespec","振り直し",Vector2.zero,Vector2.one,ConfirmRespec);
         CastleTree.Changed+=Changed;Redraw();
     }
     private void Changed()=>dirty=true;
@@ -112,7 +112,7 @@ public sealed class CastleTreeView : MonoBehaviour
         {
             Link("BranchLink_"+b,Vector2.zero,map.Hubs[b],colors[b]);
             var hub=Surface(content,"TreeBranch_"+b,new(.12f,.19f,.15f),Vector2.zero,Vector2.zero);
-            MapRect((RectTransform)hub.transform,map.Hubs[b],new(b==2?90:62,32));
+            MapRect((RectTransform)hub.transform,map.Hubs[b],CastleTreeMapLayout.HubSize(b));
             int branch=b;
             hub.AddComponent<Button>().onClick.AddListener(()=>
             {
@@ -127,7 +127,7 @@ public sealed class CastleTreeView : MonoBehaviour
             Link("Link_"+node.id,start,map.Positions[node.id],CastleTree.Owned(node)?colors[node.branch]:new(.33f,.42f,.36f));
         }
         var home=Surface(content,"TreeOrigin",Color.clear,Vector2.zero,Vector2.zero);
-        MapRect((RectTransform)home.transform,Vector2.zero,new(84,84));
+        MapRect((RectTransform)home.transform,Vector2.zero,CastleTreeMapLayout.OriginSize);
         var homeIcon=Icon(home.transform,"Castle",CastleTreeArt.Building("FacilityRankTower"),new(.02f,.16f),new(.98f,1));
         home.AddComponent<Button>().onClick.AddListener(()=>{selected=null;dirty=true;});
         Text(home.transform,"Name","城下",new(0,0),new(1,.32f),18).alignment=TextAlignmentOptions.Center;
@@ -135,7 +135,7 @@ public sealed class CastleTreeView : MonoBehaviour
         {
             bool owned=CastleTree.Owned(node),available=CastleTree.Blocked(node).Length==0;
             var go=Surface(content,"TreeNode_"+node.id,owned?new(.15f,.29f,.21f):new(.10f,.15f,.12f),Vector2.zero,Vector2.zero);
-            float side=Mathf.Max(46,(node.kind==CastleTree.Kind.Facility?96:76)*zoom);
+            float side=CastleTreeMapLayout.NodeSize(node,zoom);
             MapRect((RectTransform)go.transform,map.Positions[node.id],new(side,side));
             go.AddComponent<Button>().onClick.AddListener(()=>{selected=node.id;dirty=true;});
             var outline=go.AddComponent<Outline>();outline.effectDistance=new(2,2);
@@ -186,6 +186,7 @@ public sealed class CastleTreeView : MonoBehaviour
         bool compact=UiReadability.Height<500;
         Place((RectTransform)title.transform.parent,new(.025f,compact?.68f:.70f),new(.975f,.91f));
         Place(scroll.viewport,new(.025f,.10f),new(.975f,compact?.66f:.68f));
+        scroll.viewport.offsetMin=new Vector2(0,48/fontScale);
         if(compact)
         {
             Place(title.rectTransform,new(.15f,.50f),new(.74f,.98f));
@@ -206,7 +207,8 @@ public sealed class CastleTreeView : MonoBehaviour
         toolbar.sizeDelta=new Vector2(176,40)/fontScale;toolbar.anchoredPosition=new Vector2(-6,6)/fontScale;
         var resetRect=respec.GetComponent<RectTransform>();
         resetRect.anchorMin=resetRect.anchorMax=new(.025f,.10f);resetRect.pivot=new(0,0);
-        resetRect.sizeDelta=new Vector2(156,40)/fontScale;resetRect.anchoredPosition=new Vector2(6,6)/fontScale;
+        float resetWidth=Mathf.Min(156,UiReadability.Width*.95f-196);
+        resetRect.sizeDelta=new Vector2(resetWidth,40)/fontScale;resetRect.anchoredPosition=new Vector2(6,6)/fontScale;
     }
     private void DrawSlot(Transform parent)
     {

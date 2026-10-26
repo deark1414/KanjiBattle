@@ -1,6 +1,31 @@
 const assert=require('node:assert/strict');
 const expand=['c11','s1','c13','c14','s2','c27','s3','c23','s4','c19','c31','c32','s5'];
+function assertTreeSpacing(state){
+  const overlap=(a,b)=>Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x)>.0001&&
+    Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y)>.0001;
+  const nodes=state.controls.filter(c=>/\/(TreeNode_[^/]+|TreeBranch_\d+|TreeOrigin)$/.test(c.path));
+  for(let a=0;a<nodes.length;a++)for(let b=a+1;b<nodes.length;b++)
+    assert(!overlap(nodes[a].rect,nodes[b].rect),`${nodes[a].path} overlaps ${nodes[b].path}`);
+  const tools=state.controls.filter(c=>/\/(TreeRespec|TreeZoomOut|TreeZoomIn|TreeCenter)$/.test(c.path));
+  for(let a=0;a<tools.length;a++){
+    assert(!overlap(tools[a].rect,state.treeViewport),'Tools must stay outside the scrolling map');
+    for(let b=a+1;b<tools.length;b++)assert(!overlap(tools[a].rect,tools[b].rect),'Tree tools overlap');
+  }
+  assert(!state.treeOverflow,`Tree text overflow: ${state.treeOverflowNames}`);
+}
 module.exports=[
+  ...[{width:320,height:740},{width:390,height:844},{width:844,height:390},{width:1280,height:800}].map(viewport=>({
+    id:'tree-spacing-'+viewport.width,name:'城下のノード・分類名・操作欄の重なり '+viewport.width,fixture:'standard',viewport,
+    async run(game){
+      await game.request('treeFresh');
+      for(const stage of [0,15,35]){
+        await game.request('treeAdvance',String(stage));await game.page.waitForTimeout(700);await game.request();
+        await game.named('TreeCenter');assertTreeSpacing(game.state);await game.screenshot('spacing-'+stage);
+      }
+      for(let i=0;i<8;i++)await game.named('TreeZoomIn');
+      assertTreeSpacing(game.state);await game.screenshot('spacing-max-zoom');
+    }
+  })),
   {
     id:'tree-investment',name:'同じキャラノードで反復強化・カテゴリ強化・保存・振り直し',fixture:'standard',viewport:{width:390,height:844},
     async run(game){

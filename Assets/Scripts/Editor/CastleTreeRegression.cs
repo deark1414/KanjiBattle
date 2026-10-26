@@ -21,10 +21,24 @@ public static class CastleTreeRegression
                 current=nodes.Single(n=>n.id==current.parent);Check(path.Add(current.id),"acyclic prerequisites");
             }
         }
-        var map=new CastleTreeMapLayout(nodes);
-        Check(map.Positions.Count==nodes.Count,"all nodes placed on radial map");
-        for(int a=0;a<nodes.Count;a++)for(int b=a+1;b<nodes.Count;b++)
-            Check(Vector2.Distance(map.Positions[nodes[a].id],map.Positions[nodes[b].id])>=76,"map nodes do not overlap");
+        foreach(int stage in Enumerable.Range(0,9).Select(i=>i*5))
+        {
+            var visible=nodes.Where(n=>n.stage<=stage).ToArray();
+            var map=new CastleTreeMapLayout(visible);
+            Check(map.Positions.Count==visible.Length,"all nodes placed on radial map");
+            foreach(float zoom in new[]{.5f,.75f,1f,1.25f})
+            {
+                var bounds=new System.Collections.Generic.List<(string name,Vector2 point,Vector2 size)>();
+                bounds.Add(("origin",Vector2.zero,CastleTreeMapLayout.OriginSize));
+                foreach(int branch in Enumerable.Range(0,5).Where(b=>visible.Any(n=>n.branch==b)))
+                    bounds.Add(("branch "+branch,map.Hubs[branch]*zoom,CastleTreeMapLayout.HubSize(branch)));
+                foreach(var node in visible)
+                    bounds.Add((node.id,map.Positions[node.id]*zoom,Vector2.one*CastleTreeMapLayout.NodeSize(node,zoom)));
+                for(int a=0;a<bounds.Count;a++)for(int b=a+1;b<bounds.Count;b++)
+                    Check(!CastleTreeMapLayout.Overlaps(bounds[a].point,bounds[a].size,bounds[b].point,bounds[b].size,7.9f),
+                        $"stage {stage}, zoom {zoom}: {bounds[a].name} overlaps {bounds[b].name}");
+            }
+        }
         foreach(var node in nodes.Where(n=>n.kind==CastleTree.Kind.Facility))
             Check(CastleTreeArt.Facility(CastleTree.Facility(node))!=null,"existing building art resolves");
         var stages=AssetDatabase.LoadAssetAtPath<StageDatabase>("Assets/ScriptableObjects/Stages/StageDatabase.asset");
