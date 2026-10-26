@@ -26,7 +26,7 @@ public sealed class CastleTreeView : MonoBehaviour
     {
         Place((RectTransform)transform,Vector2.zero,Vector2.one);
         fontScale=UiReadability.Scale(GetComponentInParent<Canvas>());
-        var detail=Surface(transform,"TreeDetail",new(.065f,.11f,.09f,1),new(.025f,.70f),new(.975f,.91f));
+        var detail=Surface(transform,"TreeDetail",new(.065f,.11f,.09f,.90f),new(.025f,.70f),new(.975f,.91f));
         detailIcon=Surface(detail.transform,"SelectedIcon",Color.white,new(.015f,.10f),new(.23f,.90f)).GetComponent<Image>();
         detailIcon.preserveAspect=true;detailIcon.raycastTarget=false;
         title=Text(detail.transform,"Title","城下",new(.25f,.67f),new(.98f,.98f),24);
@@ -34,7 +34,7 @@ public sealed class CastleTreeView : MonoBehaviour
         status=Text(detail.transform,"Status","",new(.25f,.02f),new(.72f,.30f),18);
         action=Command(detail.transform,"TreePurchase","解放",new(.74f,.02f),new(.98f,.29f),()=>
         {if(CastleTree.Purchase(selected))GameAudio.Instance.Play(GameSound.Click);dirty=true;});
-        var view=Surface(transform,"TreeViewport",new(.045f,.075f,.065f,1),new(.025f,.10f),new(.975f,.68f));
+        var view=Surface(transform,"TreeViewport",new(.10f,.17f,.13f,.38f),new(.025f,.10f),new(.975f,.68f));
         view.AddComponent<RectMask2D>();scroll=view.AddComponent<ScrollRect>();
         scroll.horizontal=true;scroll.vertical=true;scroll.inertia=false;scroll.scrollSensitivity=28;
         scroll.movementType=ScrollRect.MovementType.Clamped;
@@ -269,6 +269,9 @@ public sealed class CastleTreeView : MonoBehaviour
     }
     private void Link(string name,Vector2 a,Vector2 b,Color color)
     {
+        var road=Surface(content,name+"_Road",new(.075f,.10f,.08f,.8f),Vector2.zero,Vector2.zero).GetComponent<RectTransform>();
+        MapRect(road,(a+b)*.5f,new(7,Vector2.Distance(a,b)*zoom));
+        road.localRotation=Quaternion.Euler(0,0,-Mathf.Atan2(b.x-a.x,b.y-a.y)*Mathf.Rad2Deg);road.GetComponent<Image>().raycastTarget=false;
         var line=Surface(content,name,color,Vector2.zero,Vector2.zero).GetComponent<RectTransform>();
         MapRect(line,(a+b)*.5f,new(3,Vector2.Distance(a,b)*zoom));
         line.localRotation=Quaternion.Euler(0,0,-Mathf.Atan2(b.x-a.x,b.y-a.y)*Mathf.Rad2Deg);line.GetComponent<Image>().raycastTarget=false;
