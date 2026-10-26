@@ -30,7 +30,7 @@ public static class ElementSkillExecutor
     public static void EndSideTurn(BattleManager battle, bool ally)
     {
         foreach (BattleCharacter unit in battle.gridMap.Values)
-            if (unit != null && unit.isAlly == ally) unit.WindBoost = unit.WindSlow = false;
+            if (unit != null && unit.isAlly == ally) unit.TickWind();
     }
 
     public static bool ExecuteLightning(BattleCharacter caster, BattleCharacter target, BattleManager battle)
@@ -85,9 +85,10 @@ public static class ElementSkillExecutor
             BattleCharacter recipient = friends.FirstOrDefault(unit => unit != wind && Helps(unit));
             if (recipient != null || Helps(wind))
             {
-                wind.WindBoost = true;
+                int duration=wind.isAlly?CharacterInvestment.WindDuration(wind.OriginalData):1;
+                wind.ApplyWind(true,duration);
                 recipient ??= friends.FirstOrDefault(unit => unit != wind);
-                if (recipient != null) recipient.WindBoost = true;
+                if (recipient != null) recipient.ApplyWind(true,duration);
                 battle.PlayElementEffect(wind, "追風", new Color(0.45f, 1f, 0.75f));
                 if (recipient != null) battle.PlayElementEffect(recipient, "移動+1", new Color(0.45f, 1f, 0.75f));
                 battle.AddLog($"{wind.DisplayName} の追風！ 自分と味方の移動+1");
@@ -97,7 +98,7 @@ public static class ElementSkillExecutor
                 var targets = enemies.Where(unit => !unit.WindSlow).ToList();
                 if (targets.Count == 0) continue;
                 BattleCharacter victim = targets[Random.Range(0, targets.Count)];
-                victim.WindSlow = true;
+                victim.ApplyWind(false,wind.isAlly?CharacterInvestment.WindDuration(wind.OriginalData):1);
                 battle.PlayElementEffect(victim, "向風", new Color(0.6f, 0.8f, 1f));
                 battle.AddLog($"{wind.DisplayName} の向風！ {victim.DisplayName} の移動-1（最低1）");
             }

@@ -795,7 +795,7 @@ public partial class BattleManager : MonoBehaviour
             switch (character.data.category)
             {
                 case CharacterCategory.Number1:
-                    character.SetNumberPassiveAttackBonus(lowAttackBonus);
+                    character.SetNumberPassiveAttackBonus(Mathf.RoundToInt(lowAttackBonus*character.SkillEffectMultiplier));
                     if (lowStrength > 0)
                     {
                         StartCoroutine(PlayNumberAuraAfterDelay(character, lowStrength, isOneOnlyParty && onePartyCount >= 4, auraIndex++ * 0.04f));
@@ -811,7 +811,7 @@ public partial class BattleManager : MonoBehaviour
                     break;
 
                 case CharacterCategory.Number3:
-                    character.SetNumberPassiveAttackBonus(highAttackBonus);
+                    character.SetNumberPassiveAttackBonus(Mathf.RoundToInt(highAttackBonus*character.SkillEffectMultiplier));
                     if (highStrength > 0)
                     {
                         StartCoroutine(PlayNumberAuraAfterDelay(character, highStrength, false, auraIndex++ * 0.04f));
@@ -835,7 +835,7 @@ public partial class BattleManager : MonoBehaviour
         if (character == null || healPercent <= 0) return;
 
         int maxHp = character.maxHP;
-        int heal = Mathf.CeilToInt(maxHp * healPercent / 100f);
+        int heal = Mathf.CeilToInt(maxHp * healPercent / 100f * character.SkillEffectMultiplier);
         int before = character.currentHP;
         character.currentHP = Mathf.Min(maxHp, character.currentHP + heal);
         int actualHeal = character.currentHP - before;
@@ -3094,7 +3094,7 @@ public partial class BattleManager : MonoBehaviour
     public void GenerateSoilTraps(BattleCharacter caster)
     {
         if (caster == null) return;
-        GenerateSoilTraps(caster.gridPos, caster.GetEffectiveAttack(this), caster);
+        GenerateSoilTraps(caster.gridPos, Mathf.RoundToInt(caster.GetEffectiveAttack(this)*caster.SkillEffectMultiplier), caster);
     }
 
     public void GenerateSoilTraps(Vector2Int center)

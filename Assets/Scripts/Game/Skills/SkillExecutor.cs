@@ -169,11 +169,8 @@ public static class SkillExecutor
         SkillData skillData = SkillCatalog.Get(skillType);
         int chance = skillData != null && skillData.chanceOverride >= 0
             ? skillData.chanceOverride
-            : data.skillChance;
-        if (isAlly)
-        {
-            chance = Mathf.RoundToInt(chance * CharacterInvestment.Multiplier(investmentSource ?? data,CharacterInvestment.Stat.Technique));
-        }
+            : skillType==SkillType.Counter?30:skillType==SkillType.AreaCounter?20:data.skillChance;
+        chance=CharacterInvestment.AdjustChance(investmentSource??data,skillType,chance,isAlly);
         return Mathf.Clamp(chance, 0, 95);
     }
 

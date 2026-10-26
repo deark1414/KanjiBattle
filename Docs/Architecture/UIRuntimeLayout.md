@@ -73,4 +73,4 @@ npm run qa:visual
 For deployment-bound changes, also run the Unity WebGL build and repeat `npm run qa:visual` against the regenerated `Docs` output.
 # キャラ別育成の補足（2026-10-26）
 
-`CastleTreeView`は加入済みキャラの耐久・攻撃・専門強化も同じマップに表示する。専門強化は技能、または固定能力キャラの守備。詳細欄は仮効果・費用・取得済み状態を示す。左下の育成振り直しは確認画面付きで、右下の倍率／中央復帰操作と分離する。加入・増枠・施設は振り直さない。
+`CastleTreeView`はキャラ加入とスキルの反復強化を同じコマのノードへまとめる。加入後もクリック可能で、上部に現在の段階・効果・次の強化・費用を表示する。カテゴリの共通強化だけは別の建物ノード。左下の振り直しはキャラとカテゴリのスキル育成を対象にし、加入・増枠・機能施設を残す。右下の倍率／中央復帰操作と分離する。

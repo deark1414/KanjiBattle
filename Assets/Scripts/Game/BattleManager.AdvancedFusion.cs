@@ -9,7 +9,7 @@ public partial class BattleManager
     public int CurrentBattleTurn => fusionTurn;
     private readonly Dictionary<int, int> grassSplits = new();
     private sealed class RainZone
-    { public bool ally; public Vector2Int center; public int remaining = 2; public int recordToken; }
+    { public bool ally; public Vector2Int center; public int remaining = 2; public int recordToken; public float effect=1; }
     private readonly List<RainZone> rainZones = new();
     private readonly Dictionary<Vector2Int, GameObject> rainMarkers = new();
 
@@ -69,7 +69,7 @@ public partial class BattleManager
                             StartCoroutine(SpriteProjectileVfxRoutine(unit.transform as RectTransform,
                                 enemy.transform as RectTransform, "Gun", useArc: true));
                             PlaySupportBurst(enemy, "MortarImpact", .65f);
-                            enemy.TakeDamage(Mathf.Max(1, Mathf.RoundToInt(unit.GetEffectiveAttack(this) * .5f)),
+                            enemy.TakeDamage(Mathf.Max(1, Mathf.RoundToInt(unit.GetEffectiveAttack(this) * .5f*unit.SkillEffectMultiplier)),
                                 this, unit, actionLabel: "要塞の迫撃砲");
                         }
                     break;
@@ -90,12 +90,12 @@ public partial class BattleManager
         foreach (var friend in gridMap.Values.Where(friend => friend != null && !friend.isDead
             && friend.currentHP > 0 && friend.isAlly == dice.isAlly).ToArray())
         {
-            if (face <= 2) HealFusion(friend, .06f, dice.RecordToken);
-            else if (face <= 4) friend.DiceDefensePercent = 20;
-            else friend.ApplyAttackBuff(BattleAttackBuff.Dice, 20, 1);
+            if (face <= 2) HealFusion(friend, .06f*dice.SkillEffectMultiplier, dice.RecordToken);
+            else if (face <= 4) friend.DiceDefensePercent = Mathf.RoundToInt(20*dice.SkillEffectMultiplier);
+            else friend.ApplyAttackBuff(BattleAttackBuff.Dice, Mathf.RoundToInt(20*dice.SkillEffectMultiplier), 1);
         }
         PlaySupportDice(dice, face);
-        AddLog($"{dice.DisplayName} の賽子【{face}】！ {(face <= 2 ? "全体回復" : face <= 4 ? "防御+20%" : "攻撃+20%")}");
+        AddLog($"{dice.DisplayName} の賽子【{face}】！ {(face <= 2 ? "全体回復" : face <= 4 ? $"防御+{Mathf.RoundToInt(20*dice.SkillEffectMultiplier)}%" : $"攻撃+{Mathf.RoundToInt(20*dice.SkillEffectMultiplier)}%")}");
     }
 
     private void HealFusion(BattleCharacter unit, float rate, int recordToken)
@@ -109,7 +109,7 @@ public partial class BattleManager
 
     public void CastRain(BattleCharacter caster, Vector2Int center)
     {
-        var zone = new RainZone { ally = caster.isAlly, center = center, recordToken = caster.RecordToken };
+        var zone = new RainZone { ally = caster.isAlly, center = center, recordToken = caster.RecordToken,effect=caster.SkillEffectMultiplier };
         HealRainZone(zone); rainZones.Add(zone); RefreshRainMarkers();
         AddLog($"{caster.DisplayName} が回復の雨を設置（3回・重複可）");
     }
@@ -118,7 +118,7 @@ public partial class BattleManager
     {
         foreach (var unit in gridMap.Values.Where(unit => unit != null && !unit.isDead && unit.currentHP > 0
             && unit.isAlly == zone.ally && BattleRangeService.Distance(zone.center, unit.gridPos) <= 1).ToArray())
-            HealFusion(unit, .03f, zone.recordToken);
+            HealFusion(unit, .03f*zone.effect, zone.recordToken);
     }
 
     private void RefreshRainMarkers()
@@ -165,9 +165,9 @@ public partial class BattleManager
             if (IsCellFree(cell)) { empty = cell; break; }
         }
         if (!empty.HasValue) return null;
-        int hp = sand ? Mathf.Max(1, source.maxHP / 2) : source.maxHP;
-        int attack = Mathf.Max(1, Mathf.RoundToInt(source.attack * (sand ? .5f : .7f)));
-        int defense = sand ? source.defense / 2 : source.defense;
+        int hp = sand ? Mathf.Max(1, Mathf.FloorToInt(source.maxHP*.5f*source.SkillEffectMultiplier)) : source.maxHP;
+        int attack = Mathf.Max(1, Mathf.RoundToInt(source.attack * (sand ? .5f : .7f)*source.SkillEffectMultiplier));
+        int defense = sand ? Mathf.FloorToInt(source.defense*.5f*source.SkillEffectMultiplier) : source.defense;
         var data = CharacterData.CreateBattleCopy(sand ? "砂" : "草", sand ? SkillType.None : SkillType.Grass, hp, attack, defense);
         fusionRuntimeData.Add(data);
         SpawnCharacter(data, empty.Value, source.isAlly, source.level);

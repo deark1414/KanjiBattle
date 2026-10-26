@@ -24,12 +24,14 @@ async function main(){
     await click('DeployButton');assert.equal((await state()).battle.units.filter(u=>!u.ally).length,3);
     await click('CancelDeployment');await page.goto(base);await ready();assert((await state()).owned.includes(11));
     await page.setViewportSize({width:390,height:844});await page.waitForTimeout(1000);
-    current=await state();assert(!current.treeOverflow);assert.deepEqual(errors,[]);
+    current=await state();await page.screenshot({path:'tmp/e2e/manual-tree-mobile.png'});
+    assert(!current.treeOverflow,JSON.stringify(current.treeOverflowNames));assert.deepEqual(errors,[]);
     await page.screenshot({path:'tmp/e2e/manual-tree-mobile.png'});
     await page.goto(base+'?preset=tree&chapter=15');await ready();await page.waitForTimeout(1000);
-    current=await state();assert(current.treeVisible.includes('u10_0'));assert.equal(current.stagePoints,230);
+    current=await state();assert(!current.treeVisible.some(id=>id.startsWith('u')));assert(current.treeVisible.includes('k0_4'));assert.equal(current.stagePoints,230);
     assert.equal(current.investmentRefund,0);assert(!current.treeOverflow);
-    await click('TreeBranch_0');await page.screenshot({path:'tmp/e2e/manual-investment-mobile.png'});
+    await click('TreeBranch_0');await click('TreeNode_c10');await click('TreePurchase');assert.equal((await state()).investmentRefund,4);
+    await page.screenshot({path:'tmp/e2e/manual-investment-mobile.png'});
     assert.deepEqual(errors,[]);
     console.log('Passed: manual tree preset, purchase, real campaign deployment, reload, portrait, character investment preset.');
   }finally{await browser.close();}

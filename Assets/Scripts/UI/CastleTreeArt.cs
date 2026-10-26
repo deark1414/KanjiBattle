@@ -29,9 +29,8 @@ public static class CastleTreeArt
     });
     public static Sprite Investment(CharacterInvestment.Stat stat)=>Building(stat switch
     {
-        CharacterInvestment.Stat.Health=>"FacilityInfirmary",
-        CharacterInvestment.Stat.Attack=>"FacilityMartialHall",
-        CharacterInvestment.Stat.Defense=>"FacilityBarracks",
+        CharacterInvestment.Stat.Chance or CharacterInvestment.Stat.ChanceII=>"FacilityShrine",
+        CharacterInvestment.Stat.Duration or CharacterInvestment.Stat.DurationII=>"FacilityDrillTower",
         _=>"FacilityStrategyHall"
     });
 }

@@ -18,10 +18,10 @@ public static class FusionReactionRules
             return true;
         }
         if (battle == null || !skillHit || !IsProjectile(attacker.data.skillType)) return false;
-        bool protectedByLamp = battle.gridMap.Values.Any(unit => unit != null && unit != target && !unit.isDead
+        var lamp = battle.gridMap.Values.Where(unit => unit != null && unit != target && !unit.isDead
             && unit.currentHP > 0 && unit.isAlly == target.isAlly && unit.data.skillType == SkillType.Lantern
-            && BattleRangeService.Distance(unit.gridPos, target.gridPos) == 1);
-        if (!protectedByLamp || !SkillExecutor.RollSkillActivation(70)) return false;
+            && BattleRangeService.Distance(unit.gridPos, target.gridPos) == 1).OrderByDescending(unit=>unit.SkillEffectMultiplier).FirstOrDefault();
+        if (lamp==null || !SkillExecutor.RollSkillActivation(Mathf.Min(95,Mathf.RoundToInt(70*lamp.SkillEffectMultiplier)))) return false;
         battle.RecordProtection(target, incomingDamage, true);
         battle.PlayElementEffect(target, "回避", new Color(1f, .85f, .45f));
         battle.AddLog($"{target.DisplayName} は灯に守られ遠距離攻撃を回避！");
@@ -42,16 +42,18 @@ public static class FusionReactionRules
         }
         if (skill == SkillType.Grass && target.currentHP > 0
             && (long)target.currentHP * 4 <= (long)target.maxHP * 3) battle?.SplitGrass(target);
-        if (skill == SkillType.Mountain && !attacker.isDead && SkillExecutor.RollSkillActivation(30))
+        if (skill == SkillType.Mountain && !attacker.isDead && SkillExecutor.RollSkillActivation(
+            CharacterInvestment.AdjustChance(target.OriginalData,skill,Mathf.RoundToInt(30*target.SkillEffectMultiplier),target.isAlly)))
         {
             battle?.PlaySupportBurst(target, "MountainRebound", .6f);
             battle?.PlaySupportLink(target, attacker, "MortarShell", .1f);
             battle?.AddLog($"{target.DisplayName} の山びこ！ {loss}を返した");
             attacker.TakeDamage(loss, battle, target, ignoreDefense: true, origin: BattleDamageOrigin.Returned);
         }
-        if (skill == SkillType.Fortress && battle != null && SkillExecutor.RollSkillActivation(25))
+        if (skill == SkillType.Fortress && battle != null && SkillExecutor.RollSkillActivation(
+            CharacterInvestment.AdjustChance(target.OriginalData,skill,25,target.isAlly)))
         {
-            int damage = Mathf.Max(1, Mathf.RoundToInt(loss * .25f));
+            int damage = Mathf.Max(1, Mathf.RoundToInt(loss * .25f*target.SkillEffectMultiplier));
             foreach (BattleCharacter enemy in battle.gridMap.Values.Where(unit => unit != null && !unit.isDead
                 && unit.currentHP > 0 && unit.isAlly != target.isAlly
                 && BattleRangeService.Distance(unit.gridPos, target.gridPos) == 1).ToArray())

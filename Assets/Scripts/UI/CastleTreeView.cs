@@ -13,7 +13,7 @@ public sealed class CastleTreeView : MonoBehaviour
     private Button action,respec,zoomOut,zoomIn;
     private GameObject resetDialog;
     private ScrollRect scroll;
-    private string selected="c11",signature;
+    private string selected="c11",signature,mapSignature;
     private float fontScale,lastZoom=.5f,zoom=.5f,nextRefresh;
     private bool dirty=true,centerPending=true;
     private Vector2 requestedCenter;
@@ -57,7 +57,7 @@ public sealed class CastleTreeView : MonoBehaviour
     {
         if(resetDialog!=null||CharacterInvestment.Refund==0)return;
         resetDialog=Surface(transform,"TreeRespecDialog",new(0,0,0,.94f),Vector2.zero,Vector2.one);
-        Text(resetDialog.transform,"Question","キャラ強化を振り直しますか？",new(.06f,.65f),new(.94f,.80f),25);
+        Text(resetDialog.transform,"Question","スキル強化を振り直す？",new(.06f,.65f),new(.94f,.80f),23);
         Text(resetDialog.transform,"Refund",$"戦果 {CharacterInvestment.Refund} を全額返却\n仲間・編成枠・機能解放はそのまま",new(.06f,.40f),new(.94f,.63f),21);
         Command(resetDialog.transform,"TreeRespecCancel","戻る",new(.08f,.19f),new(.46f,.32f),()=>Destroy(resetDialog));
         Command(resetDialog.transform,"TreeRespecConfirm","振り直す",new(.54f,.19f),new(.92f,.32f),()=>
@@ -72,7 +72,7 @@ public sealed class CastleTreeView : MonoBehaviour
         if(Time.unscaledTime>=nextRefresh)
         {
             nextRefresh=Time.unscaledTime+.4f;
-            string value=$"{UiReadability.Width}:{UiReadability.Height}:{GameManager.Instance?.StagePoints}:{GameManager.Instance?.GetHighestClearedStageId()}:{CastleTree.Slots}:{PlayerInventory.Instance?.GetUnlockedCharacters().Count}";
+            string value=$"{UiReadability.Width}:{UiReadability.Height}:{UiReadability.Scale(GetComponentInParent<Canvas>())}:{GameManager.Instance?.StagePoints}:{GameManager.Instance?.GetHighestClearedStageId()}:{CastleTree.Slots}:{PlayerInventory.Instance?.GetUnlockedCharacters().Count}";
             if(signature!=value){signature=value;dirty=true;}
         }
         if(dirty)Redraw();
@@ -80,6 +80,20 @@ public sealed class CastleTreeView : MonoBehaviour
     private void Redraw()
     {
         dirty=false;
+        var nodes=CastleTree.Nodes.Where(CastleTree.Visible).ToList();
+        string geometry=$"{UiReadability.Width}:{UiReadability.Height}:{UiReadability.Scale(GetComponentInParent<Canvas>())}:{zoom}:{string.Join(",",nodes.Select(n=>n.id))}";
+        if(mapSignature==geometry&&map!=null)
+        {
+            RefreshNodeStyles(nodes);ShowDetails();
+            respec.interactable=CharacterInvestment.Refund>0;
+            if(centerPending)
+            {
+                scroll.StopMovement();content.anchoredPosition=-requestedCenter*zoom/fontScale;
+                centerPending=false;scroll.viewport.GetComponent<RectMask2D>().PerformClipping();
+            }
+            return;
+        }
+        mapSignature=geometry;
         Vector2 worldCenter=content!=null?-content.anchoredPosition*fontScale/lastZoom:Vector2.zero;
         foreach(Transform child in content){child.gameObject.SetActive(false);Destroy(child.gameObject);}
         float scale=UiReadability.Scale(GetComponentInParent<Canvas>());
@@ -90,7 +104,6 @@ public sealed class CastleTreeView : MonoBehaviour
             fontScale=scale;
         }
         LayoutChrome();
-        var nodes=CastleTree.Nodes.Where(CastleTree.Visible).ToList();
         map=new CastleTreeMapLayout(nodes);
         float maxX=map.Positions.Count==0?250:Mathf.Max(250,map.Positions.Values.Max(p=>Mathf.Abs(p.x))+90);
         float maxY=map.Positions.Count==0?250:Mathf.Max(250,map.Positions.Values.Max(p=>Mathf.Abs(p.y))+90);
@@ -131,7 +144,7 @@ public sealed class CastleTreeView : MonoBehaviour
             else
             {
                 var sprite=node.kind==CastleTree.Kind.Character?CastleTree.Character(node)?.icon:
-                    node.kind==CastleTree.Kind.Upgrade?CastleTreeArt.Investment(node.stat):CastleTreeArt.Facility(CastleTree.Facility(node));
+                    node.kind is CastleTree.Kind.Upgrade or CastleTree.Kind.CategoryUpgrade?CastleTreeArt.Investment(node.stat):CastleTreeArt.Facility(CastleTree.Facility(node));
                 var icon=Icon(go.transform,"NodeIcon",sprite,new(.05f,.05f),new(.95f,.95f));
                 icon.color=owned||available?Color.white:new(.64f,.69f,.65f);
             }
@@ -143,7 +156,30 @@ public sealed class CastleTreeView : MonoBehaviour
         Canvas.ForceUpdateCanvases();scroll.StopMovement();
         Vector2 center=centerPending?requestedCenter:worldCenter;
         content.anchoredPosition=-center*zoom/scale;
+        scroll.viewport.GetComponent<RectMask2D>().PerformClipping();
+        Canvas.ForceUpdateCanvases();
         centerPending=false;lastZoom=zoom;
+    }
+    private void RefreshNodeStyles(IEnumerable<CastleTree.Node> nodes)
+    {
+        foreach(var node in nodes)
+        {
+            var item=content.Find("TreeNode_"+node.id);if(item==null)continue;
+            bool owned=CastleTree.Owned(node),available=CastleTree.Blocked(node).Length==0;
+            item.GetComponent<Image>().color=owned?new(.15f,.29f,.21f):new(.10f,.15f,.12f);
+            item.GetComponent<Outline>().effectColor=node.id==selected?new(1,.81f,.28f):available?colors[node.branch]:new(.29f,.36f,.32f);
+            var icon=item.Find("NodeIcon")?.GetComponent<Image>();
+            if(icon!=null)icon.color=owned||available?Color.white:new(.64f,.69f,.65f);
+            var mark=item.Find("OwnedMark");
+            if(mark==null&&owned)
+            {
+                mark=Surface(item,"OwnedMark",new(.44f,.78f,.49f),new(.76f,.02f),new(.98f,.10f)).transform;
+                mark.GetComponent<Image>().raycastTarget=false;
+            }
+            if(mark!=null)mark.gameObject.SetActive(owned);
+            var line=content.Find("Link_"+node.id)?.GetComponent<Image>();
+            if(line!=null)line.color=owned?colors[node.branch]:new(.33f,.42f,.36f);
+        }
     }
     private void LayoutChrome()
     {
@@ -192,16 +228,22 @@ public sealed class CastleTreeView : MonoBehaviour
             detailIcon.sprite=CastleTreeArt.Building("FacilityRankTower");return;
         }
         title.text=CastleTree.Name(node);action.gameObject.SetActive(true);
+        if(node.kind==CastleTree.Kind.Character&&CastleTree.Owned(node))
+            title.text+=$"　技能 {CastleTree.SkillLevel(node)} / {CharacterInvestment.Upgrades(CastleTree.Character(node)).Length}";
         description.text=node.kind switch
         {
-            CastleTree.Kind.Character=>CastleTree.Owned(node)?SkillDescription.GetShort(CastleTree.Character(node).skillType):"仲間加入・"+CastleTree.Branches[node.branch],
+            CastleTree.Kind.Character=>CastleTree.Owned(node)?CastleTree.NextUpgrade(node) is { } next
+                ?CharacterInvestment.CurrentSummary(CastleTree.Character(node))+"\n次："+CharacterInvestment.Description(next.stat,CastleTree.Character(node))
+                :CharacterInvestment.CurrentSummary(CastleTree.Character(node))+"\nスキル強化完了":"仲間加入・"+CastleTree.Branches[node.branch],
             CastleTree.Kind.Slot=>CastleTree.Owned(node)?"素材のコマを1体追加・取得済":$"編成 {CastleTree.Slots} → {Mathf.Min(8,CastleTree.Slots+1)}枠",
-            CastleTree.Kind.Upgrade=>CharacterInvestment.Description(node.stat),
+            CastleTree.Kind.Upgrade=>CharacterInvestment.Description(node.stat,CastleTree.Character(node)),
+            CastleTree.Kind.CategoryUpgrade=>CharacterInvestment.CategoryDescription(node.branch),
             _=>FacilityDescription(node)
         };
         status.text=CastleTree.Status(node);action.interactable=CastleTree.Blocked(node).Length==0;
-        action.GetComponentInChildren<TextMeshProUGUI>().text=CastleTree.Owned(node)?node.kind==CastleTree.Kind.Facility?"強化":"取得済":"解放";
+        action.GetComponentInChildren<TextMeshProUGUI>().text=CastleTree.Owned(node)?node.kind is CastleTree.Kind.Facility or CastleTree.Kind.Character?"強化":"取得済":"解放";
         detailIcon.sprite=node.kind is CastleTree.Kind.Character or CastleTree.Kind.Upgrade?CastleTree.Character(node)?.icon:
+            node.kind==CastleTree.Kind.CategoryUpgrade?CastleTreeArt.Investment(node.stat):
             node.kind==CastleTree.Kind.Slot?CastleTreeArt.Building("FacilityBarracks"):CastleTreeArt.Facility(CastleTree.Facility(node));
     }
     private static string FacilityDescription(CastleTree.Node node)

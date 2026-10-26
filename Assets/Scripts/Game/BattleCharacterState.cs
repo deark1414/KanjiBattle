@@ -15,10 +15,13 @@ public sealed class BattleCharacterState
     public bool IsDead { get; set; }
     public int NumberPassiveAttackBonusPercent { get; private set; }
     public int StunTurns { get; private set; }
-    public bool WindBoost { get; set; }
-    public bool WindSlow { get; set; }
+    public int WindBoostTurns { get; set; }
+    public int WindSlowTurns { get; set; }
+    public bool WindBoost { get=>WindBoostTurns>0; set=>WindBoostTurns=value?Mathf.Max(1,WindBoostTurns):0; }
+    public bool WindSlow { get=>WindSlowTurns>0; set=>WindSlowTurns=value?Mathf.Max(1,WindSlowTurns):0; }
     public IronForm IronForm { get; set; }
     public bool CoalAwake { get; set; }
+    public int CoalAttackBonus { get; private set; }=40;
     public bool CocoonShield { get; set; }
     public int DiceDefensePercent { get; set; }
     private readonly Dictionary<BattleAttackBuff, (int percent, int turns)> attackBuffs = new();
@@ -37,12 +40,13 @@ public sealed class BattleCharacterState
         IronForm = IronForm.Sword;
         attackBuffs.Clear();
         CoalAwake = CocoonShield = false;
+        CoalAttackBonus=Mathf.RoundToInt(40*(isAlly?CharacterInvestment.Effect(data):1));
         DiceDefensePercent = 0;
     }
 
     public int GetEffectiveAttack()
     {
-        return Mathf.RoundToInt(Attack * (1f + (NumberPassiveAttackBonusPercent + AttackBuffPercent + (CoalAwake ? 40 : 0)) / 100f));
+        return Mathf.RoundToInt(Attack * (1f + (NumberPassiveAttackBonusPercent + AttackBuffPercent + (CoalAwake ? CoalAttackBonus : 0)) / 100f));
     }
 
     public void SetVitals(int hp, int currentHP, int attack, int defense)

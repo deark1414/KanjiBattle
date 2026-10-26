@@ -98,7 +98,7 @@ class GameHarness {
       control = matches.find(item => item.visible && item.reachable);
       if (control) break;
       assert(matches.length > 0, `Control not found: ${description}`);
-      assert(!matches.some(item => item.visible && !item.reachable), `Control is covered by another UI element: ${description}`);
+      assert(!matches.some(item => item.visible && !item.reachable), `Control is covered by another UI element: ${description} (${matches.find(item=>item.visible&&!item.reachable)?.hit??'unknown hit'})`);
       const canvas = await this.page.locator("#unity-canvas").boundingBox();
       if (matches[0].path.includes('/TreeViewport/') && state.treeViewport) {
         const v=state.treeViewport;

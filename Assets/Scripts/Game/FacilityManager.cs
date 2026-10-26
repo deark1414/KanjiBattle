@@ -29,7 +29,8 @@ public class FacilityManager : MonoBehaviour
         facility.effectType is FacilityEffectType.AttackBoost or FacilityEffectType.HealthBoost
             or FacilityEffectType.SkillPowerBoost or FacilityEffectType.SkillChanceBoost;
 
-    private void Start() => RefundRetiredCombatFacilities();
+    private void Start()
+    {RefundRetiredCombatFacilities();CharacterInvestment.RefundLegacyStats();}
 
     public int RefundRetiredCombatFacilities()
     {

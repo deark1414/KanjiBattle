@@ -17,7 +17,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
     [Serializable] public sealed class Control
     {
         public string path; public string text; public string kind; public int id;
-        public bool enabled; public bool selected; public bool visible; public bool reachable; public Box rect;
+        public bool enabled; public bool selected; public bool visible; public bool reachable; public string hit; public Box rect;
     }
     [Serializable] public sealed class Unit { public int id; public int originalId; public bool transformed; public int slot; public string name; public bool ally; public int x; public int y; public int hp; public int maxHP; public int level; public int attackBuff; public bool icon; public bool motif; public bool motifVisible; public float motifAlpha; }
     [Serializable] public sealed class Cell { public int x; public int y; public Box rect; }
@@ -51,6 +51,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public string[] treeVisible,treeFacilityIcons;
         public float treeZoom;
         public int investmentRefund;
+        public string[] investmentOwned;
         public int retiredRefundExpected;
         public bool lastTreePurchase;
         public Box treeViewport;
@@ -114,6 +115,9 @@ public sealed class BattleE2EBridge : MonoBehaviour
                     ResetTreeFixture();break;
                 case "treeFunds": GameManager.Instance.AddStagePoints(int.Parse(request.value));break;
                 case "investmentProbe": ProbeInvestment();break;
+                case "skillInvestmentProbe":ProbeSkillInvestment();break;
+                case "legacyStatSave":
+                    CharacterInvestment.Record("u10_0",4);CharacterInvestment.Record("u10_1",6);CharacterInvestment.Record("u10_2",8);break;
                 case "treeTryPurchase":lastTreePurchase=CastleTree.Purchase(request.value);break;
                 case "legacyCombatSave":
                     var retired=FacilityManager.Instance.GetFacilities().Where(FacilityManager.IsRetiredCombatFacility).ToArray();
@@ -341,6 +345,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
 
     private Snapshot Capture()
     {
+        Canvas.ForceUpdateCanvases();
         BattleManager battle = FindObjectsByType<BattleManager>(FindObjectsInactive.Include, FindObjectsSortMode.None).First();
         FacilityData fusion = FacilityManager.Instance.GetFacilities().First(data => data.effectType == FacilityEffectType.Fusion);
         return new Snapshot
@@ -359,6 +364,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 .Where(image=>image.name=="NodeIcon"&&image.sprite!=null&&image.transform.parent.name.StartsWith("TreeNode_f")).Select(image=>image.transform.parent.name.Substring(9)).ToArray(),
             treeOwned=CastleTree.Nodes.Where(CastleTree.Owned).Select(n=>n.id).ToArray(),
             investmentRefund=CharacterInvestment.Refund,
+            investmentOwned=CharacterInvestment.Purchased,
             retiredRefundExpected=FacilityManager.Instance.GetFacilities().Where(FacilityManager.IsRetiredCombatFacility)
                 .Sum(f=>(f.unlockType==FacilityUnlockType.Free?0:f.unlockStagePointCost)+f.GetUpgradeCost(0)+f.GetUpgradeCost(1)),
             lastTreePurchase=lastTreePurchase,
@@ -396,20 +402,47 @@ public sealed class BattleE2EBridge : MonoBehaviour
         var sword=db.GetById(10);var two=db.GetById(2);
         var ally=new BattleCharacterState();var enemy=new BattleCharacterState();
         ally.Initialize(sword,10,true);enemy.Initialize(sword,10,false);
-        if(ally.MaxHP!=CharacterInvestment.Health(sword,10)||enemy.MaxHP!=sword.GetMaxHP(10))throw new Exception("Personal health boost scope");
-        if(ally.Attack!=Mathf.RoundToInt(sword.GetAttack(10)*CharacterInvestment.Multiplier(sword,CharacterInvestment.Stat.Attack))
-            ||enemy.Attack!=sword.GetAttack(10))throw new Exception("Personal attack boost scope");
+        if(ally.MaxHP!=enemy.MaxHP||ally.Attack!=enemy.Attack||ally.Defense!=enemy.Defense)throw new Exception("Skill tree must not modify base stats");
         var fusion=CharacterData.CreateBattleFusion(BattleFusionRules.GetRecipe(-1001),new[]{two,sword},10);
         try
         {
-            float expected=(two.GetMaxHP(10)*CharacterInvestment.Multiplier(two,CharacterInvestment.Stat.Health)
-                +sword.GetMaxHP(10)*CharacterInvestment.Multiplier(sword,CharacterInvestment.Stat.Health))
-                /(two.GetMaxHP(10)+(float)sword.GetMaxHP(10));
-            if(Mathf.Abs(CharacterInvestment.Multiplier(fusion,CharacterInvestment.Stat.Health)-expected)>.0001f)throw new Exception("Fusion inheritance weighting");
+            float expected=(CharacterInvestment.Effect(two)+CharacterInvestment.Effect(sword))/2;
+            if(Mathf.Abs(CharacterInvestment.Effect(fusion)-expected)>.0001f)throw new Exception("Fusion skill inheritance");
             ally.Initialize(fusion,10,true);enemy.Initialize(fusion,10,false);
-            if(ally.MaxHP!=Mathf.RoundToInt(fusion.GetMaxHP(10)*expected)||enemy.MaxHP!=fusion.GetMaxHP(10))throw new Exception("Fusion applied once, ally only");
+            if(ally.MaxHP!=enemy.MaxHP||ally.Attack!=enemy.Attack)throw new Exception("Fusion base stats unchanged");
         }
         finally{Destroy(fusion);}
+    }
+
+    private static void ProbeSkillInvestment()
+    {
+        var db=Resources.Load<CharacterDatabase>("CharacterDatabase");var hosts=new List<GameObject>();
+        BattleCharacter Unit(int id,bool ally,Vector2Int cell)
+        {var host=new GameObject("SkillInvestmentProbe",typeof(RectTransform));host.SetActive(false);hosts.Add(host);
+            var unit=host.AddComponent<BattleCharacter>();unit.Init(db.GetById(id),cell,ally,10);return unit;}
+        void Check(bool condition,string message){if(!condition)throw new Exception("Skill investment: "+message);}
+        try
+        {
+            var sword=Unit(10,true,new(0,0));var enemy=Unit(10,false,new(1,0));
+            Check(sword.attack==enemy.attack&&sword.maxHP==enemy.maxHP,"base stats unchanged");
+            Check(Mathf.Abs(sword.GetEffectiveSkillPower()-sword.data.skillPower*CharacterInvestment.Effect(sword.data))<.0001f,"ally skill power");
+            Check(enemy.GetEffectiveSkillPower()==enemy.data.skillPower,"enemy not boosted");
+            var shield=Unit(13,true,new(0,0));int hp=shield.currentHP;
+            int defended=Mathf.Max(1,Mathf.FloorToInt(100*100f/(100+shield.defense/4f)));
+            int expected=BattleDamageRules.ReduceByShield(defended,shield.SkillEffectMultiplier);
+            shield.TakeDamage(100,null);Check(hp-shield.currentHP==expected,"shield skill reduction applies");
+            var shadow=Unit(29,true,new(0,0));hp=shadow.currentHP;
+            float strength=shadow.SkillEffectMultiplier;
+            Check(shadow.CopyBattleForm(enemy),"shadow transforms");
+            Check(shadow.attack==Mathf.RoundToInt(enemy.attack*strength)&&shadow.currentHP==hp,"shadow copies enhanced attack, keeps HP");
+            Check(shadow.GetEffectiveSkillPower()==shadow.data.skillPower,"shadow copied skill not enhanced a second time");
+            var wind=Unit(32,true,new(0,0));int turns=CharacterInvestment.WindDuration(wind.data);
+            wind.ApplyWind(true,turns);for(int i=1;i<turns;i++){wind.TickWind();Check(wind.WindBoost,"wind persists");}
+            wind.TickWind();Check(!wind.WindBoost,"wind expires");
+            var ox=db.GetById(30);float xp=1+(ox.skillPower-1)*CharacterInvestment.Effect(ox);
+            Check(Mathf.Abs(BattleRewardRules.ArmyExperienceMultiplier(new[]{ox,ox})-xp)<.0001f,"ox bonus enhanced, duplicates do not stack");
+        }
+        finally{foreach(var host in hosts)Destroy(host);}
     }
 
     private static void ProbeTreeRecruitment(int[] ids)
@@ -454,7 +487,8 @@ public sealed class BattleE2EBridge : MonoBehaviour
             text = string.Join(" ", selectable.GetComponentsInChildren<TMP_Text>().Select(text => text.text)),
             enabled = selectable.IsInteractable(), selected = toggle != null && toggle.isOn,
             rect = box, visible = visible,
-            reachable = hits.Count > 0 && hits[0].gameObject.GetComponentInParent<Selectable>() == selectable
+            reachable = hits.Count > 0 && hits[0].gameObject.GetComponentInParent<Selectable>() == selectable,
+            hit=hits.Count>0?Path(hits[0].gameObject.transform):""
         };
     }
 

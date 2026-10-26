@@ -7,7 +7,7 @@ public static class CastleTree
 {
     public const int InitialSlots = 3, MaximumSlots = 8;
     private const string SlotsKey = "KanjiBattle.CastleTree.Slots.v1";
-    public enum Kind { Character, Facility, Slot, Upgrade }
+    public enum Kind { Character, Facility, Slot, Upgrade, CategoryUpgrade }
     public sealed class Node
     {
         public string id, parent;
@@ -39,13 +39,27 @@ public static class CastleTree
         F(13,3,"c19"); F(3,3);
         C(23,4,10,20); C(24,4,15,26,"c23"); C(25,4,20,30,"c23"); C(30,4,20,28,"c23");
         S(4,4,30,38,"c23"); F(4,4); F(7,4); F(5,4);
-        foreach (var character in nodes.Where(n=>n.kind==Kind.Character).ToArray())
-            foreach (var stat in new[]{CharacterInvestment.Stat.Health,CharacterInvestment.Stat.Attack,
-                CharacterInvestment.Specialty(Resources.Load<CharacterDatabase>("CharacterDatabase")?.GetById(character.target))})
-                nodes.Add(new Node { id=CharacterInvestment.NodeId(character.target,stat), parent=character.id,
-                    kind=Kind.Upgrade,target=character.target,branch=character.branch,stat=stat,
-                    stage=Mathf.Max(character.stage,5+Mathf.Min(2,(int)stat)*5),cost=4+Mathf.Min(2,(int)stat)*2 });
+        for(int branch=0;branch<5;branch++)
+            foreach(var stat in new[]{CharacterInvestment.Stat.Effect,CharacterInvestment.Stat.EffectII})
+                nodes.Add(new Node{id=CharacterInvestment.CategoryId(branch,stat),kind=Kind.CategoryUpgrade,
+                    parent=stat==CharacterInvestment.Stat.EffectII?CharacterInvestment.CategoryId(branch,CharacterInvestment.Stat.Effect):null,
+                    target=branch,branch=branch,stat=stat,stage=stat==CharacterInvestment.Stat.Effect?10:25,
+                    cost=stat==CharacterInvestment.Stat.Effect?10:18});
         return nodes;
+    }
+    public static int SkillLevel(Node node)=>CharacterInvestment.Upgrades(Character(node)).Count(stat=>CharacterInvestment.Owned(CharacterInvestment.NodeId(node.target,stat)));
+    public static Node NextUpgrade(Node character)
+    {
+        foreach(var stat in CharacterInvestment.Upgrades(Character(character)))
+        {
+            string id=CharacterInvestment.NodeId(character.target,stat);
+            if(CharacterInvestment.Owned(id))continue;
+            bool second=CharacterInvestment.IsSecond(stat);
+            bool chance=stat==CharacterInvestment.Stat.Chance&&Character(character)?.skillType!=SkillType.BellEcho;
+            return new Node{id=id,target=character.target,kind=Kind.Upgrade,branch=character.branch,stat=stat,
+                stage=Mathf.Max(character.stage,second?20:chance?10:5),cost=second?8:chance?6:4};
+        }
+        return null;
     }
     public static CharacterData Character(Node node) => Resources.Load<CharacterDatabase>("CharacterDatabase")?.GetById(node.target);
     public static FacilityData Facility(Node node) => FacilityManager.Instance?.GetFacilities().FirstOrDefault(f=>f.facilityId==node.target);
@@ -54,6 +68,7 @@ public static class CastleTree
         Kind.Character => Character(node)?.characterName ?? "？",
         Kind.Facility => Facility(node)?.facilityName ?? "施設",
         Kind.Upgrade => (Character(node)?.characterName??"？")+"・"+CharacterInvestment.Label(node.stat),
+        Kind.CategoryUpgrade => Branches[node.branch]+"・"+CharacterInvestment.Label(node.stat),
         _ => "編成＋1"
     };
     private static HashSet<int> ReadSlots() => PlayerProgressStore.GetString(SlotsKey).Split(',')
@@ -63,16 +78,18 @@ public static class CastleTree
     {
         Kind.Character => PlayerInventory.Instance != null && PlayerInventory.Instance.IsOwned(Character(node)),
         Kind.Facility => FacilityManager.Instance != null && FacilityManager.Instance.IsUnlocked(Facility(node)),
-        Kind.Upgrade => CharacterInvestment.Owned(node.id),
+        Kind.Upgrade or Kind.CategoryUpgrade => CharacterInvestment.Owned(node.id),
         _ => ReadSlots().Contains(node.target)
     };
     public static int RequiredStage(Node node) => node.kind==Kind.Facility
-        ? Mathf.CeilToInt(Mathf.Max(0,Facility(node)?.requiredStageId ?? 0)/5f)*5 : node.stage;
+        ? Mathf.CeilToInt(Mathf.Max(0,Facility(node)?.requiredStageId ?? 0)/5f)*5
+        : node.kind==Kind.Character&&Owned(node)?NextUpgrade(node)?.stage??node.stage:node.stage;
     public static bool Visible(Node node) => Owned(node)||
         (RequiredStage(node)<=(GameManager.Instance?.GetHighestClearedStageId()??0)
         &&(node.kind!=Kind.Upgrade||PlayerInventory.Instance!=null&&PlayerInventory.Instance.IsOwned(Character(node))));
     public static int Cost(Node node)
     {
+        if(node.kind==Kind.Character&&Owned(node))return NextUpgrade(node)?.cost??0;
         if(node.kind!=Kind.Facility)return node.cost;
         var f=Facility(node);var manager=FacilityManager.Instance;
         return manager==null||f==null ? 0 : Owned(node)?manager.GetUpgradeCost(f):manager.GetUnlockCost(f);
@@ -80,7 +97,9 @@ public static class CastleTree
     public static string Blocked(Node node)
     {
         if(node==null)return "不明な解放先";
-        if(Owned(node)&&node.kind!=Kind.Facility)return "解放済";
+        if(Owned(node)&&node.kind==Kind.Character&&NextUpgrade(node)==null)return "スキル強化完了";
+        if(Owned(node)&&node.kind is not (Kind.Facility or Kind.Character))return "解放済";
+        if(node.kind==Kind.Character&&Owned(node)&&(GameManager.Instance?.GetHighestClearedStageId()??0)<RequiredStage(node))return $"第{RequiredStage(node)}局突破で次の強化";
         // Existing unlocks remain usable even when a new tree prerequisite was added.
         if(!Owned(node))
         {
@@ -113,8 +132,10 @@ public static class CastleTree
         }
         if(node.kind==Kind.Character && (Character(node)==null||Character(node).isBoss))return false;
         if(!GameManager.Instance.SpendStagePoints(Cost(node)))return false;
-        if(node.kind==Kind.Character)PlayerInventory.Instance.AddCharacter(Character(node));
-        else if(node.kind==Kind.Upgrade)CharacterInvestment.Record(node.id,Cost(node));
+        if(node.kind==Kind.Character&&Owned(node))
+        {var upgrade=NextUpgrade(node);CharacterInvestment.Record(upgrade.id,upgrade.cost);}
+        else if(node.kind==Kind.Character)PlayerInventory.Instance.AddCharacter(Character(node));
+        else if(node.kind is Kind.Upgrade or Kind.CategoryUpgrade)CharacterInvestment.Record(node.id,Cost(node));
         else
         {
             var slots=ReadSlots();slots.Add(node.target);

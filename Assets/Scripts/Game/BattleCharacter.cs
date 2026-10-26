@@ -21,6 +21,10 @@ public class BattleCharacter : MonoBehaviour
     public bool isDead { get => state.IsDead; set => state.IsDead = value; }
     public bool WindBoost { get => state.WindBoost; set => state.WindBoost = value; }
     public bool WindSlow { get => state.WindSlow; set => state.WindSlow = value; }
+    public void ApplyWind(bool boost,int turns)
+    {if(boost)state.WindBoostTurns=Mathf.Max(state.WindBoostTurns,turns);else state.WindSlowTurns=Mathf.Max(state.WindSlowTurns,turns);}
+    public void TickWind(){state.WindBoostTurns=Mathf.Max(0,state.WindBoostTurns-1);state.WindSlowTurns=Mathf.Max(0,state.WindSlowTurns-1);}
+    public float SkillEffectMultiplier=>isAlly&&!HasTransformed?CharacterInvestment.Effect(OriginalData):1;
     public int MovementModifier => (WindBoost ? 1 : 0) - (WindSlow ? 1 : 0);
     public IronForm IronForm { get => state.IronForm; set => state.IronForm = value; }
     public int AttackBuffPercent => state.AttackBuffPercent;
@@ -119,11 +123,12 @@ if (background != null)
     public bool CopyBattleForm(BattleCharacter target)
     {
         if (HasTransformed || !SupportSkillExecutor.CanCopy(this, target)) return false;
+        float copyEffect=SkillEffectMultiplier;
         HasTransformed = true;
         copiedForm = Instantiate(target.data);
         copiedForm.hideFlags = HideFlags.HideAndDontSave;
         data = copiedForm;
-        attack = target.attack;
+        attack = Mathf.RoundToInt(target.attack*copyEffect);
         defense = target.defense;
         state.SetNumberPassiveAttackBonus(0);
         Sprite sprite = !isAlly && data.enemyIcon != null ? data.enemyIcon : data.icon;
@@ -221,13 +226,13 @@ if (background != null)
 
         if (canMitigate && data != null && BattleDamageRules.HasShield(data.skillType))
         {
-            dmg = BattleDamageRules.ReduceByShield(dmg);
+            dmg = BattleDamageRules.ReduceByShield(dmg,SkillEffectMultiplier);
             bm?.PlayDefensiveVfx(this, SkillType.Shield);
         }
 
         if (canMitigate && data != null
             && data.skillType == SkillType.IronAdapt && IronForm == IronForm.Shield)
-            dmg = Mathf.Max(1, Mathf.FloorToInt(dmg * 0.75f));
+            dmg = Mathf.Max(1, Mathf.FloorToInt(dmg * (1-Mathf.Min(.5f,.25f*SkillEffectMultiplier))));
 
         if (canMitigate && data != null && data.skillType == SkillType.Coal && !CoalAwake)
             dmg = Mathf.Max(1, Mathf.FloorToInt(dmg * 0.5f));
@@ -237,7 +242,7 @@ if (background != null)
         if (origin == BattleDamageOrigin.Direct && bm != null)
         {
             BattleCharacter protector = BattleDamageRules.FindProtector(this, bm.gridMap.Values);
-            int shared = protector == null ? 0 : BattleDamageRules.GuardShare(dmg, protector.currentHP, protector.data.skillPower);
+            int shared = protector == null ? 0 : BattleDamageRules.GuardShare(dmg, protector.currentHP, protector.GetEffectiveSkillPower());
             if (shared > 0)
             {
                 dmg -= shared;
@@ -359,6 +364,8 @@ if (background != null)
             }
         }
 
+        chance=CharacterInvestment.AdjustChance(OriginalData,skillType,chance,isAlly);
+        reflectPercent=Mathf.Min(.8f,reflectPercent*SkillEffectMultiplier);
         if (SkillExecutor.ForceSkillActivationForVfxReview)
         {
             chance = 100;
@@ -483,9 +490,7 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
     public float GetEffectiveSkillPower()
     {
         float power = data != null ? data.skillPower : 1f;
-        return isAlly
-            ? power * CharacterInvestment.Multiplier(OriginalData,CharacterInvestment.Stat.Technique)
-            : power;
+        return power*SkillEffectMultiplier;
     }
 
     public void SetNumberPassiveAttackBonus(int percent)
