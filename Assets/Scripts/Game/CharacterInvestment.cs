@@ -144,7 +144,7 @@ public static class CharacterInvestment
             SkillType.WaterHeal=>$"回復 最大HPの{WaterRecoveryRatio(data,effect)*100:0.#}%",
             SkillType.Shield=>$"被害軽減 {20*effect:0.#}%",
             SkillType.GuardAlly=>$"肩代わり {data.skillPower*100*effect:0.#}%",
-            SkillType.ProjectileGuard=>$"遠距離肩代わり {Mathf.Clamp01(data.skillPower*effect)*100:0.#}% / 引受分を30%軽減",
+            SkillType.ProjectileGuard=>$"遠距離肩代わり {BattleDamageRules.GuardRatio(data.skillPower*effect,true)*100:0.#}% / 引受分の37.5%を負担 / 発動時防御+10%（最大30%）",
             SkillType.Wall=>$"遠距離軽減 {Mathf.Clamp01(data.skillPower)*100:0.#}% / 銃の貫通停止（固定）",
             SkillType.ExperienceBonus=>$"勝利経験値 ×{1+(data.skillPower-1)*effect:0.##}",
             SkillType.ShadowCopy=>$"変身時の攻撃力 ×{effect:0.##}",

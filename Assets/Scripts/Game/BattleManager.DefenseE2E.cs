@@ -12,6 +12,7 @@ public partial class BattleManager
         { if (!value) throw new System.InvalidOperationException("Projectile guard: " + label); }
         var ox = allies[0]; var second = allies[1]; var target = allies[2]; var shell = allies[4]; var attacker = enemies[0];
         var shellData = shell.data; var attackerData = attacker.data;
+        int previousTurn = fusionTurn;
         var attackDefinition = Instantiate(attackerData);
         void Place(BattleCharacter unit, Vector2Int cell)
         {
@@ -40,10 +41,12 @@ public partial class BattleManager
                     var record = battleRecords.Entries.Single(row => row.token == ox.RecordToken).result;
                     long guarded = record.guarded, prevented = record.prevented, received = record.received;
                     target.TakeDamage(100, this, attacker, ignoreDefense: true);
-                    Check(target.currentHP == 950 && ox.currentHP == 965, "100 becomes 50 plus 35: " + skill + "/" + side);
+                    Check(target.currentHP == 980 && ox.currentHP == 970, "100 becomes 20 plus 30: " + skill + "/" + side);
+                    Check(target.OxDefensePercent == 10 && ox.OxDefensePercent == 10,
+                        "each recipient gains defense only once during the same turn");
                     Check(second.currentHP == 1000 && shell.currentHP == 1000, "no duplicate or chained sharing");
-                    if (side) Check(record.guarded - guarded == 300 && record.prevented - prevented == 90
-                        && record.received - received == 210, "records distinguish fifty guarded, fifteen prevented, thirty-five received");
+                    if (side) Check(record.guarded - guarded == 480 && record.prevented - prevented == 300
+                        && record.received - received == 180, "records distinguish eighty guarded, fifty prevented, thirty received");
                 }
                 foreach (SkillType skill in new[] { SkillType.Slash, SkillType.Spear, SkillType.ChainLightning, SkillType.Dragon, SkillType.Fortress })
                 {
@@ -68,13 +71,22 @@ public partial class BattleManager
                 Check(ox.currentHP == 900, "ox does not reduce a direct hit to itself");
             }
             Reset(true); attackDefinition.skillType = SkillType.Gun;
+            for (int turn = 1; turn <= 4; turn++)
+            {
+                fusionTurn = turn;
+                target.TakeDamage(100, this, attacker, ignoreDefense: true);
+                Check(target.OxDefensePercent == Mathf.Min(30, (turn + 1) * 10)
+                    && ox.OxDefensePercent == target.OxDefensePercent, "defense persists and caps across turns");
+                Check(second.OxDefensePercent == 0, "unused second ox gains no defense");
+            }
+            Reset(true);
             Place(second, new(5, 5)); Place(shell, new(5, 6)); ox.currentHP = 7;
             target.TakeDamage(100, this, attacker, ignoreDefense: true);
-            Check(target.currentHP == 910 && ox.isDead && !gridMap.ContainsValue(ox), "capacity uses remaining HP and protector can die");
+            Check(target.currentHP == 918 && ox.isDead && !gridMap.ContainsValue(ox), "capacity uses remaining HP and protector can die");
             Check(BattleRewardRules.ArmyExperienceMultiplier(deployedAllies) == 1, "no residual experience bonus");
             AddLog("遠距離吸収チェック完了");
         }
-        finally { shell.data = shellData; attacker.data = attackerData; Destroy(attackDefinition); }
+        finally { fusionTurn = previousTurn; shell.data = shellData; attacker.data = attackerData; Destroy(attackDefinition); }
     }
 
     internal void ProbeDefenseSkills()

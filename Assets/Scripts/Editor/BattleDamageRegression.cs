@@ -13,20 +13,30 @@ public static class BattleDamageRegression
         Check(BattleDamageRules.GuardShare(1, 100, 0.25f) == 0, "small hit does not create extra damage");
         Check(BattleDamageRules.GuardShare(80, 100, 2f) == 80
             && BattleDamageRules.GuardShare(80, 100, -1f) == 0, "invalid ratios are clamped");
-        Check(BattleDamageRules.GuardShare(100, 100, .5f, true) == 50
-            && BattleDamageRules.GuardLoss(50, true) == 35, "ox halves the hit and reduces only its share by thirty percent");
+        Check(BattleDamageRules.GuardShare(100, 100, .8f, true) == 80
+            && BattleDamageRules.GuardLoss(80, true) == 30, "ox leaves twenty on ally and pays thirty for a hundred-point hit");
         for (int hp = 0; hp <= 100; hp++)
         {
-            int share = BattleDamageRules.GuardShare(100, hp, .5f, true);
+            int share = BattleDamageRules.GuardShare(100, hp, .8f, true);
             int loss = BattleDamageRules.GuardLoss(share, true);
             Check(loss <= hp && loss <= share && (share == 0 || loss >= 1), "bounded protection with no free absorption");
         }
-        Check(BattleDamageRules.GuardShare(100, 7, .5f, true) == 10
-            && BattleDamageRules.GuardLoss(10, true) == 7, "low HP capacity accounts for transfer mitigation exactly once");
-        Check(BattleDamageRules.GuardShare(int.MaxValue, int.MaxValue, 1, true) == int.MaxValue,
+        Check(BattleDamageRules.GuardShare(100, 7, .8f, true) == 18
+            && BattleDamageRules.GuardLoss(18, true) == 7, "low HP capacity accounts for transfer mitigation exactly once");
+        Check(BattleDamageRules.GuardShare(int.MaxValue, int.MaxValue, 1, true) == (int)System.Math.Floor(int.MaxValue * .9d),
             "large damage protection does not overflow");
         var ox = Resources.Load<CharacterDatabase>("CharacterDatabase").GetById(30);
-        Check(ox.skillType == SkillType.ProjectileGuard && ox.skillPower == .5f, "ox asset uses the new passive");
+        Check(ox.skillType == SkillType.ProjectileGuard && ox.skillPower == .8f, "ox asset uses the new passive");
+        var state = new BattleCharacterState();
+        state.Initialize(ox, 1, false);
+        Check(state.ApplyOxDefense(1) && state.OxDefensePercent == 10 && !state.ApplyOxDefense(1),
+            "defense increases only once per recipient per turn");
+        Check(state.ApplyOxDefense(2) && state.ApplyOxDefense(3) && !state.ApplyOxDefense(4)
+            && state.OxDefensePercent == 30, "permanent combat defense caps at thirty percent");
+        state.Initialize(ox, 1, false);
+        Check(state.OxDefensePercent == 0 && state.ApplyOxDefense(1), "new battle resets defense and turn stamp");
+        state.IsDead = true;
+        Check(!state.ApplyOxDefense(2), "guard defense cannot revive a dead ox");
         Check(BattleRewardRules.ArmyExperienceMultiplier(new[] { ox, ox }) == 1, "actual ox data has no experience bonus");
         Check(Resources.Load<CharacterDatabase>("CharacterDatabase").GetById(15).skillType == SkillType.Wall,
             "wall asset replaces reflection with projectile blocking");
@@ -62,13 +72,13 @@ public static class BattleDamageRegression
             guard.gridPos = new(0, 0);
             Check(BattleDamageRules.FindProtector(target, units) == null, "distance and enemy guards rejected");
             Check(BattleDamageRules.FindProtector(guard, new[] { guard }) == null, "no self protection");
-            var projectileGuard = Create(new(1, 3), true, SkillType.ProjectileGuard, .5f);
+            var projectileGuard = Create(new(1, 3), true, SkillType.ProjectileGuard, .8f);
             var projectileUnits = new[] { guard, projectileGuard };
             guard.gridPos = new(3, 3);
             Check(BattleDamageRules.FindProtector(target, projectileUnits) == guard, "ox does not intercept non-projectiles");
             Check(BattleDamageRules.FindProtector(target, projectileUnits, true) == projectileGuard,
                 "one strongest eligible protector is used, not ox plus shell");
-            guard.data.skillPower = .5f;
+            guard.data.skillPower = .8f;
             Check(BattleDamageRules.FindProtector(target, projectileUnits, true) == projectileGuard,
                 "equal shares prefer the protector with lower transferred damage");
             projectileGuard.isDead = true;
@@ -95,6 +105,18 @@ public static class BattleDamageRegression
             Check(SkillExecutor.TryExecuteDetailed(projectileGuard, target, null).Failure == SkillExecutionFailure.PassiveOrReactiveSkill,
                 "ox is a passive and does not consume its ordinary attack action");
             var wall=Create(new(2,3),true,SkillType.Wall,1);
+            var fortified=Create(new(0,6),true,SkillType.Slash);
+            fortified.defense=100;
+            fortified.currentHP=100;
+            fortified.TakeDamage(100,null);
+            Check(fortified.currentHP==20,"unbuffed defense baseline");
+            for(int turn=1;turn<=3;turn++) fortified.ApplyOxDefense(turn);
+            fortified.currentHP=100;
+            fortified.TakeDamage(100,null);
+            Check(fortified.currentHP==25,"ox defense modifies actual defense, not incoming damage by a flat thirty percent");
+            fortified.currentHP=100;
+            fortified.TakeDamage(100,null,ignoreDefense:true);
+            Check(fortified.currentHP==0,"ox defense does not bypass ignore-defense damage");
             var shooter=Create(new(2,0),false,SkillType.Gun);
             foreach(bool side in new[]{true,false})
             {

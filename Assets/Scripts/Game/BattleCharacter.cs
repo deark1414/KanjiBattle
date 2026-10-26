@@ -33,6 +33,8 @@ public class BattleCharacter : MonoBehaviour
     public bool CoalAwake { get => state.CoalAwake; set => state.CoalAwake = value; }
     public bool CocoonShield { get => state.CocoonShield; set => state.CocoonShield = value; }
     public int DiceDefensePercent { get => state.DiceDefensePercent; set => state.DiceDefensePercent = value; }
+    public int OxDefensePercent => state.OxDefensePercent;
+    public bool ApplyOxDefense(int turn) => state.ApplyOxDefense(turn);
     public bool IsGenerated { get; set; }
     public BattleCharacter Summoner { get; set; }
     public int LineageId { get; set; }
@@ -208,7 +210,7 @@ if (background != null)
         bool armorReducedDamage = false;
         // Defense-based reduction (unless Armor skill or ignoreDefense is true)
         if (canMitigate && !ignoreDefense && (data == null || data.skillType != SkillType.Armor)) {
-            float effectiveDefense = Mathf.Max(0, defense * (1f + DiceDefensePercent / 100f) / 4f);
+            float effectiveDefense = Mathf.Max(0, defense * (1f + (DiceDefensePercent + OxDefensePercent) / 100f) / 4f);
             int reducedByDefense = Mathf.FloorToInt(dmg * 100f / (100f + effectiveDefense));
             dmg = Mathf.Max(1, reducedByDefense);
         }
@@ -270,6 +272,15 @@ if (background != null)
                 protector.TakeDamage(loss, bm, attacker, ignoreDefense: true,
                     actionLabel: $"{protector.DisplayName} が {DisplayName} をかばった！",
                     origin: BattleDamageOrigin.Transferred);
+                if (projectileGuard)
+                {
+                    // Per-recipient turn stamps also prevent several oxen from stacking a single hit.
+                    int turn = bm.CurrentBattleTurn;
+                    if (protector.ApplyOxDefense(turn))
+                        bm.AddLog($"{protector.DisplayName} の防御が強化（+{protector.OxDefensePercent}%）");
+                    if (ApplyOxDefense(turn))
+                        bm.AddLog($"{DisplayName} の防御が強化（+{OxDefensePercent}%）");
+                }
             }
         }
 

@@ -24,6 +24,16 @@ public sealed class BattleCharacterState
     public int CoalAttackBonus { get; private set; }=40;
     public bool CocoonShield { get; set; }
     public int DiceDefensePercent { get; set; }
+    public int OxDefensePercent { get; private set; }
+    private int lastOxDefenseTurn = -1;
+
+    public bool ApplyOxDefense(int turn)
+    {
+        if (IsDead || CurrentHP <= 0 || turn == lastOxDefenseTurn || OxDefensePercent >= 30) return false;
+        lastOxDefenseTurn = turn;
+        OxDefensePercent = Mathf.Min(30, OxDefensePercent + 10);
+        return true;
+    }
     private readonly Dictionary<BattleAttackBuff, (int percent, int turns)> attackBuffs = new();
 
     public void Initialize(CharacterData data, int level, bool isAlly)
@@ -42,6 +52,8 @@ public sealed class BattleCharacterState
         CoalAwake = CocoonShield = false;
         CoalAttackBonus=Mathf.RoundToInt(40*(isAlly?CharacterInvestment.Effect(data):1));
         DiceDefensePercent = 0;
+        OxDefensePercent = 0;
+        lastOxDefenseTurn = -1;
     }
 
     public int GetEffectiveAttack()

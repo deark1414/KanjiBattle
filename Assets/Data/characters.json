@@ -384,7 +384,7 @@
     "baseDefense": 10,
     "defenseGrowth": 1,
     "skillType": "ProjectileGuard",
-    "skillPower": 0.5,
+    "skillPower": 0.8,
     "skillChance": 0,
     "isBoss": false
   },

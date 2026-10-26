@@ -24,19 +24,24 @@ public static class BattleDamageRules
     public static bool HasShield(SkillType skill) => skill is SkillType.Shield or SkillType.Warrior or SkillType.Sentinel or SkillType.Fortress;
     public static int ReduceByShield(int damage,float effect=1) => damage <= 0 ? 0 : Mathf.Max(1, Mathf.FloorToInt(damage * (1-Mathf.Min(.5f,.2f*effect))));
 
-    public const int ProjectileGuardDamagePercent = 70;
+    // Redirect 80% of the original hit; the ox pays 3/8 of that share (30% of the hit).
+    private const int ProjectileGuardDamageNumerator = 375;
+    private const int ProjectileGuardDamageScale = 1000;
+
+    public static float GuardRatio(float ratio, bool projectileGuard) =>
+        Mathf.Clamp(ratio, 0, projectileGuard ? .9f : 1f);
 
     public static int GuardShare(int damage, int protectorHP, float ratio, bool projectileGuard = false)
     {
         long capacity = Mathf.Max(0, protectorHP);
-        if (projectileGuard) capacity = capacity * 100 / ProjectileGuardDamagePercent;
+        if (projectileGuard) capacity = capacity * ProjectileGuardDamageScale / ProjectileGuardDamageNumerator;
         // Preserve skill-tree percentages across float rounding (for example 65%).
-        double requested = System.Math.Floor(Mathf.Max(0, damage) * System.Math.Round(Mathf.Clamp01(ratio), 6));
+        double requested = System.Math.Floor(Mathf.Max(0, damage) * System.Math.Round(GuardRatio(ratio, projectileGuard), 6));
         return (int)System.Math.Min(capacity, System.Math.Min(Mathf.Max(0, damage), requested));
     }
 
     public static int GuardLoss(int shared, bool projectileGuard) => projectileGuard
-        ? (int)((System.Math.Max(0, shared) * (long)ProjectileGuardDamagePercent + 99) / 100)
+        ? (int)((System.Math.Max(0, shared) * (long)ProjectileGuardDamageNumerator + ProjectileGuardDamageScale - 1) / ProjectileGuardDamageScale)
         : Mathf.Max(0, shared);
 
     public static BattleCharacter FindProtector(BattleCharacter target, IEnumerable<BattleCharacter> candidates, bool projectileHit = false)

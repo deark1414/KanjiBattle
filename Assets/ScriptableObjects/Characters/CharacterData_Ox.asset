@@ -25,7 +25,7 @@ MonoBehaviour:
   production: 0
   skillType: 47
   skillChance: 0
-  skillPower: 0.5
+  skillPower: 0.8
   level: 1
   maxLevel: 50
   attackGrowth: 3
