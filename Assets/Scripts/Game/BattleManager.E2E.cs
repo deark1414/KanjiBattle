@@ -110,6 +110,15 @@ public partial class BattleManager
     internal BattleE2EBridge.BattleState CaptureE2EState()
     {
         var frames=GetComponentsInChildren<RectTransform>().Where(rect=>rect.name=="FusionMaterial"&&rect.gameObject.activeInHierarchy).ToArray();
+        var glows=GetComponentsInChildren<UnityEngine.UI.Image>().Where(image=>image.name=="FusionPieceGlow"&&image.gameObject.activeInHierarchy).ToArray();
+        bool GlowValid(UnityEngine.UI.Image glow)
+        {
+            var source=glow.transform.parent.GetComponent<UnityEngine.UI.Image>();
+            if(source==null||source.sprite==null||glow.sprite!=source.sprite||glow.raycastTarget)return false;
+            var outer=BattleE2EBridge.Bounds(source.rectTransform);var inner=BattleE2EBridge.Bounds(glow.rectTransform);
+            return inner.x>=outer.x-.0001f&&inner.y>=outer.y-.0001f&&inner.x+inner.w<=outer.x+outer.w+.0001f
+                &&inner.y+inner.h<=outer.y+outer.h+.0001f&&glow.color.a<=.12f&&!glow.GetComponent<CanvasGroup>().blocksRaycasts;
+        }
         bool FrameValid(RectTransform frame)
         {
             var cell=frame.parent as RectTransform;
@@ -123,6 +132,7 @@ public partial class BattleManager
         return new BattleE2EBridge.BattleState
         {
             fusionFrameCount=frames.Length,fusionFramesValid=frames.All(FrameValid),
+            fusionGlowCount=glows.Length,fusionGlowsValid=glows.All(GlowValid),
             active = gameObject.activeInHierarchy,
             paused = isPaused,
             header = BattleE2EBridge.Bounds(transform.Find("BattleInformationHeader") as RectTransform),
