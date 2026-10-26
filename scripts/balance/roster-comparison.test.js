@@ -25,6 +25,7 @@ test('comparison validates actual eight-slot stats and ignores computed Unity ve
   const manifest = { kind: 'projectile-probe', characters: [{ id: 10 }], recipes: [], stages: [35], seeds: 1, level: 33 };
   validateComparison([row], [job], manifest, source);
   validateComparison([row], [job], {...manifest, kind: 'guard-probe'}, source);
+  validateComparison([row], [job], {...manifest, kind: 'fusion-probe'}, source);
   const bad = structuredClone(row); bad.initialUnits[0].materials = [];
   assert.throws(() => validateComparison([bad], [job], manifest, source));
   const moved = structuredClone(row); moved.initialUnits[0].x = 5;

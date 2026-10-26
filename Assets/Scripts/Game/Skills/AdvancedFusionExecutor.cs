@@ -3,6 +3,19 @@ using UnityEngine;
 
 public static class AdvancedFusionExecutor
 {
+    public static bool IsMagnetRear(SkillType skill) => FusionReactionRules.IsProjectile(skill)
+        || skill is SkillType.WaterHeal or SkillType.Rain or SkillType.Forge or SkillType.BellEcho
+            or SkillType.WindChime or SkillType.Dice or SkillType.Sand or SkillType.Lantern;
+
+    public static Vector2Int MagnetDestination(Vector2Int source, Vector2Int target, SkillType skill)
+    {
+        Vector2Int toward = BattleRangeService.NormalizeDirection(source - target);
+        return target + (IsMagnetRear(skill) ? -toward : toward);
+    }
+
+    public static int DiceBonusPercent(int turn, float effect = 1) =>
+        Mathf.RoundToInt(Mathf.Clamp((100 + (Mathf.Clamp(turn, 1, 9) - 1) * 25) * effect, 0, 300));
+
     public static BattleCharacter FindFriendlyTarget(BattleManager battle, BattleCharacter caster, bool unprotected) =>
         battle.gridMap.Values.Where(unit => unit != null && !unit.isDead && unit.currentHP > 0
             && unit.isAlly == caster.isAlly && (!unprotected || !unit.CocoonShield))
@@ -15,7 +28,7 @@ public static class AdvancedFusionExecutor
         if (skill is SkillType.Rain or SkillType.Cocoon)
         {
             if (target.isAlly != caster.isAlly) return false;
-            if (skill == SkillType.Rain) battle.CastRain(caster, target.gridPos);
+            if (skill == SkillType.Rain) battle.CastRain(caster, battle.FindRainCenter(caster));
             else
             {
                 if (target.CocoonShield) return false;

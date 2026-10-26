@@ -45,7 +45,7 @@ function analyze(rows, manifest) {
 }
 function validateComparison(rows, jobs, manifest, source) {
   validateResults(rows, jobs, source);
-  assert([undefined, 'projectile-probe', 'origin-probe', 'guard-probe'].includes(manifest.kind));
+  assert([undefined, 'projectile-probe', 'origin-probe', 'guard-probe', 'fusion-probe'].includes(manifest.kind));
   if (!manifest.kind) {
     assert.equal(manifest.characters.length, 26);
     assert.equal(manifest.recipes.length, 17);
@@ -114,7 +114,8 @@ async function main() {
     const seeds = Number(option('--seeds', 3));
     assert(Number.isInteger(seeds) && seeds >= 1 && seeds <= 10);
     const guardProbe = args.includes('--guard-probe');
-    const probe = args.includes('--projectile-probe') || args.includes('--origin-probe') || guardProbe;
+    const fusionProbe = args.includes('--fusion-probe');
+    const probe = args.includes('--projectile-probe') || args.includes('--origin-probe') || guardProbe || fusionProbe;
     if (probe) {
       const source = path.resolve(root, option('--source', 'tmp/balance/roster-screen'));
       assert.notEqual(source, directory, 'Do not overwrite the original comparison');
@@ -124,8 +125,9 @@ async function main() {
       const stage = stages.find(stage => stage.stageId === 25);
       const originProbe = args.includes('--origin-probe');
       const rearOx = args.includes('--rear-ox');
-      const ids = guardProbe ? [13,14,15,30] : originProbe ? [] : rearOx ? [30] : [10, 13, 14, 15, 30];
+      const ids = fusionProbe ? [] : guardProbe ? [13,14,15,30] : originProbe ? [] : rearOx ? [30] : [10, 13, 14, 15, 30];
       const selected = sourceManifest.recipes.filter(recipe => {
+        if (fusionProbe) return ['磁石','雨','賽子'].includes(recipe.name);
         if (guardProbe) return false;
         if (!originProbe) return !rearOx && recipe.id === -1017;
         const control = sourceJobs.find(job => job.profile === `fusion/${recipe.id}/materials`);
@@ -133,8 +135,8 @@ async function main() {
         const origin = control.allyPositions.slice(0, recipe.materials.length).sort((a,b)=>a.y-b.y||a.x-b.x)[0];
         return origin.x !== fused.allyPositions[0].x || origin.y !== fused.allyPositions[0].y;
       });
-      const manifest = { ...sourceManifest, kind: guardProbe ? 'guard-probe' : originProbe ? 'origin-probe' : 'projectile-probe',
-        stages: guardProbe ? [35,36,40] : originProbe ? [36,40] : [25], seeds, ...(originProbe || guardProbe ? {} : { enemyLevel: 33 }),
+      const manifest = { ...sourceManifest, kind: fusionProbe ? 'fusion-probe' : guardProbe ? 'guard-probe' : originProbe ? 'origin-probe' : 'projectile-probe',
+        stages: guardProbe || fusionProbe ? [35,36,40] : originProbe ? [36,40] : [25], seeds, ...(originProbe || guardProbe || fusionProbe ? {} : { enemyLevel: 33 }),
         characters: sourceManifest.characters.filter(character => ids.includes(character.id)), recipes: selected,
         ...(rearOx ? { oxRear: true } : {}) };
       const profiles = [...ids.map(id => 'normal/' + id), ...selected.flatMap(recipe =>
@@ -144,7 +146,7 @@ async function main() {
       const jobs = profiles.flatMap(profile => manifest.stages.flatMap(stageId => Array.from({ length: seeds }, (_, index) => {
         const job = structuredClone(sourceJobs.find(job => job.profile === profile));
         assert(job, 'Missing source formation');
-        if (guardProbe) return { ...job, stage: stageId, seed: 1729 + index * 7919 };
+        if (guardProbe || fusionProbe) return { ...job, stage: stageId, seed: 1729 + index * 7919 };
         if (originProbe) {
           if (profile.endsWith('/fused')) {
             const recipe = selected.find(recipe => profile === `fusion/${recipe.id}/fused`);
@@ -164,7 +166,7 @@ async function main() {
       characters: JSON.parse(fs.readFileSync(path.join(root, 'Assets/Data/characters.json'))),
       skills: JSON.parse(fs.readFileSync(path.join(root, 'Assets/Resources/skills.json'))) };
     fs.writeFileSync(path.join(directory, 'context.json'), JSON.stringify(context, null, 2));
-    console.log(probe ? `追加比較: ${guardProbe ? '終盤の守備役' : args.includes('--origin-probe') ? '融合の通常起点' : '射撃対策・敵Lv33'}・${seeds}シード。`
+    console.log(probe ? `追加比較: ${fusionProbe ? '磁石・雨・賽子' : guardProbe ? '終盤の守備役' : args.includes('--origin-probe') ? '融合の通常起点' : '射撃対策・敵Lv33'}・${seeds}シード。`
       : `無音の比較調査: 通常26種・融合17種の素材個別/融合後、各3局×${seeds}シード。`);
     await new Promise((resolve, reject) => {
       const child = spawn(process.env.UNITY_EDITOR || '/Applications/Unity/Hub/Editor/6000.4.4f1/Unity.app/Contents/MacOS/Unity',

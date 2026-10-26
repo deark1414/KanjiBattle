@@ -21,6 +21,15 @@ public static class CompleteFusionRegression
             Check(BattleFusionRules.Recipes.Count == 17 && BattleFusionRules.Recipes.Select(recipe => recipe.Id).Distinct().Count() == 17,
                 "seventeen unique implemented recipes");
             var db = Resources.Load<CharacterDatabase>("CharacterDatabase");
+            Check(AdvancedFusionExecutor.DiceBonusPercent(1)==100
+                && AdvancedFusionExecutor.DiceBonusPercent(2)==125
+                && AdvancedFusionExecutor.DiceBonusPercent(9)==300
+                && AdvancedFusionExecutor.DiceBonusPercent(20,2)==300, "dice grows from twice to four times without exponential stacking");
+            Check(AdvancedFusionExecutor.MagnetDestination(new(2,4),new(2,2),SkillType.Slash)==new Vector2Int(2,3)
+                && AdvancedFusionExecutor.MagnetDestination(new(2,4),new(4,2),SkillType.Arrow)==new Vector2Int(5,1),
+                "magnet pulls melee and pushes ranged away using grid direction");
+            Check(AdvancedFusionExecutor.IsMagnetRear(SkillType.Rain)
+                && !AdvancedFusionExecutor.IsMagnetRear(SkillType.Fortress), "support and frontline magnet roles are distinct");
             var materials = BattleFusionRules.Recipes.SelectMany(recipe => recipe.Materials).ToHashSet();
             Check(db.characters.Where(data => !data.isBoss && data.category != CharacterCategory.Animal)
                 .All(data => materials.Contains(data.characterName)), "all twenty-two normal material types covered");
@@ -58,6 +67,9 @@ public static class CompleteFusionRegression
             Check(protectedUnit.currentHP == 100 && !protectedUnit.CocoonShield, "one cocoon absorbs one damage segment");
             protectedUnit.TakeDamage(20,null,enemy,ignoreDefense:true);
             Check(protectedUnit.currentHP == 80, "next segment is unprotected");
+            protectedUnit.CocoonShield=true;
+            protectedUnit.TakeDamage(20,null,enemy,ignoreDefense:true,origin:BattleDamageOrigin.Periodic);
+            Check(protectedUnit.currentHP==60&&protectedUnit.CocoonShield,"periodic rain does not trigger direct-hit protection");
             var battle = host.AddComponent<BattleManager>(); battle.gridMap[protectedUnit.gridPos] = protectedUnit;
             protectedUnit.DiceDefensePercent = 20; protectedUnit.ApplyAttackBuff(BattleAttackBuff.Dice,20,1);
             FusionSupportExecutor.EndSideTurn(battle,true);

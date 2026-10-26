@@ -30,6 +30,7 @@ public class BattleCharacter : MonoBehaviour
     public int AttackBuffPercent => state.AttackBuffPercent;
     public void ApplyAttackBuff(BattleAttackBuff source, int percent, int turns) => state.ApplyAttackBuff(source, percent, turns);
     public void TickAttackBuffs() => state.TickAttackBuffs();
+    public void RemoveAttackBuff(BattleAttackBuff source) => state.RemoveAttackBuff(source);
     public bool CoalAwake { get => state.CoalAwake; set => state.CoalAwake = value; }
     public bool CocoonShield { get => state.CocoonShield; set => state.CocoonShield = value; }
     public int DiceDefensePercent { get => state.DiceDefensePercent; set => state.DiceDefensePercent = value; }

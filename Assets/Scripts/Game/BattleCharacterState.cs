@@ -68,6 +68,7 @@ public sealed class BattleCharacterState
     }
 
     public int AttackBuffPercent => attackBuffs.Values.Sum(buff => buff.percent);
+    public void RemoveAttackBuff(BattleAttackBuff source) => attackBuffs.Remove(source);
 
     public void ApplyAttackBuff(BattleAttackBuff source, int percent, int turns)
     {

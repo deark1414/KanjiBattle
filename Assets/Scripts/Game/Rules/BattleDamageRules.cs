@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BattleDamageOrigin { Direct, Transferred, Reflected, Returned }
+public enum BattleDamageOrigin { Direct, Transferred, Reflected, Returned, Periodic }
 
 public static class BattleDamageRules
 {

@@ -32,6 +32,7 @@ public partial class BattleManager
         bool force = SkillExecutor.ForceSkillActivationForVfxReview;
         var attacker = enemies[0]; var target = friends[0];
         CharacterData oldAttacker = attacker.data, oldFriend = target.data;
+        CharacterData oldSecondEnemy = enemies[1].data;
         try
         {
             SkillExecutor.ForceSkillActivationForVfxReview = true;
@@ -49,14 +50,41 @@ public partial class BattleManager
                     Check(enemies[1].gridPos==new Vector2Int(2,3) && !enemies[1].IsStunned(),"water blocks only displacement");
                     impassableCells.Remove(blocked); break;
                 case SkillType.Magnet:
+                    attacker.data=Resources.Load<CharacterDatabase>("CharacterDatabase").GetById(10);
+                    enemies[1].data=Resources.Load<CharacterDatabase>("CharacterDatabase").GetById(17);
+                    root.attack=20;
+                    for(int i=2;i<enemies.Count;i++) Place(enemies[i],new(0,i-2));
+                    foreach(bool side in new[]{true,false})
+                    {
+                        root.isAlly=side;attacker.isAlly=enemies[1].isAlly=!side;
+                        Place(attacker,new(2,2));Place(enemies[1],new(4,2));
+                        attacker.currentHP=enemies[1].currentHP=1000;
+                        var pair=new System.Collections.Generic.List<BattleCharacter>{attacker,enemies[1]};
+                        ResolveMagnet(root,pair);
+                        Check(attacker.gridPos==new Vector2Int(2,3)&&enemies[1].gridPos==new Vector2Int(5,1),
+                            "melee pull and backline push on both sides");
+                        Check(attacker.currentHP==1000&&enemies[1].currentHP==1000,"successful movement deals no collision damage");
+                        Place(attacker,new(2,2));Place(enemies[1],new(4,2));
+                        var blocks=new[]{new Vector2Int(2,3),new Vector2Int(5,1)};
+                        foreach(var cell in blocks) impassableCells.Add(cell);
+                        ResolveMagnet(root,pair);
+                        Check(attacker.currentHP==960&&enemies[1].currentHP==960
+                            &&attacker.gridPos==new Vector2Int(2,2)&&enemies[1].gridPos==new Vector2Int(4,2),
+                            "blocked terrain causes two hundred percent collision damage");
+                        foreach(var cell in blocks) impassableCells.Remove(cell);
+                        Place(attacker,new(2,3));Place(enemies[1],new(5,0));
+                        ResolveMagnet(root,pair);
+                        Check(attacker.currentHP==920&&enemies[1].currentHP==920,
+                            "occupied caster cell and board edge also cause collision damage");
+                    }
+                    root.isAlly=true;attacker.isAlly=enemies[1].isAlly=false;
+                    foreach(var enemy in enemies) enemy.currentHP=1000;
                     var positions=enemies.Select(unit=>unit.gridPos).ToArray();
+                    var priorHP=enemies.Select(unit=>unit.currentHP).ToArray();
                     BeginAdvancedFusionTurn(true,1);
-                    Check(enemies.Where((unit,i)=>unit.gridPos!=positions[i]).Count()==1,"one random enemy moved");
-                    var blocks=enemies.Select(unit=>unit.gridPos+BattleRangeService.NormalizeDirection(root.gridPos-unit.gridPos)).ToArray();
-                    foreach(var cell in blocks) impassableCells.Add(cell);
-                    positions=enemies.Select(unit=>unit.gridPos).ToArray(); BeginAdvancedFusionTurn(true,2);
-                    Check(enemies.Select(unit=>unit.gridPos).SequenceEqual(positions),"blocked destination is not retried");
-                    foreach(var cell in blocks) impassableCells.Remove(cell); break;
+                    Check(enemies.Where((unit,i)=>unit.gridPos!=positions[i]||unit.currentHP!=priorHP[i]).Count()==2,
+                        "turn-start dispatch affects at most two distinct enemies");
+                    break;
                 case SkillType.Mountain:
                     attacker.data=Resources.Load<CharacterDatabase>("CharacterDatabase").GetById(13);
                     root.currentHP=20; int before=attacker.currentHP;
@@ -81,25 +109,56 @@ public partial class BattleManager
                     for(int i=0;i<3;i++) Check(hp[i]-enemies[i].currentHP==20,"area return"); break;
                 case SkillType.Dice:
                     foreach(var unit in allies) unit.currentHP=1;
-                    int heal=Mathf.Max(1,Mathf.RoundToInt(target.maxHP*.06f)); ResolveDice(root,1);
-                    Check(target.currentHP==1+heal,"six percent army heal");
-                    ResolveDice(root,3); Check(allies.All(unit=>unit.DiceDefensePercent==20),"army defense");
+                    fusionTurn=1; ResolveDice(root,1); ResolveDice(root,2);
+                    Check(allies.All(unit=>unit.currentHP==unit.maxHP),"both healing faces fully heal all living allies");
+                    ResolveDice(root,3); ResolveDice(root,4);
+                    Check(allies.All(unit=>unit.DiceDefensePercent==100),"both defense faces double defense without stacking");
                     ResolveDice(root,5); ResolveDice(root,6);
-                    Check(allies.All(unit=>unit.AttackBuffPercent==20),"army attack does not stack");
+                    Check(allies.All(unit=>unit.AttackBuffPercent==100),"both attack faces double attack without stacking");
                     FusionSupportExecutor.EndSideTurn(this,true);
-                    Check(allies.All(unit=>unit.AttackBuffPercent==0 && unit.DiceDefensePercent==20),"defense survives until enemy attacks");
-                    ClearDiceDefense(true);
-                    Check(allies.All(unit=>unit.DiceDefensePercent==0),"defense expires before next friendly phase"); break;
+                    Check(allies.All(unit=>unit.AttackBuffPercent==100 && unit.DiceDefensePercent==100),"both buffs survive enemy phase");
+                    ClearDiceBonuses(true);
+                    Check(allies.All(unit=>unit.DiceDefensePercent==0&&unit.AttackBuffPercent==0),"bonuses expire at next friendly phase");
+                    fusionTurn=2;ResolveDice(root,5);
+                    Check(target.AttackBuffPercent==125,"second turn grows to 2.25 times");
+                    ClearDiceBonuses(true);fusionTurn=20;ResolveDice(root,3);ResolveDice(root,5);
+                    Check(target.AttackBuffPercent==300&&target.DiceDefensePercent==300,"late bonuses cap at four times");
+                    root.isAlly=false;target.currentHP=1;
+                    foreach(var enemy in enemies) enemy.currentHP=1;
+                    ResolveDice(root,2);ResolveDice(root,4);ResolveDice(root,6);
+                    Check(enemies.All(enemy=>enemy.currentHP==enemy.maxHP&&enemy.DiceDefensePercent==300
+                        &&enemy.AttackBuffPercent==300)&&target.currentHP==1,"enemy dice affects only its living army");
+                    root.isAlly=true;
+                    break;
                 case SkillType.Rain:
-                    Place(target,new(2,3)); target.currentHP=1; root.currentHP=1;
-                    int rate=Mathf.Max(1,Mathf.RoundToInt(target.maxHP*.03f));
+                    root.attack=20;
+                    foreach(var friend in allies) friend.currentHP=friend.maxHP;
+                    for(int i=0;i<enemies.Count;i++) Place(enemies[i],new(i+1,0));
+                    Vector2Int best=FindRainCenter(root);
+                    Check(enemies.Count(enemy=>BattleRangeService.Distance(best,enemy.gridPos)<=1)>=3,
+                        "automatic center covers enemy cluster rather than full-health ally feet");
+                    Place(target,new(2,3));target.SetBattleVitals(1000,1,20,0);
+                    Check(BattleRangeService.Distance(FindRainCenter(root),target.gridPos)<=1,"injured ally can outweigh enemy coverage");
+                    Place(attacker,new(3,3));attacker.SetBattleVitals(1000,1000,20,0);attacker.CocoonShield=true;
+                    int rate=100;
                     CastRain(root,target.gridPos); CastRain(root,target.gridPos);
-                    Check(rainZones.Count==2 && target.currentHP==1+2*rate,"rain stacks immediately");
+                    Check(rainZones.Count==2 && target.currentHP==1+2*rate&&attacker.currentHP==980&&attacker.CocoonShield,
+                        "two rain layers heal allies and damage enemies immediately without direct-hit protection");
+                    root.attack=1000;
                     BeginAdvancedFusionTurn(true,1);
-                    Check(target.currentHP==1+4*rate,"both layers continue");
+                    Check(target.currentHP==1+4*rate&&attacker.currentHP==960,"both layers continue with snapshotted attack");
                     Place(target,new(5,3)); int current=target.currentHP;
+                    root.isDead=true;
                     BeginAdvancedFusionTurn(true,2);
-                    Check(rainZones.Count==0 && target.currentHP==current,"fixed cells and three pulses"); break;
+                    Check(rainZones.Count==0 && target.currentHP==current&&attacker.currentHP==940,
+                        "fixed cells expire after three pulses and survive caster death");
+                    root.isDead=false;
+                    root.isAlly=target.isAlly=false;attacker.isAlly=true;
+                    root.attack=20;target.currentHP=1;attacker.currentHP=1000;
+                    Place(attacker,new(4,3));CastRain(root,target.gridPos);
+                    Check(target.currentHP==101&&attacker.currentHP==990,"enemy rain heals enemies and damages allies");
+                    root.isAlly=target.isAlly=true;attacker.isAlly=false;
+                    break;
                 case SkillType.Sand:
                     root.currentHP=1;
                     var copies=Enumerable.Range(0,3).Select(_=>SpawnSandCopy(root)).ToArray();
@@ -148,6 +207,7 @@ public partial class BattleManager
         {
             SkillExecutor.ForceSkillActivationForVfxReview=force;
             attacker.data=oldAttacker; target.data=oldFriend;
+            enemies[1].data=oldSecondEnemy;
         }
     }
 }
