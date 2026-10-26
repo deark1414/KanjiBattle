@@ -23,6 +23,8 @@ public static class CampaignBalanceRunner
         public int[] enemyIds;
         public Vector2Int[] enemyPositions;
         public bool playthrough;
+        public bool comparison;
+        public Vector2Int[] allyPositions;
     }
     private static Job[] jobs;
     private static readonly List<object> results = new();
@@ -79,6 +81,12 @@ public static class CampaignBalanceRunner
                 jobs = JsonConvert.DeserializeObject<Job[]>(File.ReadAllText(Argument("-balancePlan", "tmp/balance/plan.json")));
                 output = Argument("-balanceOutput", "tmp/balance/results.json");
                 Directory.CreateDirectory(Path.GetDirectoryName(output));
+                if (Argument("-balanceComparison", "0") == "1")
+                {
+                    jobs = RosterComparisonPlan.Create(Path.GetDirectoryName(output),
+                        int.Parse(Argument("-comparisonSeeds", "3")));
+                    File.WriteAllText(Argument("-balancePlan", "tmp/balance/plan.json"), JsonConvert.SerializeObject(jobs, Formatting.Indented));
+                }
                 TutorialDirector.Instance?.SuppressForDebug(true);
                 SkillExecutor.ForceSkillActivationForVfxReview = false;
                 QualitySettings.vSyncCount = 0; Application.targetFrameRate = -1;
@@ -112,7 +120,7 @@ public static class CampaignBalanceRunner
             var enemies = Field<List<BattleCharacter>>("enemies");
             bool won = Field<bool>("lastBattleWon");
             results.Add(new { job.stage, job.level, seed = battleSeed, job.profile, job.party, job.upgrades, job.economyWins,
-                job.layout, job.playthrough, job.variant, attempt = attempts + 1,
+                job.layout, job.playthrough, job.variant, job.comparison, attempt = attempts + 1,
                 initialUnits, initialEnemies, economyEntry, enemyIds = Field<StageData>("currentStage").GetEnemies().Select(data => data.characterId).ToArray(),
                 won, turns = Field<int>("fusionTurn"),
                 allyHP = allies.Where(u => u != null && !u.isDead).Sum(u => u.currentHP),
@@ -233,6 +241,7 @@ public static class CampaignBalanceRunner
             ? new[] { 0, 1, 4, 2, 3, 5 } : new[] { 0, 2, 4, 1, 3, 5 } : columns;
         int[] rearColumns = staggered ? new[] { 1, 3, 5, 0, 2, 4 } : columns;
         var positions = party.Select(data => Rear(data) ? new Vector2Int(rearColumns[rear++], 6) : new Vector2Int(frontColumns[front++], 5)).ToArray();
+        if (job.allyPositions != null) positions = job.allyPositions;
         if (job.playthrough && FacilityManager.Instance.IsFusionUnlocked()) positions = SeparateFusionMaterials(party, positions);
         BattleDeploymentRules.Save(party.Select(data => data.characterId).ToArray(), positions);
         battleSeed = job.seed + (job.playthrough ? attempts * 997 : 0);
@@ -302,7 +311,7 @@ public static class CampaignBalanceRunner
         ? Mathf.Max(1, (int)(data.GetMaxHP(level) * 9L / 10)) : data.GetMaxHP(level);
     private static string Route(string profile) => profile == "ranged" ? "ranged" : profile is "spear" or "sentinel" ? "spear" : "balanced";
 
-    private static Vector2Int[] SeparateFusionMaterials(List<CharacterData> party, Vector2Int[] preferred)
+    internal static Vector2Int[] SeparateFusionMaterials(List<CharacterData> party, Vector2Int[] preferred)
     {
         var choices = BattleFusionRules.Empty(party);
         if (BattleFusionRules.ResolveAdjacent(party, preferred, choices).candidates.Count == 0) return preferred;
