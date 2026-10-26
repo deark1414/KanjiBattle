@@ -26,10 +26,16 @@ public static class CharacterInvestmentRegression
             foreach(var node in characters)
             {
                 var upgrades=CharacterInvestment.Upgrades(CastleTree.Character(node));
-                Check(upgrades.Length>=2&&upgrades.All(s=>(int)s>=4),"every character has skill-only upgrades");
+                Check((CastleTree.Character(node).skillType==SkillType.Wall?upgrades.Length==0:upgrades.Length>=2)
+                    &&upgrades.All(s=>(int)s>=4),"skill upgrades except fixed wall immunity");
                 Check(upgrades.All(s=>CastleTreeArt.Investment(s)!=null),"existing icons");
             }
             Check(!CharacterInvestment.Upgrades(db.GetById(10)).Contains(CharacterInvestment.Stat.Chance),"no chance node for guaranteed roles");
+            Check(CharacterInvestment.CurrentSummary(db.GetById(15)).Contains("100%"),"wall immunity is fixed");
+            foreach(string id in new[]{"u15_4","u15_5","u15_6","u15_7"})
+                Check(CharacterInvestment.IsRetiredUpgrade(id),"refund retired wall effect and chance upgrades");
+            Check(!CharacterInvestment.IsRetiredUpgrade("u13_4")&&!CharacterInvestment.IsRetiredUpgrade("k1_4"),
+                "other defense investments remain valid");
             var water=db.GetById(20);
             float Recovery()=>CharacterInvestment.WaterRecoveryRatio(water,CharacterInvestment.Effect(water));
             Check(Mathf.Abs(Recovery()-.3f)<.0001f,"water base recovery 30 percent");

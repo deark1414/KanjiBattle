@@ -28,6 +28,10 @@ public static class BattleDamageRegression
         var ox = Resources.Load<CharacterDatabase>("CharacterDatabase").GetById(30);
         Check(ox.skillType == SkillType.ProjectileGuard && ox.skillPower == .5f, "ox asset uses the new passive");
         Check(BattleRewardRules.ArmyExperienceMultiplier(new[] { ox, ox }) == 1, "actual ox data has no experience bonus");
+        Check(Resources.Load<CharacterDatabase>("CharacterDatabase").GetById(15).skillType == SkillType.Wall,
+            "wall asset replaces reflection with projectile blocking");
+        Check(BattleDamageRules.ReduceByWall(100,1)==0 && BattleDamageRules.ReduceByWall(100,.8f)==20,
+            "wall supports immunity and later fractional mitigation");
         var host = new GameObject("DamageRegression", typeof(RectTransform));
         host.SetActive(false);
         var definitions = new List<CharacterData>();
@@ -90,6 +94,43 @@ public static class BattleDamageRegression
             projectileGuard.isDead = false;
             Check(SkillExecutor.TryExecuteDetailed(projectileGuard, target, null).Failure == SkillExecutionFailure.PassiveOrReactiveSkill,
                 "ox is a passive and does not consume its ordinary attack action");
+            var wall=Create(new(2,3),true,SkillType.Wall,1);
+            var shooter=Create(new(2,0),false,SkillType.Gun);
+            foreach(bool side in new[]{true,false})
+            {
+                wall.isAlly=side;shooter.isAlly=!side;
+                foreach(SkillType skill in new[]{SkillType.Arrow,SkillType.Gun,SkillType.Stone,SkillType.Fireball,SkillType.ScatterShot})
+                {
+                    shooter.data.skillType=skill;wall.currentHP=100;wall.CocoonShield=true;
+                    wall.TakeDamage(40,null,shooter,ignoreDefense:true);
+                    Check(wall.currentHP==100&&wall.CocoonShield,"wall blocks projectiles before consuming cocoon");
+                }
+                wall.CocoonShield=false;
+                foreach(SkillType skill in new[]{SkillType.Slash,SkillType.Spear,SkillType.ChainLightning,SkillType.Dragon})
+                {
+                    wall.currentHP=100;shooter.data.skillType=skill;
+                    wall.TakeDamage(40,null,shooter,ignoreDefense:true);
+                    Check(wall.currentHP==60&&shooter.currentHP==shooter.maxHP,"non-projectiles hurt wall without reflection");
+                }
+                shooter.data.skillType=SkillType.Gun;
+                foreach(BattleDamageOrigin origin in new[]{BattleDamageOrigin.Transferred,BattleDamageOrigin.Reflected,BattleDamageOrigin.Returned})
+                {
+                    wall.currentHP=100;wall.TakeDamage(40,null,shooter,ignoreDefense:true,origin:origin);
+                    Check(wall.currentHP==60,"wall does not block indirect damage");
+                }
+                wall.currentHP=100;wall.TakeDamage(40,null,shooter,ignoreDefense:true,isBasicAttack:true);
+                Check(wall.currentHP==60,"basic attack is not a projectile");
+                wall.currentHP=100;wall.TakeDamage(40,null,ignoreDefense:true);
+                Check(wall.currentHP==60,"traps still hurt wall");
+                var grid=new Dictionary<Vector2Int,BattleCharacter>{{wall.gridPos,wall}};
+                Check(BattleDamageRules.GunLine(shooter,Vector2Int.up,grid,6,7).Count==3,"bullet stops on hostile wall");
+                wall.isDead=true;
+                Check(BattleDamageRules.GunLine(shooter,Vector2Int.up,grid,6,7).Count==6,"dead wall does not block");
+                wall.isDead=false;wall.isAlly=shooter.isAlly;
+                Check(BattleDamageRules.GunLine(shooter,Vector2Int.up,grid,6,7).Count==6,"friendly wall does not obstruct friendly fire");
+            }
+            Check(SkillExecutor.TryExecuteDetailed(wall,shooter,null).Failure==SkillExecutionFailure.PassiveOrReactiveSkill,
+                "wall immunity does not consume an attack action");
         }
         finally
         {

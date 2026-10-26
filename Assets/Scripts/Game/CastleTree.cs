@@ -97,7 +97,8 @@ public static class CastleTree
     public static string Blocked(Node node)
     {
         if(node==null)return "不明な解放先";
-        if(Owned(node)&&node.kind==Kind.Character&&NextUpgrade(node)==null)return "スキル強化完了";
+        if(Owned(node)&&node.kind==Kind.Character&&NextUpgrade(node)==null)
+            return Character(node)?.skillType==SkillType.Wall?"固定スキル":"スキル強化完了";
         if(Owned(node)&&node.kind is not (Kind.Facility or Kind.Character))return "解放済";
         if(node.kind==Kind.Character&&Owned(node)&&(GameManager.Instance?.GetHighestClearedStageId()??0)<RequiredStage(node))return $"第{RequiredStage(node)}局突破で次の強化";
         // Existing unlocks remain usable even when a new tree prerequisite was added.

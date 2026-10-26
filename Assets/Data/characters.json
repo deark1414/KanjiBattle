@@ -139,7 +139,7 @@
     "attackGrowth": 1,
     "baseDefense": 20,
     "defenseGrowth": 2,
-    "skillType": "AreaCounter",
+    "skillType": "Wall",
     "skillPower": 1,
     "skillChance": 0,
     "isBoss": false

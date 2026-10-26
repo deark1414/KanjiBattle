@@ -11,6 +11,7 @@ public static class CharacterInvestment
     public enum Stat { Health, Attack, Technique, Defense, Effect, Chance, EffectII, ChanceII, Duration, DurationII }
     public static Stat[] Upgrades(CharacterData data)
     {
+        if(data?.skillType==SkillType.Wall)return Array.Empty<Stat>();
         if(data?.skillType==SkillType.BellEcho)return new[]{Stat.Chance,Stat.ChanceII};
         if(data?.skillType==SkillType.WindShift)return new[]{Stat.Duration,Stat.DurationII};
         return HasChance(data?.skillType??SkillType.None)
@@ -71,12 +72,17 @@ public static class CharacterInvestment
     {
         if(GameManager.Instance==null)return 0;
         bool Legacy(Entry entry)
-        {var parts=(entry.id??"").Split('_');return parts.Length==2&&parts[0].StartsWith("u")
-            &&int.TryParse(parts[1],out int value)&&value>=0&&value<=3;}
+            => IsRetiredUpgrade(entry.id);
         var ledger=Read();int refund=ledger.entries.Where(Legacy).Sum(e=>e.paid);
         if(ledger.entries.RemoveAll(e=>Legacy(e))==0)return 0;
         cachedJson=JsonUtility.ToJson(ledger);PlayerProgressStore.SetString(Key,cachedJson);PlayerProgressStore.Save();
         GameManager.Instance.AddStagePoints(refund);CastleTree.NotifyChanged();return refund;
+    }
+    public static bool IsRetiredUpgrade(string id)
+    {
+        var parts=(id??"").Split('_');
+        return parts.Length==2&&parts[0].StartsWith("u")&&int.TryParse(parts[1],out int value)
+            && ((value>=0&&value<=3)||(parts[0]=="u15"&&value>=4&&value<=7));
     }
     public static float Effect(CharacterData data)
     {
@@ -139,6 +145,7 @@ public static class CharacterInvestment
             SkillType.Shield=>$"被害軽減 {20*effect:0.#}%",
             SkillType.GuardAlly=>$"肩代わり {data.skillPower*100*effect:0.#}%",
             SkillType.ProjectileGuard=>$"遠距離肩代わり {Mathf.Clamp01(data.skillPower*effect)*100:0.#}% / 引受分を30%軽減",
+            SkillType.Wall=>$"遠距離軽減 {Mathf.Clamp01(data.skillPower)*100:0.#}% / 銃の貫通停止（固定）",
             SkillType.ExperienceBonus=>$"勝利経験値 ×{1+(data.skillPower-1)*effect:0.##}",
             SkillType.ShadowCopy=>$"変身時の攻撃力 ×{effect:0.##}",
             SkillType.Magnet or SkillType.Cocoon=>"距離・対象数・保護回数は固定",

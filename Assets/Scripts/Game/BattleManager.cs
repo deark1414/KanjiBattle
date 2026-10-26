@@ -1873,7 +1873,7 @@ public partial class BattleManager : MonoBehaviour
 
         Color color = new Color(1f, 0.88f, 0.42f);
         caster.PlayCastEffect(color);
-        List<Vector2Int> cells = BattleRangeService.GetLineWithinBoard(caster.gridPos, dir, rows + cols, cols, rows);
+        List<Vector2Int> cells = BattleDamageRules.GunLine(caster, dir, gridMap, cols, rows);
         StartCoroutine(HighlightCellsRoutine(cells, GetSkillImpactRangeColor(SkillType.Gun), 0.30f));
 
         RectTransform from = caster.transform as RectTransform;
@@ -1915,7 +1915,7 @@ public partial class BattleManager : MonoBehaviour
             SkillType.BirdRetreat => "BirdRetreat",
             SkillType.HorseCharge => "HorseCharge",
             SkillType.Counter or SkillType.Shield => "Shield",
-            SkillType.AreaCounter => "Wall",
+            SkillType.AreaCounter or SkillType.Wall => "Wall",
             SkillType.Armor => "Armor",
             SkillType.Dragon => "DragonBreath",
             _ => null

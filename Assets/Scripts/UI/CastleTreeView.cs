@@ -232,13 +232,15 @@ public sealed class CastleTreeView : MonoBehaviour
             detailIcon.sprite=CastleTreeArt.Castle();return;
         }
         title.text=CastleTree.Name(node);action.gameObject.SetActive(true);
-        if(node.kind==CastleTree.Kind.Character&&CastleTree.Owned(node))
+        if(node.kind==CastleTree.Kind.Character&&CastleTree.Owned(node)
+            &&CharacterInvestment.Upgrades(CastleTree.Character(node)).Length>0)
             title.text+=$"　技能 {CastleTree.SkillLevel(node)} / {CharacterInvestment.Upgrades(CastleTree.Character(node)).Length}";
         description.text=node.kind switch
         {
             CastleTree.Kind.Character=>CastleTree.Owned(node)?CastleTree.NextUpgrade(node) is { } next
                 ?CharacterInvestment.CurrentSummary(CastleTree.Character(node))+"\n次："+CharacterInvestment.Description(next.stat,CastleTree.Character(node))
-                :CharacterInvestment.CurrentSummary(CastleTree.Character(node))+"\nスキル強化完了":"仲間加入・"+CastleTree.Branches[node.branch],
+                :CharacterInvestment.CurrentSummary(CastleTree.Character(node))
+                    +(CastleTree.Character(node)?.skillType==SkillType.Wall?"":"\nスキル強化完了"):"仲間加入・"+CastleTree.Branches[node.branch],
             CastleTree.Kind.Slot=>CastleTree.Owned(node)?"素材のコマを1体追加・取得済":$"編成 {CastleTree.Slots} → {Mathf.Min(8,CastleTree.Slots+1)}枠",
             CastleTree.Kind.Upgrade=>CharacterInvestment.Description(node.stat,CastleTree.Character(node)),
             CastleTree.Kind.CategoryUpgrade=>CharacterInvestment.CategoryDescription(node.branch),

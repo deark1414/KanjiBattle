@@ -92,6 +92,7 @@ public partial class BattleManager
             unit.transform.position = gridCells[position.x, position.y].position;
         }
         var guard = allies[0]; var shield = allies[1]; var wall = allies[2]; var second = allies[3];
+        var ranged = allies[4]; var healer = allies[5];
         var enemyGuard = enemies[0]; var enemyShield = enemies[1]; var attacker = enemies[2];
         gridMap.Clear();
         Place(guard, new(1, 3)); Place(shield, new(2, 3)); Place(wall, new(0, 6)); Place(second, new(1, 4));
@@ -136,7 +137,69 @@ public partial class BattleManager
         Check(enemyHP - enemyShield.currentHP == 60 && enemyGuardHP - enemyGuard.currentHP == 20,
             "enemy side uses the same protection rules");
         Check(!SkillExecutor.TryExecute(shield, attacker, this), "shield does not use an active skill action");
+        ProbeWallProjectiles(wall, attacker, ranged, healer);
         AddLog("防御能力チェック完了");
+    }
+
+    private void ProbeWallProjectiles(BattleCharacter wall, BattleCharacter shooter,
+        BattleCharacter front, BattleCharacter rear)
+    {
+        void Check(bool value,string label)
+        { if(!value)throw new System.InvalidOperationException("Wall projectile: "+label); }
+        var original=shooter.data;
+        var originalGrid=gridMap.ToArray();
+        var gun=Instantiate(Resources.Load<CharacterDatabase>("CharacterDatabase").GetById(18));
+        bool wallSide=wall.isAlly, shooterSide=shooter.isAlly, frontSide=front.isAlly, rearSide=rear.isAlly;
+        void Place(BattleCharacter unit,Vector2Int cell,bool ally)
+        {
+            unit.isAlly=ally;unit.gridPos=cell;unit.SetBattleVitals(1000,1000,100,0);
+            gridMap[cell]=unit;unit.transform.position=gridCells[cell.x,cell.y].position;
+        }
+        try
+        {
+            shooter.data=gun;
+            gridMap.Clear();Place(wall,new(2,3),true);Place(shooter,new(2,0),false);
+            var record=battleRecords.Entries.Single(row=>row.token==wall.RecordToken).result;
+            long prevented=record.prevented,received=record.received;
+            foreach(SkillType skill in new[]{SkillType.Arrow,SkillType.Gun,SkillType.Stone,SkillType.Fireball,SkillType.ScatterShot})
+            {
+                gun.skillType=skill;wall.TakeDamage(100,this,shooter,ignoreDefense:true);
+                Check(wall.currentHP==1000&&record.prevented>prevented&&record.received==received,
+                    "immunity credits wall prevention, not cocoon or HP loss");
+                prevented=record.prevented;
+            }
+            gun.skillType=SkillType.Gun;
+            foreach(bool side in new[]{true,false})
+                foreach(Vector2Int dir in new[]{Vector2Int.up,Vector2Int.right,new Vector2Int(1,1)})
+                {
+                    gridMap.Clear();Place(shooter,Vector2Int.zero,!side);
+                    Place(front,dir*2,side);Place(wall,dir*3,side);Place(rear,dir*4,side);
+                    Check(SkillExecutor.TryExecute(shooter,front,this),"gun executes");
+                    Check(front.currentHP<1000&&wall.currentHP==1000&&rear.currentHP==1000,
+                        "enemy before wall hit, wall and enemy behind unharmed: "+side+"/"+dir);
+                    Check(BattleDamageRules.GunLine(shooter,dir,gridMap,cols,rows).Last()==wall.gridPos,
+                        "projectile animation and damage stop on same cell");
+                    gridMap.Clear();Place(shooter,Vector2Int.zero,!side);
+                    Place(wall,dir,side);Place(front,dir*2,side);Place(rear,dir*4,side);
+                    Check(SkillExecutor.TryExecute(shooter,front,this)&&front.currentHP==1000&&rear.currentHP==1000,
+                        "adjacent wall blocks without dead-zone damage");
+                    wall.isAlly=shooter.isAlly;
+                    Check(SkillExecutor.TryExecute(shooter,front,this)&&front.currentHP<1000&&rear.currentHP<1000,
+                        "friendly wall does not stop bullets");
+                }
+            AddLog("壁の遠距離遮断チェック完了");
+        }
+        finally
+        {
+            shooter.data=original;wall.isAlly=wallSide;shooter.isAlly=shooterSide;
+            front.isAlly=frontSide;rear.isAlly=rearSide;Destroy(gun);
+            gridMap.Clear();
+            foreach(var entry in originalGrid)
+            {
+                gridMap[entry.Key]=entry.Value;entry.Value.gridPos=entry.Key;
+                entry.Value.transform.position=gridCells[entry.Key.x,entry.Key.y].position;
+            }
+        }
     }
 }
 #endif

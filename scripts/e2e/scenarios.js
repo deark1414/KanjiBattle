@@ -237,6 +237,7 @@ module.exports = [
       assert(initial.battle.units.some(unit=>unit.id===17 && unit.name==="弓"));
       const state=await game.request("defenseProbe");
       assert(state.battle.logs.some(log=>log.includes("防御能力チェック完了")));
+      assert(state.battle.logs.some(log=>log.includes("壁の遠距離遮断チェック完了")));
       assert(state.battle.logs.some(log=>log.includes("かばった")));
       assert.equal(allies(state).length,5);
       await game.screenshot("guard-resolution");

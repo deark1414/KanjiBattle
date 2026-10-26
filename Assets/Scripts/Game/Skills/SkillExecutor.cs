@@ -27,7 +27,7 @@ public static class SkillExecutor
         }
 
         if (skillType is SkillType.Counter or SkillType.AreaCounter or SkillType.NumberPassive
-            or SkillType.BellEcho or SkillType.GuardAlly or SkillType.ProjectileGuard or SkillType.Shield or SkillType.Armor or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge
+            or SkillType.BellEcho or SkillType.GuardAlly or SkillType.ProjectileGuard or SkillType.Wall or SkillType.Shield or SkillType.Armor or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge
             or SkillType.Magnet or SkillType.Mountain or SkillType.Coal or SkillType.Fortress or SkillType.Dice
             or SkillType.Sand or SkillType.Grass or SkillType.WindChime or SkillType.Lantern)
         {
@@ -606,12 +606,15 @@ public static class SkillExecutor
         bool didHit = false;
         ctx.BattleManager.PlayGunLineVfx(ctx.Caster, chosenDir);
 
-        for (int d = BattleRangeService.MinimumRange(SkillType.Gun); d <= ctx.BattleManager.Rows + ctx.BattleManager.Cols; d++)
+        foreach (Vector2Int pos in BattleDamageRules.GunLine(ctx.Caster, chosenDir, ctx.BattleManager.gridMap,
+            ctx.BattleManager.Cols, ctx.BattleManager.Rows))
         {
-            Vector2Int pos = ctx.Caster.gridPos + chosenDir * d;
-            if (pos.x < 0 || pos.x >= ctx.BattleManager.Cols || pos.y < 0 || pos.y >= ctx.BattleManager.Rows)
+            if (BattleRangeService.Distance(ctx.Caster.gridPos, pos) < BattleRangeService.MinimumRange(SkillType.Gun))
             {
-                break;
+                if (ctx.BattleManager.gridMap.TryGetValue(pos, out var adjacent)
+                    && BattleDamageRules.StopsProjectile(adjacent) && adjacent.isAlly != ctx.Caster.isAlly)
+                    return true;
+                continue;
             }
             if (!ctx.BattleManager.gridMap.TryGetValue(pos, out var target) || target == null)
             {

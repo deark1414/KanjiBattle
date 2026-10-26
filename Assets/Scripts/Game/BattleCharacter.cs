@@ -186,10 +186,22 @@ if (background != null)
         BattleDamageOrigin origin = BattleDamageOrigin.Direct)
     {
         if (isDead || dmg <= 0) return;
+        int incomingDamage = dmg;
+        if (origin == BattleDamageOrigin.Direct && !isBasicAttack && attacker != null
+            && attacker.isAlly != isAlly && BattleDamageRules.StopsProjectile(this)
+            && FusionReactionRules.IsProjectile(attacker.data.skillType))
+        {
+            dmg = BattleDamageRules.ReduceByWall(dmg, data.skillPower);
+            bm?.PlayDefensiveVfx(this, SkillType.Wall);
+            if (dmg == 0)
+            {
+                bm?.RecordDamage(this, attacker, 0, incomingDamage);
+                bm?.AddLog($"{DisplayName} が遠距離攻撃を遮った！");
+                return;
+            }
+        }
         if (origin == BattleDamageOrigin.Direct && attacker != null && attacker.isAlly != isAlly
             && FusionReactionRules.TryProtect(this, attacker, bm, !isBasicAttack, dmg)) return;
-
-        int incomingDamage = dmg;
 
         bool canMitigate = origin is not (BattleDamageOrigin.Transferred or BattleDamageOrigin.Returned);
 

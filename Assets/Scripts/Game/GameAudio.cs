@@ -141,7 +141,7 @@ public sealed class GameAudio : MonoBehaviour
             SkillType.TigerTwinClaw => GameSound.ClawDouble,
             SkillType.Shield => GameSound.ShieldReflect,
             SkillType.Armor => GameSound.ArmorReduce,
-            SkillType.Wall => GameSound.WallCounter,
+            SkillType.Wall => GameSound.Defense,
             SkillType.Dragon => GameSound.DragonBreath,
             _ => GameSound.Skill
         };

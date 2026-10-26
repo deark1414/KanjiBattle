@@ -5,6 +5,22 @@ public enum BattleDamageOrigin { Direct, Transferred, Reflected, Returned }
 
 public static class BattleDamageRules
 {
+    public static bool StopsProjectile(BattleCharacter unit) => unit != null && !unit.isDead
+        && unit.currentHP > 0 && unit.data != null && unit.data.skillType == SkillType.Wall;
+    public static int ReduceByWall(int damage, float reduction) =>
+        Mathf.Max(0, Mathf.CeilToInt(damage * (1 - Mathf.Clamp01(reduction))));
+
+    // Traverse from the muzzle, including the dead zone: an adjacent wall still stops a bullet.
+    public static List<Vector2Int> GunLine(BattleCharacter caster, Vector2Int direction,
+        IReadOnlyDictionary<Vector2Int, BattleCharacter> grid, int cols, int rows)
+    {
+        var cells = BattleRangeService.GetLineWithinBoard(caster.gridPos, direction, rows + cols, cols, rows);
+        int blocker = cells.FindIndex(cell => grid.TryGetValue(cell, out var unit)
+            && StopsProjectile(unit) && unit.isAlly != caster.isAlly);
+        if (blocker >= 0) cells.RemoveRange(blocker + 1, cells.Count - blocker - 1);
+        return cells;
+    }
+
     public static bool HasShield(SkillType skill) => skill is SkillType.Shield or SkillType.Warrior or SkillType.Sentinel or SkillType.Fortress;
     public static int ReduceByShield(int damage,float effect=1) => damage <= 0 ? 0 : Mathf.Max(1, Mathf.FloorToInt(damage * (1-Mathf.Min(.5f,.2f*effect))));
 

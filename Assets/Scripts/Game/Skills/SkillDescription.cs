@@ -1,4 +1,5 @@
 using System.Text;
+using UnityEngine;
 
 public static class SkillDescription
 {
@@ -37,7 +38,9 @@ public static class SkillDescription
             builder.Append($"\n肩代わり率: {data.skillPower * 100:0.#}%");
         if (skillType == SkillType.ExperienceBonus)
             builder.Append($"\n経験値倍率: ×{data.skillPower:0.#}");
-        if (data.skillPower > 0f && skillType is not (SkillType.NumberPassive or SkillType.BellEcho or SkillType.ShadowCopy or SkillType.GuardAlly or SkillType.ProjectileGuard or SkillType.Shield or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge))
+        if (skillType == SkillType.Wall)
+            builder.Append($"\n遠距離軽減率: {Mathf.Clamp01(data.skillPower) * 100:0.#}%");
+        if (data.skillPower > 0f && skillType is not (SkillType.NumberPassive or SkillType.BellEcho or SkillType.ShadowCopy or SkillType.GuardAlly or SkillType.ProjectileGuard or SkillType.Wall or SkillType.Shield or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge))
         {
             float power = data.skillPower;
             if (skillType == SkillType.Gun) power *= SkillCatalog.Get(skillType)?.powerMultiplier ?? 1;
@@ -63,6 +66,7 @@ public static class SkillDescription
             && skillType != SkillType.AreaCounter
             && skillType != SkillType.GuardAlly
             && skillType != SkillType.ProjectileGuard
+            && skillType != SkillType.Wall
             && skillType != SkillType.Shield
             && skillType != SkillType.ExperienceBonus
             && skillType != SkillType.WindShift
@@ -114,7 +118,7 @@ public static class SkillDescription
             SkillType.Cocoon => "繭の保護",
             SkillType.WindChime => "全体再響",
             SkillType.Lantern => "灯守り",
-            SkillType.Wall => "壁",
+            SkillType.Wall => "遠距離遮断",
             SkillType.Soil => "土罠",
             SkillType.Fireball => "火球",
             SkillType.WoodPush => "木押し",
@@ -169,7 +173,7 @@ public static class SkillDescription
             SkillType.Cocoon => "保護されていない味方1体へ繭を付与。次の敵の直接攻撃1段を無効化し消える。重ね置き不可。",
             SkillType.WindChime => "盤面全体の味方のスキルを確率で1回再発動。自分は対象外。鈴と重なっても追加は最大1回、再発動から再誘発しない。",
             SkillType.Lantern => "隣接8マスの味方は投射攻撃を70%で回避。自分は守らない。射撃可能な敵から優先して狙われる。槍・電の連鎖・迫撃砲・竜の息は対象外。",
-            SkillType.Wall => "高い耐久で前線を支える。",
+            SkillType.Wall => "自分への弓・銃・散弾・投石・火球を無効化し、敵の銃弾は自分のマスで貫通を止める。近接・罠・転送・反射ダメージは防がない。反撃はしない。",
             SkillType.Soil => "周囲5x5の候補から最大2マスに土の罠を設置する。土以外が踏むと設置者の攻撃力に応じたダメージを受け、立ち続けるとターンごとに再びダメージを受ける。",
             SkillType.Fireball => "周囲2マスの敵に防御無視の火球を放つ。味方と水を越える。",
             SkillType.WoodPush => "敵を攻撃し、後方へ押し出す。",
