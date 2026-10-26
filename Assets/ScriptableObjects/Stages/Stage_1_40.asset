@@ -20,16 +20,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 900ecc4fc8132484191c54303b8cbe88, type: 2}
   - {fileID: 11400000, guid: b6b59b79b5715430181760d04ccedb0f, type: 2}
   - {fileID: 11400000, guid: 5461d3926e577437db81e4171e34682a, type: 2}
-  - {fileID: 11400000, guid: 1e8376bc251e144439579c16721a02dd, type: 2}
+  - {fileID: 11400000, guid: c4bdf81b972a942e4929848d9a47b771, type: 2}
+  enemyFusionIds: 09fcffff
   rewardStagePoints: 50
   slotCount: 8
   restrictFormationSlots: 0
   enemyPositions:
   - {x: 2, y: 1}
   - {x: 3, y: 1}
-  - {x: 1, y: 1}
   - {x: 2, y: 0}
   - {x: 3, y: 0}
+  - {x: 4, y: 0}
+  - {x: 1, y: 0}
   trapDamage: 23
   trapCount: 2
   reinforcementEnemy: []

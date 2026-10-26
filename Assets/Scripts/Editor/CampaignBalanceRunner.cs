@@ -21,6 +21,7 @@ public static class CampaignBalanceRunner
         public int[] party;
         public bool upgrades;
         public int[] enemyIds;
+        public Vector2Int[] enemyPositions;
         public bool playthrough;
     }
     private static Job[] jobs;
@@ -32,6 +33,7 @@ public static class CampaignBalanceRunner
     private static bool running;
     private static string output;
     private static object[] initialUnits;
+    private static object[] initialEnemies;
     private static JArray economyRows;
     private static JObject economyEntry;
     private static StageData fixtureStage;
@@ -110,7 +112,7 @@ public static class CampaignBalanceRunner
             bool won = Field<bool>("lastBattleWon");
             results.Add(new { job.stage, job.level, seed = battleSeed, job.profile, job.party, job.upgrades, job.economyWins,
                 job.layout, job.playthrough, attempt = attempts + 1,
-                initialUnits, economyEntry, enemyIds = Field<StageData>("currentStage").enemyPool.Select(data => data.characterId).ToArray(),
+                initialUnits, initialEnemies, economyEntry, enemyIds = Field<StageData>("currentStage").GetEnemies().Select(data => data.characterId).ToArray(),
                 won, turns = Field<int>("fusionTurn"),
                 allyHP = allies.Where(u => u != null && !u.isDead).Sum(u => u.currentHP),
                 enemyHP = enemies.Where(u => u != null && !u.isDead).Sum(u => u.currentHP),
@@ -211,8 +213,10 @@ public static class CampaignBalanceRunner
         if (job.enemyIds != null)
         {
             fixtureStage = UnityEngine.Object.Instantiate(stage);
-            fixtureStage.enemyPool = job.enemyIds.Select(db.GetById).ToList();
-            fixtureStage.enemyPositions = CampaignTreeAuthoring.Positions(job.enemyIds);
+            var ids = job.enemyIds.Where(id => id > 0).Concat(job.enemyIds.Where(id => id < 0)).ToArray();
+            fixtureStage.enemyPool = ids.Where(id => id > 0).Select(db.GetById).ToList();
+            fixtureStage.enemyFusionIds = ids.Where(id => id < 0).ToList();
+            fixtureStage.enemyPositions = job.enemyPositions?.ToList() ?? CampaignTreeAuthoring.Positions(ids);
             fixtureStage.enemyLevel = job.enemyLevel;
             stage = fixtureStage;
         }
@@ -242,6 +246,17 @@ public static class CampaignBalanceRunner
             hp = unit.maxHP, unit.attack, unit.defense,
             x = unit.gridPos.x, y = unit.gridPos.y,
             materials = unit.data.InvestmentMaterials?.Select(data => data.characterId).ToArray() ?? new[] { unit.data.characterId } }).ToArray();
+        initialEnemies = Field<List<BattleCharacter>>("enemies").Select(unit =>
+        {
+            if (unit.level != stage.enemyLevel || unit.maxHP != unit.data.GetMaxHP(stage.enemyLevel)
+                || unit.attack != unit.data.GetAttack(stage.enemyLevel) || unit.defense != unit.data.GetDefense(stage.enemyLevel)
+                || unit.SkillEffectMultiplier != 1)
+                throw new Exception("Enemy level/stat/investment mismatch: " + unit.data.characterName);
+            if (unit.data.characterId < 0 && BattleFusionRules.IsDiscovered(unit.data.characterId))
+                throw new Exception("Enemy encounter must not discover a recipe.");
+            return (object)new { id=unit.data.characterId, unit.level, hp=unit.maxHP, unit.attack, unit.defense,
+                x=unit.gridPos.x, y=unit.gridPos.y };
+        }).ToArray();
         typeof(BattleManager).GetMethod("ConfirmDeployment", Private).Invoke(battle, null);
         if (battle.IsDeploying) throw new Exception("Deployment was blocked.");
         if (!Field<List<BattleCharacter>>("allies").Select(unit => unit.data.characterId).OrderBy(id => id)

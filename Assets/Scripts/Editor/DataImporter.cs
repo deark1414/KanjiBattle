@@ -99,6 +99,8 @@ public class DataImporter : EditorWindow
         public string stageName;
         public int chapterId;
         public List<int> enemyIds;
+        public List<StagePositionJson> enemyPositions;
+        public bool restrictFormationSlots;
         public int rewardStagePoints;
         public int slotCount;
         public int trapDamage;
@@ -111,6 +113,9 @@ public class DataImporter : EditorWindow
         public int enemyLevel;
         public int prerequisiteStageId;
     }
+
+    [System.Serializable]
+    class StagePositionJson { public int x; public int y; }
 
     static void ImportCharacters(string path)
     {
@@ -240,10 +245,17 @@ public class DataImporter : EditorWindow
             data.chapterId = s.chapterId;
 
             data.enemyPool = new List<CharacterData>();
+            data.enemyFusionIds = new List<int>();
             if (s.enemyIds != null)
             {
                 foreach (var id in s.enemyIds)
                 {
+                    if (id < 0)
+                    {
+                        if (BattleFusionRules.GetRecipe(id) == null) throw new System.ArgumentException("Unknown enemy fusion " + id);
+                        data.enemyFusionIds.Add(id);
+                        continue;
+                    }
                     if (characterById.TryGetValue(id, out CharacterData ch) && ch != null)
                     {
                         data.enemyPool.Add(ch);
@@ -253,6 +265,8 @@ public class DataImporter : EditorWindow
 
             data.rewardStagePoints = s.rewardStagePoints;
             data.slotCount = s.slotCount;
+            data.enemyPositions = s.enemyPositions?.Select(cell => new Vector2Int(cell.x, cell.y)).ToList() ?? new List<Vector2Int>();
+            data.restrictFormationSlots = s.restrictFormationSlots;
             data.trapDamage = s.trapDamage;
             data.trapCount = s.trapCount;
 

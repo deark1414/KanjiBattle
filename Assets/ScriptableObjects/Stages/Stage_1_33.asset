@@ -24,6 +24,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1e8376bc251e144439579c16721a02dd, type: 2}
   - {fileID: 11400000, guid: 7cd32ba1bab21408d8adeb14f331e6dd, type: 2}
   - {fileID: 11400000, guid: 0eaca48f611824f8abf71128035a7864, type: 2}
+  enemyFusionIds:
   rewardStagePoints: 11
   slotCount: 8
   restrictFormationSlots: 0

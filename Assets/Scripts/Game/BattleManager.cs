@@ -138,7 +138,7 @@ public partial class BattleManager : MonoBehaviour
     {
         if (stage == null || allies == null) return;
         var party = allies.Where(character => character != null).ToList();
-        int enemyCount = stage.enemyPool != null ? stage.enemyPool.Count(enemy => enemy != null) : 0;
+        int enemyCount = stage.GetEnemies().Count;
         if (party.Count == 0 || party.Count > BattleDeploymentRules.Capacity || enemyCount > BattleDeploymentRules.Capacity)
         {
             Debug.LogError("[BattleManager] 初期配置の人数が配置可能枠に収まりません。");
@@ -173,7 +173,7 @@ public partial class BattleManager : MonoBehaviour
 
         int enemyIndex = 0;
         var enemyPositions = CampaignFormationRules.EnemyPositions(stage);
-        foreach (var enemy in stage.enemyPool ?? new List<CharacterData>())
+        foreach (var enemy in stage.GetEnemies())
         {
             if (enemy == null) continue;
             var pos = enemyPositions[enemyIndex++];

@@ -60,16 +60,30 @@ public static class CastleTreeRegression
         foreach(var stage in rows)
         {
             Check(!stage.restrictFormationSlots && stage.slotCount==8,"normal stages do not cap owned slots");
-            Check(CampaignFormationRules.EnemyPositions(stage).Count==stage.enemyPool.Count,"enemy formation valid");
-            Check(stage.enemyPool.Count<=10,"enemy count cap");
+            Check(CampaignFormationRules.EnemyPositions(stage).Count==stage.GetEnemies().Count,"enemy formation valid");
+            Check(stage.GetEnemies().Count<=10,"enemy count cap");
+            Check(stage.isBossStage==(stage.stageId%5==0),"chapter end boss flags");
+            Check(stage.enemyFusionIds.Count==(stage.isBossStage?1:0),"one normal fusion per chapter boss only");
+            foreach(int id in stage.enemyFusionIds)
+            {
+                bool discovered=BattleFusionRules.IsDiscovered(id);
+                var enemy=stage.GetEnemies().Single(data=>data.characterId==id);
+                var recipe=BattleFusionRules.GetRecipe(id);
+                Check(enemy.skillType==recipe.Skill && enemy.InvestmentLevel==stage.enemyLevel,"enemy fusion uses shared recipe at stage level");
+                Check(enemy.GetMaxHP(stage.enemyLevel)>0 && enemy.icon!=null,"enemy fusion stats and art resolve");
+                Check(!enemy.isBoss,"enemy fusion does not inherit dragon-only boss abilities");
+                Check(BattleFusionRules.IsDiscovered(id)==discovered,"preview must not reveal recipes");
+            }
         }
         for(int i=1;i<rows.Length;i++)
         {
             Check(rows[i].enemyLevel-rows[i-1].enemyLevel<=1,"no level spike");
-            Check(rows[i].enemyPool.Count-rows[i-1].enemyPool.Count<=1,"no headcount spike");
+            if(!rows[i-1].isBossStage)
+                Check(rows[i].GetEnemies().Count-rows[i-1].GetEnemies().Count<=1,"no headcount spike within chapter");
         }
         foreach(var group in rows.GroupBy(s=>s.chapterId))
-            Check(group.Select(s=>string.Join(",",s.enemyPool.Select(c=>c.characterId))).Distinct().Count()==5,"varied chapter compositions");
+            Check(group.Select(s=>string.Join(",",s.GetEnemies().Select(c=>c.characterId))).Distinct().Count()==5,"varied chapter compositions");
+        Check(rows.SelectMany(stage=>stage.enemyFusionIds).Distinct().Count()<BattleFusionRules.Recipes.Count,"unseen fusions remain");
         Debug.Log("[CastleTreeRegression] Passed.");
     }
 }

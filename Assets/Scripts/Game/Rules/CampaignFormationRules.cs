@@ -7,7 +7,7 @@ public static class CampaignFormationRules
 {
     public static List<Vector2Int> EnemyPositions(StageData stage)
     {
-        int count=stage.enemyPool?.Count ?? 0;
+        int count=stage.GetEnemies().Count;
         if(stage.enemyPositions==null||stage.enemyPositions.Count==0)
             return Enumerable.Range(0,count).Select(index=>BattleDeploymentRules.DefaultPosition(index,false)).ToList();
         if(stage.enemyPositions.Count!=count||stage.enemyPositions.Distinct().Count()!=count

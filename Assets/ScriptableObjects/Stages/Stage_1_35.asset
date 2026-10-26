@@ -19,30 +19,28 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 76349d043ec8445949168a7c39201e9e, type: 2}
   - {fileID: 11400000, guid: 927571de945b1422898eae1f5cfc1827, type: 2}
   - {fileID: 11400000, guid: 7cd32ba1bab21408d8adeb14f331e6dd, type: 2}
-  - {fileID: 11400000, guid: 534c573a4a6844998906b6bed4bd38c1, type: 2}
-  - {fileID: 11400000, guid: 900ecc4fc8132484191c54303b8cbe88, type: 2}
-  - {fileID: 11400000, guid: 5461d3926e577437db81e4171e34682a, type: 2}
+  - {fileID: 11400000, guid: 76349d043ec8445949168a7c39201e9e, type: 2}
+  - {fileID: 11400000, guid: b6b59b79b5715430181760d04ccedb0f, type: 2}
   - {fileID: 11400000, guid: 1e8376bc251e144439579c16721a02dd, type: 2}
-  - {fileID: 11400000, guid: f5b98ab44ef824bbd826cb14c9818c47, type: 2}
+  enemyFusionIds: 08fcffff
   rewardStagePoints: 38
   slotCount: 8
   restrictFormationSlots: 0
   enemyPositions:
   - {x: 2, y: 1}
   - {x: 3, y: 1}
-  - {x: 1, y: 1}
-  - {x: 4, y: 1}
-  - {x: 0, y: 1}
-  - {x: 2, y: 0}
-  - {x: 3, y: 0}
   - {x: 1, y: 0}
+  - {x: 4, y: 1}
+  - {x: 1, y: 1}
+  - {x: 3, y: 0}
+  - {x: 2, y: 0}
   trapDamage: 21
   trapCount: 2
   reinforcementEnemy: []
   reinforcementInterval: 0
   reinforcementCount: 0
   reinforcementLimit: 0
-  isBossStage: 0
+  isBossStage: 1
   enemyLevel: 32
   prerequisite: {fileID: 11400000, guid: e0025e853e76041d48a128ff9f19732c, type: 2}
   isCleared: 0

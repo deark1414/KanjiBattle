@@ -849,11 +849,14 @@ private void SetEntries(List<Entry> entries, params int[] idLevelPairs)
             Debug.Log($"[DebugBattleOverlay] Enemies: {FormatEntryNames(enemyEntries)}");
 
             var originalPool = stage.enemyPool;
+            var originalFusions = stage.enemyFusionIds;
             bool originalBoss = stage.isBossStage;
             stage.enemyPool = enemies;
+            stage.enemyFusionIds = new List<int>();
             stage.isBossStage = bossStageOverride;
             battleManager.StartBattle(allies, stage);
             stage.enemyPool = originalPool;
+            stage.enemyFusionIds = originalFusions;
             stage.isBossStage = originalBoss;
 
             ApplyDragonBossOverride(enemies);

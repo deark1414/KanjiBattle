@@ -111,7 +111,7 @@ async function main() {
   const jobs = selected.flatMap(id => profiles.flatMap(profile => Array.from({ length: seeds }, (_, seed) => ({
     stage: id, level: Math.min(50, Math.max(3, stages.find(s => s.stageId === id).enemyLevel + Number(option('--level-offset', 0)))), seed: 1729 + seed * 7919,
     profile, party: party(id, profile), upgrades: args.includes('--upgrades'), economyWins, playthrough, farmWins, layout,
-    ...(campaign ? { enemyIds: campaign[id - 1].enemies, enemyLevel: campaign[id - 1].level } : {})
+    ...(campaign ? { enemyIds: campaign[id - 1].enemies, enemyLevel: campaign[id - 1].level, enemyPositions: campaign[id - 1].positions } : {})
   }))));
   fs.writeFileSync(path.join(directory, 'plan.json'), JSON.stringify(jobs, null, 2));
   if (args.includes('--plan-only')) return;

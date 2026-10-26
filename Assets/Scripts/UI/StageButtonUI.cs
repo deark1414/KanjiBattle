@@ -278,7 +278,7 @@ public class StageButtonUI : MonoBehaviour
             return;
         }
 
-        string enemies = FormatCharacters(stageData.enemyPool);
+        string enemies = FormatCharacters(stageData.GetEnemies());
         string reinforcements = FormatCharacters(stageData.reinforcementEnemy);
         detailText.text = string.IsNullOrEmpty(reinforcements)
             ? $"{rewardLine}\n敵編成: {enemies}"
