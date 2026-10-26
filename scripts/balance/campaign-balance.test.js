@@ -18,6 +18,9 @@ test('chapter bosses reserve undisclosed fusions and deploy without overlapping 
   });
   assert.equal(seen.size, 7);
   assert(campaign[39].enemies.includes(26), 'The dragon remains the final boss');
+  assert(campaign[34].enemies.includes(15), 'The late animal boss protects its support with a wall');
+  assert.equal(campaign[39].enemies.filter(id=>id===15).length,2,'Two walls stop the central gun lanes');
+  assert(campaign[39].level>campaign[38].level,'The final boss must not be lower-level than the preceding stage');
 });
 
 test('unowned Lv1 fixtures and missing proof are rejected, actual shared stats pass', () => {

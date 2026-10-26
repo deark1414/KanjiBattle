@@ -1713,6 +1713,7 @@
       25,
       14,
       20,
+      15,
       -1016
     ],
     "rewardStagePoints": 38,
@@ -1724,16 +1725,16 @@
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": true,
-    "enemyLevel": 32,
+    "enemyLevel": 33,
     "prerequisiteStageId": 34,
     "restrictFormationSlots": false,
     "enemyPositions": [
       {
-        "x": 2,
+        "x": 3,
         "y": 1
       },
       {
-        "x": 3,
+        "x": 0,
         "y": 1
       },
       {
@@ -1754,10 +1755,14 @@
       },
       {
         "x": 2,
+        "y": 1
+      },
+      {
+        "x": 2,
         "y": 0
       }
     ],
-    "tacticalTheme": "風鈴で寅と午酉の技能再発動を狙う"
+    "tacticalTheme": "壁で射線を遮り風鈴で二頭の寅と午酉を再発動"
   },
   {
     "stageId": 36,
@@ -2033,10 +2038,11 @@
     "chapterId": 8,
     "enemyIds": [
       26,
-      13,
+      15,
       14,
       17,
       30,
+      15,
       -1015
     ],
     "rewardStagePoints": 50,
@@ -2048,28 +2054,32 @@
     "reinforcementCount": 0,
     "reinforcementLimit": 0,
     "isBossStage": true,
-    "enemyLevel": 35,
+    "enemyLevel": 37,
     "prerequisiteStageId": 39,
     "restrictFormationSlots": false,
     "enemyPositions": [
       {
         "x": 2,
-        "y": 1
-      },
-      {
-        "x": 3,
-        "y": 1
-      },
-      {
-        "x": 2,
         "y": 0
       },
       {
+        "x": 2,
+        "y": 1
+      },
+      {
         "x": 3,
+        "y": 0
+      },
+      {
+        "x": 4,
         "y": 0
       },
       {
         "x": 1,
+        "y": 1
+      },
+      {
+        "x": 3,
         "y": 1
       },
       {
@@ -2077,6 +2087,6 @@
         "y": 0
       }
     ],
-    "tacticalTheme": "竜を甲と繭で守り丑で射撃を受け止める"
+    "tacticalTheme": "二枚の壁で竜への射線を遮り甲と繭と丑で支える"
   }
 ]

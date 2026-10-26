@@ -77,7 +77,8 @@ public static class CastleTreeRegression
         }
         for(int i=1;i<rows.Length;i++)
         {
-            Check(rows[i].enemyLevel-rows[i-1].enemyLevel<=1,"no level spike");
+            Check(rows[i].enemyLevel-rows[i-1].enemyLevel<=(rows[i].isBossStage?2:1),
+                "normal levels rise at most one; chapter bosses at most two");
             if(!rows[i-1].isBossStage)
                 Check(rows[i].GetEnemies().Count-rows[i-1].GetEnemies().Count<=1,"no headcount spike within chapter");
         }
