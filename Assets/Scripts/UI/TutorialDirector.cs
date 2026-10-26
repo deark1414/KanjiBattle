@@ -105,7 +105,7 @@ public sealed class TutorialDirector : MonoBehaviour
         CloseView();CurrentId="replay:"+page.id;
         view=FullScreenGuideView.Open(page,ShowHelp,null,"一覧に戻る");
     }
-#if KANJI_BATTLE_E2E
+#if KANJI_BATTLE_E2E || UNITY_EDITOR
     public void SuppressForDebug(bool value)
     {
         suppressed=value;
