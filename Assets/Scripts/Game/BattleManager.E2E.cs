@@ -93,10 +93,10 @@ public partial class BattleManager
         if(IsDeploying)throw new System.InvalidOperationException("Battle must have started.");
         foreach(var unit in (ally?allies:enemies).ToArray())HandleDeath(unit);
     }
-    internal void DefeatExperienceUnit()
+    internal void DefeatOxForE2E()
     {
         if (IsDeploying) throw new System.InvalidOperationException("Battle must have started.");
-        HandleDeath(allies.First(unit => unit.data.skillType == SkillType.ExperienceBonus));
+        HandleDeath(allies.First(unit => unit.data.characterId == 30));
     }
 
     internal void ProbeSupportSkills()

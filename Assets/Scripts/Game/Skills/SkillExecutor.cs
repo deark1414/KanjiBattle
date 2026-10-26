@@ -27,7 +27,7 @@ public static class SkillExecutor
         }
 
         if (skillType is SkillType.Counter or SkillType.AreaCounter or SkillType.NumberPassive
-            or SkillType.BellEcho or SkillType.GuardAlly or SkillType.Shield or SkillType.Armor or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge
+            or SkillType.BellEcho or SkillType.GuardAlly or SkillType.ProjectileGuard or SkillType.Shield or SkillType.Armor or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge
             or SkillType.Magnet or SkillType.Mountain or SkillType.Coal or SkillType.Fortress or SkillType.Dice
             or SkillType.Sand or SkillType.Grass or SkillType.WindChime or SkillType.Lantern)
         {

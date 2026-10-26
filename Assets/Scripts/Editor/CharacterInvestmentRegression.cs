@@ -40,6 +40,15 @@ public static class CharacterInvestmentRegression
             Check(CharacterInvestment.WaterRecoveryRatio(water,2f)==.6f,"water recovery ceiling");
             Check(CharacterInvestment.CurrentSummary(water).Contains("60%"),"water summary matches actual recovery");
             CharacterInvestment.Clear();
+            var ox=db.GetById(30);
+            Check(ox.skillType==SkillType.ProjectileGuard && CharacterInvestment.CurrentSummary(ox).Contains("50%"),"ox base protection replaces experience");
+            CharacterInvestment.Record("u30_4",4);CharacterInvestment.Record("u30_6",8);
+            CharacterInvestment.Record("k4_4",10);CharacterInvestment.Record("k4_6",18);
+            Check(BattleDamageRules.GuardShare(100,100,ox.skillPower*CharacterInvestment.Effect(ox),true)==65,
+                "ox individual and animal upgrades increase sharing to sixty-five percent");
+            Check(BattleDamageRules.GuardLoss(50,true)==35 && BattleRewardRules.ArmyExperienceMultiplier(new[]{ox})==1,
+                "ox upgrades do not change fixed mitigation or grant experience");
+            CharacterInvestment.Clear();
             CharacterInvestment.Record("u10_4",4);CharacterInvestment.Record("u10_6",8);CharacterInvestment.Record("k0_4",10);
             CharacterInvestment.Record("u10_4",999);
             Check(CharacterInvestment.Refund==22,"actual payment once");

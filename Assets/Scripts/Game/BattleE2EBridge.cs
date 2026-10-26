@@ -151,9 +151,10 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "supportProbe": FindFirstObjectByType<BattleManager>().ProbeSupportSkills(); break;
                 case "shootingDeadZoneProbe": FindFirstObjectByType<BattleManager>().ProbeShootingDeadZoneForE2E(); break;
                 case "defenseProbe": FindFirstObjectByType<BattleManager>().ProbeDefenseSkills(); break;
+                case "projectileGuardProbe": FindFirstObjectByType<BattleManager>().ProbeProjectileGuard(); break;
                 case "recruitSupport": ProbeTreeRecruitment(new[] { 27, 28, 29 }); break;
                 case "recruitCow": ProbeTreeRecruitment(new[] { 30 }); break;
-                case "defeatCow": FindFirstObjectByType<BattleManager>().DefeatExperienceUnit(); break;
+                case "defeatCow": FindFirstObjectByType<BattleManager>().DefeatOxForE2E(); break;
                 case "elementProbe": FindFirstObjectByType<BattleManager>().ProbeElementSkills(); break;
                 case "recruitElements": ProbeTreeRecruitment(new[] { 31, 32, 33 }); break;
                 case "fusionSupportProbe": FindFirstObjectByType<BattleManager>().ProbeFusionSupport(); break;
@@ -281,7 +282,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
         }
         if (animals)
         {
-            fixtureStage.stageName = "干支と育成の確認";
+            fixtureStage.stageName = "干支と遠距離防御の確認";
             fixtureStage.chapterId = 2;
             if (kind == "animals-enemy")
             {
@@ -448,8 +449,12 @@ public sealed class BattleE2EBridge : MonoBehaviour
             var wind=Unit(32,true,new(0,0));int turns=CharacterInvestment.WindDuration(wind.data);
             wind.ApplyWind(true,turns);for(int i=1;i<turns;i++){wind.TickWind();Check(wind.WindBoost,"wind persists");}
             wind.TickWind();Check(!wind.WindBoost,"wind expires");
-            var ox=db.GetById(30);float xp=1+(ox.skillPower-1)*CharacterInvestment.Effect(ox);
-            Check(Mathf.Abs(BattleRewardRules.ArmyExperienceMultiplier(new[]{ox,ox})-xp)<.0001f,"ox bonus enhanced, duplicates do not stack");
+            var ox=db.GetById(30);
+            var alliedOx=Unit(30,true,new(0,0));var enemyOx=Unit(30,false,new(1,0));
+            Check(ox.skillType==SkillType.ProjectileGuard && CharacterInvestment.CurrentSummary(ox).Contains("遠距離肩代わり"),"ox investment shows projectile protection");
+            Check(Mathf.Abs(alliedOx.GetEffectiveSkillPower()-.5f*CharacterInvestment.Effect(ox))<.0001f
+                && enemyOx.GetEffectiveSkillPower()==.5f,"only allied ox protection is upgraded");
+            Check(BattleRewardRules.ArmyExperienceMultiplier(new[]{ox,ox})==1f,"ox no longer grants experience bonuses");
         }
         finally{foreach(var host in hosts)Destroy(host);}
     }

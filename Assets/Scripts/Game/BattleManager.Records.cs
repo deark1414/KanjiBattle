@@ -37,8 +37,8 @@ public partial class BattleManager
             battleRecords.Credit(attacker.RecordToken, damage: loss);
     }
 
-    public void RecordGuard(BattleCharacter guard, int amount)
-    { if (guard != null && guard.isAlly) battleRecords.Credit(guard.RecordToken, guarded: amount); }
+    public void RecordGuard(BattleCharacter guard, int amount, int prevention = 0)
+    { if (guard != null && guard.isAlly) battleRecords.Credit(guard.RecordToken, guarded: amount, prevented: prevention); }
 
     public void RecordHeal(BattleCharacter source, int amount)
     { if (source != null && source.isAlly) battleRecords.Credit(source.RecordToken, healed: amount); }

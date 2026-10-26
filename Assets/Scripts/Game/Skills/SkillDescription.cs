@@ -33,11 +33,11 @@ public static class SkillDescription
             builder.Append($"\n発動率: {chance}%");
         }
 
-        if (skillType == SkillType.GuardAlly)
+        if (skillType is SkillType.GuardAlly or SkillType.ProjectileGuard)
             builder.Append($"\n肩代わり率: {data.skillPower * 100:0.#}%");
         if (skillType == SkillType.ExperienceBonus)
             builder.Append($"\n経験値倍率: ×{data.skillPower:0.#}");
-        if (data.skillPower > 0f && skillType is not (SkillType.NumberPassive or SkillType.BellEcho or SkillType.ShadowCopy or SkillType.GuardAlly or SkillType.Shield or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge))
+        if (data.skillPower > 0f && skillType is not (SkillType.NumberPassive or SkillType.BellEcho or SkillType.ShadowCopy or SkillType.GuardAlly or SkillType.ProjectileGuard or SkillType.Shield or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge))
         {
             builder.Append($"\n威力補正: x{data.skillPower:0.##}");
         }
@@ -60,6 +60,7 @@ public static class SkillDescription
             && skillType != SkillType.Counter
             && skillType != SkillType.AreaCounter
             && skillType != SkillType.GuardAlly
+            && skillType != SkillType.ProjectileGuard
             && skillType != SkillType.Shield
             && skillType != SkillType.ExperienceBonus
             && skillType != SkillType.WindShift
@@ -91,6 +92,7 @@ public static class SkillDescription
             SkillType.Stone => "投石",
             SkillType.Shield => "堅守",
             SkillType.GuardAlly => "肩代わり",
+            SkillType.ProjectileGuard => "遠距離吸収",
             SkillType.ExperienceBonus => "育成支援",
             SkillType.ChainLightning => "連鎖電撃",
             SkillType.WindShift => "風向操作",
@@ -145,6 +147,7 @@ public static class SkillDescription
             SkillType.Stone => "周囲2マスの敵へ石を投げる。味方と水を越える。",
             SkillType.Shield => "自分が受けるダメージを、防御計算後さらに20%軽減する。反射はしない。",
             SkillType.GuardAlly => "隣接8マスの味方の軽減後ダメージの一部を肩代わりする。複数体いても1体だけが担当。移した分は再軽減・再転送・反射しない。残りHPを超える肩代わりはできない。",
+            SkillType.ProjectileGuard => "隣接8マスの味方への投射ダメージを50%肩代わりし、引き受けた分を30%軽減。弓・銃・散弾・投石・火球が対象。自分への直接攻撃は軽減しない。甲や他の丑と二重にかばわず、転送・反射・罠には発動しない。肩代わり率だけ育成で上昇し、軽減率は固定。経験値ボーナスはない。",
             SkillType.ExperienceBonus => "出撃した戦闘の勝利経験値を増やす。撃破されても有効。複数体いても最大倍率だけを適用し、施設倍率と掛け合わせる。所持だけ・敵側・敗北・訓練・縁・戦果には効果なし。",
             SkillType.ChainLightning => "3マス以内の敵へ電撃。隣接8マスの未命中の敵へ最大4体まで連鎖し、威力は毎回75%になる。味方には命中しない。",
             SkillType.WindShift => "ターン開始時、移動を増やせば攻撃圏へ届く味方がいれば自分と味方1体の移動+1。それ以外は敵1体の移動-1。最低移動1、そのターンのみ、同効果は重複しない。",

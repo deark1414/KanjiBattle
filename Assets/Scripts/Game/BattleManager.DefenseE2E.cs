@@ -4,6 +4,79 @@ using UnityEngine;
 
 public partial class BattleManager
 {
+    internal void ProbeProjectileGuard()
+    {
+        if (!IsDeploying || allies.Count < 5 || allies[0].data.characterId != 30 || allies[1].data.characterId != 30)
+            throw new System.InvalidOperationException("Two-ox deployment fixture required.");
+        void Check(bool value, string label)
+        { if (!value) throw new System.InvalidOperationException("Projectile guard: " + label); }
+        var ox = allies[0]; var second = allies[1]; var target = allies[2]; var shell = allies[4]; var attacker = enemies[0];
+        var shellData = shell.data; var attackerData = attacker.data;
+        var attackDefinition = Instantiate(attackerData);
+        void Place(BattleCharacter unit, Vector2Int cell)
+        {
+            if (gridMap.TryGetValue(unit.gridPos, out var current) && current == unit) gridMap.Remove(unit.gridPos);
+            unit.gridPos = cell; gridMap[cell] = unit;
+            unit.transform.position = gridCells[cell.x, cell.y].position;
+        }
+        void Reset(bool side)
+        {
+            gridMap.Clear();
+            foreach (var unit in new[] { ox, second, target, shell })
+            { unit.isAlly = side; unit.SetBattleVitals(1000, 1000, 20, 0); }
+            attacker.isAlly = !side;
+            Place(target, new(2, 3)); Place(ox, new(1, 3)); Place(second, new(1, 4));
+            Place(shell, new(3, 3)); Place(attacker, new(2, 0));
+        }
+        try
+        {
+            shell.data = Resources.Load<CharacterDatabase>("CharacterDatabase").GetById(14);
+            attacker.data = attackDefinition;
+            foreach (bool side in new[] { true, false })
+            {
+                foreach (SkillType skill in new[] { SkillType.Arrow, SkillType.Gun, SkillType.ScatterShot, SkillType.Stone, SkillType.Fireball })
+                {
+                    Reset(side); attackDefinition.skillType = skill;
+                    var record = battleRecords.Entries.Single(row => row.token == ox.RecordToken).result;
+                    long guarded = record.guarded, prevented = record.prevented, received = record.received;
+                    target.TakeDamage(100, this, attacker, ignoreDefense: true);
+                    Check(target.currentHP == 950 && ox.currentHP == 965, "100 becomes 50 plus 35: " + skill + "/" + side);
+                    Check(second.currentHP == 1000 && shell.currentHP == 1000, "no duplicate or chained sharing");
+                    if (side) Check(record.guarded - guarded == 300 && record.prevented - prevented == 90
+                        && record.received - received == 210, "records distinguish fifty guarded, fifteen prevented, thirty-five received");
+                }
+                foreach (SkillType skill in new[] { SkillType.Slash, SkillType.Spear, SkillType.ChainLightning, SkillType.Dragon, SkillType.Fortress })
+                {
+                    Reset(side); Place(shell, new(5, 6)); attackDefinition.skillType = skill;
+                    target.TakeDamage(100, this, attacker, ignoreDefense: true);
+                    Check(target.currentHP == 900 && ox.currentHP == 1000 && second.currentHP == 1000, "non-projectile excluded");
+                }
+                foreach (BattleDamageOrigin origin in new[] { BattleDamageOrigin.Transferred, BattleDamageOrigin.Reflected, BattleDamageOrigin.Returned })
+                {
+                    Reset(side); attackDefinition.skillType = SkillType.Gun;
+                    target.TakeDamage(100, this, attacker, ignoreDefense: true, origin: origin);
+                    Check(target.currentHP == 900 && ox.currentHP == 1000 && second.currentHP == 1000, "indirect damage excluded");
+                }
+                Reset(side); Place(shell, new(5, 6)); attackDefinition.skillType = SkillType.Gun;
+                target.TakeDamage(100, this, attacker, ignoreDefense: true, isBasicAttack: true);
+                Check(target.currentHP == 900 && ox.currentHP == 1000, "ordinary melee attack excluded");
+                Reset(side); Place(shell, new(5, 6));
+                target.TakeDamage(100, this, ignoreDefense: true);
+                Check(target.currentHP == 900 && ox.currentHP == 1000, "environmental hit excluded");
+                Reset(side); Place(second, new(5, 5)); Place(shell, new(5, 6));
+                ox.TakeDamage(100, this, attacker, ignoreDefense: true);
+                Check(ox.currentHP == 900, "ox does not reduce a direct hit to itself");
+            }
+            Reset(true); attackDefinition.skillType = SkillType.Gun;
+            Place(second, new(5, 5)); Place(shell, new(5, 6)); ox.currentHP = 7;
+            target.TakeDamage(100, this, attacker, ignoreDefense: true);
+            Check(target.currentHP == 910 && ox.isDead && !gridMap.ContainsValue(ox), "capacity uses remaining HP and protector can die");
+            Check(BattleRewardRules.ArmyExperienceMultiplier(deployedAllies) == 1, "no residual experience bonus");
+            AddLog("遠距離吸収チェック完了");
+        }
+        finally { shell.data = shellData; attacker.data = attackerData; Destroy(attackDefinition); }
+    }
+
     internal void ProbeDefenseSkills()
     {
         if (!IsDeploying || allies.Count != 6 || allies[0].data.skillType != SkillType.GuardAlly)

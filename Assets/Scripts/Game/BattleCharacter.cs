@@ -241,15 +241,21 @@ if (background != null)
         if (canMitigate && bm != null) dmg = bm.ApplyPlayerSkillGuard(this, dmg);
         if (origin == BattleDamageOrigin.Direct && bm != null)
         {
-            BattleCharacter protector = BattleDamageRules.FindProtector(this, bm.gridMap.Values);
-            int shared = protector == null ? 0 : BattleDamageRules.GuardShare(dmg, protector.currentHP, protector.GetEffectiveSkillPower());
+            bool projectileHit = !isBasicAttack && attacker != null && attacker.isAlly != isAlly
+                && FusionReactionRules.IsProjectile(attacker.data.skillType);
+            BattleCharacter protector = BattleDamageRules.FindProtector(this, bm.gridMap.Values, projectileHit);
+            bool projectileGuard = protector != null && protector.data.skillType == SkillType.ProjectileGuard;
+            int shared = protector == null ? 0 : BattleDamageRules.GuardShare(dmg, protector.currentHP,
+                protector.GetEffectiveSkillPower(), projectileGuard);
             if (shared > 0)
             {
                 dmg -= shared;
-                bm.RecordGuard(protector, shared);
-                bm.PlaySupportBurst(this, "GuardShell", .6f, .8f);
-                bm.PlaySupportBurst(protector, "GuardShell", .6f, .7f);
-                protector.TakeDamage(shared, bm, attacker, ignoreDefense: true,
+                int loss = BattleDamageRules.GuardLoss(shared, projectileGuard);
+                bm.RecordGuard(protector, shared, shared - loss);
+                string effect = projectileGuard ? "GuardShield" : "GuardShell";
+                bm.PlaySupportBurst(this, effect, .6f, .8f);
+                bm.PlaySupportBurst(protector, effect, .6f, .7f);
+                protector.TakeDamage(loss, bm, attacker, ignoreDefense: true,
                     actionLabel: $"{protector.DisplayName} が {DisplayName} をかばった！",
                     origin: BattleDamageOrigin.Transferred);
             }

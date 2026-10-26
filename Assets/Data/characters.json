@@ -383,8 +383,8 @@
     "attackGrowth": 3,
     "baseDefense": 10,
     "defenseGrowth": 1,
-    "skillType": "ExperienceBonus",
-    "skillPower": 1.5,
+    "skillType": "ProjectileGuard",
+    "skillPower": 0.5,
     "skillChance": 0,
     "isBoss": false
   },

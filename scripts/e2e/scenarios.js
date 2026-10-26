@@ -5,6 +5,14 @@ const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y
 
 module.exports = [
   {
+    id:'ox-projectile-guard',name:'丑の遠距離吸収・甲や牛との非重複・軽減成績・両陣営・残HP上限',fixture:'animals-double',
+    async run(game){
+      await game.deploy();await game.request('projectileGuardProbe');
+      assert(game.state.battle.logs.some(log=>log.includes('遠距離吸収チェック完了')));
+      await game.screenshot('projectile-guard');
+    }
+  },
+  {
     id:'shooting-dead-zone',name:'弓と銃は隣接攻撃不可・退避後に射撃・包囲時待機・銃の至近貫通なし（両陣営）',fixture:'elements',
     async run(game){
       await game.deploy();await game.request('shootingDeadZoneProbe');await game.screenshot('shooting-dead-zone');
@@ -163,10 +171,10 @@ module.exports = [
     }
   },
   ...[
-    {id:"animals-dead",name:"丑が撃破されても勝利経験値1.5倍・再戦で復元",fixture:"animals",bonus:1.5,killCow:true},
-    {id:"animals-double",name:"丑2体の経験値倍率は重複しない",fixture:"animals-double",bonus:1.5},
+    {id:"animals-dead",name:"丑の経験値ボーナス廃止・撃破後の再戦で復元",fixture:"animals",bonus:1,killCow:true},
+    {id:"animals-double",name:"遠距離防御の丑2体でも経験値を増やさない",fixture:"animals-double",bonus:1},
     {id:"animals-enemy",name:"所持だけ・敵側の丑では経験値が増えない",fixture:"animals-enemy",bonus:1},
-    {id:"animals-mobile",name:"干支の編成と経験値補正リザルト・縦長",fixture:"animals",bonus:1.5,viewport:{width:390,height:844}}
+    {id:"animals-mobile",name:"干支の編成と通常経験値のリザルト・縦長",fixture:"animals",bonus:1,viewport:{width:390,height:844}}
   ].map(options=>({
     ...options,
     async run(game) {

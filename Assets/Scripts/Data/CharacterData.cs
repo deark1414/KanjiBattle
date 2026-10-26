@@ -38,7 +38,8 @@ public enum SkillType
     Warrior,
     Sentinel,
     Forge,
-    Wave, Magnet, Mountain, Coal, Fortress, Dice, Rain, Sand, Grass, Cocoon, WindChime, Lantern
+    Wave, Magnet, Mountain, Coal, Fortress, Dice, Rain, Sand, Grass, Cocoon, WindChime, Lantern,
+    ProjectileGuard
 }
 
 public enum CharacterCategory
