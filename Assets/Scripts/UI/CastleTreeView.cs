@@ -109,11 +109,10 @@ public sealed class CastleTreeView : MonoBehaviour
         float maxY=map.Positions.Count==0?250:Mathf.Max(250,map.Positions.Values.Max(p=>Mathf.Abs(p.y))+90);
         content.sizeDelta=scroll.viewport.rect.size+new Vector2(maxX,maxY)*2*zoom/scale;
         foreach(var b in Enumerable.Range(0,5).Where(b=>nodes.Any(n=>n.branch==b)))
-            Link("BranchLink_"+b,Vector2.zero,map.Hubs[b],colors[b]);
+            LinkRoute("BranchLink_"+b,map.Roads["branch_"+b],colors[b]);
         foreach(var node in nodes)
         {
-            var start=node.parent!=null&&map.Positions.TryGetValue(node.parent,out var parent)?parent:map.Hubs[node.branch];
-            Link("Link_"+node.id,start,map.Positions[node.id],CastleTree.Owned(node)?colors[node.branch]:new(.33f,.42f,.36f));
+            LinkRoute("Link_"+node.id,map.Roads[node.id],CastleTree.Owned(node)?colors[node.branch]:new(.33f,.42f,.36f));
         }
         // Draw all roads before labels and pieces so no branch crosses their faces.
         foreach(var b in Enumerable.Range(0,5).Where(b=>nodes.Any(n=>n.branch==b)))
@@ -179,8 +178,9 @@ public sealed class CastleTreeView : MonoBehaviour
                 mark.GetComponent<Image>().raycastTarget=false;
             }
             if(mark!=null)mark.gameObject.SetActive(owned);
-            var line=content.Find("Link_"+node.id)?.GetComponent<Image>();
-            if(line!=null)line.color=owned?colors[node.branch]:new(.33f,.42f,.36f);
+            foreach(Transform line in content)
+                if(line.name.StartsWith("Link_"+node.id+"_Segment_")&&!line.name.EndsWith("_Road"))
+                    line.GetComponent<Image>().color=owned?colors[node.branch]:new(.33f,.42f,.36f);
         }
     }
     private void LayoutChrome()
@@ -268,6 +268,10 @@ public sealed class CastleTreeView : MonoBehaviour
             _=>"獲得戦果を強化"
         };
         return $"Lv.{FacilityManager.Instance.GetLevel(f)} / {FacilityManager.Instance.GetCurrentFacilityMaxLevel(f)}　{effect}";
+    }
+    private void LinkRoute(string name,IReadOnlyList<Vector2> points,Color color)
+    {
+        for(int i=1;i<points.Count;i++)Link(name+"_Segment_"+i,points[i-1],points[i],color);
     }
     private void Link(string name,Vector2 a,Vector2 b,Color color)
     {

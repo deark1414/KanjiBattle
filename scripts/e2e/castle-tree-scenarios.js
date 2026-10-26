@@ -1,12 +1,17 @@
 const assert=require('node:assert/strict');
 const expand=['c11','s1','c13','c14','s2','c27','s3','c23','s4','c19','c31','c32','s5'];
-function assertTreeSpacing(state){
+function assertTreeSpacing(state,viewport){
   assert(state.treeLabelsForeground,'Roads must render behind category labels and pieces');
   const overlap=(a,b)=>Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x)>.0001&&
     Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y)>.0001;
   const nodes=state.controls.filter(c=>/\/(TreeNode_[^/]+|TreeBranch_\d+|TreeOrigin)$/.test(c.path));
   for(let a=0;a<nodes.length;a++)for(let b=a+1;b<nodes.length;b++)
-    assert(!overlap(nodes[a].rect,nodes[b].rect),`${nodes[a].path} overlaps ${nodes[b].path}`);
+  {
+    const x=nodes[a].rect,y=nodes[b].rect;
+    assert(!overlap(x,y),`${nodes[a].path} overlaps ${nodes[b].path}`);
+    if(viewport)assert(Math.abs(x.x+x.w/2-y.x-y.w/2)>=(x.w+y.w)/2+31/viewport.width||
+      Math.abs(x.y+x.h/2-y.y-y.h/2)>=(x.h+y.h)/2+31/viewport.height,`${nodes[a].path} is too close to ${nodes[b].path}`);
+  }
   const tools=state.controls.filter(c=>/\/(TreeRespec|TreeZoomOut|TreeZoomIn|TreeCenter)$/.test(c.path));
   for(let a=0;a<tools.length;a++){
     assert(!overlap(tools[a].rect,state.treeViewport),'Tools must stay outside the scrolling map');
@@ -15,16 +20,45 @@ function assertTreeSpacing(state){
   assert(!state.treeOverflow,`Tree text overflow: ${state.treeOverflowNames}`);
 }
 module.exports=[
+  {
+    id:'tree-full-map',name:'最終章の全48ノードを一画面で表示して全体配置を検査',fixture:'standard',viewport:{width:3200,height:3600},
+    async run(game){
+      await game.request('treeFresh');await game.request('treeAdvance','40');
+      await game.page.waitForTimeout(800);await game.request();await game.named('TreeCenter');
+      assert.equal(game.state.treeVisible.length,48,'Every character, facility, slot and category upgrade is revealed');
+      assertTreeSpacing(game.state,game.page.viewportSize());
+      const nodes=game.state.controls.filter(c=>/\/TreeNode_[^/]+$/.test(c.path));
+      assert.equal(nodes.length,48);
+      assert(nodes.every(c=>c.visible&&c.reachable),'All nodes must be visible and unobstructed together');
+      const width=3200,height=3600,margin=32;
+      const left=Math.floor(Math.min(...nodes.map(c=>c.rect.x))*width)-margin;
+      const top=Math.floor(Math.min(...nodes.map(c=>c.rect.y))*height)-margin;
+      const right=Math.ceil(Math.max(...nodes.map(c=>c.rect.x+c.rect.w))*width)+margin;
+      const bottom=Math.ceil(Math.max(...nodes.map(c=>c.rect.y+c.rect.h))*height)+margin;
+      await game.page.screenshot({path:require('node:path').join(game.output,'all-48-nodes.png'),clip:{x:left,y:top,width:right-left,height:bottom-top}});
+    }
+  },
   ...[{width:320,height:740},{width:390,height:844},{width:844,height:390},{width:1280,height:800}].map(viewport=>({
     id:'tree-spacing-'+viewport.width,name:'城下のノード・分類名・操作欄の重なり '+viewport.width,fixture:'standard',viewport,
     async run(game){
       await game.request('treeFresh');
-      for(const stage of [0,15,35]){
+      const initialPositions=new Map();
+      for(const stage of [0,5,10,15,20,25,30,35,40]){
         await game.request('treeAdvance',String(stage));await game.page.waitForTimeout(700);await game.request();
-        await game.named('TreeCenter');assertTreeSpacing(game.state);await game.screenshot('spacing-'+stage);
+        await game.named('TreeCenter');assertTreeSpacing(game.state,viewport);
+        for(const c of game.state.controls.filter(c=>/\/TreeNode_[^/]+$/.test(c.path))){
+          if(initialPositions.has(c.path)){
+            const p=initialPositions.get(c.path);assert(Math.abs(c.rect.x-p.x)<.0001&&Math.abs(c.rect.y-p.y)<.0001,'Chapter progression must not move existing nodes');
+          }else initialPositions.set(c.path,c.rect);
+        }
+        await game.screenshot('spacing-'+stage);
       }
-      for(let i=0;i<8;i++)await game.named('TreeZoomIn');
-      assertTreeSpacing(game.state);await game.screenshot('spacing-max-zoom');
+      for(let i=0;i<8;i++){await game.named('TreeZoomIn');assertTreeSpacing(game.state,viewport);}
+      await game.screenshot('spacing-max-zoom');
+      for(let branch=0;branch<5;branch++){
+        await game.named('TreeCenter');await game.named('TreeBranch_'+branch);assertTreeSpacing(game.state,viewport);
+        await game.screenshot('full-branch-'+branch);
+      }
     }
   })),
   {

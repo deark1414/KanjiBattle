@@ -17,7 +17,7 @@ KanjiBattle currently treats Unity prefabs as structural templates and applies m
   - `UiReadability`とWebGLプラグインがCanvasの描画倍率をCSS pxへ補正する。通常・Retinaとも同じ見た目の文字・操作領域を使い、描画解像度は保持する。
 
 - `CastleTreeView`（城下）
-  - `CastleTreeMapLayout`が城下を中心とする5方向の放射配置を担当する。章ごとの表示候補だけを配置し、実際の前提ノードをつなぐ。
+  - `CastleTreeMapLayout`が城下を中心とする5方向の放射配置を担当する。全48ノードの予約座標を基準に、章ごとの表示候補だけを描画し、実際の前提ノードをつなぐ。章の解禁では既存ノードを移動しない。
   - 外部の分類タブを廃止し、マップ内の分類ノードで枝へ移動する。50%の初期表示、拡大縮小、上下左右ドラッグ、城下復帰を持つ。
   - `CastleTreeArt`が既存の建物画像を再利用する。ノードはアイコン中心、上の固定欄は選択した名前・効果・購入条件を表示する。増枠の画像は複数コマに「+1」。
   - グローバルテーマはこの配下の文字・画像・ボタン・スクロール位置を上書きしない。

@@ -22,11 +22,23 @@ public static class CastleTreeRegression
                 current=nodes.Single(n=>n.id==current.parent);Check(path.Add(current.id),"acyclic prerequisites");
             }
         }
+        var completeMap=new CastleTreeMapLayout(nodes);
+        var roadBounds=nodes.ToDictionary(n=>n.id,n=>CastleTreeMapLayout.Bounds(completeMap.Positions[n.id],Vector2.one*CastleTreeMapLayout.NodeSize(n,.5f)/.5f+Vector2.one*32));
+        roadBounds["origin"]=CastleTreeMapLayout.Bounds(Vector2.zero,CastleTreeMapLayout.OriginSize/.5f+Vector2.one*32);
+        for(int branch=0;branch<5;branch++)roadBounds["branch_"+branch]=CastleTreeMapLayout.Bounds(completeMap.Hubs[branch],CastleTreeMapLayout.HubSize(branch)/.5f+Vector2.one*32);
+        foreach(var road in completeMap.Roads)
+        {
+            string source=road.Key.StartsWith("branch_")?"origin":nodes.Single(n=>n.id==road.Key).parent??"branch_"+nodes.Single(n=>n.id==road.Key).branch;
+            for(int segment=1;segment<road.Value.Length;segment++)foreach(var obstacle in roadBounds)
+                if(obstacle.Key!=source&&obstacle.Key!=road.Key)
+                    Check(!CastleTreeMapLayout.CrossesRect(road.Value[segment-1],road.Value[segment],obstacle.Value),$"road {road.Key} crosses {obstacle.Key}");
+        }
         foreach(int stage in Enumerable.Range(0,9).Select(i=>i*5))
         {
             var visible=nodes.Where(n=>n.stage<=stage).ToArray();
             var map=new CastleTreeMapLayout(visible);
             Check(map.Positions.Count==visible.Length,"all nodes placed on radial map");
+            foreach(var node in visible)Check(map.Positions[node.id]==completeMap.Positions[node.id],"chapter reveals keep existing positions stable");
             foreach(float zoom in new[]{.5f,.75f,1f,1.25f})
             {
                 var bounds=new System.Collections.Generic.List<(string name,Vector2 point,Vector2 size)>();
@@ -36,7 +48,7 @@ public static class CastleTreeRegression
                 foreach(var node in visible)
                     bounds.Add((node.id,map.Positions[node.id]*zoom,Vector2.one*CastleTreeMapLayout.NodeSize(node,zoom)));
                 for(int a=0;a<bounds.Count;a++)for(int b=a+1;b<bounds.Count;b++)
-                    Check(!CastleTreeMapLayout.Overlaps(bounds[a].point,bounds[a].size,bounds[b].point,bounds[b].size,23.9f),
+                    Check(!CastleTreeMapLayout.Overlaps(bounds[a].point,bounds[a].size,bounds[b].point,bounds[b].size,31.9f),
                         $"stage {stage}, zoom {zoom}: {bounds[a].name} overlaps {bounds[b].name}");
             }
         }
