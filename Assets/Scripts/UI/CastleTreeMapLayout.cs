@@ -8,13 +8,13 @@ public sealed class CastleTreeMapLayout
     public readonly Vector2[] Hubs=new Vector2[5];
     public static float NodeSize(CastleTree.Node node,float zoom)=>Mathf.Max(46,(node.kind==CastleTree.Kind.Facility?96:76)*zoom);
     public static Vector2 HubSize(int branch)=>new(branch==2?90:62,32);
-    public static readonly Vector2 OriginSize=new(84,84);
+    public static readonly Vector2 OriginSize=new(96,96);
     public CastleTreeMapLayout(IReadOnlyList<CastleTree.Node> nodes)
     {
         for(int branch=0;branch<5;branch++)
         {
             float angle=(90-branch*72)*Mathf.Deg2Rad;
-            Hubs[branch]=new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*210;
+            Hubs[branch]=new Vector2(Mathf.Cos(angle),Mathf.Sin(angle))*260;
         }
         for(int branch=0;branch<5;branch++)
         {
@@ -29,8 +29,8 @@ public sealed class CastleTreeMapLayout
     {
         float t=(left+Span(node,nodes)*.5f)/total-.5f;
         float theta=angle+t*56*Mathf.Deg2Rad;
-        float radius=340+depth*160;
-        if(node.parent!=null&&Positions.TryGetValue(node.parent,out var parent))radius=Mathf.Max(radius,parent.magnitude+160);
+        float radius=420+depth*220;
+        if(node.parent!=null&&Positions.TryGetValue(node.parent,out var parent))radius=Mathf.Max(radius,parent.magnitude+220);
         var direction=new Vector2(Mathf.Cos(theta),Mathf.Sin(theta));
         // The minimum zoom has the largest hit targets relative to the map.
         var size=Vector2.one*NodeSize(node,.5f)/.5f;
@@ -38,7 +38,7 @@ public sealed class CastleTreeMapLayout
         Positions[node.id]=direction*radius;
         foreach(var child in nodes.Where(n=>n.parent==node.id)){Place(child,nodes,left,total,depth+1,angle);left+=Span(child,nodes);}
     }
-    public static bool Overlaps(Vector2 a,Vector2 aSize,Vector2 b,Vector2 bSize,float gap=16)=>
+    public static bool Overlaps(Vector2 a,Vector2 aSize,Vector2 b,Vector2 bSize,float gap=48)=>
         Mathf.Abs(a.x-b.x)<(aSize.x+bSize.x)*.5f+gap&&Mathf.Abs(a.y-b.y)<(aSize.y+bSize.y)*.5f+gap;
     private bool Occupied(Vector2 point,Vector2 size,IReadOnlyList<CastleTree.Node> nodes)
     {

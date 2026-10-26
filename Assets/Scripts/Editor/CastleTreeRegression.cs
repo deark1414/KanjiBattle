@@ -9,6 +9,7 @@ public static class CastleTreeRegression
     {
         void Check(bool value,string message){if(!value)throw new Exception("Castle tree: "+message);}
         var nodes=CastleTree.Nodes;
+        Check(CastleTreeArt.Castle()!=null,"central castle art resolves");
         Check(nodes.Select(n=>n.id).Distinct().Count()==nodes.Count,"unique nodes");
         Check(nodes.Count(n=>n.kind==CastleTree.Kind.Character)==26,"26 normal characters");
         Check(nodes.Where(n=>n.kind==CastleTree.Kind.Slot).Select(n=>n.stage).SequenceEqual(new[]{5,10,20,35,30}),"five distributed chapter gates");
@@ -35,7 +36,7 @@ public static class CastleTreeRegression
                 foreach(var node in visible)
                     bounds.Add((node.id,map.Positions[node.id]*zoom,Vector2.one*CastleTreeMapLayout.NodeSize(node,zoom)));
                 for(int a=0;a<bounds.Count;a++)for(int b=a+1;b<bounds.Count;b++)
-                    Check(!CastleTreeMapLayout.Overlaps(bounds[a].point,bounds[a].size,bounds[b].point,bounds[b].size,7.9f),
+                    Check(!CastleTreeMapLayout.Overlaps(bounds[a].point,bounds[a].size,bounds[b].point,bounds[b].size,23.9f),
                         $"stage {stage}, zoom {zoom}: {bounds[a].name} overlaps {bounds[b].name}");
             }
         }

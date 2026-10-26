@@ -130,9 +130,9 @@ public sealed class CastleTreeView : MonoBehaviour
         }
         var home=Surface(content,"TreeOrigin",Color.clear,Vector2.zero,Vector2.zero);
         MapRect((RectTransform)home.transform,Vector2.zero,CastleTreeMapLayout.OriginSize);
-        var homeIcon=Icon(home.transform,"Castle",CastleTreeArt.Building("FacilityRankTower"),new(.02f,.16f),new(.98f,1));
+        Icon(home.transform,"Castle",CastleTreeArt.Castle(),new(.02f,.30f),new(.98f,1));
         home.AddComponent<Button>().onClick.AddListener(()=>{selected=null;dirty=true;});
-        Text(home.transform,"Name","城下",new(0,0),new(1,.32f),18).alignment=TextAlignmentOptions.Center;
+        Text(home.transform,"Name","城下",new(0,0),new(1,.26f),18).alignment=TextAlignmentOptions.Center;
         foreach(var node in nodes)
         {
             bool owned=CastleTree.Owned(node),available=CastleTree.Blocked(node).Length==0;
@@ -229,7 +229,7 @@ public sealed class CastleTreeView : MonoBehaviour
         {
             selected=null;title.text="城下";description.text=$"編成 {CastleTree.Slots} / {CastleTree.MaximumSlots}枠";
             status.text=$"戦果 {GameManager.Instance.StagePoints}";action.gameObject.SetActive(false);
-            detailIcon.sprite=CastleTreeArt.Building("FacilityRankTower");return;
+            detailIcon.sprite=CastleTreeArt.Castle();return;
         }
         title.text=CastleTree.Name(node);action.gameObject.SetActive(true);
         if(node.kind==CastleTree.Kind.Character&&CastleTree.Owned(node))

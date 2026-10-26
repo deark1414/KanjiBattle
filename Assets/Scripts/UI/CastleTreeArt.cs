@@ -4,13 +4,15 @@ using UnityEngine;
 public static class CastleTreeArt
 {
     private static readonly Dictionary<string,Sprite> sprites=new();
-    public static Sprite Building(string name)
+    public static Sprite Building(string name)=>Load("UI/ModernWafuu/Buildings/"+name);
+    public static Sprite Castle()=>Load("UI/ModernWafuu/Stages/StageBossCastle");
+    private static Sprite Load(string path)
     {
-        if(sprites.TryGetValue(name,out var sprite))return sprite;
-        var texture=Resources.Load<Texture2D>("UI/ModernWafuu/Buildings/"+name);
+        if(sprites.TryGetValue(path,out var sprite))return sprite;
+        var texture=Resources.Load<Texture2D>(path);
         if(texture==null)return null;
         sprite=Sprite.Create(texture,new Rect(0,0,texture.width,texture.height),new(.5f,.5f),100);
-        sprites[name]=sprite;return sprite;
+        sprites[path]=sprite;return sprite;
     }
     public static Sprite Facility(FacilityData facility)=>Building(facility==null?"FacilityBarracks":facility.effectType switch
     {
