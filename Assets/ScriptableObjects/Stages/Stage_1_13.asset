@@ -17,7 +17,8 @@ MonoBehaviour:
   chapterId: 3
   enemyPool:
   - {fileID: 11400000, guid: 3cbaf21d4fb454e6b89c20a0467e0017, type: 2}
-  - {fileID: 11400000, guid: a8f9237dba00b460b8d915962812b47b, type: 2}
+  - {fileID: 11400000, guid: 900ecc4fc8132484191c54303b8cbe88, type: 2}
+  - {fileID: 11400000, guid: b6b59b79b5715430181760d04ccedb0f, type: 2}
   - {fileID: 11400000, guid: 5461d3926e577437db81e4171e34682a, type: 2}
   - {fileID: 11400000, guid: 77e4edf0443a8447ba2b967699eaa2e7, type: 2}
   - {fileID: 11400000, guid: 1e8376bc251e144439579c16721a02dd, type: 2}
@@ -27,6 +28,7 @@ MonoBehaviour:
   enemyPositions:
   - {x: 2, y: 1}
   - {x: 3, y: 1}
+  - {x: 1, y: 1}
   - {x: 2, y: 0}
   - {x: 3, y: 0}
   - {x: 1, y: 0}
