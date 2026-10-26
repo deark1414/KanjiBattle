@@ -47,7 +47,7 @@ public static class CastleTree
     {
         Kind.Character => Character(node)?.characterName ?? "？",
         Kind.Facility => Facility(node)?.facilityName ?? "施設",
-        _ => $"編成 {InitialSlots+node.target}枠"
+        _ => "編成＋1"
     };
     private static HashSet<int> ReadSlots() => PlayerProgressStore.GetString(SlotsKey).Split(',')
         .Select(value=>int.TryParse(value,out int id)?id:0).Where(id=>id>=1&&id<=5).ToHashSet();
@@ -60,6 +60,7 @@ public static class CastleTree
     };
     public static int RequiredStage(Node node) => node.kind==Kind.Facility
         ? Mathf.CeilToInt(Mathf.Max(0,Facility(node)?.requiredStageId ?? 0)/5f)*5 : node.stage;
+    public static bool Visible(Node node) => Owned(node)||RequiredStage(node)<=(GameManager.Instance?.GetHighestClearedStageId()??0);
     public static int Cost(Node node)
     {
         if(node.kind!=Kind.Facility)return node.cost;
@@ -76,7 +77,6 @@ public static class CastleTree
             int cleared=GameManager.Instance?.GetHighestClearedStageId()??0;
             if(cleared<RequiredStage(node))return $"第{RequiredStage(node)}局突破で解禁";
             if(node.parent!=null&&!Owned(Nodes.First(n=>n.id==node.parent)))return Name(Nodes.First(n=>n.id==node.parent))+"の解放が必要";
-            if(node.kind==Kind.Slot&&node.target>1&&!ReadSlots().Contains(node.target-1))return "前の編成枠の解放が必要";
         }
         if(node.kind==Kind.Facility && Owned(node) && FacilityManager.Instance.IsMaxLevel(Facility(node)))
         {

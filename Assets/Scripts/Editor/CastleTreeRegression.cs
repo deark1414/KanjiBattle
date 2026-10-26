@@ -21,6 +21,12 @@ public static class CastleTreeRegression
                 current=nodes.Single(n=>n.id==current.parent);Check(path.Add(current.id),"acyclic prerequisites");
             }
         }
+        var map=new CastleTreeMapLayout(nodes);
+        Check(map.Positions.Count==nodes.Count,"all nodes placed on radial map");
+        for(int a=0;a<nodes.Count;a++)for(int b=a+1;b<nodes.Count;b++)
+            Check(Vector2.Distance(map.Positions[nodes[a].id],map.Positions[nodes[b].id])>=76,"map nodes do not overlap");
+        foreach(var node in nodes.Where(n=>n.kind==CastleTree.Kind.Facility))
+            Check(CastleTreeArt.Facility(CastleTree.Facility(node))!=null,"existing building art resolves");
         var stages=AssetDatabase.LoadAssetAtPath<StageDatabase>("Assets/ScriptableObjects/Stages/StageDatabase.asset");
         var rows=stages.stages.OrderBy(s=>s.stageId).ToArray();
         Check(rows.Length==40,"40 campaign stages");

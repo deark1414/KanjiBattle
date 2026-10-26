@@ -48,6 +48,8 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public int treeSlots;
         public string[] treeOwned;
         public bool treeOverflow;
+        public string[] treeVisible,treeFacilityIcons;
+        public float treeZoom;
         public string guideId;
         public string guideTarget;
         public int guideStep;
@@ -339,6 +341,10 @@ public sealed class BattleE2EBridge : MonoBehaviour
             guideOverflow=FindObjectsByType<FullScreenGuideView>(FindObjectsSortMode.None).Any(view=>view.GetComponentsInChildren<TMP_Text>().Any(text=>text.isTextOverflowing))
                 ||FindObjectsByType<GuidedTutorialView>(FindObjectsSortMode.None).Any(view=>view.GetComponentsInChildren<TMP_Text>().Any(text=>text.isTextOverflowing)),
             treeSlots=GameManager.Instance.GetFacilityFormationSlots(),
+            treeVisible=CastleTree.Nodes.Where(CastleTree.Visible).Select(n=>n.id).ToArray(),
+            treeZoom=FindAnyObjectByType<CastleTreeView>()?.Zoom??0,
+            treeFacilityIcons=FindObjectsByType<CastleTreeView>(FindObjectsSortMode.None).SelectMany(view=>view.GetComponentsInChildren<Image>())
+                .Where(image=>image.name=="NodeIcon"&&image.sprite!=null&&image.transform.parent.name.StartsWith("TreeNode_f")).Select(image=>image.transform.parent.name.Substring(9)).ToArray(),
             treeOwned=CastleTree.Nodes.Where(CastleTree.Owned).Select(n=>n.id).ToArray(),
             treeOverflow=FindObjectsByType<CastleTreeView>(FindObjectsSortMode.None).Any(view=>view.GetComponentsInChildren<TMP_Text>().Any(text=>text.isTextOverflowing)),
             controls = FindObjectsByType<Selectable>(FindObjectsSortMode.None).Where(control => control.gameObject.activeInHierarchy)

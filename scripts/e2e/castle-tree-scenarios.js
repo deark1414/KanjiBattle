@@ -1,11 +1,31 @@
 const assert=require('node:assert/strict');
 const expand=['c11','s1','c13','c14','s2','c27','s3','c23','s4','c19','c31','c32','s5'];
 module.exports=[
+  {
+    id:'tree-radial',name:'5方向マップ・章ごとの表示・建物アイコン・順不同の増枠',fixture:'standard',
+    async run(game){
+      await game.request('treeFresh');await game.request('treeFunds','1000');await game.page.waitForTimeout(700);await game.request();
+      assert(!game.state.treeVisible.includes('c23'));assert(!game.state.treeVisible.includes('s4'));
+      assert(game.state.treeFacilityIcons.length>0,'Existing facility art must render');
+      for(const id of game.state.treeVisible.filter(id=>id.startsWith('f')))assert(game.state.treeFacilityIcons.includes(id),id+' needs building art');
+      assert(game.state.controls.filter(c=>/TreeBranch_/.test(c.path)).every(c=>c.path.includes('/TreeContent/')),'Branch navigation belongs inside the map');
+      const zoom=game.state.treeZoom;await game.named('TreeZoomIn');assert(game.state.treeZoom>zoom);
+      await game.named('TreeZoomOut');assert(Math.abs(game.state.treeZoom-zoom)<.01);await game.named('TreeCenter');await game.screenshot('initial-radial-map');
+      await game.request('treeAdvance','30');await game.page.waitForTimeout(600);await game.request();
+      assert(game.state.treeVisible.includes('c23')&&!game.state.treeVisible.includes('s5'));
+      await game.request('treePurchase','c23');await game.request('treePurchase','s4');
+      assert.equal(game.state.treeSlots,4);assert(!game.state.treeOwned.includes('s1'),'No order dependency for +1 nodes');
+      await game.screenshot('chapter-30-map');await game.request('treeAdvance','35');await game.page.waitForTimeout(600);await game.request();
+      assert(game.state.treeVisible.includes('s5'));assert(!game.state.treeOverflow);await game.screenshot('chapter-35-map');
+    }
+  },
   ...[{width:1280,height:800},{width:390,height:844},{width:844,height:390}].map(viewport=>({
     id:'tree-layout-'+viewport.width,name:'城下ツリーの加入・戦果不足・章条件 '+viewport.width,fixture:'standard',viewport,
     async run(game){
       await game.request('treeFresh');await game.page.waitForTimeout(700);await game.request();
       assert.deepEqual(game.state.owned,[1,10,20]);assert.equal(game.state.treeSlots,3);
+      assert(game.state.treeZoom<.8,'Initial view must be pulled back');
+      assert(!game.state.treeVisible.includes('s1')&&!game.state.treeVisible.includes('c23'),'Future chapters stay hidden');
       const first=game.state.controls.find(c=>c.path.endsWith('/TreeNode_c11'));
       const sibling=game.state.controls.find(c=>c.path.endsWith('/TreeNode_c16'));
       assert(Math.abs(first.rect.x-sibling.rect.x)>.05,'Sibling paths must branch horizontally, not form a list');
@@ -13,8 +33,9 @@ module.exports=[
       assert(!game.state.controls.find(c=>c.path.endsWith('/TreePurchase')).enabled);
       await game.request('treeFunds','6');await game.page.waitForTimeout(600);
       await game.named('TreePurchase');assert(game.state.owned.includes(11));assert.equal(game.state.stagePoints,0);
-      await game.named('TreeNode_s1');assert(!game.state.controls.find(c=>c.path.endsWith('/TreePurchase')).enabled);
       await game.request('treeFunds','10');await game.request('treeAdvance','5');await game.page.waitForTimeout(600);
+      await game.request();assert(game.state.treeVisible.includes('s1'),'Chapter completion reveals its nodes');
+      await game.named('TreeNode_s1');
       await game.named('TreePurchase');assert.equal(game.state.treeSlots,4);
       await game.screenshot('castle-tree');assert(!game.state.treeOverflow,'tree text must fit');
       if(viewport.width===390){
@@ -22,7 +43,7 @@ module.exports=[
         assert(!game.state.treeOverflow);await game.screenshot('tree-rotated');
       }
       await game.named('HomeTabButton');assert(!game.state.controls.some(c=>c.path.includes('TreeNode_')));
-      await game.named('FacilityTabButton');await game.named('TreeBranch_1');
+      await game.named('FacilityTabButton');await game.named('TreeCenter');await game.named('TreeBranch_1');
       await game.named('TreeNode_c13');await game.screenshot('second-branch');
     }
   })),
