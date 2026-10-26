@@ -24,6 +24,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
     [Serializable] public sealed class BattleState
     {
         public bool active; public bool deploying; public bool fusionOpen; public bool result; public bool won;
+        public bool paused; public Box header;
         public int battleId; public int[] originalIds; public Unit[] units; public Cell[] cells; public BattleFusionRules.Plan plan;
         public int conflicts; public int previewLinks; public string fusionSummary;
         public string[] logs;
@@ -99,6 +100,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "fundFusion": GameManager.Instance.AddStagePoints(10); break;
                 case "corruptPlan": PlayerProgressStore.SetString("KanjiBattle.Fusion.AdjacentChoices.v2", "{broken"); PlayerProgressStore.Save(); break;
                 case "snapshot": break;
+                case "defeatSide": FindFirstObjectByType<BattleManager>().DefeatSideForE2E(request.value=="ally");break;
                 case "tutorialRoute":
                     switch(request.value)
                     {

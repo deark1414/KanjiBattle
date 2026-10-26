@@ -4,6 +4,11 @@ using UnityEngine;
 
 public partial class BattleManager
 {
+    internal void DefeatSideForE2E(bool ally)
+    {
+        if(IsDeploying)throw new System.InvalidOperationException("Battle must have started.");
+        foreach(var unit in (ally?allies:enemies).ToArray())HandleDeath(unit);
+    }
     internal void DefeatExperienceUnit()
     {
         if (IsDeploying) throw new System.InvalidOperationException("Battle must have started.");
@@ -82,6 +87,8 @@ public partial class BattleManager
         return new BattleE2EBridge.BattleState
         {
             active = gameObject.activeInHierarchy,
+            paused = isPaused,
+            header = BattleE2EBridge.Bounds(transform.Find("BattleInformationHeader") as RectTransform),
             playerSkillPlan = playerSkillPlan.Copy(), playerSkillOpen = playerSkillView != null,
             playerSkillFired = playerSkill.Fired, playerSkillActive = playerSkill.Active,
             playerSkillRemaining = playerSkill.Remaining,

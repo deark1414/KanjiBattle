@@ -30,6 +30,7 @@ KanjiBattle currently treats Unity prefabs as structural templates and applies m
   - Bottom tab anchoring.
 
 - `BattleUILayout`
+  - 戦闘・布陣中も共通ステータスバーを表示する。戦場見出しはバーの下、盤面は見出しの下に配置し、重ねない。
   - Battle board/container placement.
   - Battle log area placement.
   - Battle pause/resume/back button placement.

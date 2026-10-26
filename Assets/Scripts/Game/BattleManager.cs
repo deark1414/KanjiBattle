@@ -295,7 +295,7 @@ public partial class BattleManager : MonoBehaviour
 
         foreach (var character in allies) character.PlayMotifArrival();
         foreach (var character in enemies) character.PlayMotifArrival();
-        yield return new WaitForSecondsRealtime(1.2f);
+        yield return WaitBattleSeconds(1.2f);
         foreach (BattleCharacter character in allies.Concat(enemies).ToList())
         {
             if (!character.isDead && trapCells.Remove(character.gridPos))
@@ -625,8 +625,11 @@ public partial class BattleManager : MonoBehaviour
             ApplyNumberPassivesAtTurnStart("敵", enemies, turn, false);
             BeginAdvancedFusionTurn(false, turn);
             FusionSupportExecutor.BeginSideTurn(this, false, turn);
+                yield return WaitBattleSeconds(0f);
+                if (ResolveBattleBeforePlayerSkill()) yield break;
             ElementSkillExecutor.ApplyWind(this, false, impassableCells);
 
+                if (ResolveBattleBeforePlayerSkill()) yield break;
             foreach (var enemy in new List<BattleCharacter>(enemies))
             {
                 if (enemy != null) DoAction(enemy, "敵");
@@ -638,8 +641,11 @@ public partial class BattleManager : MonoBehaviour
 
             // 土の罠による継続ダメージ
             foreach (var bc in new List<BattleCharacter>(allies))
+                yield return WaitBattleSeconds(0f);
+                if (ResolveBattleBeforePlayerSkill()) yield break;
             {
                 if (bc != null && soilTrapCells.Contains(bc.gridPos) && bc.data.skillType != SkillType.Soil)
+                if (ResolveBattleBeforePlayerSkill()) yield break;
                 {
                     ResolveSoilTrapDamage(bc, "土の罠が沈み込んだ！");
                 }
@@ -662,6 +668,8 @@ public partial class BattleManager : MonoBehaviour
                     && enemy.data.skillType == SkillType.Dragon && !enemy.isAlly)
                 {
                     if (Random.value < 0.3f) // 30% の確率
+            if (ResolveBattleBeforePlayerSkill()) yield break;
+
                     {
                         int heal = Mathf.RoundToInt(enemy.maxHP * 0.1f); // 最大HPの10%
                         int beforeHP = enemy.currentHP;
@@ -705,11 +713,21 @@ public partial class BattleManager : MonoBehaviour
         }
     }
 
-    private WaitForSeconds BattleWait(float seconds)
+    private IEnumerator BattleWait(float seconds)
     {
         float standardDelay = seconds / CurrentBattleSpeed;
         float cinematicRemaining = Mathf.Max(0f, skillCinematicUntil - Time.time);
-        return new WaitForSeconds(Mathf.Max(standardDelay, cinematicRemaining));
+        return WaitBattleSeconds(Mathf.Max(standardDelay, cinematicRemaining));
+    }
+
+    private IEnumerator WaitBattleSeconds(float seconds)
+    {
+        float elapsed = 0f;
+        while (isPaused || elapsed < seconds)
+        {
+            yield return null;
+            if (!isPaused) elapsed += Time.deltaTime;
+        }
     }
 
     private void ApplyNumberPassivesAtTurnStart(string side, List<BattleCharacter> characters, int battleTurn, bool isAlly)
@@ -1148,7 +1166,7 @@ public partial class BattleManager : MonoBehaviour
 
     private IEnumerator ResolveTrapAfterMovement(BattleCharacter character, Vector2Int landingPos, int stepCount, string side)
     {
-        yield return new WaitForSeconds(0.14f * Mathf.Max(1, stepCount));
+        yield return WaitBattleSeconds(0.14f * Mathf.Max(1, stepCount));
         if (character == null || character.isDead || character.gridPos != landingPos) yield break;
 
         character.TakeDamage(
@@ -1177,7 +1195,7 @@ public partial class BattleManager : MonoBehaviour
 
     private IEnumerator ResolveSoilTrapAfterMovement(BattleCharacter character, Vector2Int landingPos, int stepCount)
     {
-        yield return new WaitForSeconds(0.14f * Mathf.Max(1, stepCount));
+        yield return WaitBattleSeconds(0.14f * Mathf.Max(1, stepCount));
         if (character == null || character.isDead || character.gridPos != landingPos) yield break;
 
         ResolveSoilTrapDamage(character, "土の罠を踏み抜いた！");
@@ -1216,6 +1234,7 @@ public partial class BattleManager : MonoBehaviour
             charRect.position = Vector3.Lerp(startWorld, endWorld, t); 
             charRect.SetAsLastSibling();
 
+            if (isPaused) { yield return null; continue; }
             Canvas canvas = charRect.GetComponent<Canvas>();
             if (canvas != null)
             {
@@ -3365,7 +3384,7 @@ public partial class BattleManager : MonoBehaviour
 
         Vector3 departurePosition = bird.transform.position;
         StartCoroutine(BirdRetreatSpriteVfxRoutine(departurePosition, arriving: false, delay: 0f));
-        yield return new WaitForSecondsRealtime(SkillVfxDuration(0.13f));
+        yield return WaitBattleSeconds(SkillVfxDuration(0.13f));
 
         if (bird == null || bird.isDead || !IsCellFree(newPos)) yield break;
         gridMap.Remove(bird.gridPos);
@@ -3376,7 +3395,7 @@ public partial class BattleManager : MonoBehaviour
         if (bird == null || bird.isDead) yield break;
         StartCoroutine(BirdRetreatSpriteVfxRoutine(bird.transform.position, arriving: true, delay: 0f));
         AddLog($"{bird.data.characterName} は攻撃後に退避した！", Color.cyan);
-        yield return new WaitForSecondsRealtime(SkillVfxDuration(0.34f));
+        yield return WaitBattleSeconds(SkillVfxDuration(0.34f));
     }
 
     public void PerformTigerTwinClaw(BattleCharacter tiger, BattleCharacter firstTarget)

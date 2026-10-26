@@ -4,6 +4,31 @@ const groups = state => state.battle.plan?.groups || [];
 const positions = state => allies(state).sort((a,b)=>a.slot-b.slot).map(({id,x,y})=>({id,x,y}));
 
 module.exports = [
+  ...[{width:390,height:844},{width:844,height:390}].map(viewport=>({
+    id:'battle-pause-'+viewport.width,name:'戦闘の共通バー・ターン途中停止・行動途中の全滅判定 '+viewport.width,fixture:'animals',viewport,
+    async run(game){
+      await game.deploy();
+      const settings=game.state.controls.find(c=>c.path.endsWith('/GlobalStatusBar/SettingsStatus'));
+      assert(settings?.visible&&settings.reachable,'Common status bar is available during deployment');
+      assert(settings.rect.y+settings.rect.h<game.state.battle.header.y,'Common and battle headers do not overlap');
+      for(const cell of game.state.battle.cells)assert(cell.rect.y>=game.state.battle.header.y+game.state.battle.header.h,'Board stays below the headers');
+      await game.start();await game.wait(s=>s.battle.logs.some(text=>text.includes('--- ターン')),'First turn not started');
+      await game.named('PauseButton');assert(game.state.battle.paused);
+      const units=game.state.battle.units,logs=game.state.battle.logs;
+      await game.page.waitForTimeout(2000);await game.request();
+      assert.deepEqual(game.state.battle.units,units,'No movement or HP changes while paused');
+      assert.deepEqual(game.state.battle.logs,logs,'No further actions during a paused turn');
+      await game.screenshot('paused-with-status');
+      await game.request('defeatSide',viewport.width===390?'ally':'enemy');
+      assert(!game.state.battle.result,'Pause also suspends the result transition');
+      const afterDeath=game.state.battle.logs.length;
+      await game.named('ResumeButton');
+      await game.wait(s=>s.battle.result,'Elimination should end the battle before the remaining actors',5000);
+      assert.equal(game.state.battle.won,viewport.width!==390);
+      assert(game.state.battle.logs.slice(afterDeath).every(text=>/バトル再開|勝利|敗北|報酬|縁/.test(text)),'No remaining actors after elimination');
+      await game.screenshot('immediate-result');
+    }
+  })),
   ...require("./tutorial-scenarios"),
   ...require("./castle-tree-scenarios"),
   ...require("./player-skill-scenarios"),

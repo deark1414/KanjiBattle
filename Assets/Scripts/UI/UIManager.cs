@@ -108,7 +108,7 @@ public class UIManager : MonoBehaviour
     public void ShowBattle()
     {
         HideAll();
-        ModernWafuuPresentation.SetGlobalStatusVisible(false);
+        ModernWafuuPresentation.SetGlobalStatusVisible(true);
         if (BattlePanel != null) BattlePanel.SetActive(true);
         var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
         tabs?.SetNavigationVisible(false);
@@ -178,7 +178,7 @@ public class UIManager : MonoBehaviour
         var allies = new System.Collections.Generic.List<CharacterData>(FormationUI.Instance.GetFormation());
 
         HideAll();
-        ModernWafuuPresentation.SetGlobalStatusVisible(false);
+        ModernWafuuPresentation.SetGlobalStatusVisible(true);
         if (BattlePanel != null) BattlePanel.SetActive(true);
         var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
         tabs?.SetNavigationVisible(false);
