@@ -56,7 +56,7 @@
   },
   {
     "skillTypeName": "Gun",
-    "powerMultiplier": 0.7,
+    "powerMultiplier": 0.56,
     "chanceOverride": -1,
     "logMessage": "{0} ダメージを与えた！",
     "effects": [

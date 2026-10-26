@@ -59,6 +59,8 @@ test('controlled comparisons verify actual HP and role multipliers without mixin
     won: i === 0, turns: 10, allyHP: 100, enemyHP: 0 })));
   assert.equal(report.length, 2);
   assert.deepEqual(report.map(row => [row.variant, row.wins]), [['baseline', 1], ['gun80', 0]]);
+  assert.equal(summary([{ stage: 40, profile: 'ranged', won: true, turns: 6, allyHP: 100, enemyHP: 0 }])[0].profile,
+    'ranged', 'Summary uses the measured profiles rather than the current CLI defaults');
   const historical = { characters: data, skills: [{ skillTypeName: 'Gun', powerMultiplier: .123 }] };
   validateResults([{ variant: 'gun80', level: 10, party: [18], initialUnits: [{ ...stats(gun), roleMultiplier: .123 * .8 }] }], undefined, historical);
 });

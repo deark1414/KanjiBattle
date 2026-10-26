@@ -46,7 +46,9 @@ function party(stage, profile) {
 function summary(rows) {
   const tagged = rows.some(row => row.variant !== undefined);
   const measuredVariants = [...new Set(rows.map(row => row.variant || 'baseline'))];
-  return selected.flatMap(stage => profiles.flatMap(profile => measuredVariants.map(variant => {
+  const measuredStages = [...new Set(rows.map(row => row.stage))].sort((a, b) => a - b);
+  const measuredProfiles = [...new Set(rows.map(row => row.profile))];
+  return measuredStages.flatMap(stage => measuredProfiles.flatMap(profile => measuredVariants.map(variant => {
     const samples = rows.filter(r => r.stage === stage && r.profile === profile && (r.variant || 'baseline') === variant);
     if (!samples.length) return null;
     return { stage, profile, ...(tagged ? { variant } : {}), samples: samples.length, wins: samples.filter(r => r.won).length,

@@ -18,7 +18,7 @@ MonoBehaviour:
   enemyPool:
   - {fileID: 11400000, guid: b6b59b79b5715430181760d04ccedb0f, type: 2}
   - {fileID: 11400000, guid: 72ba58126cfe041d8ac0dc6cf96169fc, type: 2}
-  - {fileID: 11400000, guid: 5461d3926e577437db81e4171e34682a, type: 2}
+  - {fileID: 11400000, guid: 77e4edf0443a8447ba2b967699eaa2e7, type: 2}
   enemyFusionIds: 0efcffff
   rewardStagePoints: 22
   slotCount: 8

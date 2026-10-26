@@ -20,7 +20,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b6b59b79b5715430181760d04ccedb0f, type: 2}
   - {fileID: 11400000, guid: ba2cceab41d834210a14946bc2fe9339, type: 2}
   - {fileID: 11400000, guid: f5b98ab44ef824bbd826cb14c9818c47, type: 2}
-  - {fileID: 11400000, guid: 1e8376bc251e144439579c16721a02dd, type: 2}
   - {fileID: 11400000, guid: 0a04ffc5b535040419d7c94a209fc8d2, type: 2}
   enemyFusionIds: 16fcffff
   rewardStagePoints: 30
@@ -31,7 +30,6 @@ MonoBehaviour:
   - {x: 3, y: 1}
   - {x: 1, y: 1}
   - {x: 1, y: 0}
-  - {x: 3, y: 0}
   - {x: 4, y: 0}
   - {x: 2, y: 0}
   trapDamage: 16

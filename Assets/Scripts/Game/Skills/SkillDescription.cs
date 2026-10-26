@@ -39,7 +39,9 @@ public static class SkillDescription
             builder.Append($"\n経験値倍率: ×{data.skillPower:0.#}");
         if (data.skillPower > 0f && skillType is not (SkillType.NumberPassive or SkillType.BellEcho or SkillType.ShadowCopy or SkillType.GuardAlly or SkillType.ProjectileGuard or SkillType.Shield or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge))
         {
-            builder.Append($"\n威力補正: x{data.skillPower:0.##}");
+            float power = data.skillPower;
+            if (skillType == SkillType.Gun) power *= SkillCatalog.Get(skillType)?.powerMultiplier ?? 1;
+            builder.Append($"\n威力補正: x{power:0.##}");
         }
 
         string rangeDiagram = GetRangeDiagram(skillType);

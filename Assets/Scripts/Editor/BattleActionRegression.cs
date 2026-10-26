@@ -37,6 +37,14 @@ public static class BattleActionRegression
                 Check(BattleRangeService.Distance(origin, cell) >= 2, "penetrating effect excludes dead zone");
         }
         Check(BattleRangeService.CanTargetCell(SkillType.ScatterShot, origin, new(2, 4), 6, 7), "scattershot retains close-range specialty");
+        var database = Resources.Load<CharacterDatabase>("CharacterDatabase");
+        var bow = database.GetById(17); var gun = database.GetById(18);
+        foreach (int level in new[] { 1, 10, 25, 40, 50 })
+            Check(gun.GetAttack(level) * gun.skillPower * SkillCatalog.Get(SkillType.Gun).powerMultiplier
+                < bow.GetAttack(level) * bow.skillPower * SkillCatalog.Get(SkillType.Arrow).powerMultiplier,
+                "piercing gun trades single-target damage for multiple targets across shared levels");
+        Check(SkillDescription.GetDetail(gun).Contains($"威力補正: x{gun.skillPower * SkillCatalog.Get(SkillType.Gun).powerMultiplier:0.##}"),
+            "gun description includes its actual piercing coefficient");
 
         var data = ScriptableObject.CreateInstance<CharacterData>();
         try
