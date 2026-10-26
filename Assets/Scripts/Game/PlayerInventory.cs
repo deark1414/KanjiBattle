@@ -150,10 +150,7 @@ public class PlayerInventory : MonoBehaviour
             return 0;
         }
 
-        float multiplier = FacilityManager.Instance != null
-            ? FacilityManager.Instance.GetHealthMultiplier()
-            : 1f;
-        return Mathf.Max(1, Mathf.RoundToInt(character.GetMaxHP(level) * multiplier));
+        return CharacterInvestment.Health(character,level);
     }
 
     public PlayerExperienceResult GrantBattleExperience(StageData stage, IEnumerable<CharacterData> deployedParty = null)

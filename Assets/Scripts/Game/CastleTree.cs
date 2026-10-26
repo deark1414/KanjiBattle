@@ -7,12 +7,13 @@ public static class CastleTree
 {
     public const int InitialSlots = 3, MaximumSlots = 8;
     private const string SlotsKey = "KanjiBattle.CastleTree.Slots.v1";
-    public enum Kind { Character, Facility, Slot }
+    public enum Kind { Character, Facility, Slot, Upgrade }
     public sealed class Node
     {
         public string id, parent;
         public Kind kind;
         public int target, branch, stage, cost;
+        public CharacterInvestment.Stat stat;
     }
     public static readonly string[] Branches = { "武具", "守備", "数・支援", "自然", "動物" };
     public static readonly IReadOnlyList<Node> Nodes = CreateNodes();
@@ -28,17 +29,22 @@ public static class CastleTree
             {id="f"+id,kind=Kind.Facility,target=id,branch=branch,parent=parent});
         C(10,0,0,0); C(11,0,0,6,"c10"); S(1,0,5,10,"c11");
         C(12,0,5,12,"c11"); C(16,0,0,6,"c10"); C(17,0,5,14,"c16"); C(18,0,10,22,"c17");
-        F(8,0,"c10"); F(9,0,"c11");
         C(13,1,0,6); C(14,1,5,12,"c13"); S(2,1,10,18,"c14"); C(15,1,10,20,"c14");
-        F(11,1,"c13"); F(12,1);
+        F(12,1);
         C(1,2,0,0); C(2,2,0,6,"c1"); C(3,2,5,12,"c2");
         C(27,2,5,14,"c1"); C(28,2,10,20,"c27"); C(29,2,15,26,"c28");
-        S(3,2,20,28,"c27"); F(10,2,"c27"); F(6,2);
+        S(3,2,20,28,"c27"); F(6,2);
         C(20,3,0,0); C(19,3,0,6,"c20"); C(21,3,5,12,"c19"); C(22,3,10,20,"c21");
         C(31,3,25,36,"c19"); C(32,3,30,42,"c31"); S(5,3,35,50,"c32"); C(33,3,35,48,"c31");
         F(13,3,"c19"); F(3,3);
         C(23,4,10,20); C(24,4,15,26,"c23"); C(25,4,20,30,"c23"); C(30,4,20,28,"c23");
         S(4,4,30,38,"c23"); F(4,4); F(7,4); F(5,4);
+        foreach (var character in nodes.Where(n=>n.kind==Kind.Character).ToArray())
+            foreach (var stat in new[]{CharacterInvestment.Stat.Health,CharacterInvestment.Stat.Attack,
+                CharacterInvestment.Specialty(Resources.Load<CharacterDatabase>("CharacterDatabase")?.GetById(character.target))})
+                nodes.Add(new Node { id=CharacterInvestment.NodeId(character.target,stat), parent=character.id,
+                    kind=Kind.Upgrade,target=character.target,branch=character.branch,stat=stat,
+                    stage=Mathf.Max(character.stage,5+Mathf.Min(2,(int)stat)*5),cost=4+Mathf.Min(2,(int)stat)*2 });
         return nodes;
     }
     public static CharacterData Character(Node node) => Resources.Load<CharacterDatabase>("CharacterDatabase")?.GetById(node.target);
@@ -47,6 +53,7 @@ public static class CastleTree
     {
         Kind.Character => Character(node)?.characterName ?? "？",
         Kind.Facility => Facility(node)?.facilityName ?? "施設",
+        Kind.Upgrade => (Character(node)?.characterName??"？")+"・"+CharacterInvestment.Label(node.stat),
         _ => "編成＋1"
     };
     private static HashSet<int> ReadSlots() => PlayerProgressStore.GetString(SlotsKey).Split(',')
@@ -56,11 +63,14 @@ public static class CastleTree
     {
         Kind.Character => PlayerInventory.Instance != null && PlayerInventory.Instance.IsOwned(Character(node)),
         Kind.Facility => FacilityManager.Instance != null && FacilityManager.Instance.IsUnlocked(Facility(node)),
+        Kind.Upgrade => CharacterInvestment.Owned(node.id),
         _ => ReadSlots().Contains(node.target)
     };
     public static int RequiredStage(Node node) => node.kind==Kind.Facility
         ? Mathf.CeilToInt(Mathf.Max(0,Facility(node)?.requiredStageId ?? 0)/5f)*5 : node.stage;
-    public static bool Visible(Node node) => Owned(node)||RequiredStage(node)<=(GameManager.Instance?.GetHighestClearedStageId()??0);
+    public static bool Visible(Node node) => Owned(node)||
+        (RequiredStage(node)<=(GameManager.Instance?.GetHighestClearedStageId()??0)
+        &&(node.kind!=Kind.Upgrade||PlayerInventory.Instance!=null&&PlayerInventory.Instance.IsOwned(Character(node))));
     public static int Cost(Node node)
     {
         if(node.kind!=Kind.Facility)return node.cost;
@@ -104,6 +114,7 @@ public static class CastleTree
         if(node.kind==Kind.Character && (Character(node)==null||Character(node).isBoss))return false;
         if(!GameManager.Instance.SpendStagePoints(Cost(node)))return false;
         if(node.kind==Kind.Character)PlayerInventory.Instance.AddCharacter(Character(node));
+        else if(node.kind==Kind.Upgrade)CharacterInvestment.Record(node.id,Cost(node));
         else
         {
             var slots=ReadSlots();slots.Add(node.target);
@@ -119,5 +130,6 @@ public static class CastleTree
         if(slots.Count==previous)return;
         PlayerProgressStore.SetString(SlotsKey,string.Join(",",slots.OrderBy(x=>x)));PlayerProgressStore.Save();
     }
-    public static void ResetProgress(){PlayerProgressStore.Delete(SlotsKey);PlayerProgressStore.Save();Changed?.Invoke();}
+    public static void NotifyChanged()=>Changed?.Invoke();
+    public static void ResetProgress(){CharacterInvestment.Clear();PlayerProgressStore.Delete(SlotsKey);PlayerProgressStore.Save();Changed?.Invoke();}
 }

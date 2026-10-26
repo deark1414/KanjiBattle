@@ -79,6 +79,11 @@ document.querySelector('#defeat').onclick=()=>execute('nextDefeat').catch(()=>{}
   const explicit=valid.includes(selected);
   preset.value=explicit?selected:(localStorage.getItem(key)||'standard');
   await execute(explicit || !localStorage.getItem(key)?'seed':'resume',preset.value);
+  const chapter=Number(new URLSearchParams(location.search).get('chapter'));
+  if(explicit && selected==='tree' && Number.isInteger(chapter) && chapter>=5 && chapter<=40) {
+    await execute('treeAdvance',String(chapter));
+    await execute('treeFunds','200');
+  }
 })().catch(error=>status.textContent=error.message);
 </script>
 </html>

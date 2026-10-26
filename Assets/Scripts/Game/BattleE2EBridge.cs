@@ -50,6 +50,10 @@ public sealed class BattleE2EBridge : MonoBehaviour
         public bool treeOverflow;
         public string[] treeVisible,treeFacilityIcons;
         public float treeZoom;
+        public int investmentRefund;
+        public int retiredRefundExpected;
+        public bool lastTreePurchase;
+        public Box treeViewport;
         public string guideId;
         public string guideTarget;
         public int guideStep;
@@ -60,6 +64,7 @@ public sealed class BattleE2EBridge : MonoBehaviour
     }
 
     private StageData fixtureStage;
+    private bool lastTreePurchase;
     private const string FixtureKey = "KanjiBattle.E2E.Fixture";
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -108,6 +113,13 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 case "treeFresh":
                     ResetTreeFixture();break;
                 case "treeFunds": GameManager.Instance.AddStagePoints(int.Parse(request.value));break;
+                case "investmentProbe": ProbeInvestment();break;
+                case "treeTryPurchase":lastTreePurchase=CastleTree.Purchase(request.value);break;
+                case "legacyCombatSave":
+                    var retired=FacilityManager.Instance.GetFacilities().Where(FacilityManager.IsRetiredCombatFacility).ToArray();
+                    PlayerProgressStore.SetString("KanjiBattle.Facilities.Unlocked",PlayerProgressStore.GetString("KanjiBattle.Facilities.Unlocked")+","+string.Join(",",retired.Select(f=>f.facilityId)));
+                    PlayerProgressStore.SetString("KanjiBattle.Facilities.Levels",PlayerProgressStore.GetString("KanjiBattle.Facilities.Levels")+","+string.Join(",",retired.Select(f=>$"{f.facilityId}:2")));
+                    PlayerProgressStore.Save();break;
                 case "treeAdvance": GameManager.Instance.RegisterClearedStage(int.Parse(request.value));break;
                 case "treePurchase": if(!CastleTree.Purchase(request.value))throw new Exception("Tree purchase blocked: "+request.value);break;
                 case "treeCampaign": PrepareTreeCampaign(int.Parse(request.value));break;
@@ -346,6 +358,11 @@ public sealed class BattleE2EBridge : MonoBehaviour
             treeFacilityIcons=FindObjectsByType<CastleTreeView>(FindObjectsSortMode.None).SelectMany(view=>view.GetComponentsInChildren<Image>())
                 .Where(image=>image.name=="NodeIcon"&&image.sprite!=null&&image.transform.parent.name.StartsWith("TreeNode_f")).Select(image=>image.transform.parent.name.Substring(9)).ToArray(),
             treeOwned=CastleTree.Nodes.Where(CastleTree.Owned).Select(n=>n.id).ToArray(),
+            investmentRefund=CharacterInvestment.Refund,
+            retiredRefundExpected=FacilityManager.Instance.GetFacilities().Where(FacilityManager.IsRetiredCombatFacility)
+                .Sum(f=>(f.unlockType==FacilityUnlockType.Free?0:f.unlockStagePointCost)+f.GetUpgradeCost(0)+f.GetUpgradeCost(1)),
+            lastTreePurchase=lastTreePurchase,
+            treeViewport=FindAnyObjectByType<CastleTreeView>() is { } tree ? Bounds(tree.transform.Find("TreeViewport") as RectTransform) : null,
             treeOverflow=FindObjectsByType<CastleTreeView>(FindObjectsSortMode.None).Any(view=>view.GetComponentsInChildren<TMP_Text>().Any(text=>text.isTextOverflowing)),
             controls = FindObjectsByType<Selectable>(FindObjectsSortMode.None).Where(control => control.gameObject.activeInHierarchy)
                 .Select(CaptureControl).ToArray(),
@@ -371,6 +388,28 @@ public sealed class BattleE2EBridge : MonoBehaviour
                 .Select(data => data.characterId).OrderBy(id => id).ToArray(),
             baseBattleExperience = fixtureStage == null ? 0 : PlayerInventory.Instance.GetEffectiveBattleExperienceReward(fixtureStage)
         };
+    }
+
+    private static void ProbeInvestment()
+    {
+        var db=Resources.Load<CharacterDatabase>("CharacterDatabase");
+        var sword=db.GetById(10);var two=db.GetById(2);
+        var ally=new BattleCharacterState();var enemy=new BattleCharacterState();
+        ally.Initialize(sword,10,true);enemy.Initialize(sword,10,false);
+        if(ally.MaxHP!=CharacterInvestment.Health(sword,10)||enemy.MaxHP!=sword.GetMaxHP(10))throw new Exception("Personal health boost scope");
+        if(ally.Attack!=Mathf.RoundToInt(sword.GetAttack(10)*CharacterInvestment.Multiplier(sword,CharacterInvestment.Stat.Attack))
+            ||enemy.Attack!=sword.GetAttack(10))throw new Exception("Personal attack boost scope");
+        var fusion=CharacterData.CreateBattleFusion(BattleFusionRules.GetRecipe(-1001),new[]{two,sword},10);
+        try
+        {
+            float expected=(two.GetMaxHP(10)*CharacterInvestment.Multiplier(two,CharacterInvestment.Stat.Health)
+                +sword.GetMaxHP(10)*CharacterInvestment.Multiplier(sword,CharacterInvestment.Stat.Health))
+                /(two.GetMaxHP(10)+(float)sword.GetMaxHP(10));
+            if(Mathf.Abs(CharacterInvestment.Multiplier(fusion,CharacterInvestment.Stat.Health)-expected)>.0001f)throw new Exception("Fusion inheritance weighting");
+            ally.Initialize(fusion,10,true);enemy.Initialize(fusion,10,false);
+            if(ally.MaxHP!=Mathf.RoundToInt(fusion.GetMaxHP(10)*expected)||enemy.MaxHP!=fusion.GetMaxHP(10))throw new Exception("Fusion applied once, ally only");
+        }
+        finally{Destroy(fusion);}
     }
 
     private static void ProbeTreeRecruitment(int[] ids)

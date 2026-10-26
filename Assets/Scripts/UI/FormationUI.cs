@@ -510,7 +510,7 @@ public class FormationUI : MonoBehaviour
             int level = PlayerInventory.Instance.PlayerLevel;
             title = $"{inspectedCharacter.characterName}　現在 Lv.{level}　{SkillDescription.GetShort(inspectedCharacter.skillType)}";
             int maxHP = PlayerInventory.Instance.GetPlayerMaxHP(inspectedCharacter, level);
-            body = $"HP {maxHP}　攻 {inspectedCharacter.GetAttack(level)}　守 {inspectedCharacter.GetDefense(level)}\n{GetSkillSummary(inspectedCharacter)}";
+            body = $"HP {maxHP}　攻 {CharacterInvestment.Attack(inspectedCharacter,level)}　守 {CharacterInvestment.Defense(inspectedCharacter,level)}\n{GetSkillSummary(inspectedCharacter)}";
         }
         else
         {

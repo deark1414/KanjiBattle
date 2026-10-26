@@ -40,7 +40,7 @@ public static class SkillExecutor
 
         if (skillType != SkillType.Dragon && !reliableRole)
         {
-            int chance = GetSkillChance(caster.data, skillType, caster.isAlly);
+            int chance = GetSkillChance(caster.data, skillType, caster.isAlly, caster.OriginalData);
             if (!RollSkillActivation(chance))
             {
                 return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.ChanceFailed);
@@ -158,7 +158,7 @@ public static class SkillExecutor
         return executed;
     }
 
-    public static int GetSkillChance(CharacterData data, SkillType skillType, bool isAlly = false)
+    public static int GetSkillChance(CharacterData data, SkillType skillType, bool isAlly = false, CharacterData investmentSource = null)
     {
         if (BattleActionRules.IsReliableRoleSkill(skillType)) return 100;
         if (ForceSkillActivationForVfxReview)
@@ -170,9 +170,9 @@ public static class SkillExecutor
         int chance = skillData != null && skillData.chanceOverride >= 0
             ? skillData.chanceOverride
             : data.skillChance;
-        if (isAlly && FacilityManager.Instance != null)
+        if (isAlly)
         {
-            chance = Mathf.RoundToInt(chance * FacilityManager.Instance.GetSkillChanceMultiplier());
+            chance = Mathf.RoundToInt(chance * CharacterInvestment.Multiplier(investmentSource ?? data,CharacterInvestment.Stat.Technique));
         }
         return Mathf.Clamp(chance, 0, 95);
     }
@@ -697,7 +697,7 @@ public static class SkillExecutor
     private static bool ExecuteDragon(SkillContext ctx)
     {
         SkillData skillData = SkillCatalog.Get(SkillType.Dragon);
-        int chance = GetSkillChance(ctx.Caster.data, SkillType.Dragon, ctx.Caster.isAlly);
+        int chance = GetSkillChance(ctx.Caster.data, SkillType.Dragon, ctx.Caster.isAlly, ctx.Caster.OriginalData);
 
         int range = 3;
         bool hasRoar = false;

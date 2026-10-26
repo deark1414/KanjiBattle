@@ -78,6 +78,19 @@ test("offscreen tree branches are reached with real horizontal dragging", async 
   await game.named('TreeNode_s1');assert(dragged);
 });
 
+test("radial map panning uses the actual viewport for vertical offscreen nodes", async () => {
+  const page=new EventEmitter();let dragged=false,pressed=false;
+  page.locator=()=>({boundingBox:async()=>({x:0,y:0,width:390,height:844})});
+  page.mouse={move:async(x,y)=>{if(pressed&&y>400)dragged=true;},down:async()=>{pressed=true;},up:async()=>{pressed=false;},click:async()=>{}};
+  page.waitForTimeout=async()=>{};
+  const game=new GameHarness(page,"/unused");
+  game.request=async()=>({treeViewport:{x:.05,y:.3,w:.9,h:.5},controls:[{
+    path:'/TreeViewport/TreeContent/TreeNode_u10_0',enabled:true,visible:dragged,reachable:dragged,
+    rect:{x:.4,y:dragged?.45:.05,w:.1,h:.1}
+  }]});
+  await game.named('TreeNode_u10_0');assert(dragged);
+});
+
 test("test-only C# entry points are excluded from normal players", () => {
   const root = path.resolve(__dirname, "../..");
   for (const file of ["BattleE2EBridge.cs", "BattleManager.E2E.cs", "BattleManager.DefenseE2E.cs"]) {

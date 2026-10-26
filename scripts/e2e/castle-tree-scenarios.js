@@ -2,6 +2,51 @@ const assert=require('node:assert/strict');
 const expand=['c11','s1','c13','c14','s2','c27','s3','c23','s4','c19','c31','c32','s5'];
 module.exports=[
   {
+    id:'tree-investment',name:'個別強化・融合継承・保存・強化だけ無料振り直し',fixture:'standard',viewport:{width:390,height:844},
+    async run(game){
+      await game.request('treeFresh');await game.request('treeAdvance','15');
+      await game.request('treeTryPurchase','u10_0');assert.equal(game.state.lastTreePurchase,false);assert.equal(game.state.investmentRefund,0);
+      await game.request('treeFunds','300');
+      await game.request('treePurchase','c11');await game.request('treePurchase','s1');await game.request('treePurchase','f6');
+      const permanent=[...game.state.treeOwned];const before=game.state.stagePoints;
+      for(const id of ['u10_0','u10_1','u10_2'])await game.request('treePurchase',id);
+      assert.equal(game.state.investmentRefund,18);assert.equal(game.state.stagePoints,before-18);
+      await game.request('treeTryPurchase','u10_0');assert.equal(game.state.lastTreePurchase,false);assert.equal(game.state.investmentRefund,18);
+      await game.request('investmentProbe');
+      await game.page.waitForTimeout(800);await game.request();
+      await game.named('TreeCenter');await game.named('TreeBranch_0');
+      await game.named('TreeNode_u10_0');await game.screenshot('personal-health');assert(!game.state.treeOverflow);
+      await game.named('TreeRespec');await game.screenshot('respec-confirmation');
+      await game.named('TreeRespecCancel');assert.equal(game.state.investmentRefund,18);
+      await game.page.waitForTimeout(1500);await game.page.reload();
+      await game.page.waitForFunction(()=>!!window.unityInstance,null,{timeout:120000});
+      await game.page.waitForTimeout(4500);await game.request();
+      assert.equal(game.state.investmentRefund,18);assert(game.state.treeOwned.includes('u10_0'));
+      await game.named('FacilityTabButton');await game.named('TreeRespec');await game.named('TreeRespecConfirm');
+      assert.equal(game.state.stagePoints,before);assert.equal(game.state.investmentRefund,0);
+      assert(permanent.every(id=>game.state.treeOwned.includes(id)),'Recruitment, slots and facilities stay unlocked');
+      assert(!game.state.treeOwned.some(id=>id.startsWith('u')));assert.equal(game.state.treeSlots,4);
+      await game.request('investmentProbe');assert(!game.state.controls.find(c=>c.path.endsWith('/TreeRespec')).enabled);
+      await game.screenshot('reset-keeps-unlocks');
+    }
+  },
+  {
+    id:'tree-legacy-refund',name:'旧全体強化の返金は一度だけ、他の施設は維持',fixture:'standard',
+    async run(game){
+      await game.request('treeFresh');await game.request('treeAdvance','35');await game.request('treeFunds','100');
+      await game.request('treePurchase','c11');await game.request('treePurchase','s1');await game.request('treePurchase','f6');
+      const permanent=[...game.state.treeOwned],before=game.state.stagePoints,refund=game.state.retiredRefundExpected;
+      await game.request('legacyCombatSave');await game.page.waitForTimeout(1800);
+      for(let i=0;i<2;i++){
+        await game.page.reload();await game.page.waitForFunction(()=>!!window.unityInstance,null,{timeout:120000});
+        await game.page.waitForTimeout(4500);await game.request();
+        assert.equal(game.state.stagePoints,before+refund);assert(permanent.every(id=>game.state.treeOwned.includes(id)));
+        assert(!game.state.treeOwned.some(id=>['f8','f9','f10','f11'].includes(id)));
+      }
+      await game.request('investmentProbe');
+    }
+  },
+  {
     id:'tree-radial',name:'5方向マップ・章ごとの表示・建物アイコン・順不同の増枠',fixture:'standard',
     async run(game){
       await game.request('treeFresh');await game.request('treeFunds','1000');await game.page.waitForTimeout(700);await game.request();

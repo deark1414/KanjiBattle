@@ -402,7 +402,7 @@ public class CharacterListUI : MonoBehaviour
         int level = PlayerInventory.Instance.PlayerLevel;
         informationRegion.Configure(
             $"{character.characterName}　現在 Lv.{level}",
-            $"HP {PlayerInventory.Instance.GetPlayerMaxHP(character, level)}　攻 {character.GetAttack(level)}　守 {character.GetDefense(level)}　/　{GetShortSkillDescription(character)}");
+            $"HP {PlayerInventory.Instance.GetPlayerMaxHP(character, level)}　攻 {CharacterInvestment.Attack(character,level)}　守 {CharacterInvestment.Defense(character,level)}　/　{GetShortSkillDescription(character)}");
     }
 
     private void ShowBondInformation(CharacterData character, int bond, int threshold)

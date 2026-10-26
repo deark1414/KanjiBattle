@@ -26,7 +26,12 @@ async function main(){
     await page.setViewportSize({width:390,height:844});await page.waitForTimeout(1000);
     current=await state();assert(!current.treeOverflow);assert.deepEqual(errors,[]);
     await page.screenshot({path:'tmp/e2e/manual-tree-mobile.png'});
-    console.log('Passed: manual tree preset, purchase, real campaign deployment, reload, portrait.');
+    await page.goto(base+'?preset=tree&chapter=15');await ready();await page.waitForTimeout(1000);
+    current=await state();assert(current.treeVisible.includes('u10_0'));assert.equal(current.stagePoints,230);
+    assert.equal(current.investmentRefund,0);assert(!current.treeOverflow);
+    await click('TreeBranch_0');await page.screenshot({path:'tmp/e2e/manual-investment-mobile.png'});
+    assert.deepEqual(errors,[]);
+    console.log('Passed: manual tree preset, purchase, real campaign deployment, reload, portrait, character investment preset.');
   }finally{await browser.close();}
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

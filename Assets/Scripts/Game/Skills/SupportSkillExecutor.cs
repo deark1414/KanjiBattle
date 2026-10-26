@@ -35,8 +35,8 @@ public static class SupportSkillExecutor
         }
         // At most one repeat per action; repeats bypass this entry point to avoid chains.
         BattleCharacter bell = battle.gridMap.Values.Where(unit => CanEcho(unit, caster))
-            .OrderByDescending(unit => SkillExecutor.GetSkillChance(unit.data, unit.data.skillType, unit.isAlly)).FirstOrDefault();
-        if (bell == null || !SkillExecutor.RollSkillActivation(SkillExecutor.GetSkillChance(bell.data, bell.data.skillType, bell.isAlly))) return;
+            .OrderByDescending(unit => SkillExecutor.GetSkillChance(unit.data, unit.data.skillType, unit.isAlly, unit.OriginalData)).FirstOrDefault();
+        if (bell == null || !SkillExecutor.RollSkillActivation(SkillExecutor.GetSkillChance(bell.data, bell.data.skillType, bell.isAlly, bell.OriginalData))) return;
         if (repeat(target))
         {
             battle.PlaySupportEcho(bell, caster);

@@ -27,4 +27,11 @@ public static class CastleTreeArt
         FacilityEffectType.Fusion=>"FacilityBondShrine",
         _=>"FacilityBarracks"
     });
+    public static Sprite Investment(CharacterInvestment.Stat stat)=>Building(stat switch
+    {
+        CharacterInvestment.Stat.Health=>"FacilityInfirmary",
+        CharacterInvestment.Stat.Attack=>"FacilityMartialHall",
+        CharacterInvestment.Stat.Defense=>"FacilityBarracks",
+        _=>"FacilityStrategyHall"
+    });
 }

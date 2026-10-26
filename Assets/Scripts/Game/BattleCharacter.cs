@@ -477,19 +477,14 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
     {
         int attack = state.GetEffectiveAttack();
         if (bm != null) attack = bm.ApplyPlayerSkillAttack(this, attack);
-        if (!isAlly || FacilityManager.Instance == null)
-        {
-            return attack;
-        }
-
-        return Mathf.RoundToInt(attack * FacilityManager.Instance.GetAttackMultiplier());
+        return attack;
     }
 
     public float GetEffectiveSkillPower()
     {
         float power = data != null ? data.skillPower : 1f;
-        return isAlly && FacilityManager.Instance != null
-            ? power * FacilityManager.Instance.GetSkillPowerMultiplier()
+        return isAlly
+            ? power * CharacterInvestment.Multiplier(OriginalData,CharacterInvestment.Stat.Technique)
             : power;
     }
 

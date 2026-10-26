@@ -100,6 +100,17 @@ class GameHarness {
       assert(matches.length > 0, `Control not found: ${description}`);
       assert(!matches.some(item => item.visible && !item.reachable), `Control is covered by another UI element: ${description}`);
       const canvas = await this.page.locator("#unity-canvas").boundingBox();
+      if (matches[0].path.includes('/TreeViewport/') && state.treeViewport) {
+        const v=state.treeViewport;
+        const sx=v.x+v.w/2,sy=v.y+v.h/2;
+        const tx=matches[0].rect.x+matches[0].rect.w/2,ty=matches[0].rect.y+matches[0].rect.h/2;
+        const dx=Math.max(-v.w*.35,Math.min(v.w*.35,sx-tx));
+        const dy=Math.max(-v.h*.35,Math.min(v.h*.35,sy-ty));
+        await this.page.mouse.move(canvas.x+canvas.width*sx,canvas.y+canvas.height*sy);
+        await this.page.mouse.down();
+        await this.page.mouse.move(canvas.x+canvas.width*(sx+dx),canvas.y+canvas.height*(sy+dy),{steps:12});
+        await this.page.mouse.up();await this.page.waitForTimeout(200);continue;
+      }
       await this.page.mouse.move(canvas.x + canvas.width * 0.5, canvas.y + canvas.height * 0.5);
       const centerX=matches[0].rect.x+matches[0].rect.w/2;
       if(centerX<.04||centerX>.96){

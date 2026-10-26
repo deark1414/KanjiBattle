@@ -21,7 +21,7 @@ public class CharacterEntryForFormationUI : MonoBehaviour
         int maxHP = PlayerInventory.Instance != null
             ? PlayerInventory.Instance.GetPlayerMaxHP(data, level)
             : data.GetMaxHP(level);
-        statsText.text = $"PLv.{level}　HP {maxHP}　攻 {data.GetAttack(level)}　守 {data.GetDefense(level)}";
+        statsText.text = $"PLv.{level}　HP {maxHP}　攻 {CharacterInvestment.Attack(data,level)}　守 {CharacterInvestment.Defense(data,level)}";
         if (levelText != null)
         {
             levelText.gameObject.SetActive(false);

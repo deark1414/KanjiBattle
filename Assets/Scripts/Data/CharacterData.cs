@@ -62,6 +62,8 @@ public class CharacterData : ScriptableObject
     public int characterId;
     public bool isBoss;
     public bool isEvolved;
+    [System.NonSerialized] public CharacterData[] InvestmentMaterials;
+    [System.NonSerialized] public int InvestmentLevel;
     public Sprite icon;
     public Sprite enemyIcon;
 
@@ -122,6 +124,8 @@ public class CharacterData : ScriptableObject
         result.skillType = recipe.Skill;
         result.skillChance = recipe.Skill == SkillType.WindChime ? 15 : 100;
         result.skillPower = 1f;
+        result.InvestmentMaterials = new List<CharacterData>(materials).ToArray();
+        result.InvestmentLevel = battleLevel;
         float hp = 0, attack = 0, defense = 0;
         foreach (CharacterData material in materials)
         {
