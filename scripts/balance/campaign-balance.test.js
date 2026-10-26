@@ -38,6 +38,31 @@ test('paid progression rejects unowned material and oversubscribed formation slo
   assert.throws(() => validateResults([{ ...row, economyEntry: { ...row.economyEntry, slots: 0 } }]));
 });
 
+test('controlled comparisons verify actual HP and role multipliers without mixing conditions', () => {
+  const data = require('../../Assets/Data/characters.json');
+  const gun = data.find(row => row.id === 18), shield = data.find(row => row.id === 13);
+  const stats = character => ({ id: character.id, level: 10,
+    hp: character.baseHP + character.hpGrowth * 9,
+    attack: character.baseAttack + character.attackGrowth * 9,
+    defense: character.baseDefense + character.defenseGrowth * 9 });
+  const multiplier = require('../../Assets/Resources/skills.json').find(row => row.skillTypeName === 'Gun').powerMultiplier;
+  for (const [variant, scale] of [['baseline', 1], ['gun90', .9], ['gun80', .8]]) {
+    const row = { variant, level: 10, party: [18], initialUnits: [{ ...stats(gun), roleMultiplier: multiplier * scale }] };
+    validateResults([row]);
+    assert.throws(() => validateResults([{ ...row, initialUnits: [{ ...row.initialUnits[0], roleMultiplier: 123 }] }]));
+  }
+  const row = { variant: 'shield90', level: 10, party: [13], initialUnits: [{ ...stats(shield),
+    hp: Math.floor(stats(shield).hp * 9 / 10), roleMultiplier: 1 }] };
+  validateResults([row]);
+  assert.throws(() => validateResults([{ ...row, initialUnits: [{ ...row.initialUnits[0], hp: stats(shield).hp }] }]));
+  const report = summary(['baseline', 'gun80'].map((variant, i) => ({ stage: 40, profile: 'fusion', variant,
+    won: i === 0, turns: 10, allyHP: 100, enemyHP: 0 })));
+  assert.equal(report.length, 2);
+  assert.deepEqual(report.map(row => [row.variant, row.wins]), [['baseline', 1], ['gun80', 0]]);
+  const historical = { characters: data, skills: [{ skillTypeName: 'Gun', powerMultiplier: .123 }] };
+  validateResults([{ variant: 'gun80', level: 10, party: [18], initialUnits: [{ ...stats(gun), roleMultiplier: .123 * .8 }] }], undefined, historical);
+});
+
 test('each profile uses the same material slot budget and no premature fusion', () => {
   for (let stage = 1; stage <= 40; stage++) {
     const capacity = 3 + [5, 10, 20, 30, 35].filter(gate => gate < stage).length;

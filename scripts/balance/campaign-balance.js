@@ -7,6 +7,9 @@ const args = process.argv.slice(2);
 const option = (name, fallback) => args.includes(name) ? args[args.indexOf(name) + 1] : fallback;
 const stages = JSON.parse(fs.readFileSync(path.join(root, 'Assets/Data/stages.json')));
 const characters = JSON.parse(fs.readFileSync(path.join(root, 'Assets/Data/characters.json')));
+const skills = JSON.parse(fs.readFileSync(path.join(root, 'Assets/Resources/skills.json')));
+const variants = option('--variants', 'baseline').split(',');
+const variantNames = ['baseline', 'shield90', 'gun90', 'gun80', 'gun70', 'gun60'];
 const seeds = Number(option('--seeds', 3));
 const selected = option('--stages', stages.map(s => s.stageId).join(',')).split(',').map(Number);
 const profiles = option('--profiles', 'mixed,fusion').split(',');
@@ -41,18 +44,21 @@ function party(stage, profile) {
 }
 
 function summary(rows) {
-  return selected.flatMap(stage => profiles.map(profile => {
-    const samples = rows.filter(r => r.stage === stage && r.profile === profile);
+  const tagged = rows.some(row => row.variant !== undefined);
+  const measuredVariants = [...new Set(rows.map(row => row.variant || 'baseline'))];
+  return selected.flatMap(stage => profiles.flatMap(profile => measuredVariants.map(variant => {
+    const samples = rows.filter(r => r.stage === stage && r.profile === profile && (r.variant || 'baseline') === variant);
     if (!samples.length) return null;
-    return { stage, profile, samples: samples.length, wins: samples.filter(r => r.won).length,
+    return { stage, profile, ...(tagged ? { variant } : {}), samples: samples.length, wins: samples.filter(r => r.won).length,
       meanTurns: +(samples.reduce((sum, r) => sum + r.turns, 0) / samples.length).toFixed(1),
       timeouts: samples.filter(r => !r.won && r.turns === 20 && r.allyHP > 0 && r.enemyHP > 0).length };
-  })).filter(Boolean);
+  }))).filter(Boolean);
 }
 
-function validateResults(rows, jobs) {
+function validateResults(rows, jobs, source = { characters, skills }) {
   if (jobs) assert.equal(rows.length, jobs.length, '測定が途中で終了しています。');
   rows.forEach((row, index) => {
+    assert(variantNames.includes(row.variant || 'baseline'), '未知の比較条件です。');
     assert(Array.isArray(row.initialUnits), '実際の加入・レベルを検証していない旧測定です。再測定してください。');
     assert.equal(row.initialUnits.length, row.party.length);
     for (let i = 0; i < row.initialUnits.length; i++) {
@@ -61,11 +67,18 @@ function validateResults(rows, jobs) {
       assert.equal(unit.level, row.level, '未加入の駒がLv1で測定されています。');
       assert(unit.hp > 0 && unit.attack >= 0 && unit.defense >= 0);
       if (unit.id > 0) {
-        const data = characters.find(c => c.id === unit.id);
+        const data = source.characters.find(c => c.id === unit.id);
         assert(data);
-        assert.equal(unit.hp, data.baseHP + data.hpGrowth * (row.level - 1));
+        const hp = data.baseHP + data.hpGrowth * (row.level - 1);
+        assert.equal(unit.hp, row.variant === 'shield90' && unit.id === 13 ? Math.floor(hp * 9 / 10) : hp);
         assert.equal(unit.attack, data.baseAttack + data.attackGrowth * (row.level - 1));
         assert.equal(unit.defense, data.baseDefense + data.defenseGrowth * (row.level - 1));
+        if (row.variant !== undefined) {
+          let multiplier = source.skills.find(skill => skill.skillTypeName === data.skillType)?.powerMultiplier ?? 1;
+          if (data.skillType === 'Gun' && row.variant.startsWith('gun')) multiplier *= Number(row.variant.slice(3)) / 100;
+          assert(Number.isFinite(unit.roleMultiplier) && Math.abs(unit.roleMultiplier - multiplier) < .00001,
+            '比較条件と実際のスキル倍率が一致しません。');
+        }
       }
     }
     if (row.economyEntry) {
@@ -81,6 +94,7 @@ function validateResults(rows, jobs) {
       assert.equal(row.stage, jobs[index].stage);
       assert.equal(row.seed, jobs[index].seed);
       assert.equal(row.profile, jobs[index].profile);
+      assert.equal(row.variant || 'baseline', jobs[index].variant || 'baseline');
     }
   });
 }
@@ -88,11 +102,16 @@ function validateResults(rows, jobs) {
 async function main() {
   if (args.includes('--summary')) {
     const rows = JSON.parse(fs.readFileSync(path.join(directory, 'results.json')));
-    validateResults(rows); console.table(summary(rows)); return;
+    const context = path.join(directory, 'context.json');
+    validateResults(rows, undefined, fs.existsSync(context) ? JSON.parse(fs.readFileSync(context)) : undefined);
+    console.table(summary(rows)); return;
   }
   assert(Number.isInteger(seeds) && seeds >= 1 && seeds <= 100);
   assert(selected.length && new Set(selected).size === selected.length && selected.every(id => stages.some(s => s.stageId === id)));
   assert(profiles.every(profile => ['mixed', 'fusion', 'ranged', 'spear', 'sentinel'].includes(profile)));
+  assert(variants.length && new Set(variants).size === variants.length && variants.every(variant => variantNames.includes(variant)));
+  assert(!variants.includes('shield90') || profiles.every(profile => !['fusion', 'sentinel'].includes(profile)),
+    '盾HPの比較は通常盾だけを変更し、融合は対象にしません。非融合編成で比較してください。');
   const economyWins = Number(option('--economy-wins', 0));
   assert([0, 1, 3, 5].includes(economyWins));
   assert(!economyWins || !args.includes('--upgrades'), '購入済み強化と全強化を同時指定できません。');
@@ -100,7 +119,7 @@ async function main() {
   const farmWins = Number(option('--farm-wins', 3));
   const layout = option('--layout', 'compact');
   assert(['compact', 'staggered', 'adaptive'].includes(layout));
-  assert(!playthrough || (profiles.length === 1 && !economyWins && !args.includes('--upgrades') && seeds === 1));
+  assert(!playthrough || (profiles.length === 1 && variants.length === 1 && !economyWins && !args.includes('--upgrades') && seeds === 1));
   assert(!playthrough || (selected.length === 40 && selected.every((id, index) => id === index + 1)));
   assert(Number.isInteger(farmWins) && farmWins >= 1 && farmWins <= 5);
   const campaignRef = option('--campaign-ref');
@@ -108,12 +127,15 @@ async function main() {
   assert(!(campaignRef && campaignFile));
   const campaign = campaignFile ? JSON.parse(fs.readFileSync(path.resolve(root, campaignFile), 'utf8'))
     : campaignRef ? JSON.parse(execFileSync('git', ['show', `${campaignRef}:Assets/Data/campaign-plan.json`], { cwd: root, encoding: 'utf8' })) : null;
-  const jobs = selected.flatMap(id => profiles.flatMap(profile => Array.from({ length: seeds }, (_, seed) => ({
+  const jobs = selected.flatMap(id => profiles.flatMap(profile => variants.flatMap(variant => Array.from({ length: seeds }, (_, seed) => ({
     stage: id, level: Math.min(50, Math.max(3, stages.find(s => s.stageId === id).enemyLevel + Number(option('--level-offset', 0)))), seed: 1729 + seed * 7919,
-    profile, party: party(id, profile), upgrades: args.includes('--upgrades'), economyWins, playthrough, farmWins, layout,
+    profile, variant, party: party(id, profile), upgrades: args.includes('--upgrades'), economyWins, playthrough, farmWins, layout,
     ...(campaign ? { enemyIds: campaign[id - 1].enemies, enemyLevel: campaign[id - 1].level, enemyPositions: campaign[id - 1].positions } : {})
-  }))));
+  })))));
   fs.writeFileSync(path.join(directory, 'plan.json'), JSON.stringify(jobs, null, 2));
+  fs.writeFileSync(path.join(directory, 'context.json'), JSON.stringify({ schema: 1,
+    gitHead: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
+    arguments: args, characters, skills, stages, campaign }, null, 2));
   if (args.includes('--plan-only')) return;
   const unity = process.env.UNITY_EDITOR || '/Applications/Unity/Hub/Editor/6000.4.4f1/Unity.app/Contents/MacOS/Unity';
   console.log(`無音実戦測定: ${playthrough ? `表40局の通し攻略・各局最大${farmWins}勝／7試行` : `${jobs.length}戦・${economyWins ? `各局${economyWins}勝仮定の購入済み育成` : '基準レベル・進行収支は別測定'}`}。ログ: ${directory}/unity.log`);

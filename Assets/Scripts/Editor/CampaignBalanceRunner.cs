@@ -17,7 +17,7 @@ public static class CampaignBalanceRunner
     [Serializable] public sealed class Job
     {
         public int stage, level, seed, economyWins, enemyLevel, farmWins;
-        public string profile, layout;
+        public string profile, layout, variant;
         public int[] party;
         public bool upgrades;
         public int[] enemyIds;
@@ -38,6 +38,7 @@ public static class CampaignBalanceRunner
     private static JObject economyEntry;
     private static StageData fixtureStage;
     private static int attempts, wins, battleSeed;
+    private static float originalGunMultiplier = -1;
     private static readonly List<object> campaign = new();
     private const BindingFlags Private = BindingFlags.Instance | BindingFlags.NonPublic;
     private static T Field<T>(string name) => (T)typeof(BattleManager).GetField(name, Private).GetValue(battle);
@@ -111,11 +112,14 @@ public static class CampaignBalanceRunner
             var enemies = Field<List<BattleCharacter>>("enemies");
             bool won = Field<bool>("lastBattleWon");
             results.Add(new { job.stage, job.level, seed = battleSeed, job.profile, job.party, job.upgrades, job.economyWins,
-                job.layout, job.playthrough, attempt = attempts + 1,
+                job.layout, job.playthrough, job.variant, attempt = attempts + 1,
                 initialUnits, initialEnemies, economyEntry, enemyIds = Field<StageData>("currentStage").GetEnemies().Select(data => data.characterId).ToArray(),
                 won, turns = Field<int>("fusionTurn"),
                 allyHP = allies.Where(u => u != null && !u.isDead).Sum(u => u.currentHP),
                 enemyHP = enemies.Where(u => u != null && !u.isDead).Sum(u => u.currentHP),
+                contributions = battle.BattleRecords.Entries.Select(row => new { row.name,
+                    damage = row.result.damage / 6d, healed = row.result.healed / 6d,
+                    guarded = row.result.guarded / 6d, prevented = row.result.prevented / 6d }).ToArray(),
                 seconds = EditorApplication.timeSinceStartup - started });
             File.WriteAllText(output, JsonConvert.SerializeObject(results, Formatting.Indented));
             Debug.Log($"[CampaignBalance] {index + 1}/{jobs.Length}: stage {job.stage} {job.profile} win={Field<bool>("lastBattleWon")} turns={Field<int>("fusionTurn")}");
@@ -144,6 +148,7 @@ public static class CampaignBalanceRunner
         fixtureStage = null;
         foreach (var data in generated) UnityEngine.Object.Destroy(data);
         generated.Clear();
+        ConfigureVariant(job);
         if (!job.playthrough) CharacterInvestment.Clear();
         PlayerSkillRules.ResetProgress();
         var db = Resources.Load<CharacterDatabase>("CharacterDatabase");
@@ -238,23 +243,31 @@ public static class CampaignBalanceRunner
         // The normal fusion path passes an explicit level override. These factory
         // fixtures bypass material spawning, so reproduce that override here.
         foreach (var unit in units.Where(unit => unit.data.characterId < 0)) unit.SetLevelForDebug(job.level);
+        if (job.variant == "shield90")
+            foreach (var unit in units.Concat(Field<List<BattleCharacter>>("enemies")).Where(unit => unit.data.characterId == 13))
+            {
+                int hp = ExpectedHP(unit.data, unit.level, job);
+                unit.SetBattleVitals(hp, hp, unit.attack, unit.defense);
+            }
         foreach (var unit in units)
-            if (unit.level != job.level || unit.maxHP != unit.data.GetMaxHP(job.level)
+            if (unit.level != job.level || unit.maxHP != ExpectedHP(unit.data, job.level, job)
                 || unit.attack != unit.data.GetAttack(job.level) || unit.defense != unit.data.GetDefense(job.level))
                 throw new Exception("Benchmark level/stat mismatch: " + unit.data.characterName);
         initialUnits = units.Select(unit => (object)new { id = unit.data.characterId, unit.level,
             hp = unit.maxHP, unit.attack, unit.defense,
+            roleMultiplier = SkillCatalog.Get(unit.data.skillType)?.powerMultiplier ?? 1,
             x = unit.gridPos.x, y = unit.gridPos.y,
             materials = unit.data.InvestmentMaterials?.Select(data => data.characterId).ToArray() ?? new[] { unit.data.characterId } }).ToArray();
         initialEnemies = Field<List<BattleCharacter>>("enemies").Select(unit =>
         {
-            if (unit.level != stage.enemyLevel || unit.maxHP != unit.data.GetMaxHP(stage.enemyLevel)
+            if (unit.level != stage.enemyLevel || unit.maxHP != ExpectedHP(unit.data, stage.enemyLevel, job)
                 || unit.attack != unit.data.GetAttack(stage.enemyLevel) || unit.defense != unit.data.GetDefense(stage.enemyLevel)
                 || unit.SkillEffectMultiplier != 1)
                 throw new Exception("Enemy level/stat/investment mismatch: " + unit.data.characterName);
             if (unit.data.characterId < 0 && BattleFusionRules.IsDiscovered(unit.data.characterId))
                 throw new Exception("Enemy encounter must not discover a recipe.");
             return (object)new { id=unit.data.characterId, unit.level, hp=unit.maxHP, unit.attack, unit.defense,
+                roleMultiplier = SkillCatalog.Get(unit.data.skillType)?.powerMultiplier ?? 1,
                 x=unit.gridPos.x, y=unit.gridPos.y };
         }).ToArray();
         typeof(BattleManager).GetMethod("ConfirmDeployment", Private).Invoke(battle, null);
@@ -266,10 +279,27 @@ public static class CampaignBalanceRunner
     }
     private static void Finish(int code)
     {
+        if (originalGunMultiplier >= 0) SkillCatalog.Get(SkillType.Gun).powerMultiplier = originalGunMultiplier;
         SessionState.SetBool(ActiveKey, false); EditorApplication.update -= Tick;
         Debug.Log($"[CampaignBalance] Finished: {results.Count} battles, exit {code}.");
         EditorApplication.Exit(code);
     }
+
+    private static void ConfigureVariant(Job job)
+    {
+        job.variant ??= "baseline";
+        if (!new[] { "baseline", "shield90", "gun90", "gun80", "gun70", "gun60" }.Contains(job.variant))
+            throw new ArgumentException("Unknown balance variant: " + job.variant);
+        if (job.variant == "shield90" && job.party.Any(id => id < 0))
+            throw new ArgumentException("The normal-shield HP comparison does not alter fusion materials.");
+        var gun = SkillCatalog.Get(SkillType.Gun);
+        if (originalGunMultiplier < 0) originalGunMultiplier = gun.powerMultiplier;
+        // SkillCatalog holds plain runtime JSON data; no project assets are edited.
+        gun.powerMultiplier = originalGunMultiplier * (job.variant.StartsWith("gun") ? int.Parse(job.variant.Substring(3)) / 100f : 1);
+    }
+
+    private static int ExpectedHP(CharacterData data, int level, Job job) => job.variant == "shield90" && data.characterId == 13
+        ? Mathf.Max(1, (int)(data.GetMaxHP(level) * 9L / 10)) : data.GetMaxHP(level);
     private static string Route(string profile) => profile == "ranged" ? "ranged" : profile is "spear" or "sentinel" ? "spear" : "balanced";
 
     private static Vector2Int[] SeparateFusionMaterials(List<CharacterData> party, Vector2Int[] preferred)
