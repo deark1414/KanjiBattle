@@ -12,3 +12,11 @@ test('release cache version reaches every compressed Unity resource, not only th
   assert(builder.includes('new[] { "", ".unityweb" }'),'Future builds must handle compressed and uncompressed resources');
   assert(!html.includes('KANJI_E2E')&&!html.includes('window.unityInstance ='),'Production HTML must not add the test bridge');
 });
+
+test('Pages publishes the game, not review symlinks, source assets or development documents',()=>{
+  const workflow=fs.readFileSync(path.join(root,'.github/workflows/pages.yml'),'utf8');
+  assert(workflow.includes('cp -R Docs/game "$RUNNER_TEMP/kanji-pages/game"'));
+  assert(workflow.includes('cp Docs/index.html Docs/.nojekyll "$RUNNER_TEMP/kanji-pages/"'));
+  assert(workflow.includes('path: ${{ runner.temp }}/kanji-pages'));
+  assert(!/^\s+path: Docs\s*$/m.test(workflow));
+});

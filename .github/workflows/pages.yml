@@ -28,10 +28,16 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      - name: Prepare game files only
+        run: |
+          mkdir -p "$RUNNER_TEMP/kanji-pages"
+          cp -R Docs/game "$RUNNER_TEMP/kanji-pages/game"
+          cp Docs/index.html Docs/.nojekyll "$RUNNER_TEMP/kanji-pages/"
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: Docs
+          path: ${{ runner.temp }}/kanji-pages
 
       - name: Deploy to GitHub Pages
         id: deployment
