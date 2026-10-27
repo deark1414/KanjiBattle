@@ -404,6 +404,15 @@ public sealed class SupportSkillVfxLifetime : MonoBehaviour
         Action<float> render, Action removed = null)
     { valid = isValid; delta = getDelta; duration = seconds; draw = render; Removed = removed; }
 
+#if KANJI_BATTLE_E2E
+    internal void FreezeForReview(float seconds)
+    {
+        elapsed = Mathf.Clamp(seconds, 0f, Mathf.Max(0f, duration - .001f));
+        delta = () => 0f;
+        draw?.Invoke(elapsed);
+    }
+#endif
+
     private void Update()
     {
         if (valid == null) return;

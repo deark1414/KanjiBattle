@@ -35,8 +35,8 @@ module.exports=[
         await game.page.waitForTimeout(500);
         state=await game.request();
       }
-      await game.click(control=>control.path.includes('CharacterEntry')&&control.text.startsWith(characterName),characterName+'の編成項目');
-      state=await game.wait(state=>state.visibleMotifs>0,'Selected roster motif did not appear.',5000);
+      const selected=await game.click(control=>control.path.includes('CharacterEntry')&&control.text.startsWith(characterName),characterName+'の編成項目');
+      state=selected.visibleMotifs>0?selected:await game.wait(state=>state.visibleMotifs>0,'Selected roster motif did not appear.',5000);
       assert(state.visibleMotifIds.every(id=>id===characterId));await game.screenshot('selection');
       await game.wait(state=>state.visibleMotifs===0,'Roster motif did not return to a piece.',5000);
       await game.screenshot('selection-settled');

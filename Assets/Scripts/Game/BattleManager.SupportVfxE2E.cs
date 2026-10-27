@@ -24,7 +24,13 @@ public partial class BattleManager
                 RefreshSupportState(source); break;
             case "ignite": source.CoalAwake = true; RefreshSupportState(source); break;
             case "shell": PlaySupportBurst(target, "GuardShell", 1.2f); break;
-            case "forge": PlaySupportForge(target); break;
+            case "forge":
+                PlaySupportForge(target);
+                // Capture the real impact pose without racing the brief hammer visibility window.
+                foreach (var root in supportRoots)
+                    if (root != null && root.name == "SupportVfx_Forge")
+                        root.GetComponent<SupportSkillVfxLifetime>().FreezeForReview(.45f);
+                break;
             case "magnet": PlaySupportMagnet(source, enemies[0]); break;
             case "chain": PlaySupportLink(source, enemies[0], "ChainLightning"); break;
             case "clear": ClearSupportSkillVfx(); break;
