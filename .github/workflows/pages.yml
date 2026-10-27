@@ -33,6 +33,11 @@ jobs:
           mkdir -p "$RUNNER_TEMP/kanji-pages"
           cp -R Docs/game "$RUNNER_TEMP/kanji-pages/game"
           cp Docs/index.html Docs/.nojekyll "$RUNNER_TEMP/kanji-pages/"
+          mkdir -p "$RUNNER_TEMP/kanji-pages/licenses"
+          cp Licenses/NotoSansJP-OFL.txt "$RUNNER_TEMP/kanji-pages/licenses/"
+          cp "Assets/TextMesh Pro/Fonts/LiberationSans - OFL.txt" "$RUNNER_TEMP/kanji-pages/licenses/LiberationSans-OFL.txt"
+          cp Assets/Art/Generated/CharacterIcons/YujiBoku-OFL.txt "$RUNNER_TEMP/kanji-pages/licenses/"
+          cp Assets/Resources/Kenney/UIRPG/KENNEY_UI_RPG_NOTICE.md "$RUNNER_TEMP/kanji-pages/licenses/"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
