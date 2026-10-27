@@ -16,6 +16,32 @@ const scenarios = [
   { key:'mirror', name:'敵も磁石と雨', ids:[13,10,17,20,-1007,-1012],
     positions:cells([[2,1],[3,1],[0,0],[5,0],[1,0],[4,0]]) }
 ];
+const roleScenarios = [...scenarios.slice(0,3),
+  { key:'burst', name:'散弾2体の集中攻撃', ids:[31,31,10,10,-1002,-1002],
+    positions:cells([[0,0],[5,0],[2,1],[3,1],[1,0],[4,0]]) }
+];
+
+function makeRolePlan(sourceJobs, manifest, seeds=3) {
+  assert(Number.isInteger(seeds) && seeds>=1 && seeds<=10);
+  const grass=manifest.recipes.find(recipe=>recipe.name==='草');
+  assert(grass);
+  const profiles=[10,15,31,32,23,30].map(id=>({profile:`normal/${id}`,
+    label:manifest.characters.find(character=>character.id===id).name}));
+  profiles.push(...['materials','fused'].map(form=>({profile:`fusion/${grass.id}/${form}`,label:`草/${form}`})));
+  return roleScenarios.flatMap(scenario=>profiles.flatMap(({profile,label})=>{
+    const original=sourceJobs.find(job=>job.profile===profile);
+    assert(original,`Missing source formation: ${profile}`);
+    return Array.from({length:seeds},(_,i)=>({...structuredClone(original),
+      stage:1,level:33,comparison:true,upgrades:false,economyWins:0,
+      profile:`${scenario.key}/${label}`,seed:1729+i*7919,enemyLevel:33,
+      enemyIds:scenario.ids,enemyPositions:scenario.positions}));
+  }));
+}
+
+function summarizeRoles(rows) {
+  return roleScenarios.flatMap(scenario=>['剣','壁','電','風','午','丑','草/materials','草/fused']
+    .map(name=>({scenario:scenario.name,name,...group(rows.filter(row=>row.profile===`${scenario.key}/${name}`))})));
+}
 
 function makePlan(sourceJobs, manifest, seeds=3) {
   assert(Number.isInteger(seeds) && seeds>=1 && seeds<=10);
@@ -69,15 +95,17 @@ async function main() {
   const args=process.argv.slice(2);
   const option=(key,fallback)=>args.includes(key)?args[args.indexOf(key)+1]:fallback;
   const directory=path.resolve(root,option('--output','tmp/balance/fusion-stress'));
+  const roles=args.includes('--roles');
   fs.mkdirSync(directory,{recursive:true});
   const read=file=>JSON.parse(fs.readFileSync(path.join(directory,file)));
   if(!args.includes('--summary')) {
     const source=path.resolve(root,option('--source','tmp/balance/roster-screen'));
     const manifest=JSON.parse(fs.readFileSync(path.join(source,'manifest.json')));
-    const jobs=makePlan(JSON.parse(fs.readFileSync(path.join(source,'plan.json'))),manifest,Number(option('--seeds',3)));
+    const jobs=(roles?makeRolePlan:makePlan)(JSON.parse(fs.readFileSync(path.join(source,'plan.json'))),manifest,Number(option('--seeds',3)));
     const context={gitHead:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),
       characters:JSON.parse(fs.readFileSync(path.join(root,'Assets/Data/characters.json'))),
-      skills:JSON.parse(fs.readFileSync(path.join(root,'Assets/Resources/skills.json'))),recipes:manifest.recipes,scenarios};
+      skills:JSON.parse(fs.readFileSync(path.join(root,'Assets/Resources/skills.json'))),recipes:manifest.recipes,
+      scenarios:roles?roleScenarios:scenarios,kind:roles?'roles':'support'};
     fs.writeFileSync(path.join(directory,'plan.json'),JSON.stringify(jobs,null,2));
     fs.writeFileSync(path.join(directory,'context.json'),JSON.stringify(context,null,2));
     console.log(`無音の対策・複数採用比較: ${jobs.length}戦。実ステージではなくLv33固定の検査戦場。`);
@@ -90,6 +118,18 @@ async function main() {
     });
   }
   const rows=read('results.json');validateStress(rows,read('plan.json'),read('context.json'));
+  assert.equal(read('context.json').kind==='roles',roles,'Use --roles when summarizing role comparisons');
+  if(roles) {
+    const report=summarizeRoles(rows);
+    fs.writeFileSync(path.join(directory,'summary.json'),JSON.stringify(report,null,2));
+    const text=['# 草・電・移動支援の対策比較','',
+      'Lv33・強化なし・素材8枠。無罠の検査用戦場。密集と分散は敵の配置のみ変更。',
+      '草は素材個別と融合で共通6体の位置を保持。通常キャラは既存の役割別配置を利用するため、配置差も含む採用比較。',
+      '集中攻撃は散弾2体を含む素材8枠。最大育成・全編成の強弱を証明するものではない。','',
+      '|敵編成|対象|勝利|平均ターン|時間切れ|','|---|---|---:|---:|---:|',
+      ...report.map(r=>`|${r.scenario}|${r.name}|${r.wins}/${r.fights}|${r.turns.toFixed(1)}|${r.timeouts}|`),''].join('\n');
+    fs.writeFileSync(path.join(directory,'report.md'),text);console.log(text);return;
+  }
   const report=summarize(rows);
   fs.writeFileSync(path.join(directory,'summary.json'),JSON.stringify(report,null,2));
   const n=value=>value.toFixed(1);
@@ -104,4 +144,4 @@ async function main() {
   console.log(text);
 }
 if(require.main===module)main().catch(error=>{console.error(error);process.exitCode=1;});
-module.exports={makePlan,validateStress,summarize,scenarios};
+module.exports={makePlan,makeRolePlan,validateStress,summarize,summarizeRoles,scenarios,roleScenarios};
