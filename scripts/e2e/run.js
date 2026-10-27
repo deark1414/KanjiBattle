@@ -8,10 +8,10 @@ const { GameHarness } = require("./harness");
 const scenarios = require("./scenarios");
 
 const root = path.resolve(__dirname, "../..");
-const buildRoot = path.join(root, "tmp/e2e");
-const unity = process.env.UNITY_EDITOR || "/Applications/Unity/Hub/Editor/6000.4.4f1/Unity.app/Contents/MacOS/Unity";
 const args = process.argv.slice(2);
 const option = name => args.includes(name) ? args[args.indexOf(name) + 1] : undefined;
+const buildRoot = path.resolve(root, option("--build-root") || "tmp/e2e");
+const unity = process.env.UNITY_EDITOR || "/Applications/Unity/Hub/Editor/6000.4.4f1/Unity.app/Contents/MacOS/Unity";
 
 async function build() {
   fs.mkdirSync(buildRoot, { recursive: true });
@@ -19,8 +19,8 @@ async function build() {
   const log = path.join(buildRoot, "build.log");
   console.log("E2E専用WebGL版をビルドします。");
   await new Promise((resolve, reject) => {
-    const child = spawn(unity, ["-batchmode", "-quit", "-projectPath", root,
-      "-executeMethod", "KanjiBattle.Editor.WebGLBuild.BuildLocalE2E", "-logFile", log], { cwd: root, stdio: "ignore" });
+    const child = spawn(unity, ["-batchmode", "-nographics", "-noaudio", "-quit", "-projectPath", root,
+      "-executeMethod", "KanjiBattle.Editor.WebGLBuild.BuildLocalE2E", "-e2eBuildRoot", buildRoot, "-logFile", log], { cwd: root, stdio: "ignore" });
     child.on("error", reject);
     child.on("exit", code => code === 0 ? resolve() : reject(new Error(`Unity build failed (${code}). See ${log}`)));
   });
@@ -67,7 +67,7 @@ async function main() {
   try {
     let url = option("--url");
     if (!url) ({ server, url } = await serve());
-    browser = await chromium.launch({ headless: !args.includes("--headed") });
+    browser = await chromium.launch({ headless: !args.includes("--headed"), args: ["--mute-audio"] });
     const only = option("--only")?.split(",");
     const selected = only ? scenarios.filter(scenario => only.includes(scenario.id)) : scenarios;
     assert(selected.length > 0, "No matching scenario.");
