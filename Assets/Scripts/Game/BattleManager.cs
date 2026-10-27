@@ -40,6 +40,7 @@ public partial class BattleManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resultText;
     private Button resultBackButton;
     private Button resultRetryButton;
+    private Button resultRepeatButton;
     private RectTransform resultActionContainer;
     private RectTransform resultBondContainer;
 
@@ -58,8 +59,11 @@ public partial class BattleManager : MonoBehaviour
     private bool isPaused = false;
     private readonly float[] battleSpeeds = { 1f, 1.1f, 1.25f, 1.45f, 1.7f, 2f, 2.35f, 2.7f, 3f };
     private int battleSpeedIndex;
-    private Button speedButton;
-    private TextMeshProUGUI speedButtonText;
+    private BattlePlaybackControls playbackControls;
+    private bool autoRepeat;
+    private bool battleFinished;
+    private bool lastBattleWon;
+    private Coroutine repeatRoutine;
     private readonly BattleVfxRegistry battleVfxRegistry = new();
     private Transform battleVfxOverlay;
     private Transform weaponVfxOverlay;
@@ -121,6 +125,8 @@ public partial class BattleManager : MonoBehaviour
         StopAllCoroutines();
         FinishPlayerSkill();
         ClearSupportSkillVfx();
+        repeatRoutine = null;
+        autoRepeat = false;
         CleanupBattleVfx();
     }
 
@@ -310,6 +316,9 @@ public partial class BattleManager : MonoBehaviour
         ClearDeploymentView();
         ClearFusionRuntimeData();
         StopAllCoroutines();
+        repeatRoutine = null;
+        battleFinished = false;
+        resultPanel?.SetActive(false);
         CleanupBattleVfx();
 
         foreach (Transform child in battleField)
@@ -900,56 +909,54 @@ public partial class BattleManager : MonoBehaviour
 
     private void EnsureSpeedButton()
     {
-        if (speedButton != null) return;
-
-        var buttonObj = new GameObject("SpeedButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
-        buttonObj.transform.SetParent(transform, false);
-        speedButton = buttonObj.GetComponent<Button>();
-        var image = buttonObj.GetComponent<Image>();
-        image.color = new Color(0.62f, 0.42f, 0.23f, 1f);
-        var outline = buttonObj.AddComponent<Outline>();
-        outline.effectColor = new Color(0.95f, 0.72f, 0.42f, 0.8f);
-        outline.effectDistance = new Vector2(1f, -1f);
-
-        var textObj = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
-        textObj.transform.SetParent(buttonObj.transform, false);
-        speedButtonText = textObj.GetComponent<TextMeshProUGUI>();
-        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(speedButtonText);
-        speedButtonText.alignment = TextAlignmentOptions.Center;
-        speedButtonText.enableAutoSizing = true;
-        speedButtonText.fontSizeMin = 14f;
-        speedButtonText.fontSizeMax = 24f;
-        speedButtonText.color = Color.white;
-        speedButtonText.raycastTarget = false;
-
-        var textRect = speedButtonText.rectTransform;
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.offsetMin = Vector2.zero;
-        textRect.offsetMax = Vector2.zero;
-
-        speedButton.onClick.AddListener(ToggleBattleSpeed);
+        if (playbackControls != null) return;
+        playbackControls = new BattlePlaybackControls(transform, SetBattleSpeed, SetAutoRepeat);
         UpdateSpeedButtonLabel();
     }
 
-    private void ToggleBattleSpeed()
+    private void SetBattleSpeed(int index)
     {
-        GameAudio.Instance.EnsureBgm();
         int unlockedTier = GameManager.Instance != null ? GameManager.Instance.BattleSpeedTier : 0;
         int maxIndex = Mathf.Clamp(unlockedTier, 0, battleSpeeds.Length - 1);
-        battleSpeedIndex = (battleSpeedIndex + 1) % (maxIndex + 1);
+        battleSpeedIndex = Mathf.Clamp(index, 0, maxIndex);
         GameManager.Instance?.SetBattleSpeedIndex(battleSpeedIndex);
         GameAudio.Instance.Play(GameSound.Click);
-        AddLog($"バトル速度 x{CurrentBattleSpeed:0.#}", Color.cyan);
         UpdateSpeedButtonLabel();
     }
 
     private void UpdateSpeedButtonLabel()
     {
-        if (speedButtonText != null)
-        {
-            speedButtonText.text = $"x{CurrentBattleSpeed:0.#}";
-        }
+        int maximum = Mathf.Clamp(GameManager.Instance != null ? GameManager.Instance.BattleSpeedTier : 0, 0, battleSpeeds.Length - 1);
+        playbackControls?.Refresh(battleSpeedIndex, maximum, CurrentBattleSpeed, battleSpeeds[maximum], autoRepeat, CanRepeatStage);
+    }
+
+    private bool CanRepeatStage => currentStage != null && FacilityManager.Instance != null
+        && FacilityManager.Instance.IsStageRetryUnlocked() && deployedAllies.Any(ally => ally != null);
+
+    private void SetAutoRepeat(bool enabled)
+    {
+        autoRepeat = enabled && CanRepeatStage;
+        if (repeatRoutine != null) StopCoroutine(repeatRoutine);
+        repeatRoutine = null;
+        UpdateSpeedButtonLabel();
+        if (resultRepeatButton != null) SetResultActionLabel(resultRepeatButton, autoRepeat ? "連戦停止" : "連戦開始");
+        if (autoRepeat && battleFinished && lastBattleWon)
+            repeatRoutine = StartCoroutine(RepeatAfterVictory());
+    }
+
+    private IEnumerator RepeatAfterVictory()
+    {
+        yield return new WaitForSecondsRealtime(3f);
+        while (isPaused && autoRepeat) yield return null;
+        repeatRoutine = null;
+        if (autoRepeat && battleFinished && lastBattleWon && CanRepeatStage) RetryCurrentStage();
+    }
+
+    private void CompleteBattlePlayback(bool won)
+    {
+        battleFinished = true;
+        lastBattleWon = won;
+        if (!won) SetAutoRepeat(false);
     }
 
     // === Reinforcement spawning ===
@@ -1324,6 +1331,8 @@ public partial class BattleManager : MonoBehaviour
     private void ShowResult(string message, Color color, bool isWin = false)
     {
         FinishPlayerSkill();
+        if (battleFinished) return;
+        CompleteBattlePlayback(isWin);
         if (!battleRecords.Complete(isWin)) return;
         GameAudio.Instance.Play(isWin ? GameSound.Win : GameSound.Lose);
         int effectiveReward = 0;
@@ -1379,14 +1388,11 @@ public partial class BattleManager : MonoBehaviour
         int nextPlayerExperience = inventory != null ? inventory.GetExperienceToNextPlayerLevel() : 0;
         bool playerLevelCapped = inventory != null && inventory.IsAtEffectiveLevelCap;
         int playerLevelCap = inventory != null ? inventory.GetEffectiveLevelCap() : 0;
-        bool leveledUp = experienceResult.level > experienceResult.previousLevel;
         string experienceProgress = playerLevelCapped
-            ? $"上限 Lv.{playerLevelCap}　蓄積 {playerExperience}（解放後に反映）"
-            : leveledUp
-                ? $"Lv.{experienceResult.previousLevel} → Lv.{experienceResult.level}　{playerExperience}/{nextPlayerExperience}"
-                : $"{playerExperience}/{nextPlayerExperience}";
+            ? $"Lv.{playerLevelCap}（上限）　蓄積 {playerExperience}"
+            : $"Lv.{inventory?.PlayerLevel ?? experienceResult.level}　経験 {playerExperience}/{nextPlayerExperience}";
         string rewardSummary = isWin
-            ? $"\n\n戦果 +{effectiveReward}　合計 {totalStagePoints}\n軍師経験 +{experienceResult.experience}　{experienceProgress}"
+            ? $"\n\n戦果 +{effectiveReward}　所持 {totalStagePoints}\n{experienceProgress}"
             : "\n\n今回の獲得なし";
         float experienceMultiplier = BattleRewardRules.ArmyExperienceMultiplier(deployedAllies);
         if (isWin && experienceMultiplier > 1f)
@@ -1403,6 +1409,7 @@ public partial class BattleManager : MonoBehaviour
         resultText.fontSizeMax = 48f;
 
         Canvas.ForceUpdateCanvases();
+        if (autoRepeat) SetAutoRepeat(true);
         RequestResultGuide(isWin);
     }
 
@@ -1633,11 +1640,24 @@ public partial class BattleManager : MonoBehaviour
             resultRetryButton = CreateResultActionButton("RetryStageButton", "もう一度");
             resultRetryButton.onClick.AddListener(RetryCurrentStage);
         }
+        if (resultRepeatButton == null)
+        {
+            resultRepeatButton = CreateResultActionButton("RepeatStageButton", "連戦開始");
+            resultRepeatButton.onClick.AddListener(() =>
+            {
+                bool wasRepeating = autoRepeat;
+                SetAutoRepeat(!wasRepeating);
+                if (!wasRepeating && autoRepeat && !lastBattleWon) RetryCurrentStage();
+            });
+        }
 
         bool canRetry = currentStage != null
             && FacilityManager.Instance != null
             && FacilityManager.Instance.IsStageRetryUnlocked();
         resultRetryButton.gameObject.SetActive(canRetry);
+        resultRepeatButton.gameObject.SetActive(canRetry);
+        SetResultActionLabel(resultRepeatButton, autoRepeat ? "連戦停止" : "連戦開始");
+        SetResultActionLabel(resultBackButton, canRetry ? "戻る" : "ステージ選択へ");
         resultBackButton.transform.SetAsLastSibling();
         if (canRetry)
         {
@@ -1691,8 +1711,8 @@ public partial class BattleManager : MonoBehaviour
         text.color = new Color(1f, 0.95f, 0.82f);
         text.alignment = TextAlignmentOptions.Center;
         text.enableAutoSizing = true;
-        text.fontSizeMin = 15f;
-        text.fontSizeMax = 22f;
+        text.fontSizeMin = 34f;
+        text.fontSizeMax = 42f;
         text.raycastTarget = false;
     }
 
@@ -1711,11 +1731,12 @@ public partial class BattleManager : MonoBehaviour
 
         resultPanel.SetActive(false);
         GameAudio.Instance.Play(GameSound.Click);
-        StartBattle(retryParty, currentStage);
+        StartBattle(retryParty, currentStage, useSavedDeployment: autoRepeat);
     }
 
     private void ReturnToStageSelect()
     {
+        SetAutoRepeat(false);
         GameAudio.Instance.Play(GameSound.Click);
         resultPanel?.SetActive(false);
         UIManager.Instance?.ShowStageSelect();
@@ -2294,7 +2315,7 @@ public partial class BattleManager : MonoBehaviour
     {
         if (target == null || sprite == null) yield break;
 
-        float sizeScale = folder == "NumberAura_High_Strong" ? 1.04f : 1.18f;
+        float sizeScale = 1.18f;
         if (onePartyPeak) sizeScale *= 1.14f;
         float duration = SkillVfxDuration(onePartyPeak ? 0.84f : 0.72f);
         yield return SkillVfxMotion.PlayNumberAura(
@@ -2303,7 +2324,7 @@ public partial class BattleManager : MonoBehaviour
             Vector3.zero,
             currentBattleCellSize * sizeScale,
             duration,
-            110f,
+            SkillVfxMotion.NumberAuraRotationDegrees,
             useAnchoredPosition: true,
             onCreated: RegisterBattleVfx,
             onFinished: DestroyBattleVfx);

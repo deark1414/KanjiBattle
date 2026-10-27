@@ -59,6 +59,7 @@ namespace KanjiBattle.Editor
             // 透明な武器素材はWebGLの自動圧縮・タイトメッシュを通さない。
             // 実行時のRawImage描画と対になるビルド前の再発防止策。
             GeneratedVfxImporter.ConfigureWeaponMotionTextures();
+            GeneratedVfxImporter.ConfigureReviewedNumberAuraTextures();
             SupportSkillVfxAssets.PromoteAndValidate();
             ConfigureModernWafuuUiTextures();
             AssetDatabase.SaveAssets();
@@ -150,15 +151,10 @@ namespace KanjiBattle.Editor
             html = html.Replace(
                 "var loaderUrl = buildUrl + \"/game.loader.js\";",
                 "var loaderUrl = buildUrl + \"/game.loader.js\" + buildCacheSuffix;");
-            html = html.Replace(
-                "dataUrl: buildUrl + \"/game.data\",",
-                "dataUrl: buildUrl + \"/game.data\" + buildCacheSuffix,");
-            html = html.Replace(
-                "frameworkUrl: buildUrl + \"/game.framework.js\",",
-                "frameworkUrl: buildUrl + \"/game.framework.js\" + buildCacheSuffix,");
-            html = html.Replace(
-                "codeUrl: buildUrl + \"/game.wasm\",",
-                "codeUrl: buildUrl + \"/game.wasm\" + buildCacheSuffix,");
+            foreach (string asset in new[] { "game.data", "game.framework.js", "game.wasm" })
+            foreach (string suffix in new[] { "", ".unityweb" })
+                html = html.Replace($"buildUrl + \"/{asset}{suffix}\",",
+                    $"buildUrl + \"/{asset}{suffix}\" + buildCacheSuffix,");
             html = html.Replace(
                 "<canvas id=\"unity-canvas\" width=960 height=600 tabindex=\"-1\"></canvas>",
                 "<canvas id=\"unity-canvas\" tabindex=\"-1\"></canvas>");

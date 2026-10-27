@@ -243,9 +243,12 @@ public static class BattleUILayout
 
     private static void ConfigureControlButtons(Transform panelRoot, bool portrait)
     {
-        PlaceControlButton(FindChildRect(panelRoot, "PauseButton"), "停止", portrait ? new Vector2(0.34f, 0.285f) : new Vector2(0.40f, 0.285f), portrait, panelRoot);
-        PlaceControlButton(FindChildRect(panelRoot, "ResumeButton"), "再開", portrait ? new Vector2(0.54f, 0.285f) : new Vector2(0.55f, 0.285f), portrait, panelRoot);
-        PlaceControlButton(FindChildRect(panelRoot, "SpeedButton"), null, portrait ? new Vector2(0.74f, 0.285f) : new Vector2(0.70f, 0.285f), portrait, panelRoot);
+        PlaceControlButton(FindChildRect(panelRoot, "PauseButton"), "停止", new Vector2(portrait ? 0.12f : 0.22f, 0.285f), portrait, panelRoot);
+        PlaceControlButton(FindChildRect(panelRoot, "ResumeButton"), "再開", new Vector2(portrait ? 0.27f : 0.34f, 0.285f), portrait, panelRoot);
+        var speed = FindChildRect(panelRoot, "SpeedControl");
+        if (speed != null) Place(speed, new Vector2(portrait ? 0.38f : 0.44f, 0.255f), new Vector2(portrait ? 0.76f : 0.68f, 0.318f));
+        var repeat = FindChildRect(panelRoot, "AutoRepeatControl");
+        if (repeat != null) Place(repeat, new Vector2(portrait ? 0.80f : 0.72f, 0.26f), new Vector2(portrait ? 0.95f : 0.84f, 0.31f));
     }
 
     private static void PlaceControlButton(RectTransform rect, string label, Vector2 centerAnchor, bool portrait, Transform panelRoot)
@@ -261,7 +264,7 @@ public static class BattleUILayout
         rect.anchorMax = centerAnchor;
         rect.pivot = new Vector2(0.5f, 0.5f);
         rect.anchoredPosition = Vector2.zero;
-        rect.sizeDelta = portrait ? new Vector2(120f, 44f) : new Vector2(144f, 54f);
+        rect.sizeDelta = portrait ? new Vector2(120f, 120f) : new Vector2(144f, 80f);
         rect.SetAsLastSibling();
 
         var image = rect.GetComponent<Image>();
@@ -281,7 +284,7 @@ public static class BattleUILayout
         text.gameObject.SetActive(true);
         UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
         text.enableAutoSizing = false;
-        text.fontSize = portrait ? 22f : 28f;
+        text.fontSize = portrait ? 42f : 28f;
         text.fontStyle = FontStyles.Bold;
         text.alignment = TextAlignmentOptions.Center;
         text.color = new Color(1f, 0.95f, 0.82f);

@@ -377,8 +377,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void UpdateActionSeal(FacilityActionState state)
     {
-        bool visible = state == FacilityActionState.UnlockReady
-            || state == FacilityActionState.UpgradeReady;
+        bool visible = true;
         if (actionSeal == null)
         {
             var sealObject = new GameObject("FacilityActionSeal", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
@@ -417,6 +416,11 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         ApplyDescriptionActionClearance(visible);
 
         actionSeal.gameObject.SetActive(visible);
+        actionSeal.color = state == FacilityActionState.UpgradeBlocked || state == FacilityActionState.UnlockBlocked
+            ? new Color(0.30f, 0.36f, 0.40f, 0.96f)
+            : state == FacilityActionState.CapBlocked || state == FacilityActionState.Maxed
+                ? new Color(0.35f, 0.29f, 0.20f, 0.96f)
+                : new Color(0.74f, 0.08f, 0.05f, 0.96f);
         if (!visible)
         {
             return;
@@ -430,6 +434,10 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             FacilityActionState.UnlockReady => "解放",
             FacilityActionState.UpgradeReady => "強化",
+            FacilityActionState.UpgradeBlocked => "戦果不足",
+            FacilityActionState.UnlockBlocked => GameManager.Instance.GetClearedStageId() < facility.requiredStageId ? "未解放" : "戦果不足",
+            FacilityActionState.CapBlocked => "上限",
+            FacilityActionState.Maxed => "最大",
             _ => string.Empty
         };
         actionSeal.transform.SetAsLastSibling();
@@ -710,12 +718,14 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         if (!FacilityManager.Instance.IsUnlocked(facility))
         {
-            return $"解放: 第{facility.requiredStageId:00}局 / 戦果 {FacilityManager.Instance.GetUnlockCost(facility)}";
+            return GameManager.Instance.GetClearedStageId() < facility.requiredStageId
+                ? $"未解放　第{facility.requiredStageId:00}局クリアで解放"
+                : GetCostStatus(FacilityManager.Instance.GetUnlockCost(facility));
         }
 
         if (facility.effectType == FacilityEffectType.StageRetry)
         {
-            return "同じ局へ再挑戦可能";
+            return "再戦・連戦が可能";
         }
 
         int level = FacilityManager.Instance.GetLevel(facility);
@@ -723,10 +733,16 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (FacilityManager.Instance.IsMaxLevel(facility))
         {
             FacilityLevelCapRequirement next = FacilityManager.Instance.GetNextFacilityLevelCapRequirement(facility);
-            return next != null ? $"Lv.{level}/{cap}　次の上限: 第{next.stageId:00}局" : $"Lv.{level}/{cap}　強化済み";
+            return next != null ? $"Lv.{level}/{cap}　上限到達　第{next.stageId:00}局クリアで上限解放" : $"Lv.{level}/{cap}　最大強化済み";
         }
 
-        return $"Lv.{level}/{cap}　強化: 戦果 {FacilityManager.Instance.GetUpgradeCost(facility)}";
+        return $"Lv.{level}/{cap}　{GetCostStatus(FacilityManager.Instance.GetUpgradeCost(facility))}";
+    }
+
+    private static string GetCostStatus(int cost)
+    {
+        int points = GameManager.Instance != null ? GameManager.Instance.StagePoints : 0;
+        return points < cost ? $"戦果不足　あと {cost - points}（所持 {points} / 必要 {cost}）" : $"必要戦果 {cost}　所持 {points}";
     }
 
     private static float GetSpeedForLevel(int level)

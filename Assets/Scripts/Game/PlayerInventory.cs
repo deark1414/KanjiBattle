@@ -15,16 +15,11 @@ public class PlayerInventory : MonoBehaviour
     private const string OwnedKey = SavePrefix + "Owned";
     private const string PlayerLevelKey = SavePrefix + "PlayerLevel";
     private const string PlayerExperienceKey = SavePrefix + "PlayerExperience";
+    private const string ExperienceCurveVersionKey = SavePrefix + "ExperienceCurveVersion";
     private const string StarterTrainingGrantedKey = SavePrefix + "PlayerTrainingGranted";
     private const string LastMockTrainingUtcKey = SavePrefix + "LastMockTrainingUtc";
     public const int BaseBattleExperience = 10;
     public const int BaseMockTrainingExperience = 1;
-    private const int StarterTrainingExperience = BaseBattleExperience * 2;
-    private const int ExperienceTierSize = 5;
-    private const int MaximumExperienceTier = 9;
-    private const int ExperienceTierMultiplier = 3;
-    private const float StageExperienceRate = 0.04f;
-    private const float StageExperienceRateStep = 0.002f;
     private const float MockTrainingPollIntervalSeconds = 1f;
     private const int MaximumOfflineTrainingCycles = 80;
 
@@ -199,7 +194,7 @@ public class PlayerInventory : MonoBehaviour
             return new PlayerExperienceResult(0, previousLevel, playerLevel, playerExperience);
         }
 
-        playerExperience += amount;
+        playerExperience = (int)Math.Min(int.MaxValue, (long)playerExperience + amount);
         ApplyStoredExperienceToCurrentCap();
 
         // Incremental experience should not rebuild the roster while its practice
@@ -342,6 +337,7 @@ public class PlayerInventory : MonoBehaviour
         PlayerProgressStore.SetString(OwnedKey, SerializeOwnedCharacters());
         PlayerProgressStore.SetInt(PlayerLevelKey, playerLevel);
         PlayerProgressStore.SetInt(PlayerExperienceKey, playerExperience);
+        PlayerProgressStore.SetInt(ExperienceCurveVersionKey, PlayerExperienceCurve.Version);
         PlayerProgressStore.Save();
     }
 
@@ -351,7 +347,13 @@ public class PlayerInventory : MonoBehaviour
         DeserializeOwnedCharacters(PlayerProgressStore.GetString(OwnedKey));
         playerLevel = Mathf.Clamp(PlayerProgressStore.GetInt(PlayerLevelKey, 1), 1, GetEffectiveLevelCap());
         playerExperience = Mathf.Max(0, PlayerProgressStore.GetInt(PlayerExperienceKey, 0));
+        bool migrateExperience = PlayerProgressStore.GetInt(ExperienceCurveVersionKey, 0) < PlayerExperienceCurve.Version;
+        if (migrateExperience)
+        {
+            playerExperience = PlayerExperienceCurve.ConvertLegacyExperience(playerLevel, playerExperience);
+        }
         isLoadingProgress = false;
+        if (migrateExperience) SaveProgress();
         onInventoryChanged?.Invoke();
     }
 
@@ -392,15 +394,13 @@ public class PlayerInventory : MonoBehaviour
             return;
         }
 
-        GrantPlayerExperience(StarterTrainingExperience);
+        GrantPlayerExperience(GetExperienceRequiredForLevel(1) + GetExperienceRequiredForLevel(2));
         PlayerProgressStore.SetInt(StarterTrainingGrantedKey, 1);
     }
 
     private static int GetExperienceRequiredForLevel(int level)
     {
-        // Every five levels is a clear milestone: 10, 30, 90, 270, ...
-        int tier = Mathf.Clamp((Mathf.Max(1, level) - 1) / ExperienceTierSize, 0, MaximumExperienceTier);
-        return BaseBattleExperience * (int)Mathf.Pow(ExperienceTierMultiplier, tier);
+        return PlayerExperienceCurve.Required(level);
     }
 
     private int GetExperienceRewardFromCurrentRequirement(float rate)
@@ -410,17 +410,7 @@ public class PlayerInventory : MonoBehaviour
 
     private static int GetStageBattleExperienceReward(StageData stage)
     {
-        int stageId = Mathf.Max(1, stage != null ? stage.stageId : 1);
-        int stageTier = (stageId - 1) / ExperienceTierSize;
-        int stagePosition = (stageId - 1) % ExperienceTierSize;
-        int tierRequirement = BaseBattleExperience * (int)Mathf.Pow(ExperienceTierMultiplier, stageTier);
-
-        // Each stage within a five-stage band pays a little more. The next band
-        // rises with the same 10 -> 30 -> 90 progression as level requirements.
-        float stageRate = StageExperienceRate + stagePosition * StageExperienceRateStep;
-        int scaledReward = Mathf.CeilToInt(tierRequirement * stageRate);
-        int stageBonus = 1 + (stageId - 1) / 2;
-        return Mathf.Max(1, scaledReward + stageBonus);
+        return PlayerExperienceCurve.BattleReward(stage != null ? stage.enemyLevel : 1);
     }
 
     private string SerializeOwnedCharacters()

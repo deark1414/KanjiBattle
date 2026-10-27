@@ -107,7 +107,7 @@ public class FormationCharacterListUI : MonoBehaviour
             // The formation's visible artwork ends well above the structural tray
             // boundary, so start the owned-piece region from that visual edge
             // instead of leaving an empty card-sized band between the two.
-            listRect.anchorMax = new Vector2(0.96f, 0.520f);
+            listRect.anchorMax = new Vector2(0.96f, 0.46f);
             listRect.anchoredPosition = Vector2.zero;
             listRect.sizeDelta = Vector2.zero;
         }

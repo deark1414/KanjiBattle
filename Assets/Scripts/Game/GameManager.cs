@@ -154,7 +154,7 @@ public class GameManager : MonoBehaviour
         stagePointMultiplier = 1f;
         facilityFormationSlots = CastleTree.InitialSlots;
         battleSpeedTier = 0;
-        selectedBattleSpeedIndex = Mathf.Clamp(selectedBattleSpeedIndex, 0, battleSpeedTier);
+        // Rebuilding facility bonuses must not reset the saved speed preference.
         OnProgressionChanged?.Invoke();
     }
 

@@ -397,7 +397,7 @@ public class FormationUI : MonoBehaviour
         SetButtonText(backToMarchButton, "行軍へ戻る");
         ModernWafuuPresentation.ApplyButtonTreatment(backToMarchButton);
         deployButton = EnsureButton(host, "DeployButton", "出陣");
-        LayoutPrimaryActionButton(deployButton, Vector2.zero, Vector2.one);
+        LayoutPrimaryActionButton(deployButton, Vector2.zero, new Vector2(0.78f, 1f));
         LayoutSecondaryActionButton(backToMarchButton, new Vector2(0.04f, 0.025f), new Vector2(0.42f, 0.065f));
         backToMarchButton.transform.SetAsLastSibling();
         ApplyDeployButtonTreatment(deployButton);

@@ -10,6 +10,7 @@ using UnityEngine.UI;
 /// </summary>
 public static class SkillVfxMotion
 {
+    public const float NumberAuraRotationDegrees = 360f;
     private static readonly Dictionary<string, Sprite> representativeSprites = new();
     private static readonly Dictionary<string, Texture2D> weaponTextures = new();
 
@@ -102,11 +103,6 @@ public static class SkillVfxMotion
         if (cached == null)
         {
             return null;
-        }
-
-        if (folder == "NumberAura_High_Strong")
-        {
-            cached = CreateSafeHighStrongAuraSprite(cached);
         }
 
         representativeSprites[folder] = cached;
@@ -451,18 +447,4 @@ public static class SkillVfxMotion
             or SkillType.Dragon;
     }
 
-    private static Sprite CreateSafeHighStrongAuraSprite(Sprite source)
-    {
-        if (source == null)
-        {
-            return null;
-        }
-
-        const float inset = 16f;
-        Rect sourceRect = source.rect;
-        float width = Mathf.Max(1f, sourceRect.width - inset * 2f);
-        float height = Mathf.Max(1f, sourceRect.height - inset * 2f);
-        Rect safeRect = new Rect(sourceRect.x + inset, sourceRect.y + inset, width, height);
-        return Sprite.Create(source.texture, safeRect, new Vector2(0.5f, 0.5f), source.pixelsPerUnit, 0, SpriteMeshType.FullRect);
-    }
 }
