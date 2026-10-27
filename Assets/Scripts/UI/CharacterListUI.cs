@@ -12,6 +12,7 @@ public class CharacterListUI : MonoBehaviour
     private RectTransform practiceRegion;
     private RosterPracticeVfx practiceVfx;
     private bool recruitmentInProgress;
+    private CharacterData inspectedCharacter;
 
     private void Start()
     {
@@ -26,6 +27,7 @@ public class CharacterListUI : MonoBehaviour
 
     private void OnEnable()
     {
+        inspectedCharacter = null;
         ApplyListLayout();
         RefreshList();
     }
@@ -116,6 +118,7 @@ public class CharacterListUI : MonoBehaviour
         FinalizeEntryLayout(cursorY);
         ShowRosterSummary(owned.Count, candidates.Count);
         ConfigurePracticePresentation(owned);
+        SelectMotif(inspectedCharacter);
 
         // This is a dynamic scrollable grid. Rebuild it after entries are added so
         // every discovered character receives a reachable row in the scroll view.
@@ -359,7 +362,7 @@ public class CharacterListUI : MonoBehaviour
 
         informationRegion.Configure(
             "軍勢の状況",
-            $"加入済み {ownedCount} 駒　/　縁候補 {candidateCount} 駒　/　緑の縁印は加入可能");
+            $"加入済み {ownedCount} 駒　/　編成 {GameManager.Instance?.GetFacilityFormationSlots() ?? CastleTree.InitialSlots} 枠");
     }
 
     private void ConfigurePracticePresentation(IReadOnlyList<CharacterData> owned)
@@ -395,10 +398,11 @@ public class CharacterListUI : MonoBehaviour
             return;
         }
 
+        SelectMotif(character, true);
         int level = PlayerInventory.Instance.PlayerLevel;
         informationRegion.Configure(
             $"{character.characterName}　現在 Lv.{level}",
-            $"HP {PlayerInventory.Instance.GetPlayerMaxHP(character, level)}　攻 {character.GetAttack(level)}　守 {character.GetDefense(level)}　/　{GetShortSkillDescription(character)}");
+            $"HP {PlayerInventory.Instance.GetPlayerMaxHP(character, level)}　攻 {CharacterInvestment.Attack(character,level)}　守 {CharacterInvestment.Defense(character,level)}　/　{GetShortSkillDescription(character)}");
     }
 
     private void ShowBondInformation(CharacterData character, int bond, int threshold)
@@ -408,6 +412,7 @@ public class CharacterListUI : MonoBehaviour
             return;
         }
 
+        SelectMotif(character, true);
         informationRegion.Configure(
             $"{character.characterName}　縁 {bond}/{threshold}",
             GetShortSkillDescription(character));
@@ -418,6 +423,13 @@ public class CharacterListUI : MonoBehaviour
         string detail = SkillDescription.GetDetail(character);
         int end = detail.IndexOf('。');
         return end >= 0 ? detail[..(end + 1)] : detail;
+    }
+
+    private void SelectMotif(CharacterData character, bool summon = false)
+    {
+        inspectedCharacter = character;
+        foreach (var entry in content.GetComponentsInChildren<CharacterEntryUI>())
+            entry.SetSelectedCharacter(character, summon);
     }
 
     private int GetRosterGroupColumns(int entryCount)

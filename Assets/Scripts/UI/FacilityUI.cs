@@ -197,8 +197,9 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 ApplyVisualState(MaxCardColor, NeedTextColor, new Color(0.38f, 0.30f, 0.23f, 1f), false, false);
                 break;
             default:
-                bool isUnlockOnly = facility.effectType == FacilityEffectType.StageRetry;
-                costText.text = isUnlockOnly ? "戦闘後に同じステージへ再挑戦できます" : "最大強化済み";
+                bool isUnlockOnly = facility.effectType is FacilityEffectType.StageRetry or FacilityEffectType.Fusion;
+                costText.text = facility.effectType == FacilityEffectType.Fusion ? "融合 解放済み"
+                    : isUnlockOnly ? "同じ局への再戦・連戦ができます" : "最大強化済み";
                 buttonText.text = isUnlockOnly ? "解放済み" : "MAX";
                 ApplyVisualState(MaxCardColor, MaxTextColor, new Color(0.40f, 0.30f, 0.22f, 1f), false, false);
                 break;
@@ -217,6 +218,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         return "再戦機能 解放済み";
     }
+    if (facility != null && facility.effectType == FacilityEffectType.Fusion) return "融合 解放済み";
 
     string capPrefix = level >= maxLevel ? "上限中 " : string.Empty;
     return $"{capPrefix}{GetEffectLabel()} Lv.{level} / {maxLevel}";
@@ -237,6 +239,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         case FacilityEffectType.Training: return "経験値強化";
         case FacilityEffectType.BattleSpeed: return "戦闘速度";
         case FacilityEffectType.StageRetry: return "再戦解放";
+        case FacilityEffectType.Fusion: return "融合解放";
         case FacilityEffectType.TrainingFrequency: return "稽古頻度";
         case FacilityEffectType.AttackBoost: return "攻勢強化";
         case FacilityEffectType.SkillPowerBoost: return "技能威力";
@@ -374,8 +377,7 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void UpdateActionSeal(FacilityActionState state)
     {
-        bool visible = state == FacilityActionState.UnlockReady
-            || state == FacilityActionState.UpgradeReady;
+        bool visible = true;
         if (actionSeal == null)
         {
             var sealObject = new GameObject("FacilityActionSeal", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
@@ -414,6 +416,11 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         ApplyDescriptionActionClearance(visible);
 
         actionSeal.gameObject.SetActive(visible);
+        actionSeal.color = state == FacilityActionState.UpgradeBlocked || state == FacilityActionState.UnlockBlocked
+            ? new Color(0.30f, 0.36f, 0.40f, 0.96f)
+            : state == FacilityActionState.CapBlocked || state == FacilityActionState.Maxed
+                ? new Color(0.35f, 0.29f, 0.20f, 0.96f)
+                : new Color(0.74f, 0.08f, 0.05f, 0.96f);
         if (!visible)
         {
             return;
@@ -427,6 +434,10 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             FacilityActionState.UnlockReady => "解放",
             FacilityActionState.UpgradeReady => "強化",
+            FacilityActionState.UpgradeBlocked => "戦果不足",
+            FacilityActionState.UnlockBlocked => GameManager.Instance.GetClearedStageId() < facility.requiredStageId ? "未解放" : "戦果不足",
+            FacilityActionState.CapBlocked => "上限",
+            FacilityActionState.Maxed => "最大",
             _ => string.Empty
         };
         actionSeal.transform.SetAsLastSibling();
@@ -685,7 +696,8 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             FacilityEffectType.PlayerLevelCap => $"軍師上限 Lv.{FacilityManager.Instance.GetPlayerLevelCap()}",
             FacilityEffectType.BattleSpeed => $"最高速度 x{GetSpeedForLevel(level):0.##}",
             FacilityEffectType.StagePointBoost => $"戦果獲得 +{facility.GetEffectValue(level) * 100f:0}%",
-            FacilityEffectType.StageRetry => "同じ局へ即再挑戦",
+            FacilityEffectType.Fusion => "融合解放",
+            FacilityEffectType.StageRetry => "同じ局へ再戦・連戦",
             _ => string.Empty
         };
         // The building card itself already conveys the name and lock state. Keep
@@ -701,14 +713,19 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             return string.Empty;
         }
 
+        if (facility.effectType == FacilityEffectType.Fusion && FacilityManager.Instance.IsUnlocked(facility))
+            return "融合 解放済み";
+
         if (!FacilityManager.Instance.IsUnlocked(facility))
         {
-            return $"解放: 第{facility.requiredStageId:00}局 / 戦果 {FacilityManager.Instance.GetUnlockCost(facility)}";
+            return GameManager.Instance.GetClearedStageId() < facility.requiredStageId
+                ? $"未解放　第{facility.requiredStageId:00}局クリアで解放"
+                : GetCostStatus(FacilityManager.Instance.GetUnlockCost(facility));
         }
 
         if (facility.effectType == FacilityEffectType.StageRetry)
         {
-            return "同じ局へ再挑戦可能";
+            return "再戦・連戦が可能";
         }
 
         int level = FacilityManager.Instance.GetLevel(facility);
@@ -716,10 +733,16 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (FacilityManager.Instance.IsMaxLevel(facility))
         {
             FacilityLevelCapRequirement next = FacilityManager.Instance.GetNextFacilityLevelCapRequirement(facility);
-            return next != null ? $"Lv.{level}/{cap}　次の上限: 第{next.stageId:00}局" : $"Lv.{level}/{cap}　強化済み";
+            return next != null ? $"Lv.{level}/{cap}　上限到達　第{next.stageId:00}局クリアで上限解放" : $"Lv.{level}/{cap}　最大強化済み";
         }
 
-        return $"Lv.{level}/{cap}　強化: 戦果 {FacilityManager.Instance.GetUpgradeCost(facility)}";
+        return $"Lv.{level}/{cap}　{GetCostStatus(FacilityManager.Instance.GetUpgradeCost(facility))}";
+    }
+
+    private static string GetCostStatus(int cost)
+    {
+        int points = GameManager.Instance != null ? GameManager.Instance.StagePoints : 0;
+        return points < cost ? $"戦果不足　あと {cost - points}（所持 {points} / 必要 {cost}）" : $"必要戦果 {cost}　所持 {points}";
     }
 
     private static float GetSpeedForLevel(int level)
@@ -812,7 +835,8 @@ public class FacilityUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             case FacilityEffectType.Recruitment: return "勝利した局で出会った敵との縁を早め、低確率で縁を一気に満たします。満ちた仲間は軍勢から迎え入れます。";
             case FacilityEffectType.Training: return "現在の必要経験値に対する戦闘・稽古の獲得割合を増やします。";
             case FacilityEffectType.BattleSpeed: return "戦闘速度を小刻みに上げ、最高3倍まで解放します。";
-            case FacilityEffectType.StageRetry: return "戦闘結果から、同じステージにすぐ再挑戦できるようにします。";
+            case FacilityEffectType.StageRetry: return "同じ局への再戦と、敗北するまでの自動連戦を解放します。";
+            case FacilityEffectType.Fusion: return "出陣時に素材のコマと出現位置を選び、融合できます。戦闘後は元の編成に戻ります。";
             case FacilityEffectType.TrainingFrequency: return "稽古の間隔を短くし、経験値を得る頻度を高めます。";
             case FacilityEffectType.AttackBoost: return "味方の攻撃力を高めます。";
             case FacilityEffectType.SkillPowerBoost: return "味方の技能の威力を高めます。";

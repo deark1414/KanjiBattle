@@ -12,24 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1df6bc30dc24f4ef8a24d39e608d3dda, type: 3}
   m_Name: Stage_1_20
   m_EditorClassIdentifier: 
-  stageName: "\u4E2D\u4F4D\u6570\u5B57\u306E\u9580\u756A"
+  stageName: "\u7D61\u7E70\u306E\u9580\u756A"
   stageId: 20
   chapterId: 4
   enemyPool:
-  - {fileID: 11400000, guid: 6c216b850f67847ccb6bf646b16f4876, type: 2}
-  - {fileID: 11400000, guid: 6c216b850f67847ccb6bf646b16f4876, type: 2}
-  - {fileID: 11400000, guid: c25f44457639447e5bf49a2ef3a74b3b, type: 2}
-  - {fileID: 11400000, guid: 021e01b73df88486c84be7643b0e0a26, type: 2}
-  - {fileID: 11400000, guid: c25f44457639447e5bf49a2ef3a74b3b, type: 2}
+  - {fileID: 11400000, guid: bef1f922a99d84bf68f448a1da2897f8, type: 2}
+  - {fileID: 11400000, guid: ba2cceab41d834210a14946bc2fe9339, type: 2}
+  - {fileID: 11400000, guid: fb39b40fb570248c29fb2bf28db54d54, type: 2}
+  - {fileID: 11400000, guid: 5461d3926e577437db81e4171e34682a, type: 2}
+  - {fileID: 11400000, guid: f5b98ab44ef824bbd826cb14c9818c47, type: 2}
+  enemyFusionIds: 09fcffff
   rewardStagePoints: 26
-  slotCount: 4
-  trapDamage: 28
-  trapCount: 2
+  slotCount: 8
+  restrictFormationSlots: 0
+  enemyPositions:
+  - {x: 2, y: 1}
+  - {x: 3, y: 1}
+  - {x: 1, y: 1}
+  - {x: 2, y: 0}
+  - {x: 3, y: 0}
+  - {x: 1, y: 0}
+  trapDamage: 13
+  trapCount: 1
   reinforcementEnemy: []
   reinforcementInterval: 0
   reinforcementCount: 0
   reinforcementLimit: 0
-  isBossStage: 0
-  enemyLevel: 25
+  isBossStage: 1
+  enemyLevel: 17
   prerequisite: {fileID: 11400000, guid: 837319bfdb8b6b8ce95238f8cfa7244c, type: 2}
   isCleared: 0

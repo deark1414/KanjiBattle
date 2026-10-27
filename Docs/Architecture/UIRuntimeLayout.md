@@ -10,6 +10,19 @@ KanjiBattle currently treats Unity prefabs as structural templates and applies m
 
 ## Main Runtime Layout Owners
 
+- `GuidedTutorialView` / `FullScreenGuideView` / `GuideSettingsLayout`（初回説明・設定）
+  - 既存コマと背景を使った全面表示、縦横の図・文字領域、設定項目の物理的な可読サイズを管理する。
+  - 共通テーマは全面説明の文字・ボタン・画像を上書きしない。表示順と既読保存は`TutorialDirector`が管理する。
+  - 実操作の強調は対象の画面座標から遮蔽の穴を毎フレーム更新する。クリックを疑似実行せず、通常のボタン／マスの処理へ渡す。
+  - `UiReadability`とWebGLプラグインがCanvasの描画倍率をCSS pxへ補正する。通常・Retinaとも同じ見た目の文字・操作領域を使い、描画解像度は保持する。
+
+- `CastleTreeView`（城下）
+  - `CastleTreeMapLayout`が城下を中心とする5方向の放射配置を担当する。全48ノードの予約座標を基準に、章ごとの表示候補だけを描画し、実際の前提ノードをつなぐ。章の解禁では既存ノードを移動しない。
+  - 外部の分類タブを廃止し、マップ内の分類ノードで枝へ移動する。50%の初期表示、拡大縮小、上下左右ドラッグ、城下復帰を持つ。
+  - `CastleTreeArt`が既存の建物画像を再利用する。ノードはアイコン中心、上の固定欄は選択した名前・効果・購入条件を表示する。増枠の画像は複数コマに「+1」。
+  - グローバルテーマはこの配下の文字・画像・ボタン・スクロール位置を上書きしない。
+  - 旧`FacilityListUI`は既存シーン参照を保ち、初回表示時にツリーへ引き継ぐ。
+
 - `UnityUIRuntimeTheme`
   - Global canvas scaler setup.
   - Shared panel, button, scroll view, and text styling.
@@ -17,6 +30,7 @@ KanjiBattle currently treats Unity prefabs as structural templates and applies m
   - Bottom tab anchoring.
 
 - `BattleUILayout`
+  - 戦闘・布陣中も共通ステータスバーを表示する。戦場見出しはバーの下、盤面は見出しの下に配置し、重ねない。
   - Battle board/container placement.
   - Battle log area placement.
   - Battle pause/resume/back button placement.
@@ -58,3 +72,6 @@ npm run qa:visual
 ```
 
 For deployment-bound changes, also run the Unity WebGL build and repeat `npm run qa:visual` against the regenerated `Docs` output.
+# キャラ別育成の補足（2026-10-26）
+
+`CastleTreeView`はキャラ加入とスキルの反復強化を同じコマのノードへまとめる。加入後もクリック可能で、上部に現在の段階・効果・次の強化・費用を表示する。カテゴリの共通強化だけは別の建物ノード。左下の振り直しはキャラとカテゴリのスキル育成を対象にし、加入・増枠・機能施設を残す。右下の倍率／中央復帰操作と分離する。

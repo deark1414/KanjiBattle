@@ -1,0 +1,624 @@
+fileFormatVersion: 2
+guid: 45efdaabac9484ffe8b7af6e08799a9a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -5068107501559748455
+    second: Cocoon_0
+  - first:
+      213: -8846009809911171272
+    second: Cocoon_1
+  - first:
+      213: -5560113742561984569
+    second: Cocoon_2
+  - first:
+      213: -2902766228828461977
+    second: Cocoon_3
+  - first:
+      213: -7209297057876627166
+    second: Cocoon_4
+  - first:
+      213: 6996541214491128472
+    second: Cocoon_5
+  - first:
+      213: -7218212713831345914
+    second: Cocoon_6
+  - first:
+      213: 5749202357733604203
+    second: Cocoon_7
+  - first:
+      213: 8931599545653424113
+    second: Cocoon_8
+  - first:
+      213: 1909603828689385781
+    second: Cocoon_9
+  - first:
+      213: -4002555392051728728
+    second: Cocoon_10
+  - first:
+      213: -4703027072123415111
+    second: Cocoon_11
+  - first:
+      213: 3444360364458767844
+    second: Cocoon_12
+  - first:
+      213: -3297976498272624293
+    second: Cocoon_13
+  - first:
+      213: 5528779350617444294
+    second: Cocoon_14
+  - first:
+      213: -6981091749814834933
+    second: Cocoon_15
+  - first:
+      213: 5551837320540148606
+    second: Cocoon_16
+  - first:
+      213: -4838707340690308562
+    second: Cocoon_17
+  - first:
+      213: -1021877433791082415
+    second: Cocoon_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Cocoon_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1233
+        height: 1238
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 998e90e44177aa9b0800000000000000
+      internalID: -5068107501559748455
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_1
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 1118
+        width: 7
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 837bf9032f8ac3580800000000000000
+      internalID: -8846009809911171272
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_2
+      rect:
+        serializedVersion: 2
+        x: 301
+        y: 1219
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cf33d7820286d2b0800000000000000
+      internalID: -5560113742561984569
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_3
+      rect:
+        serializedVersion: 2
+        x: 1105
+        y: 1100
+        width: 112
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 764eda09e7d47b7d0800000000000000
+      internalID: -2902766228828461977
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_4
+      rect:
+        serializedVersion: 2
+        x: 110
+        y: 1004
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 221bef8b58e63fb90800000000000000
+      internalID: -7209297057876627166
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_5
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 1004
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 892bf125a25b81160800000000000000
+      internalID: 6996541214491128472
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_6
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 964
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 601dfdec7c1c3db90800000000000000
+      internalID: -7218212713831345914
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_7
+      rect:
+        serializedVersion: 2
+        x: 1099
+        y: 966
+        width: 62
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6bbc82751549cf40800000000000000
+      internalID: 5749202357733604203
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_8
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 889
+        width: 9
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1ff66b2177a63fb70800000000000000
+      internalID: 8931599545653424113
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_9
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 827
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 539b1ce8096408a10800000000000000
+      internalID: 1909603828689385781
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_10
+      rect:
+        serializedVersion: 2
+        x: 997
+        y: 779
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8aeaeeec3111478c0800000000000000
+      internalID: -4002555392051728728
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_11
+      rect:
+        serializedVersion: 2
+        x: 1155
+        y: 521
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b5d90dabcd7bbeb0800000000000000
+      internalID: -4703027072123415111
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_12
+      rect:
+        serializedVersion: 2
+        x: 1163
+        y: 481
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e5fff1a083dccf20800000000000000
+      internalID: 3444360364458767844
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_13
+      rect:
+        serializedVersion: 2
+        x: 1157
+        y: 393
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b51afd629db3b32d0800000000000000
+      internalID: -3297976498272624293
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_14
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 332
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cf4113d68b2abc40800000000000000
+      internalID: 5528779350617444294
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_15
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 296
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0960eb7a0e2e1f90800000000000000
+      internalID: -6981091749814834933
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_16
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 193
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e735d8dc0a61c0d40800000000000000
+      internalID: 5551837320540148606
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_17
+      rect:
+        serializedVersion: 2
+        x: 1091
+        y: 135
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e22441a6f4579dcb0800000000000000
+      internalID: -4838707340690308562
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cocoon_18
+      rect:
+        serializedVersion: 2
+        x: 1014
+        y: 65
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15015ea53ef81d1f0800000000000000
+      internalID: -1021877433791082415
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID:
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Cocoon_0: -5068107501559748455
+      Cocoon_1: -8846009809911171272
+      Cocoon_10: -4002555392051728728
+      Cocoon_11: -4703027072123415111
+      Cocoon_12: 3444360364458767844
+      Cocoon_13: -3297976498272624293
+      Cocoon_14: 5528779350617444294
+      Cocoon_15: -6981091749814834933
+      Cocoon_16: 5551837320540148606
+      Cocoon_17: -4838707340690308562
+      Cocoon_18: -1021877433791082415
+      Cocoon_2: -5560113742561984569
+      Cocoon_3: -2902766228828461977
+      Cocoon_4: -7209297057876627166
+      Cocoon_5: 6996541214491128472
+      Cocoon_6: -7218212713831345914
+      Cocoon_7: 5749202357733604203
+      Cocoon_8: 8931599545653424113
+      Cocoon_9: 1909603828689385781
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

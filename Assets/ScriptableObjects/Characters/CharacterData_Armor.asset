@@ -12,21 +12,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845372d9678234641a9d0cb0cb42a35c, type: 3}
   m_Name: CharacterData_Armor
   m_EditorClassIdentifier: 
-  characterName: "\u93A7"
+  characterName: "\u7532"
   characterId: 14
   isBoss: 0
-  icon: {fileID: 21300000, guid: 358c2495d37d948a68874b6c54c5fe02, type: 3}
-  enemyIcon: {fileID: 21300000, guid: 80049c71459654f1aa3c4b046449d07d, type: 3}
+  isEvolved: 0
+  icon: {fileID: 21300000, guid: 6cd49d81cbfb544a5bfc2bcc62f3662f, type: 3}
+  enemyIcon: {fileID: 21300000, guid: 8b3a86e4d714747e3bd198d54da9693b, type: 3}
   category: 5
-  baseHP: 150
-  baseAttack: 25
-  baseDefense: 15
+  baseHP: 180
+  baseAttack: 18
+  baseDefense: 12
   production: 3
-  skillType: 5
+  skillType: 27
   skillChance: 0
-  skillPower: 1
+  skillPower: 0.25
   level: 1
   maxLevel: 50
-  attackGrowth: 3
-  hpGrowth: 10
-  defenseGrowth: 2
+  attackGrowth: 2
+  hpGrowth: 8
+  defenseGrowth: 1

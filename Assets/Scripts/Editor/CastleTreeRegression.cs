@@ -1,0 +1,91 @@
+using System;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
+
+public static class CastleTreeRegression
+{
+    public static void Run()
+    {
+        void Check(bool value,string message){if(!value)throw new Exception("Castle tree: "+message);}
+        var nodes=CastleTree.Nodes;
+        Check(CastleTreeArt.Castle()!=null,"central castle art resolves");
+        Check(nodes.Select(n=>n.id).Distinct().Count()==nodes.Count,"unique nodes");
+        Check(nodes.Count(n=>n.kind==CastleTree.Kind.Character)==26,"26 normal characters");
+        Check(nodes.Where(n=>n.kind==CastleTree.Kind.Slot).Select(n=>n.stage).SequenceEqual(new[]{5,10,20,35,30}),"five distributed chapter gates");
+        foreach(var node in nodes)
+        {
+            Check(node.cost>=0,"nonnegative costs");
+            var path=new System.Collections.Generic.HashSet<string>{node.id};var current=node;
+            while(current.parent!=null)
+            {
+                current=nodes.Single(n=>n.id==current.parent);Check(path.Add(current.id),"acyclic prerequisites");
+            }
+        }
+        var completeMap=new CastleTreeMapLayout(nodes);
+        var roadBounds=nodes.ToDictionary(n=>n.id,n=>CastleTreeMapLayout.Bounds(completeMap.Positions[n.id],Vector2.one*CastleTreeMapLayout.NodeSize(n,.5f)/.5f+Vector2.one*32));
+        roadBounds["origin"]=CastleTreeMapLayout.Bounds(Vector2.zero,CastleTreeMapLayout.OriginSize/.5f+Vector2.one*32);
+        for(int branch=0;branch<5;branch++)roadBounds["branch_"+branch]=CastleTreeMapLayout.Bounds(completeMap.Hubs[branch],CastleTreeMapLayout.HubSize(branch)/.5f+Vector2.one*32);
+        foreach(var road in completeMap.Roads)
+        {
+            string source=road.Key.StartsWith("branch_")?"origin":nodes.Single(n=>n.id==road.Key).parent??"branch_"+nodes.Single(n=>n.id==road.Key).branch;
+            for(int segment=1;segment<road.Value.Length;segment++)foreach(var obstacle in roadBounds)
+                if(obstacle.Key!=source&&obstacle.Key!=road.Key)
+                    Check(!CastleTreeMapLayout.CrossesRect(road.Value[segment-1],road.Value[segment],obstacle.Value),$"road {road.Key} crosses {obstacle.Key}");
+        }
+        foreach(int stage in Enumerable.Range(0,9).Select(i=>i*5))
+        {
+            var visible=nodes.Where(n=>n.stage<=stage).ToArray();
+            var map=new CastleTreeMapLayout(visible);
+            Check(map.Positions.Count==visible.Length,"all nodes placed on radial map");
+            foreach(var node in visible)Check(map.Positions[node.id]==completeMap.Positions[node.id],"chapter reveals keep existing positions stable");
+            foreach(float zoom in new[]{.5f,.75f,1f,1.25f})
+            {
+                var bounds=new System.Collections.Generic.List<(string name,Vector2 point,Vector2 size)>();
+                bounds.Add(("origin",Vector2.zero,CastleTreeMapLayout.OriginSize));
+                foreach(int branch in Enumerable.Range(0,5).Where(b=>visible.Any(n=>n.branch==b)))
+                    bounds.Add(("branch "+branch,map.Hubs[branch]*zoom,CastleTreeMapLayout.HubSize(branch)));
+                foreach(var node in visible)
+                    bounds.Add((node.id,map.Positions[node.id]*zoom,Vector2.one*CastleTreeMapLayout.NodeSize(node,zoom)));
+                for(int a=0;a<bounds.Count;a++)for(int b=a+1;b<bounds.Count;b++)
+                    Check(!CastleTreeMapLayout.Overlaps(bounds[a].point,bounds[a].size,bounds[b].point,bounds[b].size,31.9f),
+                        $"stage {stage}, zoom {zoom}: {bounds[a].name} overlaps {bounds[b].name}");
+            }
+        }
+        foreach(var node in nodes.Where(n=>n.kind==CastleTree.Kind.Facility))
+            Check(CastleTreeArt.Facility(CastleTree.Facility(node))!=null,"existing building art resolves");
+        var stages=AssetDatabase.LoadAssetAtPath<StageDatabase>("Assets/ScriptableObjects/Stages/StageDatabase.asset");
+        var rows=stages.stages.OrderBy(s=>s.stageId).ToArray();
+        Check(rows.Length==40,"40 campaign stages");
+        foreach(var stage in rows)
+        {
+            Check(!stage.restrictFormationSlots && stage.slotCount==8,"normal stages do not cap owned slots");
+            Check(CampaignFormationRules.EnemyPositions(stage).Count==stage.GetEnemies().Count,"enemy formation valid");
+            Check(stage.GetEnemies().Count<=10,"enemy count cap");
+            Check(stage.isBossStage==(stage.stageId%5==0),"chapter end boss flags");
+            Check(stage.enemyFusionIds.Count==(stage.isBossStage && stage.stageId>=10?1:0),
+                "chapter bosses use one fusion after the introductory number chapter");
+            foreach(int id in stage.enemyFusionIds)
+            {
+                bool discovered=BattleFusionRules.IsDiscovered(id);
+                var enemy=stage.GetEnemies().Single(data=>data.characterId==id);
+                var recipe=BattleFusionRules.GetRecipe(id);
+                Check(enemy.skillType==recipe.Skill && enemy.InvestmentLevel==stage.enemyLevel,"enemy fusion uses shared recipe at stage level");
+                Check(enemy.GetMaxHP(stage.enemyLevel)>0 && enemy.icon!=null,"enemy fusion stats and art resolve");
+                Check(!enemy.isBoss,"enemy fusion does not inherit dragon-only boss abilities");
+                Check(BattleFusionRules.IsDiscovered(id)==discovered,"preview must not reveal recipes");
+            }
+        }
+        for(int i=1;i<rows.Length;i++)
+        {
+            Check(rows[i].enemyLevel-rows[i-1].enemyLevel<=(rows[i].isBossStage?2:1),
+                "normal levels rise at most one; chapter bosses at most two");
+            if(!rows[i-1].isBossStage)
+                Check(rows[i].GetEnemies().Count-rows[i-1].GetEnemies().Count<=1,"no headcount spike within chapter");
+        }
+        foreach(var group in rows.GroupBy(s=>s.chapterId))
+            Check(group.Select(s=>string.Join(",",s.GetEnemies().Select(c=>c.characterId))).Distinct().Count()==5,"varied chapter compositions");
+        Check(rows.SelectMany(stage=>stage.enemyFusionIds).Distinct().Count()<BattleFusionRules.Recipes.Count,"unseen fusions remain");
+        Debug.Log("[CastleTreeRegression] Passed.");
+    }
+}

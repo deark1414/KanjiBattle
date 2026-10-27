@@ -1,0 +1,535 @@
+{
+  "tool": "Built-in image_gen",
+  "prefix": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. ",
+  "jobs": [
+    {
+      "id": -1001,
+      "key": "DualSwords",
+      "subject": "two crossed Japanese tsurugi swords"
+    },
+    {
+      "id": 14,
+      "key": "Carapace",
+      "subject": "a low domed dark jade turtle-shell carapace, no living turtle, hexagonal scutes, sturdy shell rim, three-quarter view, broad protective silhouette. This is a carapace not samurai armor."
+    },
+    {
+      "id": 17,
+      "key": "Bow",
+      "subject": "one complete asymmetrical Japanese yumi bow with a taut clearly visible bowstring and one feathered arrow laid diagonally across it. Rich red lacquer wood, ivory fletching, thick enough limbs to remain legible, compact diagonal arrangement."
+    },
+    {
+      "id": 24,
+      "key": "Rooster",
+      "subject": "a proud full-body Japanese rooster with a brilliant red comb, ivory body and dark emerald curved tail feathers, two feet visible, three-quarter view, alert poised stance. Not a hawk or eagle."
+    },
+    {
+      "id": 27,
+      "key": "Bell",
+      "subject": "a single round antique Japanese bronze suzu bell, visible mouth slit and subtle engraved ornament, crimson braided hanging cord and knot, gold-bronze highlights, compact shape."
+    },
+    {
+      "id": 28,
+      "key": "Thread",
+      "subject": "a short wooden spool wound with ivory silk thread, a clearly visible thick curved loose thread forming one loop beside the spool, blue-gray shadow and restrained red tying cord."
+    },
+    {
+      "id": 29,
+      "key": "Shadow",
+      "subject": "a mysterious solid ink-black human-shaped shadow, simple crouching silhouette with a flowing smoke-like hem and soft gray-purple rim highlights, no weapons, no facial features, no visible eyes, not a ninja costume, compact readable full figure."
+    },
+    {
+      "id": 30,
+      "key": "Ox",
+      "subject": "a powerful full-body Japanese black ox with short curved ivory horns, red braided halter, stocky calm stance, all hooves visible, side three-quarter view, subtle warm highlights on black hide."
+    },
+    {
+      "id": 31,
+      "key": "Electricity",
+      "subject": "one compact branching golden lightning bolt, jagged bright ivory core with golden amber outline, three distinct branches, crisp solid lightning silhouette, a few small electric sparks kept close to the main bolt."
+    },
+    {
+      "id": 32,
+      "key": "Wind",
+      "subject": "a compact sculptural swirl of pale celadon wind, three distinct flowing ivory curved streams wrapping a pair of small green leaves, strong opaque highlighted contours, not a cloud and not a tornado."
+    },
+    {
+      "id": 33,
+      "key": "Iron",
+      "subject": "three dark iron ingots stacked low in a stable pyramid, forged steel gray surfaces, hammered texture, bright cold silver edge highlights, one small warm forge reflection, clearly iron not gold."
+    },
+    {
+      "id": -1002,
+      "key": "ScatterShot",
+      "subject": "a compact antique Japanese fantasy matchlock blunderbuss, wide believable flared steel muzzle integrated naturally into a short thick barrel, dark walnut stock, brass fittings, diagonal full gun with butt and muzzle both visible; no firing, no bullets, no modern shotgun."
+    },
+    {
+      "id": -1003,
+      "key": "Warrior",
+      "subject": "a full-body Japanese ashigaru foot soldier holding one straight sword and a small wooden shield, conical jingasa hat, indigo fabric and simple red-brown armor, face understated, firm grounded stance, compact character sprite."
+    },
+    {
+      "id": -1004,
+      "key": "Sentinel",
+      "subject": "a full-body Japanese fortress guard with a long upright spear and broad lacquered shield, dark teal lamellar armor, simple kabuto helmet, calm guarded stance, both spear tip and feet visible, compact silhouette."
+    },
+    {
+      "id": -1005,
+      "key": "Forge",
+      "subject": "a squat iron anvil with a Japanese smith hammer resting diagonally on it and a small heated orange steel billet, charcoal-black iron, warm hammered copper details, grounded blacksmith craft, not a furnace or a modern factory."
+    },
+    {
+      "id": -1006,
+      "key": "Wave",
+      "subject": "a single compact cresting Japanese ocean wave, deep turquoise water and ivory sea foam, curling side-view crest with three readable splashes contained within silhouette, sculptural solid water, no sea background."
+    },
+    {
+      "id": -1007,
+      "key": "Magnet",
+      "subject": "a naturally magnetic dark magnetite lodestone rock with silver iron filings forming visible short curved bands around two ends, a few small iron fragments attracted close to it, no horseshoe shape, no red-blue school magnet, grounded mineral."
+    },
+    {
+      "id": -1008,
+      "key": "Mountain",
+      "subject": "a compact rocky Japanese mountain peak with rugged gray stone, deep green lower slopes, small ivory snowcap, triangular majestic silhouette, isolated entire mountain base, no landscape background."
+    },
+    {
+      "id": -1009,
+      "key": "Coal",
+      "subject": "a compact cluster of black charcoal chunks with a few subtle glowing orange ember fissures inside, mostly dense dark solid charcoal silhouette, no big flames, heavy solid defensive impression."
+    },
+    {
+      "id": -1010,
+      "key": "Fortress",
+      "subject": "a compact Japanese stone-and-timber fortified gatehouse with two small bronze mortars mounted on the parapet, mossy gray stone base, white plaster and dark timber, red banners without symbols, sturdy broad fortress silhouette, no terrain or surrounding landscape."
+    },
+    {
+      "id": -1011,
+      "key": "Dice",
+      "subject": "three antique ivory Japanese dice tumbling together in a triangular arrangement, inset black and red pips, distinct visible faces, warm carved edges, crisp clean geometry, no digits or letters, no magical ring."
+    },
+    {
+      "id": -1012,
+      "key": "Rain",
+      "subject": "a small sculptural pale blue-gray rain cloud with a group of distinct long luminous turquoise raindrops below it and a tiny translucent puddle splash at its base, refreshing gentle healing rain, not a storm, compact full subject."
+    },
+    {
+      "id": -1013,
+      "key": "Sand",
+      "subject": "ordinary loose sand in two low piles, a few scattered grains. No person, golem, figurine, face, castle or statue."
+    },
+    {
+      "id": -1014,
+      "key": "Grass",
+      "subject": "a vibrant dense tuft of Japanese wild grass with three clearly distinguishable clumps sprouting from a small connected root base, emerald and lime sharp blades, subtle white root highlights, resilient living growing silhouette, no ground tile."
+    },
+    {
+      "id": -1015,
+      "key": "Cocoon",
+      "subject": "a single hanging ivory silkworm cocoon wrapped in thick overlapping silk strands, pale jade supporting leaf, soft pearlescent shell highlights, protective closed oval form, no butterfly or insect outside."
+    },
+    {
+      "id": -1016,
+      "key": "WindChime",
+      "subject": "a traditional Japanese glass furin wind chime with a delicate clear pale aqua rounded bell, bronze clapper, one long ivory paper strip hanging beneath tied with red cord, subtle red and blue hand-painted accents, no writing on paper."
+    },
+    {
+      "id": -1017,
+      "key": "Lantern",
+      "subject": "a traditional Japanese standing andon lantern, dark walnut square lattice frame and warm softly glowing ivory washi panels, small solid wooden feet, amber candlelight inside, no kanji or writing, no cast ground shadow outside object."
+    },
+    {
+      "id": 1,
+      "key": "One",
+      "subject": "a single ivory die showing exactly one red pip on the front face, simple cube"
+    },
+    {
+      "id": 2,
+      "key": "Two",
+      "subject": "a single ivory die showing exactly two black pips on the front face, simple cube"
+    },
+    {
+      "id": 3,
+      "key": "Three",
+      "subject": "a single ivory die showing exactly three black pips on the front face, simple cube"
+    },
+    {
+      "id": 10,
+      "key": "Sword",
+      "subject": "one Japanese straight double-edged sword, steel blade, gold guard, dark handle, diagonal"
+    },
+    {
+      "id": 11,
+      "key": "Spear",
+      "subject": "one Japanese yari spear, steel triangular head, thick wooden shaft, diagonal, full length visible"
+    },
+    {
+      "id": 12,
+      "key": "Hammer",
+      "subject": "one heavy iron war hammer with a chunky square head and short thick wooden handle, diagonal"
+    },
+    {
+      "id": 13,
+      "key": "Shield",
+      "subject": "one broad wooden Japanese shield, iron rim, front three-quarter view"
+    },
+    {
+      "id": 15,
+      "key": "Wall",
+      "subject": "a low wide solid gray stone defensive wall, large chunky stones, moss in two crevices"
+    },
+    {
+      "id": 16,
+      "key": "Stone",
+      "subject": "one rough gray boulder with three sharply defined facets, chunky simple shape"
+    },
+    {
+      "id": 18,
+      "key": "Gun",
+      "subject": "one old Japanese matchlock gun, long normal straight dark steel barrel and brown stock, diagonal, NO flared muzzle"
+    },
+    {
+      "id": 19,
+      "key": "Fire",
+      "subject": "one compact orange flame with a yellow inner flame and red outer contour"
+    },
+    {
+      "id": 20,
+      "key": "Water",
+      "subject": "one large clean blue water droplet, two small square white highlights"
+    },
+    {
+      "id": 21,
+      "key": "Wood",
+      "subject": "one sturdy tree with a thick brown trunk and three round green foliage masses"
+    },
+    {
+      "id": 22,
+      "key": "Soil",
+      "subject": "one low mound of rich dark brown soil with a few small solid stones, no plants"
+    },
+    {
+      "id": 23,
+      "key": "Horse",
+      "subject": "a full-body brown horse running, compact silhouette, all limbs and tail visible"
+    },
+    {
+      "id": 25,
+      "key": "Tiger",
+      "subject": "a full-body orange tiger with bold black stripes, compact fierce pose, all feet and tail visible"
+    },
+    {
+      "id": 26,
+      "key": "Dragon",
+      "subject": "a full-body coiling Japanese green dragon, long serpentine body, golden horns, tiny legs, no wing"
+    }
+  ],
+  "generated": [
+    {
+      "id": -1013,
+      "key": "Sand",
+      "prompt": "Use case: stylized-concept. A TRUE LOW RESOLUTION pixel art game inventory sprite of an ordinary small pile of loose sand. The SUBJECT is just SAND: two overlapping low sand dunes, a few scattered grains, soft tan and ochre mineral grains indicated with SPARSE PIXEL CLUSTERS. No person, no body, no face, no golem, no statue, no sandcastle, no desert landscape, no magical aura. ART DIRECTION: a carefully hand-placed 64 by 64 pixel sprite, enlarged with NEAREST NEIGHBOR so the square pixels are visibly large. Use only about 12 colors, 3 flat tones per material, hard stair-step edges, chunky simple shading, clear strong silhouette, dark brown 1-pixel outline with a few lighter outline sections. Classic 1990s Japanese 16-bit RPG inventory icon, not an illustration filtered into pixels. NO antialiasing, NO blur, NO smooth gradients, NO high-resolution details, NO photoreal texture, NO dithering noise, NO text. Single isolated object centered with generous clear margins, actual transparent background.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-9e80628a-deb3-4f8a-a784-7943e46db64a.png"
+    },
+    {
+      "id": -1001,
+      "key": "DualSwords",
+      "subject": "two crossed Japanese tsurugi swords",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: two crossed Japanese tsurugi swords",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-cc9b058a-3eb7-4ba0-b501-e1edf88d0b4f.png"
+    },
+    {
+      "id": 14,
+      "key": "Carapace",
+      "subject": "a low domed dark jade turtle-shell carapace, no living turtle, hexagonal scutes, sturdy shell rim, three-quarter view, broad protective silhouette. This is a carapace not samurai armor.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: a low domed dark jade turtle-shell carapace, no living turtle, hexagonal scutes, sturdy shell rim, three-quarter view, broad protective silhouette. This is a carapace not samurai armor.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-3734ba6f-e71c-4d6a-9b5b-44fbacee7c09.png"
+    },
+    {
+      "id": 17,
+      "key": "Bow",
+      "subject": "one complete asymmetrical Japanese yumi bow with a taut clearly visible bowstring and one feathered arrow laid diagonally across it. Rich red lacquer wood, ivory fletching, thick enough limbs to remain legible, compact diagonal arrangement.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: one complete asymmetrical Japanese yumi bow with a taut clearly visible bowstring and one feathered arrow laid diagonally across it. Rich red lacquer wood, ivory fletching, thick enough limbs to remain legible, compact diagonal arrangement.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-2e4faced-16ce-48fc-a799-664fbd7b087f.png"
+    },
+    {
+      "id": 24,
+      "key": "Rooster",
+      "subject": "a proud full-body Japanese rooster with a brilliant red comb, ivory body and dark emerald curved tail feathers, two feet visible, three-quarter view, alert poised stance. Not a hawk or eagle.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: a proud full-body Japanese rooster with a brilliant red comb, ivory body and dark emerald curved tail feathers, two feet visible, three-quarter view, alert poised stance. Not a hawk or eagle.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-30bfe590-813c-46e0-aaa2-734a0bf08931.png"
+    },
+    {
+      "id": 27,
+      "key": "Bell",
+      "subject": "a single round antique Japanese bronze suzu bell, visible mouth slit and subtle engraved ornament, crimson braided hanging cord and knot, gold-bronze highlights, compact shape.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: a single round antique Japanese bronze suzu bell, visible mouth slit and subtle engraved ornament, crimson braided hanging cord and knot, gold-bronze highlights, compact shape.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-d673436d-5764-4dc5-a966-40057606320a.png"
+    },
+    {
+      "id": 28,
+      "key": "Thread",
+      "subject": "a short wooden spool wound with ivory silk thread, a clearly visible thick curved loose thread forming one loop beside the spool, blue-gray shadow and restrained red tying cord.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: a short wooden spool wound with ivory silk thread, a clearly visible thick curved loose thread forming one loop beside the spool, blue-gray shadow and restrained red tying cord.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-64480752-131b-4fd1-a631-b406cefdba79.png"
+    },
+    {
+      "id": 29,
+      "key": "Shadow",
+      "subject": "a mysterious solid ink-black human-shaped shadow, simple crouching silhouette with a flowing smoke-like hem and soft gray-purple rim highlights, no weapons, no facial features, no visible eyes, not a ninja costume, compact readable full figure.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: a mysterious solid ink-black human-shaped shadow, simple crouching silhouette with a flowing smoke-like hem and soft gray-purple rim highlights, no weapons, no facial features, no visible eyes, not a ninja costume, compact readable full figure.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8be6ac0b-4496-4c06-b4d4-b5e154149bc3.png"
+    },
+    {
+      "id": 30,
+      "key": "Ox",
+      "subject": "a powerful full-body Japanese black ox with short curved ivory horns, red braided halter, stocky calm stance, all hooves visible, side three-quarter view, subtle warm highlights on black hide.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: a powerful full-body Japanese black ox with short curved ivory horns, red braided halter, stocky calm stance, all hooves visible, side three-quarter view, subtle warm highlights on black hide.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-a4f6e854-0157-450e-a19e-0f74ac383387.png"
+    },
+    {
+      "id": 31,
+      "key": "Electricity",
+      "subject": "one compact branching golden lightning bolt, jagged bright ivory core with golden amber outline, three distinct branches, crisp solid lightning silhouette, a few small electric sparks kept close to the main bolt.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: one compact branching golden lightning bolt, jagged bright ivory core with golden amber outline, three distinct branches, crisp solid lightning silhouette, a few small electric sparks kept close to the main bolt.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-fec620d1-7833-448e-aef2-e727ff5fa354.png"
+    },
+    {
+      "id": 32,
+      "key": "Wind",
+      "subject": "a compact sculptural swirl of pale celadon wind, three distinct flowing ivory curved streams wrapping a pair of small green leaves, strong opaque highlighted contours, not a cloud and not a tornado.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: a compact sculptural swirl of pale celadon wind, three distinct flowing ivory curved streams wrapping a pair of small green leaves, strong opaque highlighted contours, not a cloud and not a tornado.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-fa956ca6-e23e-4495-8dfe-ac1fa747905f.png"
+    },
+    {
+      "id": 33,
+      "key": "Iron",
+      "subject": "three dark iron ingots stacked low in a stable pyramid, forged steel gray surfaces, hammered texture, bright cold silver edge highlights, one small warm forge reflection, clearly iron not gold.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: three dark iron ingots stacked low in a stable pyramid, forged steel gray surfaces, hammered texture, bright cold silver edge highlights, one small warm forge reflection, clearly iron not gold.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-378cbcb3-c8ef-4f1f-bf48-40947bf4d454.png"
+    },
+    {
+      "id": -1002,
+      "key": "ScatterShot",
+      "subject": "a compact antique Japanese fantasy matchlock blunderbuss, wide believable flared steel muzzle integrated naturally into a short thick barrel, dark walnut stock, brass fittings, diagonal full gun with butt and muzzle both visible; no firing, no bullets, no modern shotgun.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: a compact antique Japanese fantasy matchlock blunderbuss, wide believable flared steel muzzle integrated naturally into a short thick barrel, dark walnut stock, brass fittings, diagonal full gun with butt and muzzle both visible; no firing, no bullets, no modern shotgun.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-658324cc-47ca-492f-87d6-ba70867249bf.png"
+    },
+    {
+      "id": -1003,
+      "key": "Warrior",
+      "subject": "a full-body Japanese ashigaru foot soldier holding one straight sword and a small wooden shield, conical jingasa hat, indigo fabric and simple red-brown armor, face understated, firm grounded stance, compact character sprite.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject: a full-body Japanese ashigaru foot soldier holding one straight sword and a small wooden shield, conical jingasa hat, indigo fabric and simple red-brown armor, face understated, firm grounded stance, compact character sprite.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-cea976bb-7d80-4ebb-aa4a-72a4d9dfa9a1.png"
+    },
+    {
+      "id": -1004,
+      "key": "Sentinel",
+      "subject": "a full-body Japanese fortress guard with a long upright spear and broad lacquered shield, dark teal lamellar armor, simple kabuto helmet, calm guarded stance, both spear tip and feet visible, compact silhouette.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow. a full-body Japanese fortress guard with a long upright spear and broad lacquered shield, dark teal lamellar armor, simple kabuto helmet, calm guarded stance, both spear tip and feet visible, compact silhouette.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-e653387b-a8e4-4eb6-9585-411f821243b1.png"
+    },
+    {
+      "id": -1005,
+      "key": "Forge",
+      "subject": "a squat iron anvil with a Japanese smith hammer resting diagonally on it and a small heated orange steel billet, charcoal-black iron, warm hammered copper details, grounded blacksmith craft, not a furnace or a modern factory.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow. a squat iron anvil with a Japanese smith hammer resting diagonally on it and a small heated orange steel billet, charcoal-black iron, warm hammered copper details, grounded blacksmith craft, not a furnace or a modern factory.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-23f8ceec-52a0-48be-83a5-c6b0d707a994.png"
+    },
+    {
+      "id": -1006,
+      "key": "Wave",
+      "subject": "a single compact cresting Japanese ocean wave, deep turquoise water and ivory sea foam, curling side-view crest with three readable splashes contained within silhouette, sculptural solid water, no sea background.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow. a single compact cresting Japanese ocean wave, deep turquoise water and ivory sea foam, curling side-view crest with three readable splashes contained within silhouette, sculptural solid water, no sea background.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-cca769b0-4eaf-4281-94a2-5f6f4122e070.png"
+    },
+    {
+      "id": -1007,
+      "key": "Magnet",
+      "subject": "a naturally magnetic dark magnetite lodestone rock with silver iron filings forming visible short curved bands around two ends, a few small iron fragments attracted close to it, no horseshoe shape, no red-blue school magnet, grounded mineral.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow. a naturally magnetic dark magnetite lodestone rock with silver iron filings forming visible short curved bands around two ends, a few small iron fragments attracted close to it, no horseshoe shape, no red-blue school magnet, grounded mineral.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-b74837aa-47a8-4e5a-85a3-9aa65c541029.png"
+    },
+    {
+      "id": -1008,
+      "key": "Mountain",
+      "subject": "a compact rocky Japanese mountain peak with rugged gray stone, deep green lower slopes, small ivory snowcap, triangular majestic silhouette, isolated entire mountain base, no landscape background.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow. a compact rocky Japanese mountain peak with rugged gray stone, deep green lower slopes, small ivory snowcap, triangular majestic silhouette, isolated entire mountain base, no landscape background.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-168b248b-e2d1-4998-8cbd-c92d98903fdb.png"
+    },
+    {
+      "id": -1009,
+      "key": "Coal",
+      "subject": "a compact cluster of black charcoal chunks with a few subtle glowing orange ember fissures inside, mostly dense dark solid charcoal silhouette, no big flames, heavy solid defensive impression.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a compact cluster of black charcoal chunks with a few subtle glowing orange ember fissures inside, mostly dense dark solid charcoal silhouette, no big flames, heavy solid defensive impression.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-ab42d7c7-03c9-4331-892c-144818bc9c77.png"
+    },
+    {
+      "id": -1010,
+      "key": "Fortress",
+      "subject": "a compact Japanese stone-and-timber fortified gatehouse with two small bronze mortars mounted on the parapet, mossy gray stone base, white plaster and dark timber, red banners without symbols, sturdy broad fortress silhouette, no terrain or surrounding landscape.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a compact Japanese stone-and-timber fortified gatehouse with two small bronze mortars mounted on the parapet, mossy gray stone base, white plaster and dark timber, red banners without symbols, sturdy broad fortress silhouette, no terrain or surrounding landscape.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-d6f43f39-ac2d-41cb-a5fb-4060ec5b1e0f.png"
+    },
+    {
+      "id": -1011,
+      "key": "Dice",
+      "subject": "three antique ivory Japanese dice tumbling together in a triangular arrangement, inset black and red pips, distinct visible faces, warm carved edges, crisp clean geometry, no digits or letters, no magical ring.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. three antique ivory Japanese dice tumbling together in a triangular arrangement, inset black and red pips, distinct visible faces, warm carved edges, crisp clean geometry, no digits or letters, no magical ring.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-a3df90ca-1624-4d4e-8029-e4461d048232.png"
+    },
+    {
+      "id": -1012,
+      "key": "Rain",
+      "subject": "a small sculptural pale blue-gray rain cloud with a group of distinct long luminous turquoise raindrops below it and a tiny translucent puddle splash at its base, refreshing gentle healing rain, not a storm, compact full subject.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a small sculptural pale blue-gray rain cloud with a group of distinct long luminous turquoise raindrops below it and a tiny translucent puddle splash at its base, refreshing gentle healing rain, not a storm, compact full subject.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-a0c9a508-e1b6-446a-ae45-f0564dafa1c5.png"
+    },
+    {
+      "id": -1014,
+      "key": "Grass",
+      "subject": "a vibrant dense tuft of Japanese wild grass with three clearly distinguishable clumps sprouting from a small connected root base, emerald and lime sharp blades, subtle white root highlights, resilient living growing silhouette, no ground tile.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a vibrant dense tuft of Japanese wild grass with three clearly distinguishable clumps sprouting from a small connected root base, emerald and lime sharp blades, subtle white root highlights, resilient living growing silhouette, no ground tile.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-7a353b3f-708d-42dc-a7e7-69bfd300fd52.png"
+    },
+    {
+      "id": -1015,
+      "key": "Cocoon",
+      "subject": "a single hanging ivory silkworm cocoon wrapped in thick overlapping silk strands, pale jade supporting leaf, soft pearlescent shell highlights, protective closed oval form, no butterfly or insect outside.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a single hanging ivory silkworm cocoon wrapped in thick overlapping silk strands, pale jade supporting leaf, soft pearlescent shell highlights, protective closed oval form, no butterfly or insect outside.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-7afd465a-5dbb-459b-8001-0b5401f089a4.png"
+    },
+    {
+      "id": -1016,
+      "key": "WindChime",
+      "subject": "a traditional Japanese glass furin wind chime with a delicate clear pale aqua rounded bell, bronze clapper, one long ivory paper strip hanging beneath tied with red cord, subtle red and blue hand-painted accents, no writing on paper.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a traditional Japanese glass furin wind chime with a delicate clear pale aqua rounded bell, bronze clapper, one long ivory paper strip hanging beneath tied with red cord, subtle red and blue hand-painted accents, no writing on paper.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-1d05f4ce-b318-4fc2-8b39-223e2d2a2768.png"
+    },
+    {
+      "id": -1017,
+      "key": "Lantern",
+      "subject": "a traditional Japanese standing andon lantern, dark walnut square lattice frame and warm softly glowing ivory washi panels, small solid wooden feet, amber candlelight inside, no kanji or writing, no cast ground shadow outside object.",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a traditional Japanese standing andon lantern, dark walnut square lattice frame and warm softly glowing ivory washi panels, small solid wooden feet, amber candlelight inside, no kanji or writing, no cast ground shadow outside object.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-7787ea5a-a7d3-48a5-a9e7-bf76e72f994c.png"
+    },
+    {
+      "id": 1,
+      "key": "One",
+      "subject": "a single ivory die showing exactly one red pip on the front face, simple cube",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a single ivory die showing exactly one red pip on the front face, simple cube",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-05b50d6e-a324-486b-a517-251c20cefc20.png"
+    },
+    {
+      "id": 2,
+      "key": "Two",
+      "subject": "a single ivory die showing exactly two black pips on the front face, simple cube",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a single ivory die showing exactly two black pips on the front face, simple cube",
+     "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-55d611ce-1639-45cd-ba56-2af90783cfa8.png"
+    },
+    {
+      "id": 3,
+      "key": "Three",
+      "subject": "a single ivory die showing exactly three black pips on the front face, simple cube",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a single ivory die showing exactly three black pips on the front face, simple cube",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-2d89f163-f043-4e4f-8318-5f51da01001b.png"
+    },
+    {
+      "id": 10,
+      "key": "Sword",
+      "subject": "one Japanese straight double-edged sword, steel blade, gold guard, dark handle, diagonal",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. one Japanese straight double-edged sword, steel blade, gold guard, dark handle, diagonal",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-2dbdb134-9331-48ac-838e-61d39bcde8c3.png"
+    },
+    {
+      "id": 11,
+      "key": "Spear",
+      "subject": "one Japanese yari spear, steel triangular head, thick wooden shaft, diagonal, full length visible",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. one Japanese yari spear, steel triangular head, thick wooden shaft, diagonal, full length visible",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-acc3115b-c6bf-4154-a7b3-b0c8e0e43ce9.png"
+    },
+    {
+      "id": 12,
+      "key": "Hammer",
+      "subject": "one heavy iron war hammer with a chunky square head and short thick wooden handle, diagonal",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. one heavy iron war hammer with a chunky square head and short thick wooden handle, diagonal",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-eb1de238-1a72-4753-959f-667b4ed0d08e.png"
+    },
+    {
+      "id": 13,
+      "key": "Shield",
+      "subject": "one broad wooden Japanese shield, iron rim, front three-quarter view",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. one broad wooden Japanese shield, iron rim, front three-quarter view",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-96794747-6519-4baf-9276-1084bfc211b1.png"
+    },
+    {
+      "id": 15,
+      "key": "Wall",
+      "subject": "a low wide solid gray stone defensive wall, large chunky stones, moss in two crevices",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a low wide solid gray stone defensive wall, large chunky stones, moss in two crevices",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-1df37a32-747c-4da5-be39-6c8bacef70cf.png"
+    },
+    {
+      "id": 16,
+      "key": "Stone",
+      "subject": "one rough gray boulder with three sharply defined facets, chunky simple shape",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. one rough gray boulder with three sharply defined facets, chunky simple shape",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-cd7ab2c4-0226-4a60-9a38-4b7033c6f467.png"
+    },
+    {
+      "id": 18,
+      "key": "Gun",
+      "subject": "one old Japanese matchlock gun, long normal straight dark steel barrel and brown stock, diagonal, NO flared muzzle",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. one old Japanese matchlock gun, long normal straight dark steel barrel and brown stock, diagonal, NO flared muzzle",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-e0465b8b-8220-47bd-9bcd-dbbe8cfd8798.png"
+    },
+    {
+      "id": 19,
+      "key": "Fire",
+      "subject": "one compact orange flame with a yellow inner flame and red outer contour",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. one compact orange flame with a yellow inner flame and red outer contour",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-6ca4dbaa-7e2c-4098-bf4d-fb66901f89f7.png"
+    },
+    {
+      "id": 20,
+      "key": "Water",
+      "subject": "one large clean blue water droplet, two small square white highlights",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. one large clean blue water droplet, two small square white highlights",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-39423973-56ca-4138-8953-0fa92258530e.png"
+    },
+    {
+      "id": 21,
+      "key": "Wood",
+      "subject": "one sturdy tree with a thick brown trunk and three round green foliage masses",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. one sturdy tree with a thick brown trunk and three round green foliage masses",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-fbddc8c7-3f88-4df9-9f3c-a822e7c1a208.png"
+    },
+    {
+      "id": 22,
+      "key": "Soil",
+      "subject": "one low mound of rich dark brown soil with a few small solid stones, no plants",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. one low mound of rich dark brown soil with a few small solid stones, no plants",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-f7a4124f-4bf1-433f-8171-3e6e16f5bb90.png"
+    },
+    {
+      "id": 23,
+      "key": "Horse",
+      "subject": "a full-body brown horse running, compact silhouette, all limbs and tail visible",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a full-body brown horse running, compact silhouette, all limbs and tail visible",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-b414d685-dc59-43ce-b791-7195d65f022d.png"
+    },
+    {
+      "id": 25,
+      "key": "Tiger",
+      "subject": "a full-body orange tiger with bold black stripes, compact fierce pose, all feet and tail visible",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a full-body orange tiger with bold black stripes, compact fierce pose, all feet and tail visible",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-53c1a7e4-1f50-4283-bdae-18c04df0045c.png"
+    },
+    {
+      "id": 26,
+      "key": "Dragon",
+      "subject": "a full-body coiling Japanese green dragon, long serpentine body, golden horns, tiny legs, no wing",
+      "prompt": "Use case: stylized-concept. TRUE LOW RESOLUTION pixel art game sprite for a Japanese kanji strategy game. A carefully hand-placed 64 by 64 pixel sprite enlarged with NEAREST NEIGHBOR, visibly large square pixels and hard staircase outlines. Classic 1990s Japanese 16-bit RPG sprite, only 12-20 colors total and three flat shades per material, bold 1-pixel dark outline, sparse purposeful pixel clusters, simple readable silhouette. NOT a detailed illustration made to look pixelated. NO antialiasing, NO smooth gradients, NO blur, NO realistic texture, NO tiny ornamental detailing, NO dithering noise. Single centered entire object with generous transparent margin, genuine transparent background. No text, no border, no UI, no ground plane, no backdrop. Subject:  NO outer glow, NO halo, NO soft drop shadow.  HARD contour only. Every pixel outside the object must be fully transparent; no translucent atmosphere. a full-body coiling Japanese green dragon, long serpentine body, golden horns, tiny legs, no wing",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-26303d6c-e032-4ea6-af8c-96e2a5db340a.png"
+    }
+  ]
+}

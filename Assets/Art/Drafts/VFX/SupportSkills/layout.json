@@ -1,0 +1,688 @@
+{
+  "entries": [
+    {
+      "key": "ChainLightning",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ChainLightning.png",
+      "width": 512,
+      "height": 128,
+      "bounds": {
+        "x": 48,
+        "y": 40,
+        "w": 416,
+        "h": 44
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": [
+        0.09765625,
+        0.5
+      ],
+      "end": [
+        0.90234375,
+        0.5
+      ]
+    },
+    {
+      "key": "PullThread",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/PullThread.png",
+      "width": 512,
+      "height": 128,
+      "bounds": {
+        "x": 48,
+        "y": 52,
+        "w": 416,
+        "h": 20
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": [
+        0.09765625,
+        0.5
+      ],
+      "end": [
+        0.90234375,
+        0.5
+      ]
+    },
+    {
+      "key": "BellEcho",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellEcho.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 48,
+        "w": 416,
+        "h": 416
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "ThreadWrap",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ThreadWrap.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 64,
+        "w": 416,
+        "h": 380
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "CocoonGuard",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CocoonGuard.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 108,
+        "y": 24,
+        "w": 292,
+        "h": 464
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "BellNote",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellNote.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 88,
+        "y": 24,
+        "w": 332,
+        "h": 464
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "WindGust",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/WindGust.png",
+      "width": 512,
+      "height": 256,
+      "bounds": {
+        "x": 48,
+        "y": 80,
+        "w": 416,
+        "h": 96
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": [
+        0.09765625,
+        0.5
+      ],
+      "end": [
+        0.90234375,
+        0.5
+      ]
+    },
+    {
+      "key": "MagneticPull",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagneticPull.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 156,
+        "y": 24,
+        "w": 196,
+        "h": 464
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "RainRipple",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/RainRipple.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 204,
+        "w": 416,
+        "h": 104
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "ForgeSparks",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ForgeSparks.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 64,
+        "w": 416,
+        "h": 380
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "MortarImpact",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MortarImpact.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 104,
+        "w": 416,
+        "h": 300
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "SandBloom",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/SandBloom.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 72,
+        "w": 416,
+        "h": 368
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "RainDrops",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/RainDrops.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 172,
+        "y": 24,
+        "w": 164,
+        "h": 464
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "MortarShell",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MortarShell.png",
+      "width": 512,
+      "height": 128,
+      "bounds": {
+        "x": 48,
+        "y": 32,
+        "w": 416,
+        "h": 64
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": [
+        0.09765625,
+        0.5
+      ],
+      "end": [
+        0.90234375,
+        0.5
+      ]
+    },
+    {
+      "key": "ForgeHammer",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ForgeHammer.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 68,
+        "w": 416,
+        "h": 372
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "MagnetBody",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagnetBody.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 60,
+        "y": 24,
+        "w": 392,
+        "h": 464
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "WaveCrest",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/WaveCrest.png",
+      "width": 512,
+      "height": 256,
+      "bounds": {
+        "x": 48,
+        "y": 80,
+        "w": 416,
+        "h": 92
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": [
+        0.09765625,
+        0.5
+      ],
+      "end": [
+        0.90234375,
+        0.5
+      ]
+    },
+    {
+      "key": "GrassSprout",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GrassSprout.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 140,
+        "w": 416,
+        "h": 228
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "CoalEmbers",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CoalEmbers.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 72,
+        "w": 416,
+        "h": 368
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "LanternFlame",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/LanternFlame.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 108,
+        "y": 24,
+        "w": 292,
+        "h": 464
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "ShadowMist",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ShadowMist.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 88,
+        "w": 416,
+        "h": 332
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceSparkles",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceSparkles.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 64,
+        "w": 416,
+        "h": 384
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "CoalCold",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CoalCold.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 100,
+        "w": 416,
+        "h": 312
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "CoalHot",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CoalHot.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 100,
+        "w": 416,
+        "h": 312
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceFace1",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace1.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 48,
+        "w": 416,
+        "h": 416
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceFace2",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace2.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 48,
+        "w": 416,
+        "h": 416
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceFace3",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace3.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 48,
+        "w": 416,
+        "h": 416
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceFace4",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace4.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 56,
+        "w": 416,
+        "h": 400
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceFace5",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace5.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 56,
+        "w": 416,
+        "h": 400
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "DiceFace6",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace6.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 48,
+        "w": 416,
+        "h": 416
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "ReviewSword",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ReviewSword.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 120,
+        "w": 416,
+        "h": 268
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "ReviewSpear",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ReviewSpear.png",
+      "width": 512,
+      "height": 128,
+      "bounds": {
+        "x": 48,
+        "y": 32,
+        "w": 416,
+        "h": 60
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": [
+        0.09765625,
+        0.5
+      ],
+      "end": [
+        0.90234375,
+        0.5
+      ]
+    },
+    {
+      "key": "GuardShield",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GuardShield.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 136,
+        "y": 24,
+        "w": 240,
+        "h": 464
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "BonusOx",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BonusOx.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 76,
+        "w": 416,
+        "h": 356
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "MountainRebound",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MountainRebound.png",
+      "width": 512,
+      "height": 512,
+      "bounds": {
+        "x": 48,
+        "y": 52,
+        "w": 416,
+        "h": 408
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    },
+    {
+      "key": "GuardShell",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GuardShell.png",
+      "width": 256,
+      "height": 256,
+      "bounds": {
+        "x": 48,
+        "y": 76,
+        "w": 160,
+        "h": 104
+      },
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "start": null,
+      "end": null
+    }
+  ]
+}

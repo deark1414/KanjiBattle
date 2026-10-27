@@ -26,6 +26,68 @@ public static class BattleRuleRegression
         VerifyStageTerrain();
         VerifyTrapDamage();
         VerifyNumberPassives();
+        VerifyDeployment();
+        BattleActionRegression.Run();
+        BattleFusionRegression.Run();
+        SupportSkillRegression.Run();
+        BattleDamageRegression.Run();
+        BattleRewardRegression.Run();
+        ElementSkillRegression.Run();
+        FusionSupportRegression.Run();
+        CompleteFusionRegression.Run();
+        CharacterRecordRegression.RunFromCommandLine();
+        PlayerSkillRegression.Run();
+        CastleTreeRegression.Run();
+        TutorialRegression.Run();
+        CharacterInvestmentRegression.Run();
+    }
+
+    private static void VerifyDeployment()
+    {
+        var enemyCells = new HashSet<Vector2Int>();
+        var allyCells = new HashSet<Vector2Int>();
+        for (int index = 0; index < BattleDeploymentRules.Capacity; index++)
+        {
+            Vector2Int ally = BattleDeploymentRules.DefaultPosition(index, true);
+            Vector2Int enemy = BattleDeploymentRules.DefaultPosition(index, false);
+            if (!BattleDeploymentRules.IsAllyCell(ally) || !allyCells.Add(ally))
+                throw new InvalidOperationException("Invalid ally deployment.");
+            if (enemy.y < 0 || enemy.y >= 2 || !enemyCells.Add(enemy) || BattleDeploymentRules.IsAllyCell(enemy))
+                throw new InvalidOperationException("Invalid enemy deployment.");
+            if (enemy != BattleDeploymentRules.DefaultPosition(index, false))
+                throw new InvalidOperationException("Enemy placement must be deterministic.");
+        }
+
+        int[] ids = { 1, 1, 10 };
+        var positions = new List<Vector2Int> { new(0, 6), new(5, 5), new(3, 6) };
+        var saved = BattleDeploymentRules.Capture(ids, positions);
+        var restored = BattleDeploymentRules.Resolve(ids, saved);
+        for (int index = 0; index < ids.Length; index++)
+            if (restored[index] != positions[index]) throw new InvalidOperationException("Duplicate-character placement was not restored.");
+
+        restored = BattleDeploymentRules.Resolve(new[] { 12, 1, 1, 10 }, saved);
+        if (restored[1] != positions[0] || restored[2] != positions[1] || restored[3] != positions[2])
+            throw new InvalidOperationException("A new party member displaced a saved position.");
+        if (new HashSet<Vector2Int>(restored).Count != restored.Count)
+            throw new InvalidOperationException("Deployment positions overlap.");
+
+        saved.positions[0].x = -1;
+        saved.positions[1].y = 0;
+        saved.positions.Add(null);
+        restored = BattleDeploymentRules.Resolve(ids, saved);
+        foreach (Vector2Int cell in restored)
+            if (!BattleDeploymentRules.IsAllyCell(cell)) throw new InvalidOperationException("Corrupt save escaped the ally deployment zone.");
+        if (new HashSet<Vector2Int>(restored).Count != ids.Length)
+            throw new InvalidOperationException("Corrupt save produced overlapping pieces.");
+
+        bool rejected = false;
+        try { BattleDeploymentRules.Capture(new[] { 1, 1 }, new[] { positions[0], positions[0] }); }
+        catch (ArgumentException) { rejected = true; }
+        if (!rejected) throw new InvalidOperationException("Overlapping deployment was saved.");
+        rejected = false;
+        try { BattleDeploymentRules.Resolve(new int[BattleDeploymentRules.Capacity + 1], null); }
+        catch (ArgumentOutOfRangeException) { rejected = true; }
+        if (!rejected) throw new InvalidOperationException("Deployment capacity was not checked.");
     }
 
     private static void VerifySwordWedge()

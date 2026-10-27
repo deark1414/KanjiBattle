@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public enum SkillType
 {
@@ -23,7 +24,22 @@ public enum SkillType
     HorseCharge,
     BirdRetreat,
     TigerTwinClaw,
-    Dragon
+    Dragon,
+    DoubleSlash,
+    ScatterShot,
+    BellEcho,
+    ThreadPull,
+    ShadowCopy,
+    GuardAlly,
+    ExperienceBonus,
+    ChainLightning,
+    WindShift,
+    IronAdapt,
+    Warrior,
+    Sentinel,
+    Forge,
+    Wave, Magnet, Mountain, Coal, Fortress, Dice, Rain, Sand, Grass, Cocoon, WindChime, Lantern,
+    ProjectileGuard
 }
 
 public enum CharacterCategory
@@ -46,6 +62,9 @@ public class CharacterData : ScriptableObject
     public string characterName;
     public int characterId;
     public bool isBoss;
+    public bool isEvolved;
+    [System.NonSerialized] public CharacterData[] InvestmentMaterials;
+    [System.NonSerialized] public int InvestmentLevel;
     public Sprite icon;
     public Sprite enemyIcon;
 
@@ -90,5 +109,50 @@ public class CharacterData : ScriptableObject
         int baseCost = 100;
         float growthRate = 1.2f;
         return Mathf.RoundToInt(baseCost * Mathf.Pow(growthRate, currentLevel));
+    }
+
+    public static CharacterData CreateBattleFusion(BattleFusionRules.Recipe recipe, IReadOnlyList<CharacterData> materials, int battleLevel)
+    {
+        if (recipe == null || materials == null || materials.Count != recipe.Materials.Length || battleLevel < 1)
+            throw new System.ArgumentException("Invalid fusion materials or battle level.");
+        foreach (CharacterData material in materials)
+            if (material == null) throw new System.ArgumentException("Missing fusion material.");
+        var result = CreateInstance<CharacterData>();
+        result.hideFlags = HideFlags.HideAndDontSave;
+        result.characterId = recipe.Id;
+        result.characterName = recipe.Name;
+        result.category = recipe.Category;
+        result.skillType = recipe.Skill;
+        result.skillChance = recipe.Skill == SkillType.WindChime ? 15 : 100;
+        result.skillPower = 1f;
+        result.InvestmentMaterials = new List<CharacterData>(materials).ToArray();
+        result.InvestmentLevel = battleLevel;
+        float hp = 0, attack = 0, defense = 0;
+        foreach (CharacterData material in materials)
+        {
+            hp += material.GetMaxHP(battleLevel);
+            attack += material.GetAttack(battleLevel);
+            defense += material.GetDefense(battleLevel);
+        }
+        Vector3 multipliers = recipe.StatMultipliers;
+        result.baseHP = Mathf.Max(1, Mathf.RoundToInt(hp / materials.Count * multipliers.x));
+        result.baseAttack = Mathf.Max(1, Mathf.RoundToInt(attack / materials.Count * multipliers.y));
+        result.baseDefense = Mathf.Max(0, Mathf.RoundToInt(defense / materials.Count * multipliers.z));
+        result.hpGrowth = result.attackGrowth = result.defenseGrowth = 0;
+        CharacterArtCatalog.Apply(result);
+        return result;
+    }
+
+    public static CharacterData CreateBattleCopy(string name, SkillType skill, int hp, int attack, int defense)
+    {
+        var result = CreateInstance<CharacterData>();
+        result.hideFlags = HideFlags.HideAndDontSave;
+        result.characterName = name; result.characterId = -20000;
+        result.category = CharacterCategory.Nature; result.skillType = skill;
+        result.baseHP = Mathf.Max(1, hp); result.baseAttack = Mathf.Max(1, attack);
+        result.baseDefense = Mathf.Max(0, defense); result.skillChance = 0;
+        result.hpGrowth = result.attackGrowth = result.defenseGrowth = 0;
+        CharacterArtCatalog.Apply(result);
+        return result;
     }
 }

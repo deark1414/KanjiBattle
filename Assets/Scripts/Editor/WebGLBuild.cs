@@ -8,7 +8,40 @@ namespace KanjiBattle.Editor
     public static class WebGLBuild
     {
         private const string BuildRoot = "Docs";
-        private const string GameBuildPath = BuildRoot + "/game";
+        private static string GameBuildPath = BuildRoot + "/game";
+        private static bool includeE2EBridge;
+
+        public static void BuildLocalE2E()
+        {
+            string previousPath = GameBuildPath;
+            try
+            {
+                GameBuildPath = "tmp/e2e/game";
+                includeE2EBridge = true;
+                BuildGitHubPages();
+                File.WriteAllText("tmp/e2e/build.json", "{\"protocol\":1,\"define\":\"KANJI_BATTLE_E2E\"}");
+            }
+            finally
+            {
+                GameBuildPath = previousPath;
+                includeE2EBridge = false;
+            }
+        }
+
+        [MenuItem("KanjiBattle/Build/Local Deployment Preview")]
+        public static void BuildLocalDeploymentPreview()
+        {
+            string previousPath = GameBuildPath;
+            try
+            {
+                GameBuildPath = "tmp/deployment-preview/game";
+                BuildGitHubPages();
+            }
+            finally
+            {
+                GameBuildPath = previousPath;
+            }
+        }
 
         [MenuItem("KanjiBattle/Build/GitHub Pages WebGL")]
         public static void BuildGitHubPages()
@@ -26,11 +59,13 @@ namespace KanjiBattle.Editor
             // 透明な武器素材はWebGLの自動圧縮・タイトメッシュを通さない。
             // 実行時のRawImage描画と対になるビルド前の再発防止策。
             GeneratedVfxImporter.ConfigureWeaponMotionTextures();
+            GeneratedVfxImporter.ConfigureReviewedNumberAuraTextures();
+            SupportSkillVfxAssets.PromoteAndValidate();
             ConfigureModernWafuuUiTextures();
             AssetDatabase.SaveAssets();
 
             PrepareOutputDirectory();
-            WriteGitHubPagesFiles();
+            if (GameBuildPath == BuildRoot + "/game") WriteGitHubPagesFiles();
 
             // GitHub Pages does not reliably attach Content-Encoding to Unity's
             // compressed build files. The fallback keeps the archive portable while
@@ -44,7 +79,8 @@ namespace KanjiBattle.Editor
                 scenes = new[] { "Assets/Scenes/SampleScene.unity" },
                 locationPathName = GameBuildPath,
                 target = BuildTarget.WebGL,
-                options = BuildOptions.None
+                options = BuildOptions.None,
+                extraScriptingDefines = includeE2EBridge ? new[] { "KANJI_BATTLE_E2E" } : new string[0]
             };
 
             BuildReport report = BuildPipeline.BuildPlayer(options);
@@ -115,15 +151,10 @@ namespace KanjiBattle.Editor
             html = html.Replace(
                 "var loaderUrl = buildUrl + \"/game.loader.js\";",
                 "var loaderUrl = buildUrl + \"/game.loader.js\" + buildCacheSuffix;");
-            html = html.Replace(
-                "dataUrl: buildUrl + \"/game.data\",",
-                "dataUrl: buildUrl + \"/game.data\" + buildCacheSuffix,");
-            html = html.Replace(
-                "frameworkUrl: buildUrl + \"/game.framework.js\",",
-                "frameworkUrl: buildUrl + \"/game.framework.js\" + buildCacheSuffix,");
-            html = html.Replace(
-                "codeUrl: buildUrl + \"/game.wasm\",",
-                "codeUrl: buildUrl + \"/game.wasm\" + buildCacheSuffix,");
+            foreach (string asset in new[] { "game.data", "game.framework.js", "game.wasm" })
+            foreach (string suffix in new[] { "", ".unityweb" })
+                html = html.Replace($"buildUrl + \"/{asset}{suffix}\",",
+                    $"buildUrl + \"/{asset}{suffix}\" + buildCacheSuffix,");
             html = html.Replace(
                 "<canvas id=\"unity-canvas\" width=960 height=600 tabindex=\"-1\"></canvas>",
                 "<canvas id=\"unity-canvas\" tabindex=\"-1\"></canvas>");

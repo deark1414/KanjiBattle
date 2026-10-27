@@ -1,0 +1,780 @@
+fileFormatVersion: 2
+guid: 8b84c542ba8d6450abd69dce8291f93c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6498747832796277415
+    second: DualSwordsReviewed_0
+  - first:
+      213: 6314027372082769949
+    second: DualSwordsReviewed_1
+  - first:
+      213: -5672731510930129056
+    second: DualSwordsReviewed_2
+  - first:
+      213: 6911416429774129007
+    second: DualSwordsReviewed_3
+  - first:
+      213: 1366430185341468509
+    second: DualSwordsReviewed_4
+  - first:
+      213: 6338907603406772602
+    second: DualSwordsReviewed_5
+  - first:
+      213: -1219484317499177839
+    second: DualSwordsReviewed_6
+  - first:
+      213: -9115379682727940287
+    second: DualSwordsReviewed_7
+  - first:
+      213: -3865264188433681694
+    second: DualSwordsReviewed_8
+  - first:
+      213: 4878630398669874004
+    second: DualSwordsReviewed_9
+  - first:
+      213: 8199764846428297631
+    second: DualSwordsReviewed_10
+  - first:
+      213: -6202463327762384685
+    second: DualSwordsReviewed_11
+  - first:
+      213: -3234021837043772623
+    second: DualSwordsReviewed_12
+  - first:
+      213: -7110745897799448370
+    second: DualSwordsReviewed_13
+  - first:
+      213: -2584260347568506288
+    second: DualSwordsReviewed_14
+  - first:
+      213: 2339618170716451309
+    second: DualSwordsReviewed_15
+  - first:
+      213: -355771991729225276
+    second: DualSwordsReviewed_16
+  - first:
+      213: 1659991955600096422
+    second: DualSwordsReviewed_17
+  - first:
+      213: 5737926280332565370
+    second: DualSwordsReviewed_18
+  - first:
+      213: -7804800721719097710
+    second: DualSwordsReviewed_19
+  - first:
+      213: 4168580691318184862
+    second: DualSwordsReviewed_20
+  - first:
+      213: 1907230309865304926
+    second: DualSwordsReviewed_21
+  - first:
+      213: 8738826719549518525
+    second: DualSwordsReviewed_22
+  - first:
+      213: -6861706973246740299
+    second: DualSwordsReviewed_23
+  - first:
+      213: 4894640753263548780
+    second: DualSwordsReviewed_24
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: DualSwordsReviewed_0
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 0
+        width: 1205
+        height: 1232
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7aa69aad8b0303a50800000000000000
+      internalID: 6498747832796277415
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_1
+      rect:
+        serializedVersion: 2
+        x: 989
+        y: 1179
+        width: 29
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d103617117eef9750800000000000000
+      internalID: 6314027372082769949
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_2
+      rect:
+        serializedVersion: 2
+        x: 1010
+        y: 1211
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06f38d80fb86641b0800000000000000
+      internalID: -5672731510930129056
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_3
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 1156
+        width: 39
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f674c77ef984aef50800000000000000
+      internalID: 6911416429774129007
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_4
+      rect:
+        serializedVersion: 2
+        x: 217
+        y: 1191
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5f36af830986f210800000000000000
+      internalID: 1366430185341468509
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_5
+      rect:
+        serializedVersion: 2
+        x: 247
+        y: 1170
+        width: 17
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a79551d51e258f750800000000000000
+      internalID: 6338907603406772602
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_6
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 1143
+        width: 15
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1944d4e6975831fe0800000000000000
+      internalID: -1219484317499177839
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_7
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 1163
+        width: 9
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14f2032597aaf7180800000000000000
+      internalID: -9115379682727940287
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_8
+      rect:
+        serializedVersion: 2
+        x: 265
+        y: 1117
+        width: 36
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e23f5d13b2db5ac0800000000000000
+      internalID: -3865264188433681694
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_9
+      rect:
+        serializedVersion: 2
+        x: 989
+        y: 1161
+        width: 11
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 453e32fdf7064b340800000000000000
+      internalID: 4878630398669874004
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_10
+      rect:
+        serializedVersion: 2
+        x: 317
+        y: 1146
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9918110faa6bc170800000000000000
+      internalID: 8199764846428297631
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_11
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 1150
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d8f558277c6ce9a0800000000000000
+      internalID: -6202463327762384685
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_12
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 1082
+        width: 47
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 133562716427e13d0800000000000000
+      internalID: -3234021837043772623
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_13
+      rect:
+        serializedVersion: 2
+        x: 305
+        y: 1140
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec80991c74e815d90800000000000000
+      internalID: -7110745897799448370
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_14
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 1019
+        width: 19
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 05a3d08e7ecd22cd0800000000000000
+      internalID: -2584260347568506288
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 955
+        width: 35
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de17a97945ef77020800000000000000
+      internalID: 2339618170716451309
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_16
+      rect:
+        serializedVersion: 2
+        x: 1198
+        y: 927
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c142fb224b001bf0800000000000000
+      internalID: -355771991729225276
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_17
+      rect:
+        serializedVersion: 2
+        x: 1222
+        y: 931
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6acbc8b73e9790710800000000000000
+      internalID: 1659991955600096422
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_18
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 913
+        width: 13
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7bd9961d8531af40800000000000000
+      internalID: 5737926280332565370
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_19
+      rect:
+        serializedVersion: 2
+        x: 1194
+        y: 921
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 296883f5817cfa390800000000000000
+      internalID: -7804800721719097710
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_20
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 899
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9b929b7d06c9d930800000000000000
+      internalID: 4168580691318184862
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_21
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 867
+        width: 20
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e533164acd7d77a10800000000000000
+      internalID: 1907230309865304926
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_22
+      rect:
+        serializedVersion: 2
+        x: 1182
+        y: 866
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db2f074e99c864970800000000000000
+      internalID: 8738826719549518525
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_23
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 47
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b8aecadcd156c0a0800000000000000
+      internalID: -6861706973246740299
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DualSwordsReviewed_24
+      rect:
+        serializedVersion: 2
+        x: 303
+        y: 23
+        width: 32
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c699c6905d14de340800000000000000
+      internalID: 4894640753263548780
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID:
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      DualSwordsReviewed_0: 6498747832796277415
+      DualSwordsReviewed_1: 6314027372082769949
+      DualSwordsReviewed_10: 8199764846428297631
+      DualSwordsReviewed_11: -6202463327762384685
+      DualSwordsReviewed_12: -3234021837043772623
+      DualSwordsReviewed_13: -7110745897799448370
+      DualSwordsReviewed_14: -2584260347568506288
+      DualSwordsReviewed_15: 2339618170716451309
+      DualSwordsReviewed_16: -355771991729225276
+      DualSwordsReviewed_17: 1659991955600096422
+      DualSwordsReviewed_18: 5737926280332565370
+      DualSwordsReviewed_19: -7804800721719097710
+      DualSwordsReviewed_2: -5672731510930129056
+      DualSwordsReviewed_20: 4168580691318184862
+      DualSwordsReviewed_21: 1907230309865304926
+      DualSwordsReviewed_22: 8738826719549518525
+      DualSwordsReviewed_23: -6861706973246740299
+      DualSwordsReviewed_24: 4894640753263548780
+      DualSwordsReviewed_3: 6911416429774129007
+      DualSwordsReviewed_4: 1366430185341468509
+      DualSwordsReviewed_5: 6338907603406772602
+      DualSwordsReviewed_6: -1219484317499177839
+      DualSwordsReviewed_7: -9115379682727940287
+      DualSwordsReviewed_8: -3865264188433681694
+      DualSwordsReviewed_9: 4878630398669874004
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

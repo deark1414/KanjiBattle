@@ -6,6 +6,17 @@ using System.Collections.Generic;
 
 public class DataImporter : EditorWindow
 {
+    [MenuItem("Tools/Import Combat JSON Data")]
+    public static void ImportCombatData()
+    {
+        ImportCharacters("Assets/Data/characters.json");
+        ImportStages("Assets/Data/stages.json");
+        AssetDatabase.SaveAssets();
+        RebuildCharacterDatabase();
+        RebuildStageDatabase();
+        Debug.Log("[DataImporter] Combat data imported.");
+    }
+
     [MenuItem("Tools/Import JSON Data")]
     public static void ImportAllData()
     {
@@ -49,6 +60,8 @@ public class DataImporter : EditorWindow
         public float skillPower;
         public int skillChance;
         public bool isBoss;
+        public bool isEvolved;
+        public bool clearIcons;
     }
 
     [System.Serializable]
@@ -86,6 +99,8 @@ public class DataImporter : EditorWindow
         public string stageName;
         public int chapterId;
         public List<int> enemyIds;
+        public List<StagePositionJson> enemyPositions;
+        public bool restrictFormationSlots;
         public int rewardStagePoints;
         public int slotCount;
         public int trapDamage;
@@ -98,6 +113,9 @@ public class DataImporter : EditorWindow
         public int enemyLevel;
         public int prerequisiteStageId;
     }
+
+    [System.Serializable]
+    class StagePositionJson { public int x; public int y; }
 
     static void ImportCharacters(string path)
     {
@@ -133,6 +151,13 @@ public class DataImporter : EditorWindow
             data.skillPower = c.skillPower;
             data.skillChance = c.skillChance;
             data.isBoss = c.isBoss;
+            data.isEvolved = c.isEvolved;
+            if (c.clearIcons)
+            {
+                data.icon = null;
+                data.enemyIcon = null;
+            }
+            CharacterArtCatalog.Apply(data);
 
             EditorUtility.SetDirty(data);
         }
@@ -220,10 +245,17 @@ public class DataImporter : EditorWindow
             data.chapterId = s.chapterId;
 
             data.enemyPool = new List<CharacterData>();
+            data.enemyFusionIds = new List<int>();
             if (s.enemyIds != null)
             {
                 foreach (var id in s.enemyIds)
                 {
+                    if (id < 0)
+                    {
+                        if (BattleFusionRules.GetRecipe(id) == null) throw new System.ArgumentException("Unknown enemy fusion " + id);
+                        data.enemyFusionIds.Add(id);
+                        continue;
+                    }
                     if (characterById.TryGetValue(id, out CharacterData ch) && ch != null)
                     {
                         data.enemyPool.Add(ch);
@@ -233,6 +265,8 @@ public class DataImporter : EditorWindow
 
             data.rewardStagePoints = s.rewardStagePoints;
             data.slotCount = s.slotCount;
+            data.enemyPositions = s.enemyPositions?.Select(cell => new Vector2Int(cell.x, cell.y)).ToList() ?? new List<Vector2Int>();
+            data.restrictFormationSlots = s.restrictFormationSlots;
             data.trapDamage = s.trapDamage;
             data.trapCount = s.trapCount;
 

@@ -224,6 +224,8 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
 
     private void StyleImage(Image image)
     {
+        if(image!=null&&image.GetComponentInParent<GuidedTutorialView>()!=null)return;
+        if (image != null && (image.GetComponentInParent<CastleTreeView>() != null || image.GetComponentInParent<FullScreenGuideView>() != null)) return;
         if (image == null || image.name == "AutoTheme_Backdrop" || image.name == "WafuuBattleEnvironment") return;
 
         string objectName = image.gameObject.name.ToLowerInvariant();
@@ -245,6 +247,7 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
 
     private void StyleScrollRect(ScrollRect scrollRect)
     {
+        if (scrollRect != null && (scrollRect.GetComponentInParent<CastleTreeView>() != null || scrollRect.GetComponentInParent<FullScreenGuideView>() != null)) return;
         if (scrollRect == null) return;
 
         string path = GetPath(scrollRect.transform).ToLowerInvariant();
@@ -327,6 +330,8 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
 
     private void StyleButton(Button button)
     {
+        if(button!=null&&button.GetComponentInParent<GuidedTutorialView>()!=null)return;
+        if (button != null && (button.GetComponentInParent<CastleTreeView>() != null || button.GetComponentInParent<FullScreenGuideView>() != null)) return;
         if (button == null) return;
         ApplyResponsiveButtonPlacement(button);
 
@@ -371,6 +376,8 @@ public sealed class UnityUIRuntimeTheme : MonoBehaviour
 
     private static void StyleText(TextMeshProUGUI text)
     {
+        if(text!=null&&text.GetComponentInParent<GuidedTutorialView>()!=null)return;
+        if (text != null && (text.GetComponentInParent<CastleTreeView>() != null || text.GetComponentInParent<FullScreenGuideView>() != null)) return;
         if (text == null) return;
 
         EnsureJapaneseCapableFont(text);

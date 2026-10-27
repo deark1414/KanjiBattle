@@ -15,8 +15,9 @@ MonoBehaviour:
   characterName: "\u77F3"
   characterId: 16
   isBoss: 0
-  icon: {fileID: 21300000, guid: b8dd2b3caaf6e44328260dff7970bf92, type: 3}
-  enemyIcon: {fileID: 21300000, guid: 26f4f2a3fc8d1455e94406777df2ffc5, type: 3}
+  isEvolved: 0
+  icon: {fileID: 21300000, guid: e1b114545e3ba41e78a1c587f73f5ab6, type: 3}
+  enemyIcon: {fileID: 21300000, guid: 34f361a773d6449ce92270f5a5fdaec8, type: 3}
   category: 6
   baseHP: 130
   baseAttack: 28

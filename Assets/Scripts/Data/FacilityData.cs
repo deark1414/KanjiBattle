@@ -14,7 +14,8 @@ public enum FacilityEffectType
     SkillPowerBoost = 16,
     SkillChanceBoost = 17,
     HealthBoost = 18,
-    PlayerLevelCap = 19
+    PlayerLevelCap = 19,
+    Fusion = 20
 }
 
 public enum FacilityUnlockType

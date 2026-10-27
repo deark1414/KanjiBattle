@@ -15,14 +15,15 @@ MonoBehaviour:
   characterName: "\u58C1"
   characterId: 15
   isBoss: 0
-  icon: {fileID: 21300000, guid: a7fd660d916b24b3fb562c6955715fd6, type: 3}
-  enemyIcon: {fileID: 21300000, guid: d3a3f29ef4f904dafbdb8c147f3cfbab, type: 3}
+  isEvolved: 0
+  icon: {fileID: 21300000, guid: 505267a5308aa48648fb8f07d77d3dcc, type: 3}
+  enemyIcon: {fileID: 21300000, guid: 8eb9254aad1ac488d93a4ae69eb08435, type: 3}
   category: 5
   baseHP: 220
   baseAttack: 10
   baseDefense: 20
   production: 3
-  skillType: 4
+  skillType: 13
   skillChance: 0
   skillPower: 1
   level: 1

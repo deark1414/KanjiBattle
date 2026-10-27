@@ -1,0 +1,288 @@
+{
+  "date": "2026-10-25",
+  "tool": "Built-in image_gen",
+  "generated": [
+    {
+      "id": -1001,
+      "key": "DualSwordsReviewed",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/DualSwords.png",
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_10.png"
+      ],
+      "change": "Image 1 is the edit target. Replace BOTH curved single-edged katana blades with TWO IDENTICAL straight, symmetrical, double-edged tsurugi swords matching the blue-green steel blade, central ridge, small dark guard and dark handle in reference Image 2. Two whole swords crossed in an X, both tips, guards and handles fully visible. The pair MUST look like two copies of reference Image 2, not katanas, scimitars, sabres or gold-guard anime swords. Preserve the two-sword crossed composition, but use finer pixel detail.",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent in-game motif sprite for KanjiBattle. Style: fine, deliberate hand-shaded Japanese fantasy pixel art, approximately 128x128 logical sprite enlarged cleanly; clearly finer detail than chunky 64px pixel icons, but still genuine square-pixel edges, no smooth vector edges or painterly blur. Match the existing reference game's material palette and restrained outlines. Keep one isolated sprite composition centered with 12 percent safe transparent margin, complete silhouette, no text or labels, no UI, no backdrop, no cast floor shadow, no halo. Image 1 is the edit target. Replace BOTH curved single-edged katana blades with TWO IDENTICAL straight, symmetrical, double-edged tsurugi swords matching the blue-green steel blade, central ridge, small dark guard and dark handle in reference Image 2. Two whole swords crossed in an X, both tips, guards and handles fully visible. The pair MUST look like two copies of reference Image 2, not katanas, scimitars, sabres or gold-guard anime swords. Preserve the two-sword crossed composition, but use finer pixel detail.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-22508cfd-0a32-4f2c-93a3-dd8e84c4a04c.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/DualSwordsReviewed.png"
+    },
+    {
+      "id": -1003,
+      "key": "WarriorReviewed",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Warrior.png",
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_10.png"
+      ],
+      "change": "Image 1 is the edit target. Keep this single full-body Japanese warrior, pose, clothing colors and wooden shield. Replace ONLY the curved katana with a STRAIGHT symmetrical DOUBLE-EDGED tsurugi sword matching the blue-green blade, central ridge and small dark guard in reference Image 2. Blade must remain straight from guard to centered pointed tip, no curve, no single-edged katana. Preserve the rest of the character, refining pixel detail rather than changing the outfit.",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent in-game motif sprite for KanjiBattle. Style: fine, deliberate hand-shaded Japanese fantasy pixel art, approximately 128x128 logical sprite enlarged cleanly; clearly finer detail than chunky 64px pixel icons, but still genuine square-pixel edges, no smooth vector edges or painterly blur. Match the existing reference game's material palette and restrained outlines. Keep one isolated sprite composition centered with 12 percent safe transparent margin, complete silhouette, no text or labels, no UI, no backdrop, no cast floor shadow, no halo. Image 1 is the edit target. Keep this single full-body Japanese warrior, pose, clothing colors and wooden shield. Replace ONLY the curved katana with a STRAIGHT symmetrical DOUBLE-EDGED tsurugi sword matching the blue-green blade, central ridge and small dark guard in reference Image 2. Blade must remain straight from guard to centered pointed tip, no curve, no single-edged katana. Preserve the rest of the character, refining pixel detail rather than changing the outfit.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-0609904b-50e2-4cdd-82d3-ae8224e91c90.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/WarriorReviewed.png"
+    },
+    {
+      "id": -1007,
+      "key": "MagnetReviewed",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Magnet.png"
+      ],
+      "change": "Image 1 is the edit target, but replace this ambiguous rock/lodestone completely with ONE instantly recognizable classic U-shaped horseshoe magnet: strong simple U silhouette, deep muted red iron body, two short silver-grey exposed pole tips at the top, empty clear gap between arms, upright three-quarter view. No rocks, filings, floating particles, letters, N/S labels, electric arcs, glow or background. Fine pixel shading and grounded material, clear familiar object.",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent in-game motif sprite for KanjiBattle. Style: fine, deliberate hand-shaded Japanese fantasy pixel art, approximately 128x128 logical sprite enlarged cleanly; clearly finer detail than chunky 64px pixel icons, but still genuine square-pixel edges, no smooth vector edges or painterly blur. Match the existing reference game's material palette and restrained outlines. Keep one isolated sprite composition centered with 12 percent safe transparent margin, complete silhouette, no text or labels, no UI, no backdrop, no cast floor shadow, no halo. Image 1 is the edit target, but replace this ambiguous rock/lodestone completely with ONE instantly recognizable classic U-shaped horseshoe magnet: strong simple U silhouette, deep muted red iron body, two short silver-grey exposed pole tips at the top, empty clear gap between arms, upright three-quarter view. No rocks, filings, floating particles, letters, N/S labels, electric arcs, glow or background. Fine pixel shading and grounded material, clear familiar object.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-f6431693-de5f-407c-88b5-3e6b4bfb3b08.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/MagnetReviewed.png"
+    },
+    {
+      "id": -1011,
+      "key": "DiceDiagonal",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsReviewed/DiceGeometryV2.png",
+        "/Users/yuya/UnityProjects/KanjiBattle/tmp/character-art/dice-diagonal-guide.png"
+      ],
+      "change": "Image 1 is the edit target. Image 2 is ONLY the precise geometric guide for PIP PLACEMENT. Preserve Image 1's regular wooden cube geometry, honey wood grain, brown recessed pips, three-die composition, transparent background and pixel density. Correct every 2-pip and 3-pip face so pip CENTERS lie on the actual CORNER-TO-CORNER diagonal of that face, exactly as in guide Image 2. Important: this is a diagonal IN FACE COORDINATES, not simply a slanted row on the screen and NOT a line parallel to a cube edge. On diamond-shaped TOP faces, the line goes from the BACK vertex toward the FRONT vertex (nearly vertical in the image). On LEFT faces, from the far UPPER-LEFT corner toward the near LOWER-RIGHT/front-bottom corner. On RIGHT faces, from the far UPPER-RIGHT corner toward the near LOWER-LEFT/front-bottom corner: two or three pips should descend clearly down-left across the face, not sit horizontally side-by-side. 2 pips at 27% and 73% of that diagonal; 3 pips at 23%, 50%, 77%. ONE pip at the center. Counts: upper die top1 left3 right2; lower-left top2 left1 right3; lower-right top3 left1 right2. Use guide 2's placement, but do not adopt its flat plain illustration style. Keep Image 1's wooden pixel-art style. No red pips. No new objects, writing or labels.",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent motif sprite for a Japanese kanji strategy game. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, crisp square pixel edges, grounded restrained materials, not coarse 32px icons or smooth vector art. Full isolated subject centered with at least 10 percent true transparent margin on all sides. No text, kanji, labels, UI or backdrop. Preserve genuine alpha, no checkerboard. Image 1 is the edit target. Image 2 is ONLY the precise geometric guide for PIP PLACEMENT. Preserve Image 1's regular wooden cube geometry, honey wood grain, brown recessed pips, three-die composition, transparent background and pixel density. Correct every 2-pip and 3-pip face so pip CENTERS lie on the actual CORNER-TO-CORNER diagonal of that face, exactly as in guide Image 2. Important: this is a diagonal IN FACE COORDINATES, not simply a slanted row on the screen and NOT a line parallel to a cube edge. On diamond-shaped TOP faces, the line goes from the BACK vertex toward the FRONT vertex (nearly vertical in the image). On LEFT faces, from the far UPPER-LEFT corner toward the near LOWER-RIGHT/front-bottom corner. On RIGHT faces, from the far UPPER-RIGHT corner toward the near LOWER-LEFT/front-bottom corner: two or three pips should descend clearly down-left across the face, not sit horizontally side-by-side. 2 pips at 27% and 73% of that diagonal; 3 pips at 23%, 50%, 77%. ONE pip at the center. Counts: upper die top1 left3 right2; lower-left top2 left1 right3; lower-right top3 left1 right2. Use guide 2's placement, but do not adopt its flat plain illustration style. Keep Image 1's wooden pixel-art style. No red pips. No new objects, writing or labels.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-095c5f12-621c-476e-afa5-35b87222d297.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/DiceDiagonal.png",
+      "previousVersion": {
+        "id": -1011,
+        "key": "DiceGeometryV2",
+        "prompt": "Use case: precise-object-edit. Make ONE tiny localized correction in this three-wooden-dice sprite. On the UPPER die only, its RIGHT-facing vertical side currently shows ONE brown pip, duplicating the one on its top face. Replace that single pip on the upper die's RIGHT-facing side with TWO separate brown recessed pips arranged diagonally along that face. Leave the upper die top face with ONE pip, and left face with THREE pips. Do NOT change ANY cube edges, vertex positions, orientation, geometry, sizes, wood shading, grain, highlights, arrangement, transparency, outlines, pixel resolution or the two lower dice. Preserve the corrected straight, parallel cube edges exactly. Change ONLY the upper die right face's pip count from one to two. Genuine transparent background, same fine pixel art.",
+        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-3ba9ea8a-0754-4645-8e82-a36f20381c38.png",
+        "refs": [
+          "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-89015ff8-d045-4986-a2bc-8a832bb1585f.png"
+        ],
+        "previous": {
+          "id": -1011,
+          "key": "DiceGeometry",
+          "prompt": "Use case: precise-object-edit. Edit target: reference image 1, the three wooden dice sprite. Correct the distorted cube geometry ONLY, preserving its warm honey wood material, brown recessed pips, pixel art style, transparent background, and triangular arrangement of three dice. Geometry requirement: THREE IDENTICAL-SIZED PERFECT CUBES in the SAME strict orthographic isometric orientation. Each cube has three exactly straight edge families: vertical, 30 degrees down-left, 30 degrees down-right. Opposite edges of each face are perfectly parallel; each visible face is a consistent planar rhombus; all three axis lengths are equal. NO swollen surfaces, bulging wood, crooked edges, bent corners, trapezoidal faces, stretched blocks, rounded pill shapes, or perspective warping. At a logical 128px canvas, use approximately 42px wide by 48px tall cubes, with a 42x24px top rhombus and 24px straight vertical edges. Use the same cube geometry three times, arranged one above and two below, fully separate with clean gaps, at least 8px safe margin. Use tiny straight bevels, not rounded corners. Pips must follow the perspective of each plane. Top die faces: top ONE, left TWO, right THREE. Lower-left die: top TWO, left ONE, right THREE. Lower-right die: top THREE, left ONE, right TWO. No repeated number on adjacent faces of a die. Brown pips only, no red. Wood grain subordinate to precise clean geometry, fine 128px logical pixel detail, not soft painting. Single transparent sprite, no floor, no shadows outside cubes, no text, no labels, no UI. The result should read as three geometrically regular wooden gaming dice.",
+          "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-89015ff8-d045-4986-a2bc-8a832bb1585f.png",
+          "refs": [
+            "Assets/Art/Generated/CharacterMotifsReviewed/DiceReviewed.png"
+          ]
+        },
+        "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/DiceGeometryV2.png",
+        "previousVersion": {
+          "id": -1011,
+          "key": "DiceReviewed",
+          "refs": [
+            "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Dice.png",
+            "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_01.png"
+          ],
+          "change": "Image 1 is the edit target. Keep a compact group of THREE dice, but change their material and pixel language to match the golden honey WOODEN number-die motif in reference Image 2: warm golden wood grain, caramel bevelled edges, dark brown recessed circular pips. Not ivory/bone, no red pips. Three main visible faces show respectively ONE central pip, TWO diagonal pips, THREE diagonal pips, evoking the game's 一 二 三 number characters. Preserve a compact three-die grouping and true transparency. Match the reference's wooden number-piece design closely, with moderate fine pixel detail.",
+          "prompt": "Use case: precise-object-edit. Asset type: transparent in-game motif sprite for KanjiBattle. Style: fine, deliberate hand-shaded Japanese fantasy pixel art, approximately 128x128 logical sprite enlarged cleanly; clearly finer detail than chunky 64px pixel icons, but still genuine square-pixel edges, no smooth vector edges or painterly blur. Match the existing reference game's material palette and restrained outlines. Keep one isolated sprite composition centered with 12 percent safe transparent margin, complete silhouette, no text or labels, no UI, no backdrop, no cast floor shadow, no halo. Image 1 is the edit target. Keep a compact group of THREE dice, but change their material and pixel language to match the golden honey WOODEN number-die motif in reference Image 2: warm golden wood grain, caramel bevelled edges, dark brown recessed circular pips. Not ivory/bone, no red pips. Three main visible faces show respectively ONE central pip, TWO diagonal pips, THREE diagonal pips, evoking the game's 一 二 三 number characters. Preserve a compact three-die grouping and true transparency. Match the reference's wooden number-piece design closely, with moderate fine pixel detail.",
+          "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-387e3db2-e1b3-4c27-abcc-919523b4c99b.png",
+          "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/DiceReviewed.png"
+        }
+      },
+      "guidePath": "Docs/Art/References/DicePipPlacement.png"
+    },
+    {
+      "id": 29,
+      "key": "ShadowSimple",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Shadow.png"
+      ],
+      "change": "Replace the human-shaped shadow entirely with a SIMPLE NON-FIGURATIVE SHADOW: one compact flattened irregular oval patch of deep charcoal-black cast shadow viewed from a slightly elevated angle, a restrained dark muted violet edge and only one or two subtle wispy tapered extensions. NO human silhouette, NO person, NO body, NO head, NO face, NO eyes, NO arms or legs, NO doll, puppet, mannequin, hooded figure, ghost or creature. No orb, no magical circle, no flames, no ring, no floor/background. It should read as the shadow itself, an abstract dark patch, not a character standing in shadow. Simple quiet silhouette, clear opaque core, true transparent surroundings; grounded Japanese fantasy fine pixel art, matching the other sprites.",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent motif sprite for a Japanese kanji strategy game. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, crisp square pixel edges, grounded restrained materials, not coarse 32px icons or smooth vector art. Full isolated subject centered with at least 10 percent true transparent margin on all sides. No text, kanji, labels, UI or backdrop. Preserve genuine alpha, no checkerboard. Replace the human-shaped shadow entirely with a SIMPLE NON-FIGURATIVE SHADOW: one compact flattened irregular oval patch of deep charcoal-black cast shadow viewed from a slightly elevated angle, a restrained dark muted violet edge and only one or two subtle wispy tapered extensions. NO human silhouette, NO person, NO body, NO head, NO face, NO eyes, NO arms or legs, NO doll, puppet, mannequin, hooded figure, ghost or creature. No orb, no magical circle, no flames, no ring, no floor/background. It should read as the shadow itself, an abstract dark patch, not a character standing in shadow. Simple quiet silhouette, clear opaque core, true transparent surroundings; grounded Japanese fantasy fine pixel art, matching the other sprites.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-a3dc82a6-679a-4bce-a7b2-dd11338e93ee.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/ShadowSimple.png"
+    },
+    {
+      "id": -1015,
+      "key": "SilkwormCocoon",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Cocoon.png"
+      ],
+      "change": "Replace this leaf-attached pointed hanging chrysalis with ONE realistic SILKWORM COCOON (Bombyx mori): a compact plump white/ivory oblong oval capsule, rounded at both ends, gently uneven fibrous surface with fine crossing silk threads. It must look like a silkworm's silk cocoon, not a butterfly chrysalis, bag, wrapped mummy or nest. Remove ALL leaves, grass, plants, stalks, branches and green parts. No insects visible, no face or limbs, no pedestal, no hanging stem, no long dangling thread, no environment. Centered isolated natural silk cocoon, fine pixel-art shading, restrained ivory/grey shadows, readable silhouette.",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent motif sprite for a Japanese kanji strategy game. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, crisp square pixel edges, grounded restrained materials, not coarse 32px icons or smooth vector art. Full isolated subject centered with at least 10 percent true transparent margin on all sides. No text, kanji, labels, UI or backdrop. Preserve genuine alpha, no checkerboard. Replace this leaf-attached pointed hanging chrysalis with ONE realistic SILKWORM COCOON (Bombyx mori): a compact plump white/ivory oblong oval capsule, rounded at both ends, gently uneven fibrous surface with fine crossing silk threads. It must look like a silkworm's silk cocoon, not a butterfly chrysalis, bag, wrapped mummy or nest. Remove ALL leaves, grass, plants, stalks, branches and green parts. No insects visible, no face or limbs, no pedestal, no hanging stem, no long dangling thread, no environment. Centered isolated natural silk cocoon, fine pixel-art shading, restrained ivory/grey shadows, readable silhouette.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-c121cf3c-8ac1-442e-bcba-4ea0be24b712.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/SilkwormCocoon.png"
+    },
+    {
+      "id": -1017,
+      "key": "Candle",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Lantern.png"
+      ],
+      "change": "Replace the framed wooden lantern completely with ONE simple burning CANDLE: short upright ivory wax pillar, small warm amber teardrop flame on one black wick, a few restrained wax drips. No lantern, no wood frame, no cage, no paper panels, no elaborate candlestick, no environment, no floor, no cast shadow, no text, no glowing halo. The subject is only the solid candle and its flame, simple and clearly recognizable at small size. Fine grounded fantasy pixel art, clean transparent outside, preserve the general restrained warm palette.",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent motif sprite for a Japanese kanji strategy game. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, crisp square pixel edges, grounded restrained materials, not coarse 32px icons or smooth vector art. Full isolated subject centered with at least 10 percent true transparent margin on all sides. No text, kanji, labels, UI or backdrop. Preserve genuine alpha, no checkerboard. Replace the framed wooden lantern completely with ONE simple burning CANDLE: short upright ivory wax pillar, small warm amber teardrop flame on one black wick, a few restrained wax drips. No lantern, no wood frame, no cage, no paper panels, no elaborate candlestick, no environment, no floor, no cast shadow, no text, no glowing halo. The subject is only the solid candle and its flame, simple and clearly recognizable at small size. Fine grounded fantasy pixel art, clean transparent outside, preserve the general restrained warm palette.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-9af44dd6-485a-46d1-b340-a668cad6db50.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/Candle.png"
+    },
+    {
+      "id": -1012,
+      "key": "RainNoCloud",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Rain.png"
+      ],
+      "change": "Remove the CLOUD completely because a separate cloud character may be added later. Show only falling RAIN: a compact cluster of clear blue and cyan raindrops and short downward rain streaks at varied heights, gently showering into a few small subtle ripples/splashes at the bottom. Fill the former cloud's area with spaced falling raindrops rather than leaving an empty top half. No clouds, no sky, no mist, no vapor, no weather icon frame, no sun, no vegetation, no landscape, no glowing ring, no huge pool. Keep the blue water material and fine pixel-art style, true transparent gaps between the drops, an easily read rain-shower silhouette.",
+      "prompt": "Use case: precise-object-edit. Asset type: transparent motif sprite for a Japanese kanji strategy game. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, crisp square pixel edges, grounded restrained materials, not coarse 32px icons or smooth vector art. Full isolated subject centered with at least 10 percent true transparent margin on all sides. No text, kanji, labels, UI or backdrop. Preserve genuine alpha, no checkerboard. Remove the CLOUD completely because a separate cloud character may be added later. Show only falling RAIN: a compact cluster of clear blue and cyan raindrops and short downward rain streaks at varied heights, gently showering into a few small subtle ripples/splashes at the bottom. Fill the former cloud's area with spaced falling raindrops rather than leaving an empty top half. No clouds, no sky, no mist, no vapor, no weather icon frame, no sun, no vegetation, no landscape, no glowing ring, no huge pool. Keep the blue water material and fine pixel-art style, true transparent gaps between the drops, an easily read rain-shower silhouette.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-44a805be-770a-4964-aa53-4891bf94c098.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/RainNoCloud.png"
+    },
+    {
+      "id": 27,
+      "key": "BellPlain",
+      "change": "Simplify this Japanese round suzu bell to a plain unadorned brass sphere: only its simple suspension loop and the functional dark opening/slit. REMOVE ALL engraved patterns, scrollwork, relief ornaments, red cords, knots and tassels. No ribbon, no decorations. Natural restrained brass highlights, one plain recognizable bell, not a Western handbell. Preserve fine pixel resolution.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Bell.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this existing transparent game motif. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, square pixel edges, matching existing KanjiBattle motifs, not blurry painting or coarse 32px icons. Single isolated composition centered with 10 percent true transparent margin, no backdrop, no text or letters, no frame or UI, no surrounding halo. Simplify this Japanese round suzu bell to a plain unadorned brass sphere: only its simple suspension loop and the functional dark opening/slit. REMOVE ALL engraved patterns, scrollwork, relief ornaments, red cords, knots and tassels. No ribbon, no decorations. Natural restrained brass highlights, one plain recognizable bell, not a Western handbell. Preserve fine pixel resolution.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-de0c541f-7aef-4cc1-8805-bbb8740de9c9.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/BellPlain.png"
+    },
+    {
+      "id": 28,
+      "key": "ThreadPlain",
+      "change": "Simplify to a plain small wooden spool wound with white thread and one loose curling thread end. REMOVE the entire red binding cord, knot and every decorative accessory. Plain functional spool, clean understated wood, no elaborate carving, no needle, no stand, no separate cast shadow. Preserve the fine pixel-art thread detail and readable silhouette.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Thread.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this existing transparent game motif. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, square pixel edges, matching existing KanjiBattle motifs, not blurry painting or coarse 32px icons. Single isolated composition centered with 10 percent true transparent margin, no backdrop, no text or letters, no frame or UI, no surrounding halo. Simplify to a plain small wooden spool wound with white thread and one loose curling thread end. REMOVE the entire red binding cord, knot and every decorative accessory. Plain functional spool, clean understated wood, no elaborate carving, no needle, no stand, no separate cast shadow. Preserve the fine pixel-art thread detail and readable silhouette.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-3df3d8ef-1e85-4736-a3a8-ea1c19189fef.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/ThreadPlain.png"
+    },
+    {
+      "id": 30,
+      "key": "HolsteinPixel",
+      "change": "Replace the dark muscular black ox with a friendly ordinary black-and-white HOLSTEIN DAIRY COW. Natural full body standing on four legs, side-three-quarter view, rounded belly, small udder, pink muzzle, relaxed ears, small natural horns if any. Large irregular BLACK PATCHES on WHITE hide, not stripes or brown fur. Remove all ropes, collar, accessories and decorative items. Not a calf, not a plush toy, not a human. DELIBERATELY LOWER-RESOLUTION pixel-art sprite at approximately 64x64 logical pixels: larger crisp pixel clusters, limited 12-16 color palette, simple 2-3 shade planes, no dense hair detail, no fine dither or smooth gradients. Clean readable welcoming bonus-character silhouette.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsReviewed/OxPlain.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this transparent sprite for a Japanese kanji strategy game. Deliberate hand-placed square pixel clusters, limited palette, NO smooth illustration or photorealism. Match the existing game's materials. One complete isolated motif centered with at least 10 percent genuine transparent margin. No text, UI, frame or environment. Replace the dark muscular black ox with a friendly ordinary black-and-white HOLSTEIN DAIRY COW. Natural full body standing on four legs, side-three-quarter view, rounded belly, small udder, pink muzzle, relaxed ears, small natural horns if any. Large irregular BLACK PATCHES on WHITE hide, not stripes or brown fur. Remove all ropes, collar, accessories and decorative items. Not a calf, not a plush toy, not a human. DELIBERATELY LOWER-RESOLUTION pixel-art sprite at approximately 64x64 logical pixels: larger crisp pixel clusters, limited 12-16 color palette, simple 2-3 shade planes, no dense hair detail, no fine dither or smooth gradients. Clean readable welcoming bonus-character silhouette.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-b83ea723-0545-4e2b-8356-ee40ecb6a4fc.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/HolsteinPixel.png",
+      "logicalSize": 64,
+      "previousVersion": {
+        "id": 30,
+        "key": "OxPlain",
+        "change": "Keep the same full-bodied dark ox, four legs, horns, natural anatomy, pose and pixel-art rendering. REMOVE the red rope halter, every rope on the head, hanging knots, tassel, accessories, collar, reins and any ornamental item. The result is simply one natural undecorated dark brown-black ox with horns and hooves. Do not replace with a cartoon, baby, human, statue or toy.",
+        "refs": [
+          "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Ox.png"
+        ],
+        "prompt": "Use case: precise-object-edit. Edit this existing transparent game motif. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, square pixel edges, matching existing KanjiBattle motifs, not blurry painting or coarse 32px icons. Single isolated composition centered with 10 percent true transparent margin, no backdrop, no text or letters, no frame or UI, no surrounding halo. Keep the same full-bodied dark ox, four legs, horns, natural anatomy, pose and pixel-art rendering. REMOVE the red rope halter, every rope on the head, hanging knots, tassel, accessories, collar, reins and any ornamental item. The result is simply one natural undecorated dark brown-black ox with horns and hooves. Do not replace with a cartoon, baby, human, statue or toy.",
+        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-5405fc25-f478-471e-8902-af11632c8672.png",
+        "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/OxPlain.png"
+      }
+    },
+    {
+      "id": -1008,
+      "key": "MountainTwinSummit",
+      "logicalSize": 64,
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsReviewed/MountainOrganicPixel.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Make a small localized silhouette edit to this low-resolution green-grey mountain game sprite. SHAVE AWAY a little of its current single highest crest, forming TWO adjacent broad BLUNT UNEQUAL SUMMITS separated by a clearly visible SHALLOW NOTCH/SADDLE. Slightly taller rounded left peak and a lower round shoulder immediately right, with a small naturally eroded depression between. Like a worn twin summit, NOT sharp horns, NOT two separate mountains, NOT a deep canyon. Preserve the main silhouette's steep short left flank and long gentle right slope, irregular grey exposed rock and green grass regions, limited palette and coarse 64px logical pixel-art. Preserve the rest of the mountain. Do not add finer detail, repeated rock patterns, snowy sharp cone, zigzag stripes, glow or haze. Ensure the shallow notch is part of the outer top contour so the sky/transparent gap between the two rounded tips reads at small sprite size. Flat opaque pixel clusters within silhouette, true transparent exterior, entire object centered with clear margin.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-e1d5f039-8970-48bc-8ec8-3921633c13dd.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/MountainTwinSummit.png",
+      "previousVersion": {
+        "id": -1008,
+        "key": "MountainOrganicPixel",
+        "change": "Rebuild as a simple LOWER-RESOLUTION approximately 64x64 logical pixel-art natural mountain. Keep the asymmetrical overall silhouette with short steep left slope, broad weathered crest offset left of center and long gentler right slope. REMOVE the AI-like repeating diagonal bands and rows of identical sharp rocks. Use just a few UNEQUAL large irregular landforms: one broad exposed grey rock face on left, an uneven muted-green middle basin, a broken shorter ridge in the background, and scattered small rocks placed very sparsely and nonuniformly. Unequal sizes, irregular spacing, no tiled pattern, no stripes, no repeated chevrons or zigzag terraces. Mostly blunt worn ridges, not needle points. Very little snow in 1-2 irregular patches only. Limited 12-16 colors, broad simple color clusters, visibly chunky square pixels, NO dense texture, NO smooth gradients, NO glow or haze, NO cast shadow. Full isolated mountain, no sky.",
+        "refs": [],
+        "prompt": "A small retro Japanese RPG MOUNTAIN TILE SPRITE, isolated transparent background. Literal 64x64 pixel art, limited 12-color palette, opaque crisp square pixels. A low weathered grey-and-green mountain with broad rounded crest offset left, steep irregular rocky left slope and a long gentle grassy right shoulder. Three or four large irregular rock patches with UNEQUAL sizes and spacing, not repeated, no parallel bands, no snow, no pointed peak. Simple readable game sprite with a thin charcoal pixel outline defining the whole silhouette. Empty transparent space all around. No lighting effects whatsoever, no halo, no glow, no haze, no gradient, no smooth shading, no blur, no floor shadow. Hard opaque pixel edges, plain transparent exterior. This replaces an over-detailed mountain motif and must read as a natural irregular low mountain, not a decorative pattern.",
+        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-cf6026ac-7f27-4a45-8f35-cd8d9a407b4f.png",
+        "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/MountainOrganicPixel.png",
+        "logicalSize": 64,
+        "previousAttempt": {
+          "id": -1008,
+          "key": "MountainOrganicPixel",
+          "ref": "Reviewed/MountainNatural",
+          "change": "Rebuild as a simple LOWER-RESOLUTION approximately 64x64 logical pixel-art natural mountain. Keep the asymmetrical overall silhouette with short steep left slope, broad weathered crest offset left of center and long gentler right slope. REMOVE the AI-like repeating diagonal bands and rows of identical sharp rocks. Use just a few UNEQUAL large irregular landforms: one broad exposed grey rock face on left, an uneven muted-green middle basin, a broken shorter ridge in the background, and scattered small rocks placed very sparsely and nonuniformly. Unequal sizes, irregular spacing, no tiled pattern, no stripes, no repeated chevrons or zigzag terraces. Mostly blunt worn ridges, not needle points. Very little snow in 1-2 irregular patches only. Limited 12-16 colors, broad simple color clusters, visibly chunky square pixels, NO dense texture, NO smooth gradients, NO glow or haze, NO cast shadow. Full isolated mountain, no sky.",
+          "refs": [
+            "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsReviewed/MountainNatural.png"
+          ],
+          "prompt": "Use case: precise-object-edit. Edit this transparent sprite for a Japanese kanji strategy game. Deliberate hand-placed square pixel clusters, limited palette, NO smooth illustration or photorealism. Match the existing game's materials. One complete isolated motif centered with at least 10 percent genuine transparent margin. No text, UI, frame or environment. Rebuild as a simple LOWER-RESOLUTION approximately 64x64 logical pixel-art natural mountain. Keep the asymmetrical overall silhouette with short steep left slope, broad weathered crest offset left of center and long gentler right slope. REMOVE the AI-like repeating diagonal bands and rows of identical sharp rocks. Use just a few UNEQUAL large irregular landforms: one broad exposed grey rock face on left, an uneven muted-green middle basin, a broken shorter ridge in the background, and scattered small rocks placed very sparsely and nonuniformly. Unequal sizes, irregular spacing, no tiled pattern, no stripes, no repeated chevrons or zigzag terraces. Mostly blunt worn ridges, not needle points. Very little snow in 1-2 irregular patches only. Limited 12-16 colors, broad simple color clusters, visibly chunky square pixels, NO dense texture, NO smooth gradients, NO glow or haze, NO cast shadow. Full isolated mountain, no sky.",
+          "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-65d5a2d8-ac16-4c69-a7fe-e05cd0fb4373.png"
+        },
+        "flatAttempt": {
+          "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8b919734-8fad-41c2-acf5-e62e92c8f44a.png",
+          "prompt": "Use case: precise-object-edit. Edit this mountain pixel sprite. The current repeated slanted stripes STILL look artificial. Simplify DRAMATICALLY into a retro 64px sprite with just THREE TO FIVE large uneven irregular rock and vegetation regions. Broad rounded dome-like summit, plateau-ish worn crest, no pointed peak; shorter steep left slope, long gentler right slope. NO parallel diagonal stripes, NO repeated triangular rocks, NO zigzag terraces, NO arrays of same-shaped details. Show one big craggy grey mass at left, one uneven dark green sheltered hollow near middle, one larger lighter green rolling shoulder at right, and a small irregular rock exposure in lower right. Unequal natural weathered shapes with restrained edges. Very limited palette, 2 shade levels per material, chunky obvious square pixels, no tiny texture, no shading gradients, no dither, no glow, no haze, no surrounding shadow. Remove snow if necessary to simplify the silhouette. Full isolated mountain with transparent padding, no sky, no ground plane, no labels. Render in visibly lower-resolution retro pixel art, not a detailed painting."
+        },
+        "cleanupPrompt": "Precise cleanup edit. KEEP THIS SIMPLE COARSE PIXEL MOUNTAIN'S EXACT ROCK AND GREEN COLOR SHAPES. Remove ALL the blurry glow, mist, halo and soft shadow OUTSIDE its silhouette completely. Restore a fully opaque solid pixel-art mountain body with crisp pixel edges and fully transparent empty exterior. No semi-transparent haze, no edge feathering, no glow, no lighting effect, no blurred pixels. Use only flat opaque colors for the mountain. White/grey left rock and green right shoulder as now, broad blunt summit as now. This is a sharp-edged 64-pixel game sprite on genuine transparent background, NOT a painting. Safe 12 percent clear margin. Do not add detail, preserve simple large irregular shapes.",
+        "cleanupPath": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-fbbda115-a6da-4dcd-a4fb-dca804a0273c.png",
+        "previousVersion": {
+          "id": -1008,
+          "key": "MountainNatural",
+          "change": "Redesign this excessively sharp symmetric fantasy mountain into a natural asymmetrical mountain massif. A broad weathered rounded crest, NOT a needle, pyramid or sharp isolated triangular peak. Peak offset left of center. LEFT slope relatively steep and rocky with a short broken shoulder; RIGHT slope substantially longer and gentler, stepping into low foothills. Irregular believable erosion and ridgelines; restrained green lower slopes, grey rock and only modest snow on upper slopes if needed. No spike forest, no perfect cone or symmetric triangle. Remove all glow/halo. Maintain the game's fine pixel-art density and one isolated mountain silhouette.",
+          "refs": [
+            "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Mountain.png"
+          ],
+          "prompt": "Use case: precise-object-edit. Edit this existing transparent game motif. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, square pixel edges, matching existing KanjiBattle motifs, not blurry painting or coarse 32px icons. Single isolated composition centered with 10 percent true transparent margin, no backdrop, no text or letters, no frame or UI, no surrounding halo. Redesign this excessively sharp symmetric fantasy mountain into a natural asymmetrical mountain massif. A broad weathered rounded crest, NOT a needle, pyramid or sharp isolated triangular peak. Peak offset left of center. LEFT slope relatively steep and rocky with a short broken shoulder; RIGHT slope substantially longer and gentler, stepping into low foothills. Irregular believable erosion and ridgelines; restrained green lower slopes, grey rock and only modest snow on upper slopes if needed. No spike forest, no perfect cone or symmetric triangle. Remove all glow/halo. Maintain the game's fine pixel-art density and one isolated mountain silhouette.",
+          "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-6dc3c347-498e-4846-ac04-b93ba226c0ee.png",
+          "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/MountainNatural.png"
+        }
+      }
+    },
+    {
+      "id": -1002,
+      "key": "ScatterPumpTriple",
+      "change": "Replace this flared-muzzle antique blunderbuss entirely with an original fantasy THREE-BARREL PUMP-ACTION SHOTGUN, one single unified weapon. Three straight PARALLEL dark steel barrels in a triangular cluster, with THREE separate clearly countable round equal-sized muzzle openings, each a conventional cylindrical bore, NOT a bell or trumpet flare. Three-quarter side view aimed diagonally up-right, showing all three muzzle openings; walnut shoulder stock lower-left, simple receiver, visible trigger guard, and a clearly distinct ribbed sliding wooden PUMP FORE-END below the barrel assembly with understated slide rails. Readable functional pump-action silhouette, no flintlock hammer, no ornate gold filigree, no modern tactical attachments, no lasers, no projectiles, no hands. Grounded wood and gunmetal fantasy pixel art matching the reference density; whole weapon fully visible with padding. This is one imaginative triple-barrel weapon, not three floating separate guns.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/ScatterShot.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this existing transparent game motif. Fine deliberate hand-shaded pixel art at approximately 128px logical resolution, square pixel edges, matching existing KanjiBattle motifs, not blurry painting or coarse 32px icons. Single isolated composition centered with 10 percent true transparent margin, no backdrop, no text or letters, no frame or UI, no surrounding halo. Replace this flared-muzzle antique blunderbuss entirely with an original fantasy THREE-BARREL PUMP-ACTION SHOTGUN, one single unified weapon. Three straight PARALLEL dark steel barrels in a triangular cluster, with THREE separate clearly countable round equal-sized muzzle openings, each a conventional cylindrical bore, NOT a bell or trumpet flare. Three-quarter side view aimed diagonally up-right, showing all three muzzle openings; walnut shoulder stock lower-left, simple receiver, visible trigger guard, and a clearly distinct ribbed sliding wooden PUMP FORE-END below the barrel assembly with understated slide rails. Readable functional pump-action silhouette, no flintlock hammer, no ornate gold filigree, no modern tactical attachments, no lasers, no projectiles, no hands. Grounded wood and gunmetal fantasy pixel art matching the reference density; whole weapon fully visible with padding. This is one imaginative triple-barrel weapon, not three floating separate guns.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-54a7cabe-359b-40a8-9b5f-20cb96240dd8.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/ScatterPumpTriple.png"
+    },
+    {
+      "id": -1014,
+      "key": "GrassRooted",
+      "change": "Keep a recognizable fresh green grass tuft but make it GROWING FROM A SMALL PATCH OF EARTH. Roots stay completely hidden INSIDE a modest low irregular brown soil mound at its base. Upright varied blades rooted in the soil, a few tiny grass shoots along the edge, not an uprooted bouquet and not a hanging root ball. No exposed dangling roots, no pot, no planter, no decorative border, no flowers. Only one compact small patch of living grass and soil, isolated with transparency around it. Restrained approximately 96px logical pixel detail, clean square pixels.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Grass.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this transparent sprite for a Japanese kanji strategy game. Deliberate hand-placed square pixel clusters, limited palette, NO smooth illustration or photorealism. Match the existing game's materials. One complete isolated motif centered with at least 10 percent genuine transparent margin. No text, UI, frame or environment. Keep a recognizable fresh green grass tuft but make it GROWING FROM A SMALL PATCH OF EARTH. Roots stay completely hidden INSIDE a modest low irregular brown soil mound at its base. Upright varied blades rooted in the soil, a few tiny grass shoots along the edge, not an uprooted bouquet and not a hanging root ball. No exposed dangling roots, no pot, no planter, no decorative border, no flowers. Only one compact small patch of living grass and soil, isolated with transparency around it. Restrained approximately 96px logical pixel detail, clean square pixels.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-f4951e15-e00c-468b-947c-76afb0d93ab2.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/GrassRooted.png"
+    },
+    {
+      "id": -1010,
+      "key": "FortressFrontCannons",
+      "refs": [
+        "/Users/yuya/Documents/Codex/2026-10-05/kanjibattle-history-recovery/outputs/FortressFrontCandidate.png"
+      ],
+      "prompt": "Precise localized sprite edit. This is a STRICT FRONT-ELEVATION Japanese fortress. Change ONLY the TWO CANNONS so that BOTH AIM STRAIGHT AT THE VIEWER, along the camera axis. Each must show a centered circular dark muzzle opening surrounded by a thick round olive-bronze metal rim, symmetrical short foreshortened barrel behind it, with matching wood cradles beneath. The bore axes point directly out of the screen, NOT diagonally left or right, NOT up-left, NOT sideways. NO long visible slanting barrel side. Round frontal bores, not oval angled bores. Equal size and elevation, each centered over its own parapet emplacement. Both cannons should look like the same front-facing cannon placed on opposite wings. Preserve EVERYTHING ELSE: the level horizontal roof and stone courses, centered double gate, straight posts, symmetrical stone bastions, two red flags, building silhouette, existing palette and detailed crisp pixel-art density. Keep true transparency and full margins. Do not reintroduce an oblique side wall or perspective corner. One isolated transparent game sprite, no words or background.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-3a7e3f27-766e-4619-be1a-32fb243117c3.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/FortressFrontCannons.png",
+      "approved": true,
+      "previousVersion": {
+        "id": -1010,
+        "key": "FortressThickCorner",
+        "refs": [
+          "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsReviewed/FortressAlignedCannons.png"
+        ],
+        "prompt": "Use case: precise-object-edit. Correct the architectural perspective of this transparent Japanese fortress game sprite. The RIGHT outer wall currently reads as a thin facade. Give the right-hand fortification a clearly substantial SOLID volume: broad stone front face, visible shaded right RETURN/SIDE FACE receding diagonally upper-right to a back edge, continuous thick top parapet surface joining front and return, coherent stone courses wrapping around the vertical corner. Wall thickness must support the cannon platform; no paper-thin facade, no unsupported cannon, no disconnected floating corner. Front and right faces meet at a clear believable substantial masonry corner; stones on the side are foreshortened consistently, side face slightly darker. Make the right-side platform and stone foundation read as one thick three-dimensional mass matching the left wall and central gate. Keep the Japanese roof, white plaster, red flags, wood gate, TWO cannons both aimed diagonally upper-left in parallel, palette and approximately 128px logical pixel-art detail. Do not mirror the cannons or change their direction. Avoid unrelated redesign. Whole building isolated with 10 percent transparent margin, crisp square pixel art, no text or glow, genuine transparent background.",
+        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-812334eb-6de5-400e-b310-da394ae06555.png",
+        "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/FortressThickCorner.png",
+        "previousVersion": {
+          "id": -1010,
+          "key": "FortressAlignedCannons",
+          "change": "Preserve this Japanese fortified stone gate, roof, walls, banners and pixel style. Correct ONLY the two cannons and their mounts: BOTH cannons must have exactly PARALLEL barrels aimed in the SAME world direction, diagonally toward the viewer's UPPER-LEFT in the image. They are not mirror images. On BOTH left and right parapets, the muzzle is upper-left of its own breech, identical elevation angle, matching elliptical opening and cylindrical barrel perspective. Both wooden cradles face the same diagonal direction too. Place each firmly and plausibly on its parapet, not floating or intersecting walls. Do not aim cannons outward left/right symmetrically. Everything else unchanged.",
+          "refs": [
+            "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Fortress.png"
+          ],
+          "prompt": "Use case: precise-object-edit. Edit this transparent sprite for a Japanese kanji strategy game. Deliberate hand-placed square pixel clusters, limited palette, NO smooth illustration or photorealism. Match the existing game's materials. One complete isolated motif centered with at least 10 percent genuine transparent margin. No text, UI, frame or environment. Preserve this Japanese fortified stone gate, roof, walls, banners and pixel style. Correct ONLY the two cannons and their mounts: BOTH cannons must have exactly PARALLEL barrels aimed in the SAME world direction, diagonally toward the viewer's UPPER-LEFT in the image. They are not mirror images. On BOTH left and right parapets, the muzzle is upper-left of its own breech, identical elevation angle, matching elliptical opening and cylindrical barrel perspective. Both wooden cradles face the same diagonal direction too. Place each firmly and plausibly on its parapet, not floating or intersecting walls. Do not aim cannons outward left/right symmetrically. Everything else unchanged.",
+          "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-fb6dff25-4e22-4c52-98d6-78613960d2d5.png",
+          "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/FortressAlignedCannons.png"
+        }
+      }
+    },
+    {
+      "id": 32,
+      "key": "WindLeftToRight",
+      "change": "Replace the vertical circular tornado/swirl layout with a low wide HORIZONTAL GUST flowing clearly from LEFT TO RIGHT. Three or four pale ivory/mint wind streaks extend horizontally across the image, long thin trailing wisps on the LEFT, fuller forward-curving leading tips on the RIGHT. Two small green leaves carried toward the RIGHT, their stems trailing left. Unequal streak lengths and spacing, gentle slight arcs, no upright tornado, no closed circle, no vertical S spiral. Wide airy transparent gaps, clean recognizable directional gust, restrained roughly 96px logical pixel detail. No arrows, no text, no motion UI, no glowing halo, no ground.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsPixel/Wind.png"
+      ],
+      "prompt": "Use case: precise-object-edit. Edit this transparent sprite for a Japanese kanji strategy game. Deliberate hand-placed square pixel clusters, limited palette, NO smooth illustration or photorealism. Match the existing game's materials. One complete isolated motif centered with at least 10 percent genuine transparent margin. No text, UI, frame or environment. Replace the vertical circular tornado/swirl layout with a low wide HORIZONTAL GUST flowing clearly from LEFT TO RIGHT. Three or four pale ivory/mint wind streaks extend horizontally across the image, long thin trailing wisps on the LEFT, fuller forward-curving leading tips on the RIGHT. Two small green leaves carried toward the RIGHT, their stems trailing left. Unequal streak lengths and spacing, gentle slight arcs, no upright tornado, no closed circle, no vertical S spiral. Wide airy transparent gaps, clean recognizable directional gust, restrained roughly 96px logical pixel detail. No arrows, no text, no motion UI, no glowing halo, no ground.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-49a247c8-f593-4315-8241-609b37627886.png",
+      "assetPath": "Assets/Art/Generated/CharacterMotifsReviewed/WindLeftToRight.png"
+    }
+  ]
+}

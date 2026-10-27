@@ -1,0 +1,676 @@
+fileFormatVersion: 2
+guid: 260a59297fe284701890128c3df83a03
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7225575888738433091
+    second: Fortress_0
+  - first:
+      213: 5332379853258373254
+    second: Fortress_1
+  - first:
+      213: 6217167083484509658
+    second: Fortress_2
+  - first:
+      213: -6102806565478549583
+    second: Fortress_3
+  - first:
+      213: -6103393700861483706
+    second: Fortress_4
+  - first:
+      213: 2634795500822410559
+    second: Fortress_5
+  - first:
+      213: -3786291176918887901
+    second: Fortress_6
+  - first:
+      213: 8854111579946755553
+    second: Fortress_7
+  - first:
+      213: -3909023786849765321
+    second: Fortress_8
+  - first:
+      213: -2767929294250445663
+    second: Fortress_9
+  - first:
+      213: 1707170745427992754
+    second: Fortress_10
+  - first:
+      213: 6126822412801823333
+    second: Fortress_11
+  - first:
+      213: 262965262419769345
+    second: Fortress_12
+  - first:
+      213: -4125816426983078258
+    second: Fortress_13
+  - first:
+      213: -4276532577769125369
+    second: Fortress_14
+  - first:
+      213: -282798432604992196
+    second: Fortress_15
+  - first:
+      213: 1634384481868983578
+    second: Fortress_16
+  - first:
+      213: 2279447881922608785
+    second: Fortress_17
+  - first:
+      213: -5283429907227859531
+    second: Fortress_18
+  - first:
+      213: 7719786592862581127
+    second: Fortress_19
+  - first:
+      213: 336029847032518036
+    second: Fortress_20
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Fortress_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1389
+        height: 1095
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 348b1e1fcf6664460800000000000000
+      internalID: 7225575888738433091
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_1
+      rect:
+        serializedVersion: 2
+        x: 705
+        y: 1057
+        width: 19
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6883ae0793b600a40800000000000000
+      internalID: 5332379853258373254
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_2
+      rect:
+        serializedVersion: 2
+        x: 798
+        y: 1093
+        width: 17
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad57850c580d74650800000000000000
+      internalID: 6217167083484509658
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_3
+      rect:
+        serializedVersion: 2
+        x: 586
+        y: 1067
+        width: 31
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b7bab343c97e4ba0800000000000000
+      internalID: -6102806565478549583
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_4
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 1061
+        width: 28
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6456bc724c36c4ba0800000000000000
+      internalID: -6103393700861483706
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_5
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 1069
+        width: 7
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f35315a5c8ca09420800000000000000
+      internalID: 2634795500822410559
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_6
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 1059
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 322dd873c34647bc0800000000000000
+      internalID: -3786291176918887901
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_7
+      rect:
+        serializedVersion: 2
+        x: 757
+        y: 1057
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1e52664229f10ea70800000000000000
+      internalID: 8854111579946755553
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_8
+      rect:
+        serializedVersion: 2
+        x: 759
+        y: 1059
+        width: 12
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7387446a39b50c9c0800000000000000
+      internalID: -3909023786849765321
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_9
+      rect:
+        serializedVersion: 2
+        x: 1061
+        y: 1057
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a4fdc4d8f65699d0800000000000000
+      internalID: -2767929294250445663
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_10
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 1023
+        width: 11
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b0ac2c7fb611b710800000000000000
+      internalID: 1707170745427992754
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_11
+      rect:
+        serializedVersion: 2
+        x: 175
+        y: 1017
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56254fce588d60550800000000000000
+      internalID: 6126822412801823333
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_12
+      rect:
+        serializedVersion: 2
+        x: 765
+        y: 1025
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1083cce438d36a300800000000000000
+      internalID: 262965262419769345
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_13
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 1024
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e86c335b1d72eb6c0800000000000000
+      internalID: -4125816426983078258
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_14
+      rect:
+        serializedVersion: 2
+        x: 183
+        y: 1011
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70a8faf4744b6a4c0800000000000000
+      internalID: -4276532577769125369
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_15
+      rect:
+        serializedVersion: 2
+        x: 532
+        y: 8
+        width: 17
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3dca89e25c431cf0800000000000000
+      internalID: -282798432604992196
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_16
+      rect:
+        serializedVersion: 2
+        x: 554
+        y: 15
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1d2634e6008ea610800000000000000
+      internalID: 1634384481868983578
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_17
+      rect:
+        serializedVersion: 2
+        x: 568
+        y: 17
+        width: 33
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19e730685c932af10800000000000000
+      internalID: 2279447881922608785
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_18
+      rect:
+        serializedVersion: 2
+        x: 623
+        y: 17
+        width: 40
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b522000e7c7da6b0800000000000000
+      internalID: -5283429907227859531
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_19
+      rect:
+        serializedVersion: 2
+        x: 725
+        y: 7
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 781b5694101322b60800000000000000
+      internalID: 7719786592862581127
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Fortress_20
+      rect:
+        serializedVersion: 2
+        x: 779
+        y: 8
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4955d429d51d9a400800000000000000
+      internalID: 336029847032518036
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID:
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Fortress_0: 7225575888738433091
+      Fortress_1: 5332379853258373254
+      Fortress_10: 1707170745427992754
+      Fortress_11: 6126822412801823333
+      Fortress_12: 262965262419769345
+      Fortress_13: -4125816426983078258
+      Fortress_14: -4276532577769125369
+      Fortress_15: -282798432604992196
+      Fortress_16: 1634384481868983578
+      Fortress_17: 2279447881922608785
+      Fortress_18: -5283429907227859531
+      Fortress_19: 7719786592862581127
+      Fortress_2: 6217167083484509658
+      Fortress_20: 336029847032518036
+      Fortress_3: -6102806565478549583
+      Fortress_4: -6103393700861483706
+      Fortress_5: 2634795500822410559
+      Fortress_6: -3786291176918887901
+      Fortress_7: 8854111579946755553
+      Fortress_8: -3909023786849765321
+      Fortress_9: -2767929294250445663
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

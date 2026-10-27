@@ -12,25 +12,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1df6bc30dc24f4ef8a24d39e608d3dda, type: 3}
   m_Name: Stage_1_36
   m_EditorClassIdentifier: Assembly-CSharp::StageData
-  stageName: "\u4E03\u306E\u9593"
+  stageName: "\u96FB\u306E\u9593"
   stageId: 36
   chapterId: 8
   enemyPool:
-  - {fileID: 11400000, guid: b78b90014b2f3477b9c3178b6f091bb8, type: 2}
-  - {fileID: 11400000, guid: b78b90014b2f3477b9c3178b6f091bb8, type: 2}
-  - {fileID: 11400000, guid: 021e01b73df88486c84be7643b0e0a26, type: 2}
-  - {fileID: 11400000, guid: c25f44457639447e5bf49a2ef3a74b3b, type: 2}
-  - {fileID: 11400000, guid: 6c216b850f67847ccb6bf646b16f4876, type: 2}
-  - {fileID: 11400000, guid: 76349d043ec8445949168a7c39201e9e, type: 2}
+  - {fileID: 11400000, guid: 900ecc4fc8132484191c54303b8cbe88, type: 2}
+  - {fileID: 11400000, guid: a45a3f137c1464a39a5bcd33f5e6348f, type: 2}
+  - {fileID: 11400000, guid: 8bec765616db044dba5e0eca122b205b, type: 2}
+  - {fileID: 11400000, guid: 8bec765616db044dba5e0eca122b205b, type: 2}
+  - {fileID: 11400000, guid: c19d7a2070dee40bdb10bdd1e03c43f1, type: 2}
+  - {fileID: 11400000, guid: 1e8376bc251e144439579c16721a02dd, type: 2}
+  - {fileID: 11400000, guid: 5461d3926e577437db81e4171e34682a, type: 2}
+  - {fileID: 11400000, guid: f5b98ab44ef824bbd826cb14c9818c47, type: 2}
+  enemyFusionIds:
   rewardStagePoints: 12
-  slotCount: 6
-  trapDamage: 36
+  slotCount: 8
+  restrictFormationSlots: 0
+  enemyPositions:
+  - {x: 2, y: 1}
+  - {x: 3, y: 1}
+  - {x: 2, y: 0}
+  - {x: 3, y: 0}
+  - {x: 1, y: 0}
+  - {x: 4, y: 0}
+  - {x: 0, y: 0}
+  - {x: 5, y: 0}
+  trapDamage: 21
   trapCount: 2
   reinforcementEnemy: []
   reinforcementInterval: 0
   reinforcementCount: 0
   reinforcementLimit: 0
   isBossStage: 0
-  enemyLevel: 45
+  enemyLevel: 33
   prerequisite: {fileID: 11400000, guid: 4e68e7e3544bf4906adaded7570585a1, type: 2}
   isCleared: 0

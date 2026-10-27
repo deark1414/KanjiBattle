@@ -266,6 +266,7 @@ public sealed class ScreenInfoRegion : MonoBehaviour
             var iconLayout = iconObject.GetComponent<LayoutElement>();
             iconLayout.preferredWidth = 72f;
             iconLayout.preferredHeight = 72f;
+            PieceMotifPresentation.Attach(icon.rectTransform, character);
         }
     }
 

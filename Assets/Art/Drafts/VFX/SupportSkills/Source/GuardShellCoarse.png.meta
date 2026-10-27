@@ -1,0 +1,2132 @@
+fileFormatVersion: 2
+guid: ad6e000ca6a934c848e7780e45cad3a2
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4325283122536749766
+    second: GuardShellCoarse_0
+  - first:
+      213: 746890103660092044
+    second: GuardShellCoarse_1
+  - first:
+      213: 6721854414695344722
+    second: GuardShellCoarse_2
+  - first:
+      213: -1476387933006322097
+    second: GuardShellCoarse_3
+  - first:
+      213: -3801010216424476980
+    second: GuardShellCoarse_4
+  - first:
+      213: -4766029502368853667
+    second: GuardShellCoarse_5
+  - first:
+      213: 2266566587570246974
+    second: GuardShellCoarse_6
+  - first:
+      213: 6470686480676522460
+    second: GuardShellCoarse_7
+  - first:
+      213: -622417455894506389
+    second: GuardShellCoarse_8
+  - first:
+      213: 4776990453448342726
+    second: GuardShellCoarse_9
+  - first:
+      213: 7459964373174527122
+    second: GuardShellCoarse_10
+  - first:
+      213: -3111362873853368103
+    second: GuardShellCoarse_11
+  - first:
+      213: 561151981162251387
+    second: GuardShellCoarse_12
+  - first:
+      213: -2144976106260491361
+    second: GuardShellCoarse_13
+  - first:
+      213: 8330533971926466481
+    second: GuardShellCoarse_14
+  - first:
+      213: 7661335755222541702
+    second: GuardShellCoarse_15
+  - first:
+      213: -8516271188459953073
+    second: GuardShellCoarse_16
+  - first:
+      213: 6252053452838480982
+    second: GuardShellCoarse_17
+  - first:
+      213: 4807674488066343102
+    second: GuardShellCoarse_18
+  - first:
+      213: 4817633171416841941
+    second: GuardShellCoarse_19
+  - first:
+      213: 2243756266652114211
+    second: GuardShellCoarse_20
+  - first:
+      213: 149072509599367186
+    second: GuardShellCoarse_21
+  - first:
+      213: 9210546712143678570
+    second: GuardShellCoarse_22
+  - first:
+      213: 1032334556249643652
+    second: GuardShellCoarse_23
+  - first:
+      213: -8209588605612037960
+    second: GuardShellCoarse_24
+  - first:
+      213: 1329761800246766185
+    second: GuardShellCoarse_25
+  - first:
+      213: -5711904678869076665
+    second: GuardShellCoarse_26
+  - first:
+      213: -852920851376679429
+    second: GuardShellCoarse_27
+  - first:
+      213: -8695989822129394238
+    second: GuardShellCoarse_28
+  - first:
+      213: -2037474928176350862
+    second: GuardShellCoarse_29
+  - first:
+      213: 5193617501808837291
+    second: GuardShellCoarse_30
+  - first:
+      213: 5881023907121181374
+    second: GuardShellCoarse_31
+  - first:
+      213: -7411260421288233661
+    second: GuardShellCoarse_32
+  - first:
+      213: 5650291127777131245
+    second: GuardShellCoarse_33
+  - first:
+      213: 6545366604436319666
+    second: GuardShellCoarse_34
+  - first:
+      213: 5880388054725834160
+    second: GuardShellCoarse_35
+  - first:
+      213: 535286592273481632
+    second: GuardShellCoarse_36
+  - first:
+      213: -2952366057489572047
+    second: GuardShellCoarse_37
+  - first:
+      213: 7412012989029720556
+    second: GuardShellCoarse_38
+  - first:
+      213: 616831610436162032
+    second: GuardShellCoarse_39
+  - first:
+      213: -4177016071752024029
+    second: GuardShellCoarse_40
+  - first:
+      213: -7261409216133346632
+    second: GuardShellCoarse_41
+  - first:
+      213: -7218516779377247584
+    second: GuardShellCoarse_42
+  - first:
+      213: -5446474995336204096
+    second: GuardShellCoarse_43
+  - first:
+      213: 8926569554333872906
+    second: GuardShellCoarse_44
+  - first:
+      213: -7010819701074102289
+    second: GuardShellCoarse_45
+  - first:
+      213: -3878124848618709231
+    second: GuardShellCoarse_46
+  - first:
+      213: 7763754865497860516
+    second: GuardShellCoarse_47
+  - first:
+      213: -7473528875856303547
+    second: GuardShellCoarse_48
+  - first:
+      213: 8008959379361409052
+    second: GuardShellCoarse_49
+  - first:
+      213: -7721990418918986835
+    second: GuardShellCoarse_50
+  - first:
+      213: -1182924712771032789
+    second: GuardShellCoarse_51
+  - first:
+      213: 2157503059702588146
+    second: GuardShellCoarse_52
+  - first:
+      213: 5665321080850694263
+    second: GuardShellCoarse_53
+  - first:
+      213: -6385634558593177622
+    second: GuardShellCoarse_54
+  - first:
+      213: 6353136864746700446
+    second: GuardShellCoarse_55
+  - first:
+      213: -2304362406662100088
+    second: GuardShellCoarse_56
+  - first:
+      213: -6230995344573101805
+    second: GuardShellCoarse_57
+  - first:
+      213: 3793671201528317670
+    second: GuardShellCoarse_58
+  - first:
+      213: 5818214498679115670
+    second: GuardShellCoarse_59
+  - first:
+      213: -1293950303888359275
+    second: GuardShellCoarse_60
+  - first:
+      213: 2776202740834949582
+    second: GuardShellCoarse_61
+  - first:
+      213: 2708652556697975907
+    second: GuardShellCoarse_62
+  - first:
+      213: -1847525667285729036
+    second: GuardShellCoarse_63
+  - first:
+      213: 8454854359491510445
+    second: GuardShellCoarse_64
+  - first:
+      213: -2692386797382754870
+    second: GuardShellCoarse_65
+  - first:
+      213: 6291979888184072021
+    second: GuardShellCoarse_66
+  - first:
+      213: -5528137866699848427
+    second: GuardShellCoarse_67
+  - first:
+      213: -336217985954741914
+    second: GuardShellCoarse_68
+  - first:
+      213: 5729147584013070450
+    second: GuardShellCoarse_69
+  - first:
+      213: 8692686909085463085
+    second: GuardShellCoarse_70
+  - first:
+      213: -6778663944254733430
+    second: GuardShellCoarse_71
+  - first:
+      213: -8208113254311543028
+    second: GuardShellCoarse_72
+  - first:
+      213: -3326114139605495160
+    second: GuardShellCoarse_73
+  - first:
+      213: 7238983958198809819
+    second: GuardShellCoarse_74
+  - first:
+      213: 5112742501621417952
+    second: GuardShellCoarse_75
+  - first:
+      213: 6298094407614880179
+    second: GuardShellCoarse_76
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: GuardShellCoarse_0
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 1068
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ca9bc7651e760c30800000000000000
+      internalID: 4325283122536749766
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_1
+      rect:
+        serializedVersion: 2
+        x: 540
+        y: 1078
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8a1ae2979c7d5a00800000000000000
+      internalID: 746890103660092044
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_2
+      rect:
+        serializedVersion: 2
+        x: 551
+        y: 1078
+        width: 29
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25aaecbe9f2d84d50800000000000000
+      internalID: 6721854414695344722
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_3
+      rect:
+        serializedVersion: 2
+        x: 593
+        y: 1086
+        width: 19
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f462c764ff0d28be0800000000000000
+      internalID: -1476387933006322097
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_4
+      rect:
+        serializedVersion: 2
+        x: 627
+        y: 1075
+        width: 43
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cce6366c859104bc0800000000000000
+      internalID: -3801010216424476980
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_5
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 1076
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d51d54a4b69abddb0800000000000000
+      internalID: -4766029502368853667
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_6
+      rect:
+        serializedVersion: 2
+        x: 796
+        y: 1062
+        width: 35
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e35d4e77d46747f10800000000000000
+      internalID: 2266566587570246974
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 67
+        width: 1243
+        height: 1008
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd985ad221f7cc950800000000000000
+      internalID: 6470686480676522460
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_8
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 1065
+        width: 23
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b64d76f1f9abc57f0800000000000000
+      internalID: -622417455894506389
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_9
+      rect:
+        serializedVersion: 2
+        x: 732
+        y: 1042
+        width: 43
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cc783102874b4240800000000000000
+      internalID: 4776990453448342726
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_10
+      rect:
+        serializedVersion: 2
+        x: 848
+        y: 1060
+        width: 13
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2942324a21e178760800000000000000
+      internalID: 7459964373174527122
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_11
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 1054
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d8a1a073f732d4d0800000000000000
+      internalID: -3111362873853368103
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_12
+      rect:
+        serializedVersion: 2
+        x: 802
+        y: 1052
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b74ce26f0cc99c700800000000000000
+      internalID: 561151981162251387
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_13
+      rect:
+        serializedVersion: 2
+        x: 729
+        y: 1045
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9394ae88938b32e0800000000000000
+      internalID: -2144976106260491361
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_14
+      rect:
+        serializedVersion: 2
+        x: 852
+        y: 1044
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1bf300aa2800c9370800000000000000
+      internalID: 8330533971926466481
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_15
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 1018
+        width: 9
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 685e9032748825a60800000000000000
+      internalID: 7661335755222541702
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_16
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 1003
+        width: 16
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f4463f8a97020d980800000000000000
+      internalID: -8516271188459953073
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_17
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 921
+        width: 126
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65c21359d71c3c650800000000000000
+      internalID: 6252053452838480982
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_18
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 986
+        width: 18
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb007e8897a48b240800000000000000
+      internalID: 4807674488066343102
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_19
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 1004
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5de707038dbabd240800000000000000
+      internalID: 4817633171416841941
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_20
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 1000
+        width: 17
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32d1b54cf6c632f10800000000000000
+      internalID: 2243756266652114211
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_21
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 1010
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 210427c58ac911200800000000000000
+      internalID: 149072509599367186
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_22
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 988
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6c47746f6f62df70800000000000000
+      internalID: 9210546712143678570
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_23
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 951
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48ade923fc6935e00800000000000000
+      internalID: 1032334556249643652
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_24
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 728
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b86662d8aea11e80800000000000000
+      internalID: -8209588605612037960
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_25
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 614
+        width: 39
+        height: 71
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96aa79bdf43447210800000000000000
+      internalID: 1329761800246766185
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_26
+      rect:
+        serializedVersion: 2
+        x: 1156
+        y: 566
+        width: 83
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 745fd1125fc3bb0b0800000000000000
+      internalID: -5711904678869076665
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_27
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 469
+        width: 7
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf55b203101d924f0800000000000000
+      internalID: -852920851376679429
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_28
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 365
+        width: 28
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cda0918453a15780800000000000000
+      internalID: -8695989822129394238
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_29
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 345
+        width: 19
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 279b84b095f69b3e0800000000000000
+      internalID: -2037474928176350862
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_30
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 354
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba24196d99f631840800000000000000
+      internalID: 5193617501808837291
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_31
+      rect:
+        serializedVersion: 2
+        x: 86
+        y: 337
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb2b983a5189d9150800000000000000
+      internalID: 5881023907121181374
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_32
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 317
+        width: 28
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 345f333d9e9e52990800000000000000
+      internalID: -7411260421288233661
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_33
+      rect:
+        serializedVersion: 2
+        x: 1061
+        y: 258
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dea72bc18ddd96e40800000000000000
+      internalID: 5650291127777131245
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_34
+      rect:
+        serializedVersion: 2
+        x: 297
+        y: 232
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bda1267f30d5da50800000000000000
+      internalID: 6545366604436319666
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_35
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 216
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b53267b7c55b9150800000000000000
+      internalID: 5880388054725834160
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_36
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 208
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0af7d71d158bd6700800000000000000
+      internalID: 535286592273481632
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_37
+      rect:
+        serializedVersion: 2
+        x: 898
+        y: 144
+        width: 80
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13fd96886b61707d0800000000000000
+      internalID: -2952366057489572047
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_38
+      rect:
+        serializedVersion: 2
+        x: 952
+        y: 198
+        width: 18
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce1a2b10b82ccd660800000000000000
+      internalID: 7412012989029720556
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_39
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 170
+        width: 52
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f19742e41d6f8800800000000000000
+      internalID: 616831610436162032
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_40
+      rect:
+        serializedVersion: 2
+        x: 943
+        y: 203
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3208f1673024806c0800000000000000
+      internalID: -4177016071752024029
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_41
+      rect:
+        serializedVersion: 2
+        x: 973
+        y: 192
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bacf9f5aca4a3b90800000000000000
+      internalID: -7261409216133346632
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_42
+      rect:
+        serializedVersion: 2
+        x: 418
+        y: 158
+        width: 31
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0aab5080c3da2db90800000000000000
+      internalID: -7218516779377247584
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_43
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 180
+        width: 30
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c030f039db3a64b0800000000000000
+      internalID: -5446474995336204096
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_44
+      rect:
+        serializedVersion: 2
+        x: 723
+        y: 180
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0333e4f6bb81eb70800000000000000
+      internalID: 8926569554333872906
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_45
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 167
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe7fa2570a094be90800000000000000
+      internalID: -7010819701074102289
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_46
+      rect:
+        serializedVersion: 2
+        x: 524
+        y: 158
+        width: 24
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11f57735ff12e2ac0800000000000000
+      internalID: -3878124848618709231
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_47
+      rect:
+        serializedVersion: 2
+        x: 524
+        y: 166
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a9e5318ae56ebb60800000000000000
+      internalID: 7763754865497860516
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_48
+      rect:
+        serializedVersion: 2
+        x: 818
+        y: 155
+        width: 17
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54ae5f77511b84890800000000000000
+      internalID: -7473528875856303547
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_49
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 123
+        width: 56
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c18ae5b4f1a852f60800000000000000
+      internalID: 8008959379361409052
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_50
+      rect:
+        serializedVersion: 2
+        x: 585
+        y: 111
+        width: 35
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dab2d5970aaf5d490800000000000000
+      internalID: -7721990418918986835
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_51
+      rect:
+        serializedVersion: 2
+        x: 593
+        y: 144
+        width: 9
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b29604bbd38659fe0800000000000000
+      internalID: -1182924712771032789
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_52
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 136
+        width: 10
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f224631a9df0fd10800000000000000
+      internalID: 2157503059702588146
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_53
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 142
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 77043a2c1834f9e40800000000000000
+      internalID: 5665321080850694263
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_54
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 145
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae76895933ba167a0800000000000000
+      internalID: -6385634558593177622
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_55
+      rect:
+        serializedVersion: 2
+        x: 866
+        y: 150
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e9e7aa07150ea2850800000000000000
+      internalID: 6353136864746700446
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_56
+      rect:
+        serializedVersion: 2
+        x: 874
+        y: 140
+        width: 43
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88b2425a9924500e0800000000000000
+      internalID: -2304362406662100088
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_57
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 136
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3198b915fbe0789a0800000000000000
+      internalID: -6230995344573101805
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_58
+      rect:
+        serializedVersion: 2
+        x: 573
+        y: 128
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e689b9abd3d5a430800000000000000
+      internalID: 3793671201528317670
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_59
+      rect:
+        serializedVersion: 2
+        x: 866
+        y: 109
+        width: 17
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69fcbc4a2437eb050800000000000000
+      internalID: 5818214498679115670
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_60
+      rect:
+        serializedVersion: 2
+        x: 894
+        y: 130
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 590c9b3ed07fa0ee0800000000000000
+      internalID: -1293950303888359275
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_61
+      rect:
+        serializedVersion: 2
+        x: 914
+        y: 119
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec9deef0fad078620800000000000000
+      internalID: 2776202740834949582
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_62
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 111
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 36cbfe53621179520800000000000000
+      internalID: 2708652556697975907
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_63
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 117
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f08408b1354c56e0800000000000000
+      internalID: -1847525667285729036
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_64
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 117
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da087258e3da55570800000000000000
+      internalID: 8454854359491510445
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_65
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 110
+        width: 17
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: acd9c000978b2aad0800000000000000
+      internalID: -2692386797382754870
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_66
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 107
+        width: 41
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5571d193f5a915750800000000000000
+      internalID: 6291979888184072021
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_67
+      rect:
+        serializedVersion: 2
+        x: 713
+        y: 112
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 51548f946eb1843b0800000000000000
+      internalID: -5528137866699848427
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_68
+      rect:
+        serializedVersion: 2
+        x: 721
+        y: 117
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 661021ce583855bf0800000000000000
+      internalID: -336217985954741914
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_69
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 114
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 270f2e29f55028f40800000000000000
+      internalID: 5729147584013070450
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_70
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 97
+        width: 18
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d223abf10b0a2a870800000000000000
+      internalID: 8692686909085463085
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_71
+      rect:
+        serializedVersion: 2
+        x: 575
+        y: 97
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a83c2febe095de1a0800000000000000
+      internalID: -6778663944254733430
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_72
+      rect:
+        serializedVersion: 2
+        x: 675
+        y: 101
+        width: 23
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c0fb590db7ce61e80800000000000000
+      internalID: -8208113254311543028
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_73
+      rect:
+        serializedVersion: 2
+        x: 737
+        y: 97
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 882196200d447d1d0800000000000000
+      internalID: -3326114139605495160
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_74
+      rect:
+        serializedVersion: 2
+        x: 742
+        y: 95
+        width: 15
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd4f0336e89067460800000000000000
+      internalID: 7238983958198809819
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_75
+      rect:
+        serializedVersion: 2
+        x: 681
+        y: 87
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e7cf2d773c14f640800000000000000
+      internalID: 5112742501621417952
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GuardShellCoarse_76
+      rect:
+        serializedVersion: 2
+        x: 860
+        y: 75
+        width: 13
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b952c7be73576750800000000000000
+      internalID: 6298094407614880179
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID:
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      GuardShellCoarse_0: 4325283122536749766
+      GuardShellCoarse_1: 746890103660092044
+      GuardShellCoarse_10: 7459964373174527122
+      GuardShellCoarse_11: -3111362873853368103
+      GuardShellCoarse_12: 561151981162251387
+      GuardShellCoarse_13: -2144976106260491361
+      GuardShellCoarse_14: 8330533971926466481
+      GuardShellCoarse_15: 7661335755222541702
+      GuardShellCoarse_16: -8516271188459953073
+      GuardShellCoarse_17: 6252053452838480982
+      GuardShellCoarse_18: 4807674488066343102
+      GuardShellCoarse_19: 4817633171416841941
+      GuardShellCoarse_2: 6721854414695344722
+      GuardShellCoarse_20: 2243756266652114211
+      GuardShellCoarse_21: 149072509599367186
+      GuardShellCoarse_22: 9210546712143678570
+      GuardShellCoarse_23: 1032334556249643652
+      GuardShellCoarse_24: -8209588605612037960
+      GuardShellCoarse_25: 1329761800246766185
+      GuardShellCoarse_26: -5711904678869076665
+      GuardShellCoarse_27: -852920851376679429
+      GuardShellCoarse_28: -8695989822129394238
+      GuardShellCoarse_29: -2037474928176350862
+      GuardShellCoarse_3: -1476387933006322097
+      GuardShellCoarse_30: 5193617501808837291
+      GuardShellCoarse_31: 5881023907121181374
+      GuardShellCoarse_32: -7411260421288233661
+      GuardShellCoarse_33: 5650291127777131245
+      GuardShellCoarse_34: 6545366604436319666
+      GuardShellCoarse_35: 5880388054725834160
+      GuardShellCoarse_36: 535286592273481632
+      GuardShellCoarse_37: -2952366057489572047
+      GuardShellCoarse_38: 7412012989029720556
+      GuardShellCoarse_39: 616831610436162032
+      GuardShellCoarse_4: -3801010216424476980
+      GuardShellCoarse_40: -4177016071752024029
+      GuardShellCoarse_41: -7261409216133346632
+      GuardShellCoarse_42: -7218516779377247584
+      GuardShellCoarse_43: -5446474995336204096
+      GuardShellCoarse_44: 8926569554333872906
+      GuardShellCoarse_45: -7010819701074102289
+      GuardShellCoarse_46: -3878124848618709231
+      GuardShellCoarse_47: 7763754865497860516
+      GuardShellCoarse_48: -7473528875856303547
+      GuardShellCoarse_49: 8008959379361409052
+      GuardShellCoarse_5: -4766029502368853667
+      GuardShellCoarse_50: -7721990418918986835
+      GuardShellCoarse_51: -1182924712771032789
+      GuardShellCoarse_52: 2157503059702588146
+      GuardShellCoarse_53: 5665321080850694263
+      GuardShellCoarse_54: -6385634558593177622
+      GuardShellCoarse_55: 6353136864746700446
+      GuardShellCoarse_56: -2304362406662100088
+      GuardShellCoarse_57: -6230995344573101805
+      GuardShellCoarse_58: 3793671201528317670
+      GuardShellCoarse_59: 5818214498679115670
+      GuardShellCoarse_6: 2266566587570246974
+      GuardShellCoarse_60: -1293950303888359275
+      GuardShellCoarse_61: 2776202740834949582
+      GuardShellCoarse_62: 2708652556697975907
+      GuardShellCoarse_63: -1847525667285729036
+      GuardShellCoarse_64: 8454854359491510445
+      GuardShellCoarse_65: -2692386797382754870
+      GuardShellCoarse_66: 6291979888184072021
+      GuardShellCoarse_67: -5528137866699848427
+      GuardShellCoarse_68: -336217985954741914
+      GuardShellCoarse_69: 5729147584013070450
+      GuardShellCoarse_7: 6470686480676522460
+      GuardShellCoarse_70: 8692686909085463085
+      GuardShellCoarse_71: -6778663944254733430
+      GuardShellCoarse_72: -8208113254311543028
+      GuardShellCoarse_73: -3326114139605495160
+      GuardShellCoarse_74: 7238983958198809819
+      GuardShellCoarse_75: 5112742501621417952
+      GuardShellCoarse_76: 6298094407614880179
+      GuardShellCoarse_8: -622417455894506389
+      GuardShellCoarse_9: 4776990453448342726
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

@@ -15,8 +15,9 @@ MonoBehaviour:
   characterName: "\u4E09"
   characterId: 3
   isBoss: 0
-  icon: {fileID: 21300000, guid: 5ddca10484fa44ef3b45f86f0e2ee4ec, type: 3}
-  enemyIcon: {fileID: 21300000, guid: 964639eaad9474660acac3767e1ec6d3, type: 3}
+  isEvolved: 0
+  icon: {fileID: 21300000, guid: 45d5c0355f0f443f9bc5b6c13c4522e5, type: 3}
+  enemyIcon: {fileID: 21300000, guid: 68a2d29b1029341e6b3bac76e463c068, type: 3}
   category: 1
   baseHP: 160
   baseAttack: 15

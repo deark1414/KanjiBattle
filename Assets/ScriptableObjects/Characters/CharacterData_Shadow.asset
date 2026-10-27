@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 845372d9678234641a9d0cb0cb42a35c, type: 3}
+  m_Name: CharacterData_Shadow
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterData
+  characterName: "\u5F71"
+  characterId: 29
+  isBoss: 0
+  isEvolved: 0
+  icon: {fileID: 21300000, guid: c4acba70b8ef04f55aa2c701b73282b8, type: 3}
+  enemyIcon: {fileID: 21300000, guid: dcd93588b45974f65903ffbcc167ad68, type: 3}
+  category: 0
+  baseHP: 150
+  baseAttack: 22
+  baseDefense: 12
+  production: 0
+  skillType: 26
+  skillChance: 100
+  skillPower: 1
+  level: 1
+  maxLevel: 50
+  attackGrowth: 2
+  hpGrowth: 9
+  defenseGrowth: 1

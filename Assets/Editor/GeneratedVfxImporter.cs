@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEditor;
 using UnityEditor.U2D.Sprites;
 using UnityEngine;
@@ -32,6 +33,44 @@ namespace KanjiBattle.Editor
             {
                 ConfigureWeaponMotionTexture(path);
             }
+        }
+
+        public static void ConfigureReviewedNumberAuraTextures()
+        {
+            string[] tiers = { "Low", "Mid", "High" };
+            string[] strengths = { "Weak", "Medium", "Strong" };
+            string[] counts = { "OneFireball", "TwoFireballs", "ThreeFireballs" };
+            foreach (string tier in tiers)
+            {
+                for (int i = 0; i < strengths.Length; i++)
+                {
+                    string folder = $"NumberAura_{tier}_{strengths[i]}";
+                    string source = $"Assets/Art/Drafts/VFX/{folder}/{folder}_{counts[i]}_draft.png";
+                    int frame = folder == "NumberAura_High_Strong" ? 7 : 1;
+                    string destination = $"Assets/Resources/VFX/Animated/{folder}/frame_{frame:00}.png";
+                    File.Copy(source, destination, true);
+                    AssetDatabase.ImportAsset(destination, ImportAssetOptions.ForceSynchronousImport);
+                    var importer = (TextureImporter)AssetImporter.GetAtPath(destination);
+                    importer.textureType = TextureImporterType.Default;
+                    importer.spriteImportMode = SpriteImportMode.None;
+                    importer.alphaSource = TextureImporterAlphaSource.FromInput;
+                    importer.alphaIsTransparency = true;
+                    importer.mipmapEnabled = false;
+                    importer.filterMode = FilterMode.Point;
+                    importer.wrapMode = TextureWrapMode.Clamp;
+                    importer.maxTextureSize = 512;
+                    importer.textureCompression = TextureImporterCompression.Uncompressed;
+                    var webGl = importer.GetPlatformTextureSettings("WebGL");
+                    webGl.name = "WebGL";
+                    webGl.overridden = true;
+                    webGl.maxTextureSize = 512;
+                    webGl.format = TextureImporterFormat.RGBA32;
+                    webGl.textureCompression = TextureImporterCompression.Uncompressed;
+                    importer.SetPlatformTextureSettings(webGl);
+                    importer.SaveAndReimport();
+                }
+            }
+            Debug.Log("Reviewed number fireball auras: all nine textures imported. Passed.");
         }
 
         private static void ConfigureGrid(string path, int columns, int rows, int cellSize)

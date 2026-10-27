@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 845372d9678234641a9d0cb0cb42a35c, type: 3}
   m_Name: CharacterData_Tiger
   m_EditorClassIdentifier: 
-  characterName: "\u864E"
+  characterName: "\u5BC5"
   characterId: 25
   isBoss: 0
-  icon: {fileID: 21300000, guid: 563f5b1c8f90f4b1fa78ddabeef3d3ff, type: 3}
-  enemyIcon: {fileID: 21300000, guid: ece30fe6080be478e91d32f034bf7592, type: 3}
+  isEvolved: 0
+  icon: {fileID: 21300000, guid: 1a0cfa50a50cf4e1ebef4de26cdbc2c7, type: 3}
+  enemyIcon: {fileID: 21300000, guid: b5ba369c928624553a50018bc500a6f1, type: 3}
   category: 8
   baseHP: 120
   baseAttack: 42

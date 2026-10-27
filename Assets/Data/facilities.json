@@ -469,5 +469,22 @@
     "levelCapIncreasePerUnlock": 0,
     "upgradeStagePointCosts": [],
     "facilityLevelCapUnlocks": []
+  },
+  {
+    "id": 13,
+    "fileName": "FacilityData_FusionHall",
+    "facilityName": "融合所",
+    "effectType": "Fusion",
+    "unlockType": "StagePoint",
+    "requiredStageId": 20,
+    "unlockStagePointCost": 10,
+    "initialMaxLevel": 0,
+    "finalMaxLevel": 0,
+    "baseCost": 0,
+    "growthFactor": 1,
+    "effectPerLevel": 0,
+    "levelCapIncreasePerUnlock": 0,
+    "upgradeStagePointCosts": [],
+    "facilityLevelCapUnlocks": []
   }
 ]

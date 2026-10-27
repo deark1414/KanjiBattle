@@ -1,4 +1,8 @@
 using UnityEngine;
+using System.Collections.Generic;
+using System.Linq;
+
+public enum BattleAttackBuff { Warrior, Forge, Dice }
 
 // Runtime-only combat state. BattleCharacter remains responsible for Unity UI and presentation.
 public sealed class BattleCharacterState
@@ -11,25 +15,76 @@ public sealed class BattleCharacterState
     public bool IsDead { get; set; }
     public int NumberPassiveAttackBonusPercent { get; private set; }
     public int StunTurns { get; private set; }
+    public int WindBoostTurns { get; set; }
+    public int WindSlowTurns { get; set; }
+    public bool WindBoost { get=>WindBoostTurns>0; set=>WindBoostTurns=value?Mathf.Max(1,WindBoostTurns):0; }
+    public bool WindSlow { get=>WindSlowTurns>0; set=>WindSlowTurns=value?Mathf.Max(1,WindSlowTurns):0; }
+    public IronForm IronForm { get; set; }
+    public bool CoalAwake { get; set; }
+    public int CoalAttackBonus { get; private set; }=40;
+    public bool CocoonShield { get; set; }
+    public int DiceDefensePercent { get; set; }
+    public int OxDefensePercent { get; private set; }
+    private int lastOxDefenseTurn = -1;
+
+    public bool ApplyOxDefense(int turn)
+    {
+        if (IsDead || CurrentHP <= 0 || turn == lastOxDefenseTurn || OxDefensePercent >= 30) return false;
+        lastOxDefenseTurn = turn;
+        OxDefensePercent = Mathf.Min(30, OxDefensePercent + 10);
+        return true;
+    }
+    private readonly Dictionary<BattleAttackBuff, (int percent, int turns)> attackBuffs = new();
 
     public void Initialize(CharacterData data, int level, bool isAlly)
     {
         Level = level;
-        float healthMultiplier = isAlly && FacilityManager.Instance != null
-            ? FacilityManager.Instance.GetHealthMultiplier()
-            : 1f;
-        MaxHP = Mathf.Max(1, Mathf.RoundToInt(data.GetMaxHP(level) * healthMultiplier));
+        MaxHP = isAlly ? CharacterInvestment.Health(data,level) : Mathf.Max(1,data.GetMaxHP(level));
         CurrentHP = MaxHP;
-        Attack = data.GetAttack(level);
-        Defense = data.GetDefense(level);
+        Attack = isAlly ? CharacterInvestment.Attack(data,level) : data.GetAttack(level);
+        Defense = isAlly ? CharacterInvestment.Defense(data,level) : data.GetDefense(level);
         IsDead = false;
         NumberPassiveAttackBonusPercent = 0;
         StunTurns = 0;
+        WindBoost = WindSlow = false;
+        IronForm = IronForm.Sword;
+        attackBuffs.Clear();
+        CoalAwake = CocoonShield = false;
+        CoalAttackBonus=Mathf.RoundToInt(40*(isAlly?CharacterInvestment.Effect(data):1));
+        DiceDefensePercent = 0;
+        OxDefensePercent = 0;
+        lastOxDefenseTurn = -1;
     }
 
     public int GetEffectiveAttack()
     {
-        return Mathf.RoundToInt(Attack * (1f + NumberPassiveAttackBonusPercent / 100f));
+        return Mathf.RoundToInt(Attack * (1f + (NumberPassiveAttackBonusPercent + AttackBuffPercent + (CoalAwake ? CoalAttackBonus : 0)) / 100f));
+    }
+
+    public void SetVitals(int hp, int currentHP, int attack, int defense)
+    {
+        MaxHP = Mathf.Max(1, hp); CurrentHP = Mathf.Clamp(currentHP, 1, MaxHP);
+        Attack = Mathf.Max(1, attack); Defense = Mathf.Max(0, defense);
+    }
+
+    public int AttackBuffPercent => attackBuffs.Values.Sum(buff => buff.percent);
+    public void RemoveAttackBuff(BattleAttackBuff source) => attackBuffs.Remove(source);
+
+    public void ApplyAttackBuff(BattleAttackBuff source, int percent, int turns)
+    {
+        if (percent <= 0 || turns <= 0) return;
+        attackBuffs.TryGetValue(source, out var existing);
+        attackBuffs[source] = (Mathf.Max(existing.percent, percent), Mathf.Max(existing.turns, turns));
+    }
+
+    public void TickAttackBuffs()
+    {
+        foreach (var source in attackBuffs.Keys.ToArray())
+        {
+            var buff = attackBuffs[source];
+            if (buff.turns <= 1) attackBuffs.Remove(source);
+            else attackBuffs[source] = (buff.percent, buff.turns - 1);
+        }
     }
 
     public void SetNumberPassiveAttackBonus(int percent)

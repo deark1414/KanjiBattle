@@ -15,8 +15,9 @@ MonoBehaviour:
   characterName: "\u69CC"
   characterId: 12
   isBoss: 0
-  icon: {fileID: 21300000, guid: f001087e49ad9463a96d03cd7a33b54e, type: 3}
-  enemyIcon: {fileID: 21300000, guid: 00280d9d37f4849c382b9a84927c39b5, type: 3}
+  isEvolved: 0
+  icon: {fileID: 21300000, guid: 88dedfe96542b4ed08e339df6784de6e, type: 3}
+  enemyIcon: {fileID: 21300000, guid: 4f016340d28bf4624a0d3c56c2863e78, type: 3}
   category: 4
   baseHP: 160
   baseAttack: 30

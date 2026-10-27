@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
 
     private BattleManager battleManager;
     private GameObject settingsModal;
+    private Toggle openingToggle;
     private GameObject progressInfoModal;
     private TextMeshProUGUI settingsResetButtonText;
     private TextMeshProUGUI progressInfoTitle;
@@ -32,7 +33,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        ShowTop();
+        TutorialDirector.Ensure(this).BeginStartup();
     }
 
     private void Awake()
@@ -47,6 +48,8 @@ public class UIManager : MonoBehaviour
 
     private void HideAll()
     {
+        TutorialDirector.Instance?.CancelAll();
+        CharacterCodexUI.CloseAny();
         SkillTooltipPresenter.HideAll();
         CloseSettings();
         CloseProgressInfo();
@@ -99,12 +102,13 @@ public class UIManager : MonoBehaviour
         ModernWafuuPresentation.ApplyScreenChrome();
         var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
         tabs?.SetNavigationVisible(true);
+        TutorialDirector.Instance?.RequestOnce("formation",FormationPanel);
     }
 
     public void ShowBattle()
     {
         HideAll();
-        ModernWafuuPresentation.SetGlobalStatusVisible(false);
+        ModernWafuuPresentation.SetGlobalStatusVisible(true);
         if (BattlePanel != null) BattlePanel.SetActive(true);
         var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
         tabs?.SetNavigationVisible(false);
@@ -120,11 +124,27 @@ public class UIManager : MonoBehaviour
         var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
         tabs?.SetNavigationVisible(true);
         tabs?.HighlightFacility();
+        TutorialDirector.Instance?.RequestOnce("castle",FacilityPanel);
+    }
+
+    public void ShowCodex()
+    {
+        HideAll();
+        ModernWafuuPresentation.SetGlobalStatusVisible(true);
+        GameAudio.Instance.PlayBgm(GameBgm.Top);
+        ModernWafuuPresentation.ApplyScreenChrome();
+        CharacterCodexUI.OpenCodex(TopPanel != null ? TopPanel.transform.parent : transform);
+        var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
+        tabs?.SetNavigationVisible(true);
+        tabs?.HighlightCodex();
+        TutorialDirector.Instance?.RequestOnce("codex",TopPanel!=null?TopPanel.transform.parent.gameObject:gameObject,
+            ()=>CharacterCodexUI.IsCodexScreenOpen);
     }
 
     public void ShowSettings()
     {
         EnsureSettingsModal();
+        openingToggle.SetIsOnWithoutNotify(TutorialProgress.OpeningEnabled);
         settingsModal.SetActive(true);
         settingsModal.transform.SetAsLastSibling();
     }
@@ -158,7 +178,7 @@ public class UIManager : MonoBehaviour
         var allies = new System.Collections.Generic.List<CharacterData>(FormationUI.Instance.GetFormation());
 
         HideAll();
-        ModernWafuuPresentation.SetGlobalStatusVisible(false);
+        ModernWafuuPresentation.SetGlobalStatusVisible(true);
         if (BattlePanel != null) BattlePanel.SetActive(true);
         var tabs = TabManager.Instance != null ? TabManager.Instance : FindAnyObjectByType<TabManager>();
         tabs?.SetNavigationVisible(false);
@@ -190,23 +210,29 @@ public class UIManager : MonoBehaviour
 
         settingsModal = CreateModalRoot(canvas.transform, "SettingsModal", CloseSettings);
         Image dialog = CreateDialog(settingsModal.transform, "SettingsDialog");
+        dialog.gameObject.AddComponent<GuideSettingsLayout>();
         Transform dialogTransform = dialog.transform;
 
         TextMeshProUGUI title = CreateText(dialogTransform, "Title", "設定", 28f, TextAlignmentOptions.Left, new Color(1f, 0.92f, 0.70f));
-        Place(title.rectTransform, new Vector2(0.08f, 0.79f), new Vector2(0.72f, 0.93f));
-        CreateCloseButton(dialogTransform, CloseSettings);
+        Place(title.rectTransform, new Vector2(0.08f, 0.87f), new Vector2(0.72f, 0.98f));
+        var closeSettings=CreateCloseButton(dialogTransform, CloseSettings);
+        Place(closeSettings.GetComponent<RectTransform>(),new(.78f,.88f),new(.94f,.98f));
 
-        CreateText(dialogTransform, "AudioCaption", "音量", 16f, TextAlignmentOptions.Left, new Color(0.88f, 0.79f, 0.58f));
-        Place(dialogTransform.Find("AudioCaption").GetComponent<RectTransform>(), new Vector2(0.08f, 0.65f), new Vector2(0.90f, 0.74f));
-
-        Toggle bgmToggle = CreateToggle(dialogTransform, "BgmToggle", "BGM", new Vector2(0.08f, 0.49f), new Vector2(0.92f, 0.62f));
-        Toggle seToggle = CreateToggle(dialogTransform, "SeToggle", "SE", new Vector2(0.08f, 0.34f), new Vector2(0.92f, 0.47f));
+        Toggle bgmToggle = CreateToggle(dialogTransform, "BgmToggle", "BGM", new Vector2(0.08f, 0.72f), new Vector2(0.92f, 0.83f));
+        Toggle seToggle = CreateToggle(dialogTransform, "SeToggle", "SE", new Vector2(0.08f, 0.59f), new Vector2(0.92f, 0.70f));
         bgmToggle.onValueChanged.AddListener(GameAudio.Instance.SetBgmEnabled);
         seToggle.onValueChanged.AddListener(GameAudio.Instance.SetSfxEnabled);
         bgmToggle.SetIsOnWithoutNotify(GameAudio.Instance.BgmEnabled);
         seToggle.SetIsOnWithoutNotify(GameAudio.Instance.SfxEnabled);
+        openingToggle=CreateToggle(dialogTransform,"OpeningToggle","起動時にオープニングを表示",new(.08f,.46f),new(.92f,.57f));
+        openingToggle.SetIsOnWithoutNotify(TutorialProgress.OpeningEnabled);
+        openingToggle.onValueChanged.AddListener(value=>TutorialProgress.OpeningEnabled=value);
+        var help=CreateActionButton(dialogTransform,"ReviewTutorialsButton","遊び方を見直す",new(.08f,.32f),new(.92f,.43f));
+        help.onClick.AddListener(()=>TutorialDirector.Ensure(this).ShowHelp());
+        var replay=CreateActionButton(dialogTransform,"ReplayOpeningButton","オープニングを見る",new(.08f,.19f),new(.92f,.30f));
+        replay.onClick.AddListener(()=>TutorialDirector.Ensure(this).ShowOpening());
 
-        Button reset = CreateActionButton(dialogTransform, "ResetProgressButton", "進行データを削除", new Vector2(0.08f, 0.11f), new Vector2(0.92f, 0.27f), true);
+        Button reset = CreateActionButton(dialogTransform, "ResetProgressButton", "進行データを削除", new Vector2(0.08f, 0.04f), new Vector2(0.92f, 0.15f), true);
         settingsResetButtonText = reset.GetComponentInChildren<TextMeshProUGUI>(true);
         reset.onClick.AddListener(HandleResetDataButtonClicked);
         SetResetDataButtonText("進行データを削除");
@@ -227,11 +253,16 @@ public class UIManager : MonoBehaviour
         PlayerInventory.Instance?.ResetProgress();
         FacilityManager.Instance?.ResetProgress();
         ResearchBondService.Instance.ResetProgress();
+        CharacterRecords.ResetProgress();
+        BattleFusionRules.ResetProgress();
+        PlayerSkillRules.ResetProgress();
+        CastleTree.ResetProgress();
+        TutorialProgress.ResetProgress();
         GameManager.Instance?.ResetProgress();
         GameManager.Instance?.ResetRuntimeFacilityEffects();
         SetResetDataButtonText("削除しました");
         CloseSettings();
-        ShowTop();
+        TutorialDirector.Ensure(this).BeginStartup();
         Debug.Log("[UIManager] 進行データを削除しました。");
     }
 
@@ -313,7 +344,7 @@ public class UIManager : MonoBehaviour
             case ProgressInfoKind.PlayerExperience:
                 return "局の勝利と軍勢の稽古で獲得します。必要量に達すると軍師レベルが上がり、解放済みの駒がまとめて成長します。上限中に得た経験値も蓄積され、昇段櫓で上限を解放すると自動的に反映されます。";
             default:
-                return "局の勝利報酬です。城下で施設を解放・強化し、編成枠、経験値、縁、戦闘速度などを整えます。";
+                return "局の勝利報酬です。城下のツリーで仲間加入・施設強化・編成枠の増加に使います。";
         }
     }
 

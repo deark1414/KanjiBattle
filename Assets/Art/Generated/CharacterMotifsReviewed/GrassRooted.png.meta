@@ -1,0 +1,754 @@
+fileFormatVersion: 2
+guid: f27a036b92fee440f97af1edd3c7b293
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2424002746837813007
+    second: GrassRooted_0
+  - first:
+      213: 6961865515008515400
+    second: GrassRooted_1
+  - first:
+      213: -8085915851126266874
+    second: GrassRooted_2
+  - first:
+      213: 7191014284073425297
+    second: GrassRooted_3
+  - first:
+      213: -67731692562344360
+    second: GrassRooted_4
+  - first:
+      213: -8950337376140149027
+    second: GrassRooted_5
+  - first:
+      213: 3065390079583497306
+    second: GrassRooted_6
+  - first:
+      213: 8976749648983067449
+    second: GrassRooted_7
+  - first:
+      213: -2864309096905684480
+    second: GrassRooted_8
+  - first:
+      213: -2781040285639013080
+    second: GrassRooted_9
+  - first:
+      213: 7204768885023023852
+    second: GrassRooted_10
+  - first:
+      213: 9183800811526942729
+    second: GrassRooted_11
+  - first:
+      213: -8620536454222244246
+    second: GrassRooted_12
+  - first:
+      213: 5968392720091141613
+    second: GrassRooted_13
+  - first:
+      213: 7589255073516725043
+    second: GrassRooted_14
+  - first:
+      213: -611210836320099232
+    second: GrassRooted_15
+  - first:
+      213: 8932862458536075615
+    second: GrassRooted_16
+  - first:
+      213: 2133714864963123921
+    second: GrassRooted_17
+  - first:
+      213: -128470716649913587
+    second: GrassRooted_18
+  - first:
+      213: 1524108584656840298
+    second: GrassRooted_19
+  - first:
+      213: 1753543160056838089
+    second: GrassRooted_20
+  - first:
+      213: -6434214270836747049
+    second: GrassRooted_21
+  - first:
+      213: -2405906165085444482
+    second: GrassRooted_22
+  - first:
+      213: -5203088897747788751
+    second: GrassRooted_23
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: GrassRooted_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1229
+        height: 1220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f07c6d3c7a9c3a120800000000000000
+      internalID: 2424002746837813007
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_1
+      rect:
+        serializedVersion: 2
+        x: 498
+        y: 1222
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84ddf14ecc38d9060800000000000000
+      internalID: 6961865515008515400
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_2
+      rect:
+        serializedVersion: 2
+        x: 538
+        y: 1223
+        width: 44
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6042be9df5e09cf80800000000000000
+      internalID: -8085915851126266874
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_3
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 1219
+        width: 13
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 199d4f8446d9bc360800000000000000
+      internalID: 7191014284073425297
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_4
+      rect:
+        serializedVersion: 2
+        x: 595
+        y: 1219
+        width: 51
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85619cc626e5f0ff0800000000000000
+      internalID: -67731692562344360
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_5
+      rect:
+        serializedVersion: 2
+        x: 605
+        y: 1223
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ddeb34bc3930ac380800000000000000
+      internalID: -8950337376140149027
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_6
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 1221
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5ca49749047a8a20800000000000000
+      internalID: 3065390079583497306
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_7
+      rect:
+        serializedVersion: 2
+        x: 635
+        y: 1221
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93b8f31be32d39c70800000000000000
+      internalID: 8976749648983067449
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_8
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1187
+        width: 9
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00a44085d0eef38d0800000000000000
+      internalID: -2864309096905684480
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_9
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 1179
+        width: 8
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82d8f644892c769d0800000000000000
+      internalID: -2781040285639013080
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_10
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 1189
+        width: 15
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce2a590e02b7cf360800000000000000
+      internalID: 7204768885023023852
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_11
+      rect:
+        serializedVersion: 2
+        x: 508
+        y: 1179
+        width: 10
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 900f1032e2a637f70800000000000000
+      internalID: 9183800811526942729
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_12
+      rect:
+        serializedVersion: 2
+        x: 715
+        y: 1173
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6617c8b4c3bd5880800000000000000
+      internalID: -8620536454222244246
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_13
+      rect:
+        serializedVersion: 2
+        x: 533
+        y: 1159
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de55f099e8df3d250800000000000000
+      internalID: 5968392720091141613
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_14
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 1160
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 333abce9743725960800000000000000
+      internalID: 7589255073516725043
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_15
+      rect:
+        serializedVersion: 2
+        x: 595
+        y: 1150
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 06465429bfa8487f0800000000000000
+      internalID: -611210836320099232
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_16
+      rect:
+        serializedVersion: 2
+        x: 605
+        y: 1159
+        width: 13
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f512774e317e7fb70800000000000000
+      internalID: 8932862458536075615
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_17
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 1143
+        width: 19
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1daf8126d5a7c9d10800000000000000
+      internalID: 2133714864963123921
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_18
+      rect:
+        serializedVersion: 2
+        x: 645
+        y: 1140
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d03ca0a5094973ef0800000000000000
+      internalID: -128470716649913587
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_19
+      rect:
+        serializedVersion: 2
+        x: 802
+        y: 1130
+        width: 11
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a662893cea8b62510800000000000000
+      internalID: 1524108584656840298
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_20
+      rect:
+        serializedVersion: 2
+        x: 603
+        y: 1126
+        width: 15
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9c7f081a636d55810800000000000000
+      internalID: 1753543160056838089
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_21
+      rect:
+        serializedVersion: 2
+        x: 865
+        y: 1107
+        width: 17
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d4d60ae53415b6a0800000000000000
+      internalID: -6434214270836747049
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_22
+      rect:
+        serializedVersion: 2
+        x: 201
+        y: 29
+        width: 7
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e76e82307118c9ed0800000000000000
+      internalID: -2405906165085444482
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrassRooted_23
+      rect:
+        serializedVersion: 2
+        x: 1129
+        y: 43
+        width: 12
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13cd6f2f63aeac7b0800000000000000
+      internalID: -5203088897747788751
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID:
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      GrassRooted_0: 2424002746837813007
+      GrassRooted_1: 6961865515008515400
+      GrassRooted_10: 7204768885023023852
+      GrassRooted_11: 9183800811526942729
+      GrassRooted_12: -8620536454222244246
+      GrassRooted_13: 5968392720091141613
+      GrassRooted_14: 7589255073516725043
+      GrassRooted_15: -611210836320099232
+      GrassRooted_16: 8932862458536075615
+      GrassRooted_17: 2133714864963123921
+      GrassRooted_18: -128470716649913587
+      GrassRooted_19: 1524108584656840298
+      GrassRooted_2: -8085915851126266874
+      GrassRooted_20: 1753543160056838089
+      GrassRooted_21: -6434214270836747049
+      GrassRooted_22: -2405906165085444482
+      GrassRooted_23: -5203088897747788751
+      GrassRooted_3: 7191014284073425297
+      GrassRooted_4: -67731692562344360
+      GrassRooted_5: -8950337376140149027
+      GrassRooted_6: 3065390079583497306
+      GrassRooted_7: 8976749648983067449
+      GrassRooted_8: -2864309096905684480
+      GrassRooted_9: -2781040285639013080
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

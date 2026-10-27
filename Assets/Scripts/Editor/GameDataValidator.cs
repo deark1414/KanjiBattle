@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Newtonsoft.Json.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -42,6 +44,16 @@ public static class GameDataValidator
 
         HashSet<int> stageIds = ValidateStages(stageDatabase, characterIds, errors);
         ValidateJsonIds<StageJson>("Assets/Data/stages.json", entry => entry.stageId, stageIds, "stages", errors);
+        if (stageDatabase != null && File.Exists("Assets/Data/stages.json"))
+            foreach (var row in JArray.Parse(File.ReadAllText("Assets/Data/stages.json")))
+            {
+                var stage=stageDatabase.GetStageById((int)row["stageId"]);
+                if(stage==null)continue;
+                var ids=stage.enemyPool.Select(data=>data.characterId).Concat(stage.enemyFusionIds);
+                if(!ids.SequenceEqual(row["enemyIds"].Values<int>()) || stage.enemyLevel!=(int)row["enemyLevel"]
+                    || stage.isBossStage!=(bool)row["isBossStage"])
+                    errors.Add(stage.name+" enemy formation JSON differs from asset.");
+            }
 
         if (errors.Count > 0)
         {
@@ -105,6 +117,11 @@ public static class GameDataValidator
 
             AddPositiveUniqueId(ids, stage.stageId, $"stage '{stage.name}'", errors);
             ValidateCharacterReferences(stage.enemyPool, stage.name + " enemyPool", characterIds, errors);
+            foreach (int fusionId in stage.enemyFusionIds)
+                if (BattleFusionRules.GetRecipe(fusionId) == null)
+                    errors.Add(stage.name + " contains an unknown enemy fusion: " + fusionId);
+            try { CampaignFormationRules.EnemyPositions(stage); }
+            catch (ArgumentException exception) { errors.Add(exception.Message); }
             ValidateCharacterReferences(stage.reinforcementEnemy, stage.name + " reinforcementEnemy", characterIds, errors);
             if (stage.prerequisite != null && stage.prerequisite.stageId >= stage.stageId)
             {

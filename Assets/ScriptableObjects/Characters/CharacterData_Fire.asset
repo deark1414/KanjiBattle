@@ -15,8 +15,9 @@ MonoBehaviour:
   characterName: "\u706B"
   characterId: 19
   isBoss: 0
-  icon: {fileID: 21300000, guid: 1c5591931f9d545cb9e72960e9fadc33, type: 3}
-  enemyIcon: {fileID: 21300000, guid: 1383b5cc8146c4ad6996342c866e792e, type: 3}
+  isEvolved: 0
+  icon: {fileID: 21300000, guid: 1ec48e124b31b4f7f946c65e4910f698, type: 3}
+  enemyIcon: {fileID: 21300000, guid: 16f7f623f69fc48e3ae14357baab99a4, type: 3}
   category: 7
   baseHP: 120
   baseAttack: 30

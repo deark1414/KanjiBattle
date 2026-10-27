@@ -4,6 +4,33 @@ using UnityEngine;
 // Shared skill geometry for battle, previews, and regression checks.
 public static class BattleRangeService
 {
+    public static int MinimumRange(SkillType skill) => skill is SkillType.Arrow or SkillType.Gun ? 2 : 1;
+
+    public static int Distance(Vector2Int from, Vector2Int to) =>
+        Mathf.Max(Mathf.Abs(to.x - from.x), Mathf.Abs(to.y - from.y));
+
+    public static bool CanTargetCell(SkillType skill, Vector2Int from, Vector2Int to,
+        int cols, int rows, ISet<Vector2Int> friendlyCells = null)
+    {
+        skill = BattleActionRules.GeometrySkill(skill);
+        if (to.x < 0 || to.x >= cols || to.y < 0 || to.y >= rows) return false;
+        int distance = Distance(from, to);
+        if (skill == SkillType.WaterHeal) return distance <= 1;
+        if (distance < MinimumRange(skill)) return false;
+        if (skill is SkillType.Stone or SkillType.Fireball or SkillType.ThreadPull) return distance <= 2;
+        if (skill is SkillType.ScatterShot or SkillType.ChainLightning) return distance <= 3;
+        if (skill is not (SkillType.Arrow or SkillType.Gun or SkillType.Spear)) return distance == 1;
+
+        Vector2Int delta = to - from;
+        if (delta.x != 0 && delta.y != 0 && Mathf.Abs(delta.x) != Mathf.Abs(delta.y)) return false;
+        if (skill != SkillType.Spear) return true;
+        if (distance > 2) return false;
+        Vector2Int direction = NormalizeDirection(delta);
+        for (int step = 1; step < distance; step++)
+            if (friendlyCells != null && friendlyCells.Contains(from + direction * step)) return false;
+        return true;
+    }
+
     private static readonly Vector2Int[] AdjacentDirections =
     {
         Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right,
@@ -18,10 +45,17 @@ public static class BattleRangeService
         int cols,
         int rows)
     {
+        skillType = BattleActionRules.GeometrySkill(skillType);
+        if (skillType is SkillType.DoubleSlash or SkillType.ScatterShot)
+            return GetEffectCells(skillType, caster, target, cols, rows);
         var cells = new List<Vector2Int>();
         switch (skillType)
         {
+            case SkillType.ChainLightning:
+                AddBox(cells, caster, 3);
+                break;
             case SkillType.Stone:
+            case SkillType.ThreadPull:
             case SkillType.Fireball:
             case SkillType.HorseCharge:
             case SkillType.Soil:
@@ -31,6 +65,7 @@ public static class BattleRangeService
                 if (target.HasValue) cells.AddRange(GetSwordWedgeCells(caster, target.Value - caster));
                 break;
             case SkillType.StunBlow:
+            case SkillType.ShadowCopy:
             case SkillType.TigerTwinClaw:
             case SkillType.WaterHeal:
             case SkillType.BirdRetreat:
@@ -46,7 +81,7 @@ public static class BattleRangeService
                 break;
         }
 
-        return FilterBoardCells(cells, caster, cols, rows);
+        return FilterAttackCells(cells, skillType, caster, cols, rows);
     }
 
     public static List<Vector2Int> GetEffectCells(
@@ -56,13 +91,25 @@ public static class BattleRangeService
         int cols,
         int rows)
     {
+        skillType = BattleActionRules.GeometrySkill(skillType);
         var cells = new List<Vector2Int>();
         switch (skillType)
         {
+            case SkillType.ScatterShot:
+                if (target.HasValue)
+                {
+                    Vector2Int direction = NormalizeDirection(target.Value - caster);
+                    cells.AddRange(GetSwordWedgeCells(target.Value - direction, direction));
+                }
+                break;
+            case SkillType.DoubleSlash:
             case SkillType.Slash:
                 if (target.HasValue) cells.AddRange(GetSwordWedgeCells(caster, target.Value - caster));
                 break;
             case SkillType.StunBlow:
+            case SkillType.ChainLightning:
+            case SkillType.ThreadPull:
+            case SkillType.ShadowCopy:
             case SkillType.TigerTwinClaw:
             case SkillType.Arrow:
             case SkillType.Stone:
@@ -85,7 +132,15 @@ public static class BattleRangeService
                 break;
         }
 
-        return FilterBoardCells(cells, caster, cols, rows);
+        return FilterAttackCells(cells, skillType, caster, cols, rows);
+    }
+
+    private static List<Vector2Int> FilterAttackCells(List<Vector2Int> cells, SkillType skill,
+        Vector2Int caster, int cols, int rows)
+    {
+        var result = FilterBoardCells(cells, caster, cols, rows);
+        result.RemoveAll(cell => Distance(caster, cell) < MinimumRange(skill));
+        return result;
     }
 
     public static List<Vector2Int> GetSwordWedgeCells(Vector2Int caster, Vector2Int forward)

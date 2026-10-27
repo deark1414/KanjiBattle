@@ -680,7 +680,7 @@ public class StageSelectUI : MonoBehaviour
             return null;
         }
 
-        return stage.enemyPool
+        return stage.GetEnemies()
             .Concat(stage.reinforcementEnemy ?? Enumerable.Empty<CharacterData>())
             .Where(character => character != null)
             .ToArray();

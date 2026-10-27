@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Stage_", menuName = "Game/Stage Data")]
@@ -12,12 +13,52 @@ public class StageData : ScriptableObject
 
     [Header("敵キャラ編成")]
     public List<CharacterData> enemyPool = new();
+    public List<int> enemyFusionIds = new();
+    [System.NonSerialized] private List<CharacterData> fusionPreview;
+    [System.NonSerialized] private int fusionPreviewLevel;
+
+    // Enemy fusion data is level-specific and never enters the recruit database.
+    public IReadOnlyList<CharacterData> GetEnemies()
+    {
+        if (fusionPreview == null || fusionPreviewLevel != enemyLevel
+            || !fusionPreview.Select(data => data.characterId).SequenceEqual(enemyFusionIds))
+        {
+            ClearEnemyFusions();
+            fusionPreview = new List<CharacterData>();
+            fusionPreviewLevel = enemyLevel;
+            var database = Resources.Load<CharacterDatabase>("CharacterDatabase");
+            foreach (int id in enemyFusionIds)
+            {
+                var recipe = BattleFusionRules.GetRecipe(id)
+                    ?? throw new System.ArgumentException("Unknown enemy fusion: " + id);
+                fusionPreview.Add(CharacterData.CreateBattleFusion(recipe,
+                    recipe.Materials.Select(name => database.characters.Single(data => data.characterName == name)).ToArray(), enemyLevel));
+            }
+        }
+        return enemyPool.Concat(fusionPreview).ToArray();
+    }
+
+    private void OnDisable() => ClearEnemyFusions();
+
+    private void ClearEnemyFusions()
+    {
+        if (fusionPreview != null)
+            foreach (var data in fusionPreview)
+                if (data != null)
+                {
+                    if (Application.isPlaying) Destroy(data);
+                    else DestroyImmediate(data);
+                }
+        fusionPreview = null;
+    }
 
     [Header("報酬")]
     public int rewardStagePoints = 1; // ←追加
 
     [Header("フォーメーション設定")]
     public int slotCount = 3;   // このステージで使えるスロット数
+    public bool restrictFormationSlots;
+    public List<Vector2Int> enemyPositions = new();
 
     [Header("トラップ設定")]
     public int trapDamage = 10;  // ダメージ

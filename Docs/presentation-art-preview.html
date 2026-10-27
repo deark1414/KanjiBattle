@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>駒・VFX 素材プレビュー | KanjiBattle</title>
+  <style>
+    :root {
+      --page: #171411;
+      --panel: #282117;
+      --panel-border: #725b31;
+      --text: #fff1ce;
+      --muted: #c9b98e;
+      --accent: #d89c31;
+      --checker-a: #4b4945;
+      --checker-b: #393733;
+      --sample-bg: #4d4a43;
+    }
+
+    * { box-sizing: border-box; }
+    html { background: var(--page); }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    }
+
+    .shell { width: min(1540px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 56px; }
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+      border: 1px solid var(--panel-border);
+      background: var(--panel);
+      padding: 22px 24px;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(24px, 3vw, 38px); font-weight: 800; }
+    .lede { margin-top: 8px; color: var(--muted); line-height: 1.6; }
+    .key { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; white-space: nowrap; }
+    .key-dot { width: 11px; height: 11px; background: var(--accent); border-radius: 50%; }
+
+    .controls { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0; }
+    button {
+      border: 1px solid #927441;
+      border-radius: 4px;
+      padding: 9px 13px;
+      background: #3a3020;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+    button[aria-pressed="true"] { background: #914020; border-color: #e5a63e; }
+
+    section { margin-top: 32px; }
+    .section-title { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding-bottom: 9px; border-bottom: 1px solid #715a34; }
+    h2 { font-size: clamp(20px, 2vw, 28px); }
+    .section-note { color: var(--muted); font-size: 14px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-top: 14px; }
+    .wide-grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
+    .asset {
+      min-width: 0;
+      border: 1px solid #645333;
+      background: #242018;
+      overflow: hidden;
+    }
+    .asset-preview {
+      display: grid;
+      place-items: center;
+      min-height: 150px;
+      padding: 14px;
+      background-color: var(--sample-bg);
+      background-image:
+        linear-gradient(45deg, var(--checker-a) 25%, transparent 25%),
+        linear-gradient(-45deg, var(--checker-a) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, var(--checker-a) 75%),
+        linear-gradient(-45deg, transparent 75%, var(--checker-a) 75%);
+      background-size: 22px 22px;
+      background-position: 0 0, 0 11px, 11px -11px, -11px 0;
+    }
+    .asset-preview img { display: block; width: 100%; height: 122px; object-fit: contain; image-rendering: auto; }
+    .wide-grid .asset-preview { min-height: 190px; }
+    .wide-grid .asset-preview img { height: 162px; }
+    .asset-meta { padding: 10px 11px 11px; }
+    .asset-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; }
+    .asset-path { margin-top: 4px; overflow: hidden; color: var(--muted); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+    .asset-draft { border-color: #ba8830; }
+    .asset-draft .asset-meta { background: #3f2d15; }
+    .empty-note { color: var(--muted); line-height: 1.7; padding: 16px 0 0; }
+    .comparison-list { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 14px; }
+    .comparison { min-width: 0; border: 1px solid #ba8830; background: #242018; }
+    .comparison-title { padding: 10px 12px; font-weight: 800; background: #3f2d15; }
+    .comparison-samples { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: #645333; }
+    .comparison-sample { min-width: 0; background: #242018; }
+    .comparison-label { padding: 8px 10px; color: var(--muted); font-size: 13px; font-weight: 700; }
+    .comparison-preview { display: grid; min-height: 180px; place-items: center; padding: 12px; background-color: var(--sample-bg); background-image: linear-gradient(45deg, var(--checker-a) 25%, transparent 25%), linear-gradient(-45deg, var(--checker-a) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--checker-a) 75%), linear-gradient(-45deg, transparent 75%, var(--checker-a) 75%); background-size: 22px 22px; background-position: 0 0, 0 11px, 11px -11px, -11px 0; }
+    .comparison-preview img { display: block; width: 100%; height: 148px; object-fit: contain; }
+    .comparison-path { display: block; overflow: hidden; padding: 0 10px 10px; color: var(--muted); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 20px, 1540px); padding-top: 10px; }
+      header { grid-template-columns: 1fr; padding: 18px; }
+      .key { white-space: normal; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .asset-preview { min-height: 126px; padding: 8px; }
+      .asset-preview img { height: 106px; }
+      .wide-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .comparison-preview { min-height: 142px; padding: 8px; }
+      .comparison-preview img { height: 118px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div>
+        <h1>駒・VFX 素材プレビュー</h1>
+        <p class="lede">ゲーム未接続の確認ページです。駒は既存の漢字札へモチーフを重ね、技能 VFX は現行素材と候補を同じ背景・縮尺で比較します。</p>
+      </div>
+      <div class="key"><span class="key-dot"></span> 金枠は新規の下書き</div>
+    </header>
+
+    <nav class="controls" aria-label="背景の切替">
+      <button type="button" data-background="checker" aria-pressed="true">格子</button>
+      <button type="button" data-background="dark" aria-pressed="false">暗色</button>
+      <button type="button" data-background="light" aria-pressed="false">淡色</button>
+    </nav>
+
+    <section>
+      <div class="section-title">
+        <h2>駒とモチーフの対比</h2>
+        <span class="section-note">左の漢字札は残し、右のモチーフだけを駒の外側へ重ねます。素材がない側は空欄です</span>
+      </div>
+      <div id="piece-comparisons" class="comparison-list"></div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>技能 VFX の対比</h2>
+        <span class="section-note">左が実装参照PNG、右が未接続の候補です。下位・中位・上位は緑・金・赤、弱・中・強は火の玉1・2・3個で表します。実装の反時計回りの軌道に合わせ、尾を反対側へ長く円弧状に流します。三つ版は120度間隔の尾でほぼ一周を描き、中央の駒のための余白を残します。</span>
+      </div>
+      <div id="vfx-comparisons" class="comparison-list"></div>
+    </section>
+  </main>
+
+  <script>
+    const root = 'review-assets/';
+    // Keep local file previews from retaining an older candidate after an art revision.
+    const previewRevision = '20261005-v01';
+    const pieces = [
+      ['一', 'Art/Generated/CharacterIcons/icon_01_1.png'], ['二', 'Art/Generated/CharacterIcons/icon_02_2.png'], ['三', 'Art/Generated/CharacterIcons/icon_03_3.png'],
+      ['四', 'Art/Generated/CharacterIcons/icon_04_4.png'], ['五', 'Art/Generated/CharacterIcons/icon_05_5.png'], ['六', 'Art/Generated/CharacterIcons/icon_06_6.png'],
+      ['七', 'Art/Generated/CharacterIcons/icon_07_7.png'], ['八', 'Art/Generated/CharacterIcons/icon_08_8.png'], ['九', 'Art/Generated/CharacterIcons/icon_09_9.png'],
+      ['剣', 'Art/Generated/CharacterIcons/icon_10_Sword.png'], ['槍', 'Art/Generated/CharacterIcons/icon_11_Spear.png'], ['槌', 'Art/Generated/CharacterIcons/icon_12_Hammer.png'],
+      ['盾', 'Art/Generated/CharacterIcons/icon_13_Shield.png'], ['鎧', 'Art/Generated/CharacterIcons/icon_14_Armor.png'], ['壁', 'Art/Generated/CharacterIcons/icon_15_Wall.png'],
+      ['石', 'Art/Generated/CharacterIcons/icon_16_Stone.png'], ['矢', 'Art/Generated/CharacterIcons/icon_17_Arrow.png'], ['銃', 'Art/Generated/CharacterIcons/icon_18_Gun.png'],
+      ['火', 'Art/Generated/CharacterIcons/icon_19_Fire.png'], ['水', 'Art/Generated/CharacterIcons/icon_20_Water.png'], ['木', 'Art/Generated/CharacterIcons/icon_21_Wood.png'],
+      ['土', 'Art/Generated/CharacterIcons/icon_22_Soil.png'], ['馬', 'Art/Generated/CharacterIcons/icon_23_Horse.png'], ['鳥', 'Art/Generated/CharacterIcons/icon_24_Bird.png'],
+      ['虎', 'Art/Generated/CharacterIcons/icon_25_Tiger.png'], ['竜', 'Art/Generated/CharacterIcons/icon_26_Dragon.png']
+    ];
+
+    const motifDraftsByPiece = {
+      '一': 'Art/Drafts/PieceMotifs/NumberDice/Number_01_dice_draft.png',
+      '二': 'Art/Drafts/PieceMotifs/NumberDice/Number_02_dice_draft.png',
+      '三': 'Art/Drafts/PieceMotifs/NumberDice/Number_03_dice_draft.png',
+      '四': 'Art/Drafts/PieceMotifs/NumberDice/Number_04_dice_draft.png',
+      '五': 'Art/Drafts/PieceMotifs/NumberDice/Number_05_dice_draft.png',
+      '六': 'Art/Drafts/PieceMotifs/NumberDice/Number_06_dice_draft.png',
+      '七': 'Art/Drafts/PieceMotifs/NumberDice/Number_07_dice_draft.png',
+      '八': 'Art/Drafts/PieceMotifs/NumberDice/Number_08_dice_draft.png',
+      '九': 'Art/Drafts/PieceMotifs/NumberDice/Number_09_dice_draft.png',
+      '木': 'Art/Drafts/PieceMotifs/Nature/Wood_tree_draft.png',
+      '土': 'Art/Drafts/PieceMotifs/Nature/Soil_packed_mound_draft.png',
+      '馬': 'Art/Drafts/PieceMotifs/Animals/Horse_running_draft.png',
+      '鳥': 'Art/Drafts/PieceMotifs/Animals/Bird_hawk_flying_v2_draft.png',
+      '虎': 'Art/Drafts/PieceMotifs/TigerMotif_fullbody_draft.png',
+      '竜': 'Art/Drafts/PieceMotifs/DragonMotif_fullbody_draft.png'
+    };
+    const pieceComparisons = pieces.map(([name, path]) => [name, path, motifDraftsByPiece[name]]);
+
+    const vfx = [
+      ['剣', 'Resources/VFX/Weapons/SwordMotion.png'], ['槌', 'Resources/VFX/Weapons/HammerMotion.png'],
+      ['槍', 'Resources/VFX/Animated/Spear/frame_03.png'], ['矢', 'Resources/VFX/Animated/Arrow/frame_02.png'],
+      ['銃', 'Resources/VFX/Animated/Gun/frame_02.png'], ['石', 'Resources/VFX/Animated/Stone/frame_00.png'],
+      ['火', 'Resources/VFX/Animated/Fireball/frame_02.png'], ['水', 'Resources/VFX/Animated/WaterHeal/frame_03.png'],
+      ['木', 'Resources/VFX/Animated/WoodPush/frame_03.png'], ['土', 'Resources/VFX/Animated/Soil/frame_03.png'],
+      ['馬', 'Resources/VFX/Animated/HorseCharge/frame_02.png'], ['鳥', 'Resources/VFX/Animated/BirdRetreat/frame_02.png'],
+      ['虎', 'Resources/VFX/Animated/TigerTwinClaw/frame_03.png'], ['竜の息吹', 'Resources/VFX/Animated/DragonBreath/frame_03.png'],
+      ['竜の咆哮', 'Resources/VFX/Animated/DragonRoar/frame_03.png'], ['召喚', 'Resources/VFX/Animated/BossSummon/frame_01.png'],
+      ['盾', 'Resources/VFX/Animated/Shield/frame_02.png'], ['鎧', 'Resources/VFX/Animated/Armor/frame_02.png'], ['壁', 'Resources/VFX/Animated/Wall/frame_02.png'],
+      ['下位・弱: 火の玉1', 'Resources/VFX/Animated/NumberAura_Low_Weak/frame_01.png'], ['下位・中: 火の玉2', 'Resources/VFX/Animated/NumberAura_Low_Medium/frame_01.png'], ['下位・強: 火の玉3', 'Resources/VFX/Animated/NumberAura_Low_Strong/frame_01.png'],
+      ['中位・弱: 火の玉1', 'Resources/VFX/Animated/NumberAura_Mid_Weak/frame_01.png'], ['中位・中: 火の玉2', 'Resources/VFX/Animated/NumberAura_Mid_Medium/frame_01.png'], ['中位・強: 火の玉3', 'Resources/VFX/Animated/NumberAura_Mid_Strong/frame_01.png'],
+      ['上位・弱: 火の玉1', 'Resources/VFX/Animated/NumberAura_High_Weak/frame_01.png'], ['上位・中: 火の玉2', 'Resources/VFX/Animated/NumberAura_High_Medium/frame_01.png'], ['上位・強: 火の玉3', 'Resources/VFX/Animated/NumberAura_High_Strong/frame_07.png']
+    ];
+
+    const sourceFaithfulDrafts = {
+      'Resources/VFX/Weapons/SwordMotion.png': 'Art/Drafts/VFX/Weapons/SwordMotion_pixel_source_draft.png',
+      'Resources/VFX/Weapons/HammerMotion.png': 'Art/Drafts/VFX/Weapons/HammerMotion_pixel_source_draft.png',
+      'Resources/VFX/Animated/Spear/frame_03.png': 'Art/Drafts/VFX/Spear/Spear_pixel_source_draft.png',
+      'Resources/VFX/Animated/Arrow/frame_02.png': 'Art/Drafts/VFX/Arrow/Arrow_pixel_source_draft.png',
+      'Resources/VFX/Animated/Gun/frame_02.png': 'Art/Drafts/VFX/Gun/Gun_pixel_source_draft.png',
+      'Resources/VFX/Animated/Stone/frame_00.png': 'Art/Drafts/VFX/Stone/Stone_pixel_source_draft.png',
+      'Resources/VFX/Animated/Fireball/frame_02.png': 'Art/Drafts/VFX/Fireball/Fireball_pixel_source_draft.png',
+      'Resources/VFX/Animated/WaterHeal/frame_03.png': 'Art/Drafts/VFX/WaterHeal/WaterHeal_pixel_source_draft.png',
+      'Resources/VFX/Animated/WoodPush/frame_03.png': 'Art/Drafts/VFX/WoodPush/WoodPush_pixel_source_draft.png',
+      'Resources/VFX/Animated/Soil/frame_03.png': 'Art/Drafts/VFX/Soil/Soil_pixel_source_draft.png',
+      'Resources/VFX/Animated/HorseCharge/frame_02.png': 'Art/Drafts/VFX/HorseCharge/HorseCharge_pixel_v4_draft.png',
+      'Resources/VFX/Animated/BirdRetreat/frame_02.png': 'Art/Drafts/VFX/BirdRetreat/BirdRetreat_pixel_v4_draft.png',
+      'Resources/VFX/Animated/TigerTwinClaw/frame_03.png': 'Art/Drafts/VFX/TigerTwinClaw/TigerTwinClaw_pixel_source_draft.png',
+      'Resources/VFX/Animated/DragonBreath/frame_03.png': 'Art/Drafts/VFX/DragonBreath/DragonBreath_pixel_source_draft.png',
+      'Resources/VFX/Animated/DragonRoar/frame_03.png': 'Art/Drafts/VFX/DragonRoar/DragonRoar_pixel_source_draft.png',
+      'Resources/VFX/Animated/BossSummon/frame_01.png': 'Art/Drafts/VFX/BossSummon/BossSummon_pixel_source_draft.png',
+      'Resources/VFX/Animated/Shield/frame_02.png': 'Art/Drafts/VFX/Shield/Shield_pixel_source_draft.png',
+      'Resources/VFX/Animated/Armor/frame_02.png': 'Art/Drafts/VFX/Armor/Armor_pixel_source_draft.png',
+      'Resources/VFX/Animated/Wall/frame_02.png': 'Art/Drafts/VFX/Wall/Wall_pixel_source_draft.png',
+      'Resources/VFX/Animated/NumberAura_Low_Weak/frame_01.png': 'Art/Drafts/VFX/NumberAura_Low_Weak/NumberAura_Low_Weak_OneFireball_draft.png',
+      'Resources/VFX/Animated/NumberAura_Low_Medium/frame_01.png': 'Art/Drafts/VFX/NumberAura_Low_Medium/NumberAura_Low_Medium_TwoFireballs_draft.png',
+      'Resources/VFX/Animated/NumberAura_Low_Strong/frame_01.png': 'Art/Drafts/VFX/NumberAura_Low_Strong/NumberAura_Low_Strong_ThreeFireballs_draft.png',
+      'Resources/VFX/Animated/NumberAura_Mid_Weak/frame_01.png': 'Art/Drafts/VFX/NumberAura_Mid_Weak/NumberAura_Mid_Weak_OneFireball_draft.png',
+      'Resources/VFX/Animated/NumberAura_Mid_Medium/frame_01.png': 'Art/Drafts/VFX/NumberAura_Mid_Medium/NumberAura_Mid_Medium_TwoFireballs_draft.png',
+      'Resources/VFX/Animated/NumberAura_Mid_Strong/frame_01.png': 'Art/Drafts/VFX/NumberAura_Mid_Strong/NumberAura_Mid_Strong_ThreeFireballs_draft.png',
+      'Resources/VFX/Animated/NumberAura_High_Weak/frame_01.png': 'Art/Drafts/VFX/NumberAura_High_Weak/NumberAura_High_Weak_OneFireball_draft.png',
+      'Resources/VFX/Animated/NumberAura_High_Medium/frame_01.png': 'Art/Drafts/VFX/NumberAura_High_Medium/NumberAura_High_Medium_TwoFireballs_draft.png',
+      'Resources/VFX/Animated/NumberAura_High_Strong/frame_07.png': 'Art/Drafts/VFX/NumberAura_High_Strong/NumberAura_High_Strong_ThreeFireballs_draft.png'
+    };
+    const vfxComparisons = vfx.map(([name, path]) => [name, path, sourceFaithfulDrafts[path]]);
+
+    function renderComparisons(targetId, entries, labels = ['既存', '候補']) {
+      const target = document.getElementById(targetId);
+      entries.forEach(([name, currentPath, candidatePath]) => {
+        const card = document.createElement('article');
+        card.className = 'comparison';
+        card.innerHTML = `<div class="comparison-title">${name}</div>`;
+        const samples = document.createElement('div');
+        samples.className = 'comparison-samples';
+        [[labels[0], currentPath], [labels[1], candidatePath]].forEach(([label, path]) => {
+          const sample = document.createElement('div');
+          sample.className = 'comparison-sample';
+          const preview = path
+            ? `<img src="${root}${path}?rev=${previewRevision}" alt="${name} ${label}">`
+            : '';
+          sample.innerHTML = `<div class="comparison-label">${label}</div><div class="comparison-preview">${preview}</div><span class="comparison-path">${path || ''}</span>`;
+          samples.appendChild(sample);
+        });
+        card.appendChild(samples);
+        target.appendChild(card);
+      });
+    }
+
+    renderComparisons('piece-comparisons', pieceComparisons, ['漢字駒', '上乗せモチーフ']);
+    renderComparisons('vfx-comparisons', vfxComparisons);
+
+    const palettes = {
+      checker: ['#4b4945', '#393733', '#4d4a43'],
+      dark: ['#24211d', '#24211d', '#24211d'],
+      light: ['#ded7c6', '#ded7c6', '#ded7c6']
+    };
+    document.querySelectorAll('[data-background]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const palette = palettes[button.dataset.background];
+        document.documentElement.style.setProperty('--checker-a', palette[0]);
+        document.documentElement.style.setProperty('--checker-b', palette[1]);
+        document.documentElement.style.setProperty('--sample-bg', palette[2]);
+        document.querySelectorAll('[data-background]').forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+      });
+    });
+  </script>
+</body>
+</html>

@@ -21,7 +21,7 @@ public class CharacterEntryForFormationUI : MonoBehaviour
         int maxHP = PlayerInventory.Instance != null
             ? PlayerInventory.Instance.GetPlayerMaxHP(data, level)
             : data.GetMaxHP(level);
-        statsText.text = $"PLv.{level}　HP {maxHP}　攻 {data.GetAttack(level)}　守 {data.GetDefense(level)}";
+        statsText.text = $"PLv.{level}　HP {maxHP}　攻 {CharacterInvestment.Attack(data,level)}　守 {CharacterInvestment.Defense(data,level)}";
         if (levelText != null)
         {
             levelText.gameObject.SetActive(false);
@@ -111,6 +111,14 @@ public class CharacterEntryForFormationUI : MonoBehaviour
         iconRect.pivot = new Vector2(0f, 0.5f);
         iconRect.anchoredPosition = new Vector2(10f, 4f);
         iconRect.sizeDelta = new Vector2(72f, 72f);
+        PieceMotifPresentation.Attach(iconRect, data, false);
+    }
+
+    public void SetSelectedCharacter(CharacterData selected, bool summon = false)
+    {
+        var motif = iconImage?.GetComponent<PieceMotifPresentation>();
+        motif?.SetVisible(false);
+        if (summon && selected != null && characterData == selected) motif?.PlayArrival();
     }
 
     private static void ConfigureStatTextRect(TextMeshProUGUI text)

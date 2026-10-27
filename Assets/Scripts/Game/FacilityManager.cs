@@ -25,6 +25,31 @@ public class FacilityManager : MonoBehaviour
     private readonly HashSet<FacilityData> unlockedFacilities = new();
     private bool isLoadingProgress;
 
+    public static bool IsRetiredCombatFacility(FacilityData facility) => facility != null &&
+        facility.effectType is FacilityEffectType.AttackBoost or FacilityEffectType.HealthBoost
+            or FacilityEffectType.SkillPowerBoost or FacilityEffectType.SkillChanceBoost;
+
+    private void Start()
+    {RefundRetiredCombatFacilities();CharacterInvestment.RefundLegacyStats();}
+
+    public int RefundRetiredCombatFacilities()
+    {
+        if (GameManager.Instance == null) return 0;
+        int refund = 0;
+        foreach (var facility in unlockedFacilities.Where(IsRetiredCombatFacility).ToArray())
+        {
+            if (facility.unlockType != FacilityUnlockType.Free) refund += facility.unlockStagePointCost;
+            for (int i = 0; i < GetLevel(facility); i++) refund += facility.GetUpgradeCost(i);
+            unlockedFacilities.Remove(facility);
+            facilityLevels[facility] = 0;
+        }
+        // Removing the old purchases before refunding makes repeated visits idempotent.
+        SaveProgress();
+        GameManager.Instance.AddStagePoints(refund);
+        if (refund > 0) OnFacilitiesChanged?.Invoke();
+        return refund;
+    }
+
     public event Action OnFacilitiesChanged;
 
     private void Awake()
@@ -97,7 +122,7 @@ public class FacilityManager : MonoBehaviour
 
     public bool CanUnlock(FacilityData facility)
     {
-        if (facility == null || IsUnlocked(facility) || GameManager.Instance == null)
+        if (facility == null || IsRetiredCombatFacility(facility) || IsUnlocked(facility) || GameManager.Instance == null)
         {
             return false;
         }
@@ -123,7 +148,7 @@ public class FacilityManager : MonoBehaviour
 
     public bool Upgrade(FacilityData facility)
     {
-        if (facility == null || !IsUnlocked(facility) || IsMaxLevel(facility) || GameManager.Instance == null)
+        if (facility == null || IsRetiredCombatFacility(facility) || !IsUnlocked(facility) || IsMaxLevel(facility) || GameManager.Instance == null)
         {
             return false;
         }
@@ -220,30 +245,22 @@ public class FacilityManager : MonoBehaviour
 
     public float GetAttackMultiplier()
     {
-        FacilityData martialHall = FindFacility(FacilityEffectType.AttackBoost);
-        int level = martialHall != null && IsUnlocked(martialHall) ? GetLevel(martialHall) : 0;
-        return 1f + Mathf.Clamp(level, 0, 5) * 0.04f;
+        return 1f;
     }
 
     public float GetSkillPowerMultiplier()
     {
-        FacilityData strategyHall = FindFacility(FacilityEffectType.SkillPowerBoost);
-        int level = strategyHall != null && IsUnlocked(strategyHall) ? GetLevel(strategyHall) : 0;
-        return 1f + Mathf.Clamp(level, 0, 5) * 0.05f;
+        return 1f;
     }
 
     public float GetSkillChanceMultiplier()
     {
-        FacilityData shrine = FindFacility(FacilityEffectType.SkillChanceBoost);
-        int level = shrine != null && IsUnlocked(shrine) ? GetLevel(shrine) : 0;
-        return 1f + Mathf.Clamp(level, 0, 5) * 0.2f;
+        return 1f;
     }
 
     public float GetHealthMultiplier()
     {
-        FacilityData infirmary = FindFacility(FacilityEffectType.HealthBoost);
-        int level = infirmary != null && IsUnlocked(infirmary) ? GetLevel(infirmary) : 0;
-        return 1f + Mathf.Clamp(level, 0, 5) * 0.05f;
+        return 1f;
     }
 
     public int GetPlayerLevelCap()
@@ -269,6 +286,12 @@ public class FacilityManager : MonoBehaviour
     {
         FacilityData retryHall = FindFacility(FacilityEffectType.StageRetry);
         return retryHall != null && IsUnlocked(retryHall);
+    }
+
+    public bool IsFusionUnlocked()
+    {
+        FacilityData hall = FindFacility(FacilityEffectType.Fusion);
+        return hall != null && IsUnlocked(hall);
     }
 
     public bool CanUpgradeLevelCap(FacilityData facility)
@@ -331,6 +354,7 @@ public class FacilityManager : MonoBehaviour
 
     public void ResetProgress()
     {
+        BattleFusionRules.ResetProgress();
         PlayerProgressStore.Delete(UnlockedKey);
         PlayerProgressStore.Delete(LevelsKey);
         PlayerProgressStore.Delete(MigrationVersionKey);
@@ -355,6 +379,7 @@ public class FacilityManager : MonoBehaviour
                     break;
                 case FacilityEffectType.FormationSlot:
                     GameManager.Instance?.ApplyFormationSlotIncrease(level);
+                    CastleTree.AdoptLegacySlots(1+level);
                     break;
                 case FacilityEffectType.BattleSpeed:
                     GameManager.Instance?.ApplyBattleSpeedTier(level);

@@ -268,10 +268,17 @@ public sealed class RosterPracticeVfx : MonoBehaviour
         for (int i = trainingField.childCount - 1; i >= 0; i--)
         {
             Transform child = trainingField.GetChild(i);
-            if (trainingStatus == null || child != trainingStatus.transform)
+            // Preserve the VFX host across repeated setup calls in the same frame.
+            if ((trainingStatus == null || child != trainingStatus.transform) && child != overlay)
             {
                 Destroy(child.gameObject);
             }
+        }
+
+        if (overlay != null)
+        {
+            for (int i = overlay.childCount - 1; i >= 0; i--)
+                Destroy(overlay.GetChild(i).gameObject);
         }
     }
 
@@ -289,6 +296,8 @@ public sealed class RosterPracticeVfx : MonoBehaviour
         }
         // Recruitment is an arrival, not a generic flourish: each piece demonstrates
         // its own skill in a clear downward stroke before joining the roster.
+        var icon = source.Find("CharacterIcon") as RectTransform;
+        if (icon != null) PieceMotifPresentation.Attach(icon, character)?.PlayArrival(1.25f);
         Vector3 target = source.position + Vector3.down * 118f;
         if (character.skillType == SkillType.Slash)
         {
@@ -411,7 +420,7 @@ public sealed class RosterPracticeVfx : MonoBehaviour
             source.position,
             156f,
             1f,
-            110f,
+            SkillVfxMotion.NumberAuraRotationDegrees,
             useAnchoredPosition: false);
     }
 

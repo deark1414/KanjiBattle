@@ -5,15 +5,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class BattleManager : MonoBehaviour
+public partial class BattleManager : MonoBehaviour
 {
     [SerializeField] private GameObject cellPrefab;
     [SerializeField] private Transform battleField;
-    [SerializeField] private int rows = 5;
-    [SerializeField] private int cols = 8;
+    [SerializeField] private int rows = BattleDeploymentRules.Rows;
+    [SerializeField] private int cols = BattleDeploymentRules.Columns;
 
     public int Rows => rows;
     public int Cols => cols;
+    public bool IsTerrainBlocked(Vector2Int cell) => impassableCells.Contains(cell);
 
     [SerializeField] private GameObject characterPrefab;
     [SerializeField] private List<CharacterData> characterPool;
@@ -24,6 +25,9 @@ public class BattleManager : MonoBehaviour
     private List<BattleCharacter> allies = new();
     private List<BattleCharacter> enemies = new();
     private readonly List<CharacterData> deployedAllies = new();
+    private BattleDeploymentView deploymentView;
+    private BattleCharacter selectedDeploymentCharacter;
+    public bool IsDeploying => deploymentView != null;
     private readonly HashSet<int> encounteredEnemyCharacterIds = new();
 
     [SerializeField] private ScrollRect logScroll;
@@ -36,6 +40,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI resultText;
     private Button resultBackButton;
     private Button resultRetryButton;
+    private Button resultRepeatButton;
     private RectTransform resultActionContainer;
     private RectTransform resultBondContainer;
 
@@ -46,6 +51,7 @@ public class BattleManager : MonoBehaviour
     private HashSet<Vector2Int> soilTrapCells = new HashSet<Vector2Int>();
     private readonly HashSet<Vector2Int> impassableCells = new();
     private readonly Dictionary<Vector2Int, int> soilTrapDamageByCell = new();
+    private readonly Dictionary<Vector2Int, (int token, bool ally)> soilTrapRecords = new();
     private readonly Dictionary<Vector2Int, GameObject> soilTrapVfxObjects = new();
     private readonly Dictionary<Vector2Int, GameObject> soilTrapTintObjects = new();
 
@@ -53,8 +59,11 @@ public class BattleManager : MonoBehaviour
     private bool isPaused = false;
     private readonly float[] battleSpeeds = { 1f, 1.1f, 1.25f, 1.45f, 1.7f, 2f, 2.35f, 2.7f, 3f };
     private int battleSpeedIndex;
-    private Button speedButton;
-    private TextMeshProUGUI speedButtonText;
+    private BattlePlaybackControls playbackControls;
+    private bool autoRepeat;
+    private bool battleFinished;
+    private bool lastBattleWon;
+    private Coroutine repeatRoutine;
     private readonly BattleVfxRegistry battleVfxRegistry = new();
     private Transform battleVfxOverlay;
     private Transform weaponVfxOverlay;
@@ -112,6 +121,12 @@ public class BattleManager : MonoBehaviour
 
     private void OnDisable()
     {
+        ClearDeploymentView();
+        StopAllCoroutines();
+        FinishPlayerSkill();
+        ClearSupportSkillVfx();
+        repeatRoutine = null;
+        autoRepeat = false;
         CleanupBattleVfx();
     }
 
@@ -125,10 +140,22 @@ public class BattleManager : MonoBehaviour
         ConfigureResponsiveLayout();
     }
 
-    public void StartBattle(List<CharacterData> allies, StageData stage)
+    public void StartBattle(List<CharacterData> allies, StageData stage, bool useSavedDeployment = false)
     {
+        if (stage == null || allies == null) return;
+        var party = allies.Where(character => character != null).ToList();
+        int enemyCount = stage.GetEnemies().Count;
+        if (party.Count == 0 || party.Count > BattleDeploymentRules.Capacity || enemyCount > BattleDeploymentRules.Capacity)
+        {
+            Debug.LogError("[BattleManager] 初期配置の人数が配置可能枠に収まりません。");
+            return;
+        }
         GameAudio.Instance.EnsureBgm();
         ResetBattle();
+        battleRecords.Clear();
+        soilTrapRecords.Clear();
+        rows = BattleDeploymentRules.Rows;
+        cols = BattleDeploymentRules.Columns;
         currentStage = stage;
         ModernWafuuPresentation.ApplyBattleEnvironment(transform, stage != null ? stage.chapterId : 1);
         BattleUILayout.SetStageContext(stage);
@@ -142,36 +169,126 @@ public class BattleManager : MonoBehaviour
         reinforcementTotalSpawned = 0;
         SyncBattleSpeedFromProgress();
 
-        foreach (var ally in allies)
+        List<Vector2Int> allyPositions = BattleDeploymentRules.Resolve(
+            party.Select(character => character.characterId).ToList(), BattleDeploymentRules.Load());
+        for (int index = 0; index < party.Count; index++)
         {
-            if (ally != null)
-            {
-                deployedAllies.Add(ally);
-                var pos = GetRandomFreeCell();
-                SpawnCharacter(ally, pos, true);
-            }
+            deployedAllies.Add(party[index]);
+            SpawnCharacter(party[index], allyPositions[index], true);
         }
 
-        foreach (var enemy in stage.enemyPool)
+        int enemyIndex = 0;
+        var enemyPositions = CampaignFormationRules.EnemyPositions(stage);
+        foreach (var enemy in stage.GetEnemies())
         {
-            var pos = GetRandomFreeCell();
+            if (enemy == null) continue;
+            var pos = enemyPositions[enemyIndex++];
             SpawnCharacter(enemy, pos, false);
         }
 
         GenerateStageTerrain(stage);
         GenerateStageTraps(stage);
 
+        UpdateSpeedButtonLabel();
+        PreparePlayerSkill();
+        PrepareFusionPlan();
+        if (useSavedDeployment && !HasFusionConflict && PlayerSkillReady)
+        {
+            ApplyFusionPlan();
+            StartCoroutine(StartBattleAfterSetup());
+        }
+        else
+        {
+            deploymentView = new BattleDeploymentView(transform, gridCells, SelectDeploymentCell, ConfirmDeployment, CancelDeployment,
+                CanUseFusion ? OpenFusionSelection : null, OpenPlayerSkillSelection);
+            selectedDeploymentCharacter = null;
+            deploymentView.Refresh(selectedDeploymentCharacter);
+            RefreshFusionPreview();
+            RefreshPlayerSkillStatus();
+            RequestDeploymentGuides();
+        }
+    }
+
+    private void SelectDeploymentCell(Vector2Int cell)
+    {
+        if (fusionView != null || playerSkillView != null) return;
+        if (!IsDeploying || !BattleDeploymentRules.IsAllyCell(cell) || impassableCells.Contains(cell)) return;
+        gridMap.TryGetValue(cell, out BattleCharacter occupant);
+        if (occupant != null && !occupant.isAlly) return;
+        if (selectedDeploymentCharacter != null && selectedDeploymentCharacter.gridPos == cell)
+        {
+            selectedDeploymentCharacter = null;
+        }
+        else if (selectedDeploymentCharacter == null)
+        {
+            selectedDeploymentCharacter = occupant;
+        }
+        else
+        {
+            Vector2Int previous = selectedDeploymentCharacter.gridPos;
+            gridMap.Remove(previous);
+            gridMap.Remove(cell);
+            PlaceDeploymentCharacter(selectedDeploymentCharacter, cell);
+            if (occupant != null) PlaceDeploymentCharacter(occupant, previous);
+            occupied.Clear();
+            occupied.UnionWith(gridMap.Keys);
+            selectedDeploymentCharacter = null;
+        }
+        deploymentView.Refresh(selectedDeploymentCharacter);
+        RefreshFusionPlan();
+    }
+
+    private void PlaceDeploymentCharacter(BattleCharacter character, Vector2Int cell)
+    {
+        character.gridPos = cell;
+        gridMap[cell] = character;
+        occupied.Add(cell);
+        character.transform.SetParent(gridCells[cell.x, cell.y], false);
+        character.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+    }
+
+    private void ConfirmDeployment()
+    {
+        if (!IsDeploying || fusionView != null || playerSkillView != null || !PlayerSkillReady) return;
+        RefreshFusionPlan();
+        if (HasFusionConflict) { OpenFusionSelection(); return; }
+        BattleDeploymentRules.Save(allies.Select(character => character.data.characterId).ToList(),
+            allies.Select(character => character.gridPos).ToList());
+        if (CanUseFusion) BattleFusionRules.Save(deployedAllies, fusionChoices);
+        PlayerSkillRules.Save(playerSkillPlan, PlayerSkillClearedStage);
+        ApplyFusionPlan();
+        ClearDeploymentView();
+        isPaused = false;
         StartCoroutine(StartBattleAfterSetup());
+    }
+
+    private void CancelDeployment()
+    {
+        ClearDeploymentView();
+        UIManager.Instance?.ShowFormation();
+    }
+
+    private void ClearDeploymentView()
+    {
+        ClosePlayerSkillSelection();
+        CloseFusionSelection();
+        fusionPreview?.Dispose();
+        fusionPreview = null;
+        deploymentView?.Dispose();
+        deploymentView = null;
+        selectedDeploymentCharacter = null;
     }
 
     public void PauseBattle()
     {
+        if (IsDeploying) return;
         isPaused = true;
         AddLog("=== バトル一時停止 ===", Color.gray);
     }
 
     public void ResumeBattle()
     {
+        if (IsDeploying) return;
         isPaused = false;
         AddLog("=== バトル再開 ===", Color.green);
     }
@@ -182,12 +299,26 @@ public class BattleManager : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         yield return null;
 
+        foreach (var character in allies) character.PlayMotifArrival();
+        foreach (var character in enemies) character.PlayMotifArrival();
+        yield return WaitBattleSeconds(1.2f);
+        foreach (BattleCharacter character in allies.Concat(enemies).ToList())
+        {
+            if (!character.isDead && trapCells.Remove(character.gridPos))
+                character.TakeDamage(trapDamage, this, isBasicAttack: false,
+                    actionLabel: $"{character.data.characterName} は初期配置の罠を踏んだ！");
+        }
         StartCoroutine(BattleLoop());
     }
 
     private void ResetBattle()
     {
+        ClearDeploymentView();
+        ClearFusionRuntimeData();
         StopAllCoroutines();
+        repeatRoutine = null;
+        battleFinished = false;
+        resultPanel?.SetActive(false);
         CleanupBattleVfx();
 
         foreach (Transform child in battleField)
@@ -269,12 +400,18 @@ public class BattleManager : MonoBehaviour
         int desiredCount = BattleMovementRules.GetStageObstacleCount(stage);
         if (desiredCount <= 0) return;
 
-        int stageSeed = (stage != null ? stage.stageId : 0) * 7919 + rows * 31 + cols;
+        var reserved = new HashSet<Vector2Int>(gridMap.Keys);
+        for (int index = 0; index < BattleDeploymentRules.Capacity; index++)
+        {
+            reserved.Add(BattleDeploymentRules.DefaultPosition(index, true));
+            reserved.Add(BattleDeploymentRules.DefaultPosition(index, false));
+        }
+        int stageSeed = Random.Range(1, int.MaxValue);
         impassableCells.UnionWith(BattleMovementRules.GenerateImpassableCells(
             cols,
             rows,
             desiredCount,
-            new HashSet<Vector2Int>(gridMap.Keys),
+            reserved,
             stageSeed));
 
         foreach (Vector2Int cell in impassableCells)
@@ -296,7 +433,7 @@ public class BattleManager : MonoBehaviour
             for (int x = 0; x < cols; x++)
             {
                 var cell = new Vector2Int(x, y);
-                if (gridMap.ContainsKey(cell) || impassableCells.Contains(cell)) continue;
+                if (impassableCells.Contains(cell)) continue;
                 candidates.Add(cell);
             }
         }
@@ -312,7 +449,6 @@ public class BattleManager : MonoBehaviour
         {
             Vector2Int pos = candidates[index];
             trapCells.Add(pos);
-            CreateBuriedTrapMarker(pos);
         }
     }
 
@@ -402,23 +538,20 @@ public class BattleManager : MonoBehaviour
     private void ConfigureResponsiveLayout()
     {
         currentBattleCellSize = BattleUILayout.Apply(transform, battleField, logScroll, cols, rows);
-    }
-
-    private Vector2Int GetRandomFreeCell()
-    {
-        Vector2Int pos;
-        do
+        foreach (BattleCharacter character in gridMap.Values)
         {
-            int x = Random.Range(0, cols);
-            int y = Random.Range(0, rows);
-            pos = new Vector2Int(x, y);
-        } while (occupied.Contains(pos) || impassableCells.Contains(pos));
-
-        occupied.Add(pos);
-        return pos;
+            if (character != null)
+                BattleUILayout.ApplyCharacterVisualSize(character.GetComponent<RectTransform>(), currentBattleCellSize);
+        }
+        deploymentView?.BringToFront();
+        RefreshFusionPreview();
+        fusionView?.BringToFront();
+        RefreshPlayerSkillStatus();
+        playerSkillView?.BringToFront();
     }
 
-    private void SpawnCharacter(CharacterData data, Vector2Int pos, bool ally)
+
+    private void SpawnCharacter(CharacterData data, Vector2Int pos, bool ally, int? levelOverride = null)
     {
         // CellContent を親にしてキャラを生成
         Transform content = gridCells[pos.x, pos.y];
@@ -436,9 +569,10 @@ public class BattleManager : MonoBehaviour
             level = currentStage.enemyLevel;  // 🔹 敵はステージ設定
         }
 
-        bc.Init(data, pos, ally, level);
+        bc.Init(data, pos, ally, levelOverride ?? level);
+        RegisterBattleRecord(bc);
 
-        if (!ally && data != null)
+        if (!ally && data != null && data.characterId > 0)
         {
             encounteredEnemyCharacterIds.Add(data.characterId);
         }
@@ -449,6 +583,9 @@ public class BattleManager : MonoBehaviour
         rect.SetAsLastSibling(); // 念のため一番前に
 
         gridMap[pos] = bc;
+        occupied.Add(pos);
+        bc.UpdateDirection(ally ? Vector2Int.up : Vector2Int.down);
+        RefreshSupportState(bc);
         if (ally) allies.Add(bc); else enemies.Add(bc);
 
         // ボス召喚演出はラスボスステージの登場時だけ。通常ステージや通常の敵生成では出さない。
@@ -465,7 +602,7 @@ public class BattleManager : MonoBehaviour
     private IEnumerator BattleLoop()
     {
         int turn = 1;
-        const int maxTurns = 50;
+        const int maxTurns = PlayerSkillRules.MaxTurns;
 
         while (true)
         {
@@ -475,23 +612,44 @@ public class BattleManager : MonoBehaviour
                 yield return null; // 1フレーム待機
             }
             
+            if (ResolveBattleBeforePlayerSkill()) yield break;
             AddLog($"--- ターン {turn} ---");
+            fusionTurn = turn;
+            BeginPlayerSkillTurn(turn);
+            BeginAdvancedFusionTurn(true, turn);
+
+            ElementSkillExecutor.ApplyWind(this, true, impassableCells);
 
             ApplyNumberPassivesAtTurnStart("味方", allies, turn, true);
+            FusionSupportExecutor.BeginSideTurn(this, true, turn);
 
             foreach (var ally in new List<BattleCharacter>(allies))
             {
+                yield return WaitBattleSeconds(0f);
+                if (ResolveBattleBeforePlayerSkill()) yield break;
                 if (ally != null) DoAction(ally, "味方");
-                yield return BattleWait(0.3f);
+                yield return BattleWait(ElementActionDelay(ally));
+                if (ResolveBattleBeforePlayerSkill()) yield break;
             }
+            ElementSkillExecutor.EndSideTurn(this, true);
+            FusionSupportExecutor.EndSideTurn(this, true);
 
             ApplyNumberPassivesAtTurnStart("敵", enemies, turn, false);
+            BeginAdvancedFusionTurn(false, turn);
+            FusionSupportExecutor.BeginSideTurn(this, false, turn);
+            ElementSkillExecutor.ApplyWind(this, false, impassableCells);
 
             foreach (var enemy in new List<BattleCharacter>(enemies))
             {
+                yield return WaitBattleSeconds(0f);
+                if (ResolveBattleBeforePlayerSkill()) yield break;
                 if (enemy != null) DoAction(enemy, "敵");
-                yield return BattleWait(0.3f);
+                yield return BattleWait(ElementActionDelay(enemy));
+                if (ResolveBattleBeforePlayerSkill()) yield break;
             }
+            ElementSkillExecutor.EndSideTurn(this, false);
+            FusionSupportExecutor.EndSideTurn(this, false);
+            EndPlayerSkillTurn();
 
             // 土の罠による継続ダメージ
             foreach (var bc in new List<BattleCharacter>(allies))
@@ -509,6 +667,8 @@ public class BattleManager : MonoBehaviour
                 }
             }
 
+
+            if (ResolveBattleBeforePlayerSkill()) yield break;
 
             // 敵ドラゴン専用：確率で回復
             foreach (var enemy in new List<BattleCharacter>(enemies))
@@ -553,7 +713,7 @@ public class BattleManager : MonoBehaviour
             }
             if (turn >= maxTurns)
             {
-                ShowResult("引き分け", Color.gray, false);
+                ShowResult($"引き分け（{maxTurns}ターン経過）", Color.gray, false);
                 yield break;
             }
 
@@ -562,11 +722,21 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private WaitForSeconds BattleWait(float seconds)
+    private IEnumerator BattleWait(float seconds)
     {
         float standardDelay = seconds / CurrentBattleSpeed;
         float cinematicRemaining = Mathf.Max(0f, skillCinematicUntil - Time.time);
-        return new WaitForSeconds(Mathf.Max(standardDelay, cinematicRemaining));
+        return WaitBattleSeconds(Mathf.Max(standardDelay, cinematicRemaining));
+    }
+
+    private IEnumerator WaitBattleSeconds(float seconds)
+    {
+        float elapsed = 0f;
+        while (isPaused || elapsed < seconds)
+        {
+            yield return null;
+            if (!isPaused) elapsed += Time.deltaTime;
+        }
     }
 
     private void ApplyNumberPassivesAtTurnStart(string side, List<BattleCharacter> characters, int battleTurn, bool isAlly)
@@ -652,7 +822,7 @@ public class BattleManager : MonoBehaviour
             switch (character.data.category)
             {
                 case CharacterCategory.Number1:
-                    character.SetNumberPassiveAttackBonus(lowAttackBonus);
+                    character.SetNumberPassiveAttackBonus(Mathf.RoundToInt(lowAttackBonus*character.SkillEffectMultiplier));
                     if (lowStrength > 0)
                     {
                         StartCoroutine(PlayNumberAuraAfterDelay(character, lowStrength, isOneOnlyParty && onePartyCount >= 4, auraIndex++ * 0.04f));
@@ -668,7 +838,7 @@ public class BattleManager : MonoBehaviour
                     break;
 
                 case CharacterCategory.Number3:
-                    character.SetNumberPassiveAttackBonus(highAttackBonus);
+                    character.SetNumberPassiveAttackBonus(Mathf.RoundToInt(highAttackBonus*character.SkillEffectMultiplier));
                     if (highStrength > 0)
                     {
                         StartCoroutine(PlayNumberAuraAfterDelay(character, highStrength, false, auraIndex++ * 0.04f));
@@ -692,10 +862,11 @@ public class BattleManager : MonoBehaviour
         if (character == null || healPercent <= 0) return;
 
         int maxHp = character.maxHP;
-        int heal = Mathf.CeilToInt(maxHp * healPercent / 100f);
+        int heal = Mathf.CeilToInt(maxHp * healPercent / 100f * character.SkillEffectMultiplier);
         int before = character.currentHP;
         character.currentHP = Mathf.Min(maxHp, character.currentHP + heal);
         int actualHeal = character.currentHP - before;
+        RecordHeal(character, actualHeal);
         if (actualHeal <= 0) return;
 
         character.UpdateHPBar();
@@ -738,56 +909,54 @@ public class BattleManager : MonoBehaviour
 
     private void EnsureSpeedButton()
     {
-        if (speedButton != null) return;
-
-        var buttonObj = new GameObject("SpeedButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
-        buttonObj.transform.SetParent(transform, false);
-        speedButton = buttonObj.GetComponent<Button>();
-        var image = buttonObj.GetComponent<Image>();
-        image.color = new Color(0.62f, 0.42f, 0.23f, 1f);
-        var outline = buttonObj.AddComponent<Outline>();
-        outline.effectColor = new Color(0.95f, 0.72f, 0.42f, 0.8f);
-        outline.effectDistance = new Vector2(1f, -1f);
-
-        var textObj = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
-        textObj.transform.SetParent(buttonObj.transform, false);
-        speedButtonText = textObj.GetComponent<TextMeshProUGUI>();
-        UnityUIRuntimeTheme.EnsureJapaneseCapableFont(speedButtonText);
-        speedButtonText.alignment = TextAlignmentOptions.Center;
-        speedButtonText.enableAutoSizing = true;
-        speedButtonText.fontSizeMin = 14f;
-        speedButtonText.fontSizeMax = 24f;
-        speedButtonText.color = Color.white;
-        speedButtonText.raycastTarget = false;
-
-        var textRect = speedButtonText.rectTransform;
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.offsetMin = Vector2.zero;
-        textRect.offsetMax = Vector2.zero;
-
-        speedButton.onClick.AddListener(ToggleBattleSpeed);
+        if (playbackControls != null) return;
+        playbackControls = new BattlePlaybackControls(transform, SetBattleSpeed, SetAutoRepeat);
         UpdateSpeedButtonLabel();
     }
 
-    private void ToggleBattleSpeed()
+    private void SetBattleSpeed(int index)
     {
-        GameAudio.Instance.EnsureBgm();
         int unlockedTier = GameManager.Instance != null ? GameManager.Instance.BattleSpeedTier : 0;
         int maxIndex = Mathf.Clamp(unlockedTier, 0, battleSpeeds.Length - 1);
-        battleSpeedIndex = (battleSpeedIndex + 1) % (maxIndex + 1);
+        battleSpeedIndex = Mathf.Clamp(index, 0, maxIndex);
         GameManager.Instance?.SetBattleSpeedIndex(battleSpeedIndex);
         GameAudio.Instance.Play(GameSound.Click);
-        AddLog($"バトル速度 x{CurrentBattleSpeed:0.#}", Color.cyan);
         UpdateSpeedButtonLabel();
     }
 
     private void UpdateSpeedButtonLabel()
     {
-        if (speedButtonText != null)
-        {
-            speedButtonText.text = $"x{CurrentBattleSpeed:0.#}";
-        }
+        int maximum = Mathf.Clamp(GameManager.Instance != null ? GameManager.Instance.BattleSpeedTier : 0, 0, battleSpeeds.Length - 1);
+        playbackControls?.Refresh(battleSpeedIndex, maximum, CurrentBattleSpeed, battleSpeeds[maximum], autoRepeat, CanRepeatStage);
+    }
+
+    private bool CanRepeatStage => currentStage != null && FacilityManager.Instance != null
+        && FacilityManager.Instance.IsStageRetryUnlocked() && deployedAllies.Any(ally => ally != null);
+
+    private void SetAutoRepeat(bool enabled)
+    {
+        autoRepeat = enabled && CanRepeatStage;
+        if (repeatRoutine != null) StopCoroutine(repeatRoutine);
+        repeatRoutine = null;
+        UpdateSpeedButtonLabel();
+        if (resultRepeatButton != null) SetResultActionLabel(resultRepeatButton, autoRepeat ? "連戦停止" : "連戦開始");
+        if (autoRepeat && battleFinished && lastBattleWon)
+            repeatRoutine = StartCoroutine(RepeatAfterVictory());
+    }
+
+    private IEnumerator RepeatAfterVictory()
+    {
+        yield return new WaitForSecondsRealtime(3f);
+        while (isPaused && autoRepeat) yield return null;
+        repeatRoutine = null;
+        if (autoRepeat && battleFinished && lastBattleWon && CanRepeatStage) RetryCurrentStage();
+    }
+
+    private void CompleteBattlePlayback(bool won)
+    {
+        battleFinished = true;
+        lastBattleWon = won;
+        if (!won) SetAutoRepeat(false);
     }
 
     // === Reinforcement spawning ===
@@ -845,7 +1014,8 @@ public class BattleManager : MonoBehaviour
 
     private void DoAction(BattleCharacter character, string side)
     {
-        if (character == null || character.currentHP <= 0) return;
+        if (character == null || character.isDead || character.currentHP <= 0) return;
+        if (character.EligibleTurn > fusionTurn) return;
 
         if (character.IsStunned())
         {
@@ -854,6 +1024,8 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
+        if (character.data.skillType == SkillType.IronAdapt)
+            ElementSkillExecutor.SelectIronForm(character, this);
         BattleCharacter skillTarget = FindSkillTarget(character);
 
         // ドラゴンは特殊処理
@@ -875,84 +1047,27 @@ public class BattleManager : MonoBehaviour
 
         // 通常攻撃
         BattleCharacter target = TargetingService.FindAdjacentEnemy(this, character);
-        if (target != null)
+        if (target != null && BattleRangeService.MinimumRange(ElementSkillExecutor.AttackSkill(character)) == 1)
         {
             character.PerformAttack(target, this);
             return;
         }
 
-        // 移動処理
-        BattleCharacter nearest = TargetingService.FindNearestEnemy(this, character, character.isAlly ? enemies : allies);
-        if (nearest != null)
+        var friends = new HashSet<Vector2Int>();
+        var opponents = new HashSet<Vector2Int>();
+        foreach (BattleCharacter other in gridMap.Values)
         {
-            var blocked = new HashSet<Vector2Int>(gridMap.Keys);
-            blocked.UnionWith(impassableCells);
-            blocked.Remove(character.gridPos);
-            blocked.Remove(nearest.gridPos);
-
-            List<Vector2Int> path = Pathfinding.FindPath(character.gridPos, nearest.gridPos, rows, cols, blocked);
-
-            if (path != null && path.Count > 1)
-            {
-                int destinationIndex = GetMovementDestinationIndex(character, path, targetCellOccupied: true);
-                Vector2Int nextStep = path[destinationIndex];
-                if (IsCellFree(nextStep))
-                {
-                    MoveCharacter(character, path, destinationIndex, side);
-                    return;
-                }
-            }
-            else
-            {
-                // ターゲットの周囲8マスを候補として最も近づけるセルを探す
-                List<Vector2Int> candidates = new List<Vector2Int>();
-                for (int dx = -1; dx <= 1; dx++)
-                {
-                    for (int dy = -1; dy <= 1; dy++)
-                    {
-                        if (dx == 0 && dy == 0) continue;
-                        Vector2Int pos = nearest.gridPos + new Vector2Int(dx, dy);
-                        if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) continue;
-                        if (IsCellFree(pos))
-                        {
-                            candidates.Add(pos);
-                        }
-                    }
-                }
-                // 最も近づけるセルへのpathを探す
-                float minDist = float.MaxValue;
-                List<Vector2Int> bestPath = null;
-                foreach (var candidate in candidates)
-                {
-                    var blocked2 = new HashSet<Vector2Int>(gridMap.Keys);
-                    blocked2.UnionWith(impassableCells);
-                    blocked2.Remove(character.gridPos);
-                    // candidateは空きマスなのでblocked2に含まれていない
-                    List<Vector2Int> candidatePath = Pathfinding.FindPath(character.gridPos, candidate, rows, cols, blocked2);
-                    if (candidatePath != null && candidatePath.Count > 1)
-                    {
-                        // 距離はターゲットまでの距離で比較
-                        float dist = Vector2Int.Distance(candidate, nearest.gridPos);
-                        if (bestPath == null || dist < minDist)
-                        {
-                            minDist = dist;
-                            bestPath = candidatePath;
-                        }
-                    }
-                }
-                if (bestPath != null && bestPath.Count > 1)
-                {
-                    int destinationIndex = GetMovementDestinationIndex(character, bestPath, targetCellOccupied: false);
-                    Vector2Int nextStep = bestPath[destinationIndex];
-                    if (IsCellFree(nextStep))
-                    {
-                        MoveCharacter(character, bestPath, destinationIndex, side);
-                        return;
-                    }
-                }
-                AddLog($"{side} {character.data.characterName} は動けない！", Color.gray);
-            }
+            if (other == null || other.isDead) continue;
+            (other.isAlly == character.isAlly ? friends : opponents).Add(other.gridPos);
         }
+        SkillType movementSkill = BattleActionRules.IsReliableRoleSkill(character.data.skillType)
+            && character.data.skillType != SkillType.WaterHeal ? ElementSkillExecutor.AttackSkill(character) : SkillType.None;
+        List<Vector2Int> path = BattleMovementPlanner.FindNextMove(character.gridPos, opponents.ToList(), movementSkill,
+            character.data.category, friends, opponents, impassableCells, cols, rows, character.MovementModifier);
+        if (path != null && path.Count > 1)
+            MoveCharacter(character, path, path.Count - 1, side);
+        else
+            AddLog($"{side} {character.data.characterName} は待機する。", Color.gray);
     }
 
     private BattleCharacter FindSkillTarget(BattleCharacter character)
@@ -961,11 +1076,31 @@ public class BattleManager : MonoBehaviour
 
         switch (character.data.skillType)
         {
+            case SkillType.Rain:
+                return AdvancedFusionExecutor.FindFriendlyTarget(this, character, false);
+            case SkillType.Cocoon:
+                return AdvancedFusionExecutor.FindFriendlyTarget(this, character, true);
+            case SkillType.Wave:
+                return TargetingService.FindSwordTarget(this, character);
+            case SkillType.ChainLightning:
+                return TargetingService.FindEnemyTarget(this, character, SkillType.ChainLightning);
+            case SkillType.IronAdapt:
+                return character.IronForm == IronForm.Sword ? TargetingService.FindSwordTarget(this, character)
+                    : character.IronForm == IronForm.Spear ? TargetingService.FindSpearTarget(this, character) : null;
+            case SkillType.ThreadPull:
+                return TargetingService.FindEnemyTarget(this, character, SkillType.ThreadPull);
+            case SkillType.ShadowCopy:
+                return SupportSkillExecutor.FindCopyTarget(character, this);
+            case SkillType.DoubleSlash:
+            case SkillType.Warrior:
             case SkillType.Slash:
                 return TargetingService.FindSwordTarget(this, character);
+            case SkillType.ScatterShot:
+                return TargetingService.FindEnemyTarget(this, character, SkillType.ScatterShot);
             case SkillType.Arrow:
                 return TargetingService.FindArrowTarget(this, character);
             case SkillType.Spear:
+            case SkillType.Sentinel:
                 return TargetingService.FindSpearTarget(this, character);
             case SkillType.StunBlow:
             case SkillType.WoodPush:
@@ -975,12 +1110,12 @@ public class BattleManager : MonoBehaviour
             case SkillType.Stone:
                 return TargetingService.FindStoneTarget(this, character);
             case SkillType.Gun:
-                return TargetingService.FindNearestEnemy(this, character, character.isAlly ? enemies : allies);
+                return TargetingService.FindGunTarget(this, character);
             case SkillType.Soil:
             case SkillType.Dragon:
                 return character;
             case SkillType.Fireball:
-                return FindRandomLivingTarget(character.isAlly ? enemies : allies);
+                return TargetingService.FindEnemyTarget(this, character, SkillType.Fireball);
             case SkillType.WaterHeal:
                 return TargetingService.FindAdjacentAlly(this, character);
             case SkillType.HorseCharge:
@@ -990,29 +1125,6 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private static BattleCharacter FindRandomLivingTarget(List<BattleCharacter> candidates)
-    {
-        if (candidates == null) return null;
-
-        List<BattleCharacter> living = new();
-        foreach (BattleCharacter candidate in candidates)
-        {
-            if (candidate != null && !candidate.isDead)
-            {
-                living.Add(candidate);
-            }
-        }
-
-        return living.Count > 0 ? living[Random.Range(0, living.Count)] : null;
-    }
-
-    private static int GetMovementDestinationIndex(BattleCharacter character, List<Vector2Int> path, bool targetCellOccupied)
-    {
-        CharacterCategory category = character != null && character.data != null
-            ? character.data.category
-            : CharacterCategory.None;
-        return BattleMovementRules.GetDestinationIndex(category, path, targetCellOccupied);
-    }
 
     private bool IsCellFree(Vector2Int pos)
     {
@@ -1061,7 +1173,7 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator ResolveTrapAfterMovement(BattleCharacter character, Vector2Int landingPos, int stepCount, string side)
     {
-        yield return new WaitForSeconds(0.14f * Mathf.Max(1, stepCount));
+        yield return WaitBattleSeconds(0.14f * Mathf.Max(1, stepCount));
         if (character == null || character.isDead || character.gridPos != landingPos) yield break;
 
         character.TakeDamage(
@@ -1076,16 +1188,21 @@ public class BattleManager : MonoBehaviour
         if (character == null || character.isDead || character.data == null) return;
         if (!soilTrapDamageByCell.TryGetValue(character.gridPos, out int damage)) return;
 
+        int before = character.currentHP;
+        soilTrapRecords.TryGetValue(character.gridPos, out var owner);
+
         character.TakeDamage(
             damage,
             this,
             isBasicAttack: false,
             actionLabel: $"{character.data.characterName} は{message}");
+        if (owner.ally && !character.isAlly)
+            battleRecords.Credit(owner.token, damage: Mathf.Min(before, Mathf.Max(0, before - character.currentHP)));
     }
 
     private IEnumerator ResolveSoilTrapAfterMovement(BattleCharacter character, Vector2Int landingPos, int stepCount)
     {
-        yield return new WaitForSeconds(0.14f * Mathf.Max(1, stepCount));
+        yield return WaitBattleSeconds(0.14f * Mathf.Max(1, stepCount));
         if (character == null || character.isDead || character.gridPos != landingPos) yield break;
 
         ResolveSoilTrapDamage(character, "土の罠を踏み抜いた！");
@@ -1117,6 +1234,7 @@ public class BattleManager : MonoBehaviour
         while (time < duration)
         {
             if (charRect == null) yield break;
+            if (isPaused) { yield return null; continue; }
             time += Time.deltaTime;
             float t = Mathf.Clamp01(time / duration);
 
@@ -1212,6 +1330,10 @@ public class BattleManager : MonoBehaviour
 
     private void ShowResult(string message, Color color, bool isWin = false)
     {
+        FinishPlayerSkill();
+        if (battleFinished) return;
+        CompleteBattlePlayback(isWin);
+        if (!battleRecords.Complete(isWin)) return;
         GameAudio.Instance.Play(isWin ? GameSound.Win : GameSound.Lose);
         int effectiveReward = 0;
         PlayerExperienceResult experienceResult = default;
@@ -1220,7 +1342,7 @@ public class BattleManager : MonoBehaviour
         {
             GameManager.Instance.RegisterClearedStage(currentStage.stageId);
             experienceResult = PlayerInventory.Instance != null
-                ? PlayerInventory.Instance.GrantBattleExperience(currentStage)
+                ? PlayerInventory.Instance.GrantBattleExperience(currentStage, deployedAllies)
                 : default;
             var recruitmentResults = ResearchBondService.Instance.ResolveVictory(encounteredEnemyCharacterIds);
             effectiveReward = GameManager.Instance.GetEffectiveStagePointReward(currentReward);
@@ -1256,6 +1378,7 @@ public class BattleManager : MonoBehaviour
         UnityUIRuntimeTheme.EnsureJapaneseCapableFont(resultText);
         ConfigureResultModal(bondResults.Count > 0);
         ConfigureResultActions();
+        ConfigureRecordButton();
         ConfigureResultBondIndicators(bondResults);
 
         resultText.transform.SetAsLastSibling();
@@ -1265,15 +1388,15 @@ public class BattleManager : MonoBehaviour
         int nextPlayerExperience = inventory != null ? inventory.GetExperienceToNextPlayerLevel() : 0;
         bool playerLevelCapped = inventory != null && inventory.IsAtEffectiveLevelCap;
         int playerLevelCap = inventory != null ? inventory.GetEffectiveLevelCap() : 0;
-        bool leveledUp = experienceResult.level > experienceResult.previousLevel;
         string experienceProgress = playerLevelCapped
-            ? $"上限 Lv.{playerLevelCap}　蓄積 {playerExperience}（解放後に反映）"
-            : leveledUp
-                ? $"Lv.{experienceResult.previousLevel} → Lv.{experienceResult.level}　{playerExperience}/{nextPlayerExperience}"
-                : $"{playerExperience}/{nextPlayerExperience}";
+            ? $"Lv.{playerLevelCap}（上限）　蓄積 {playerExperience}"
+            : $"Lv.{inventory?.PlayerLevel ?? experienceResult.level}　経験 {playerExperience}/{nextPlayerExperience}";
         string rewardSummary = isWin
-            ? $"\n\n戦果 +{effectiveReward}　合計 {totalStagePoints}\n軍師経験 +{experienceResult.experience}　{experienceProgress}"
+            ? $"\n\n戦果 +{effectiveReward}　所持 {totalStagePoints}\n{experienceProgress}"
             : "\n\n今回の獲得なし";
+        float experienceMultiplier = BattleRewardRules.ArmyExperienceMultiplier(deployedAllies);
+        if (isWin && experienceMultiplier > 1f)
+            rewardSummary += $"\n経験値補正 ×{experienceMultiplier:0.#}";
         resultText.text = message + rewardSummary;
         resultText.color = isWin
             ? new Color(1f, 0.88f, 0.46f)
@@ -1286,6 +1409,8 @@ public class BattleManager : MonoBehaviour
         resultText.fontSizeMax = 48f;
 
         Canvas.ForceUpdateCanvases();
+        if (autoRepeat) SetAutoRepeat(true);
+        RequestResultGuide(isWin);
     }
 
     private void ConfigureResultModal(bool hasBondResults)
@@ -1515,11 +1640,24 @@ public class BattleManager : MonoBehaviour
             resultRetryButton = CreateResultActionButton("RetryStageButton", "もう一度");
             resultRetryButton.onClick.AddListener(RetryCurrentStage);
         }
+        if (resultRepeatButton == null)
+        {
+            resultRepeatButton = CreateResultActionButton("RepeatStageButton", "連戦開始");
+            resultRepeatButton.onClick.AddListener(() =>
+            {
+                bool wasRepeating = autoRepeat;
+                SetAutoRepeat(!wasRepeating);
+                if (!wasRepeating && autoRepeat && !lastBattleWon) RetryCurrentStage();
+            });
+        }
 
         bool canRetry = currentStage != null
             && FacilityManager.Instance != null
             && FacilityManager.Instance.IsStageRetryUnlocked();
         resultRetryButton.gameObject.SetActive(canRetry);
+        resultRepeatButton.gameObject.SetActive(canRetry);
+        SetResultActionLabel(resultRepeatButton, autoRepeat ? "連戦停止" : "連戦開始");
+        SetResultActionLabel(resultBackButton, canRetry ? "戻る" : "ステージ選択へ");
         resultBackButton.transform.SetAsLastSibling();
         if (canRetry)
         {
@@ -1573,8 +1711,8 @@ public class BattleManager : MonoBehaviour
         text.color = new Color(1f, 0.95f, 0.82f);
         text.alignment = TextAlignmentOptions.Center;
         text.enableAutoSizing = true;
-        text.fontSizeMin = 15f;
-        text.fontSizeMax = 22f;
+        text.fontSizeMin = 34f;
+        text.fontSizeMax = 42f;
         text.raycastTarget = false;
     }
 
@@ -1593,11 +1731,12 @@ public class BattleManager : MonoBehaviour
 
         resultPanel.SetActive(false);
         GameAudio.Instance.Play(GameSound.Click);
-        StartBattle(retryParty, currentStage);
+        StartBattle(retryParty, currentStage, useSavedDeployment: autoRepeat);
     }
 
     private void ReturnToStageSelect()
     {
+        SetAutoRepeat(false);
         GameAudio.Instance.Play(GameSound.Click);
         resultPanel?.SetActive(false);
         UIManager.Instance?.ShowStageSelect();
@@ -1755,7 +1894,7 @@ public class BattleManager : MonoBehaviour
 
         Color color = new Color(1f, 0.88f, 0.42f);
         caster.PlayCastEffect(color);
-        List<Vector2Int> cells = BattleRangeService.GetLineWithinBoard(caster.gridPos, dir, rows + cols, cols, rows);
+        List<Vector2Int> cells = BattleDamageRules.GunLine(caster, dir, gridMap, cols, rows);
         StartCoroutine(HighlightCellsRoutine(cells, GetSkillImpactRangeColor(SkillType.Gun), 0.30f));
 
         RectTransform from = caster.transform as RectTransform;
@@ -1796,8 +1935,8 @@ public class BattleManager : MonoBehaviour
             SkillType.Fireball => "Fireball",
             SkillType.BirdRetreat => "BirdRetreat",
             SkillType.HorseCharge => "HorseCharge",
-            SkillType.Counter => "Shield",
-            SkillType.AreaCounter => "Wall",
+            SkillType.Counter or SkillType.Shield => "Shield",
+            SkillType.AreaCounter or SkillType.Wall => "Wall",
             SkillType.Armor => "Armor",
             SkillType.Dragon => "DragonBreath",
             _ => null
@@ -1906,15 +2045,15 @@ public class BattleManager : MonoBehaviour
         return sprite;
     }
 
-    private static Sprite LoadHorseStaticSprite()
+    private static Sprite LoadHorseChargeSprite()
     {
-        const string cacheKey = "HorseStaticForkedWind";
+        const string cacheKey = "HorseChargeRepresentative";
         if (staticVfxSprites.TryGetValue(cacheKey, out Sprite cached))
         {
             return cached;
         }
 
-        Texture2D texture = Resources.Load<Texture2D>("VFX/Static/HorseChargeForkedWind");
+        Texture2D texture = Resources.Load<Texture2D>("VFX/Animated/HorseCharge/frame_02");
         if (texture == null)
         {
             Debug.LogWarning("[VFX] 馬の代表画像がResourcesから見つかりません。");
@@ -1922,22 +2061,22 @@ public class BattleManager : MonoBehaviour
             return null;
         }
 
-        // 馬の前方で左右に分かれる、真上視点の風圧と砂埃を使う。
+        // 採用済みの突進用砂埃フレームを一枚絵として動かす。
         Rect spriteRect = new Rect(0f, 0f, texture.width, texture.height);
         Sprite sprite = Sprite.Create(texture, spriteRect, new Vector2(0.5f, 0.5f), 100f);
         staticVfxSprites[cacheKey] = sprite;
         return sprite;
     }
 
-    private static Sprite LoadBirdStaticSprite()
+    private static Sprite LoadBirdRetreatSprite()
     {
-        const string cacheKey = "BirdStaticCleanFeathers";
+        const string cacheKey = "BirdRetreatRepresentative";
         if (staticVfxSprites.TryGetValue(cacheKey, out Sprite cached))
         {
             return cached;
         }
 
-        Texture2D texture = Resources.Load<Texture2D>("VFX/Static/BirdFeathersOnly");
+        Texture2D texture = Resources.Load<Texture2D>("VFX/Animated/BirdRetreat/frame_02");
         if (texture == null)
         {
             Debug.LogWarning("[VFX] 鳥の代表画像がResourcesから見つかりません。");
@@ -1945,7 +2084,7 @@ public class BattleManager : MonoBehaviour
             return null;
         }
 
-        // 鳥専用の羽だけを使う。地面の土埃やワープ軌跡を含む旧シートは参照しない。
+        // 採用済みの退避用フレームを一枚絵として動かす。
         Rect spriteRect = new Rect(0f, 0f, texture.width, texture.height);
         Sprite sprite = Sprite.Create(texture, spriteRect, new Vector2(0.5f, 0.5f), 100f);
         staticVfxSprites[cacheKey] = sprite;
@@ -2176,7 +2315,7 @@ public class BattleManager : MonoBehaviour
     {
         if (target == null || sprite == null) yield break;
 
-        float sizeScale = folder == "NumberAura_High_Strong" ? 1.04f : 1.18f;
+        float sizeScale = 1.18f;
         if (onePartyPeak) sizeScale *= 1.14f;
         float duration = SkillVfxDuration(onePartyPeak ? 0.84f : 0.72f);
         yield return SkillVfxMotion.PlayNumberAura(
@@ -2185,7 +2324,7 @@ public class BattleManager : MonoBehaviour
             Vector3.zero,
             currentBattleCellSize * sizeScale,
             duration,
-            110f,
+            SkillVfxMotion.NumberAuraRotationDegrees,
             useAnchoredPosition: true,
             onCreated: RegisterBattleVfx,
             onFinished: DestroyBattleVfx);
@@ -2453,11 +2592,11 @@ public class BattleManager : MonoBehaviour
     private IEnumerator HorseChargeSpriteVfxRoutine(RectTransform caster, RectTransform target)
     {
         if (caster == null || target == null) yield break;
-        Sprite sprite = LoadHorseStaticSprite();
+        Sprite sprite = LoadHorseChargeSprite();
         if (sprite == null) yield break;
 
-        // 馬の後方で左右に開く風圧。中央を空けて、馬の駒を覆わないようにする。
-        Image image = CreateSingleSpriteVfx("SingleVfx_HorseChargeForkedWind", EnsureBattleVfxOverlay(), sprite, out RectTransform rect);
+        // 馬の後方へ砂埃を流し、駒を覆わないようにする。
+        Image image = CreateSingleSpriteVfx("SingleVfx_HorseCharge", EnsureBattleVfxOverlay(), sprite, out RectTransform rect);
         Vector3 start = caster.position;
         Vector3 end = target.position;
         Vector3 delta = end - start;
@@ -2476,7 +2615,7 @@ public class BattleManager : MonoBehaviour
             float travel = Mathf.SmoothStep(0f, 1f, progress);
             Vector3 horsePosition = Vector3.Lerp(start, end, travel);
 
-            // 素材は右向き。反転して、V字の開きが馬の後方へ流れるように配置する。
+            // 素材は右向き。反転して、砂埃が馬の後方へ流れるように配置する。
             rect.position = horsePosition - forward * currentBattleCellSize * (0.72f + 0.16f * travel);
             rect.rotation = Quaternion.Euler(0f, 0f, angle + 180f);
             rect.localScale = Vector3.one * (0.62f + 0.38f * travel);
@@ -2491,7 +2630,7 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator BirdRetreatSpriteVfxRoutine(Vector3 position, bool arriving, float delay)
     {
-        Sprite sprite = LoadBirdStaticSprite();
+        Sprite sprite = LoadBirdRetreatSprite();
         if (sprite == null) yield break;
         if (delay > 0f) yield return new WaitForSecondsRealtime(delay);
 
@@ -2894,12 +3033,13 @@ public class BattleManager : MonoBehaviour
 
         if (!target.isAlly)
         {
-            ResearchBondService.Instance.RegisterDefeated(target.data);
+            if (!target.IsGenerated) ResearchBondService.Instance.RegisterDefeated(target.OriginalData);
         }
 
         gridMap.Remove(target.gridPos);
         if (target.isAlly) allies.Remove(target);
         else enemies.Remove(target);
+        RemoveFusionSummons(target);
 
         // スキル素材の途中で倒されたコマだけが消えないよう、盤面上の論理からは
         // 先に外しつつ、見た目は短く残す。次の行動もこの時間を待つ。
@@ -2980,7 +3120,10 @@ public class BattleManager : MonoBehaviour
             int dmg = Mathf.RoundToInt(self.GetEffectiveAttack(this) * self.GetEffectiveSkillPower());
             string type = (bc.isAlly == self.isAlly) ? "味方" : "敵";
             AddLog($"{self.data.characterName} の銃が{type} {bc.data.characterName} を撃った！({dmg}ダメージ)", bc.isAlly == self.isAlly ? Color.cyan : Color.red);
+            int previousHP = bc.currentHP;
             bc.TakeDamage(dmg, this, isBasicAttack: false);
+            if (self.isAlly && !bc.isAlly)
+                battleRecords.Credit(self.RecordToken, damage: Mathf.Min(previousHP, Mathf.Max(0, previousHP - bc.currentHP)));
         }
         // 最後に方向更新
         if (affected.Count > 0)
@@ -2991,7 +3134,7 @@ public class BattleManager : MonoBehaviour
     public void GenerateSoilTraps(BattleCharacter caster)
     {
         if (caster == null) return;
-        GenerateSoilTraps(caster.gridPos, caster.GetEffectiveAttack(this));
+        GenerateSoilTraps(caster.gridPos, Mathf.RoundToInt(caster.GetEffectiveAttack(this)*caster.SkillEffectMultiplier), caster);
     }
 
     public void GenerateSoilTraps(Vector2Int center)
@@ -2999,7 +3142,7 @@ public class BattleManager : MonoBehaviour
         GenerateSoilTraps(center, BattleTrapRules.MinimumSoilTrapDamage);
     }
 
-    private void GenerateSoilTraps(Vector2Int center, int casterAttack)
+    private void GenerateSoilTraps(Vector2Int center, int casterAttack, BattleCharacter source = null)
     {
         // 候補マスを収集
         List<Vector2Int> candidates = new List<Vector2Int>();
@@ -3031,6 +3174,7 @@ public class BattleManager : MonoBehaviour
             Vector2Int pos = candidates[i];
             soilTrapCells.Add(pos);
             soilTrapDamageByCell[pos] = trapDamage;
+            if (source != null) soilTrapRecords[pos] = (source.RecordToken, source.isAlly);
             placedCells.Add(pos);
             CreateSoilTrapCellTint(pos);
             CreateSoilTrapVfx(pos);
@@ -3261,7 +3405,7 @@ public class BattleManager : MonoBehaviour
 
         Vector3 departurePosition = bird.transform.position;
         StartCoroutine(BirdRetreatSpriteVfxRoutine(departurePosition, arriving: false, delay: 0f));
-        yield return new WaitForSecondsRealtime(SkillVfxDuration(0.13f));
+        yield return WaitBattleSeconds(SkillVfxDuration(0.13f));
 
         if (bird == null || bird.isDead || !IsCellFree(newPos)) yield break;
         gridMap.Remove(bird.gridPos);
@@ -3272,7 +3416,7 @@ public class BattleManager : MonoBehaviour
         if (bird == null || bird.isDead) yield break;
         StartCoroutine(BirdRetreatSpriteVfxRoutine(bird.transform.position, arriving: true, delay: 0f));
         AddLog($"{bird.data.characterName} は攻撃後に退避した！", Color.cyan);
-        yield return new WaitForSecondsRealtime(SkillVfxDuration(0.34f));
+        yield return WaitBattleSeconds(SkillVfxDuration(0.34f));
     }
 
     public void PerformTigerTwinClaw(BattleCharacter tiger, BattleCharacter firstTarget)

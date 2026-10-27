@@ -3,300 +3,131 @@ using UnityEngine;
 
 public static class TargetingService
 {
-    private static readonly Vector2Int[] AdjacentDirections =
-    {
-        Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right,
-        new Vector2Int(1, 1), new Vector2Int(-1, 1),
-        new Vector2Int(1, -1), new Vector2Int(-1, -1)
-    };
-
-    public static BattleCharacter FindAdjacentEnemy(BattleManager bm, BattleCharacter self)
-    {
-        foreach (var dir in GetAdjacentDirs())
-        {
-            Vector2Int pos = self.gridPos + dir;
-            if (bm.gridMap.ContainsKey(pos))
-            {
-                var bc = bm.gridMap[pos];
-                if (bc.isAlly != self.isAlly && bc.currentHP > 0)
-                {
-                    return bc;
-                }
-            }
-        }
-        return null;
-    }
+    public static BattleCharacter FindAdjacentEnemy(BattleManager bm, BattleCharacter self) =>
+        FindEnemyTarget(bm, self, SkillType.None);
 
     public static BattleCharacter FindAdjacentAlly(BattleManager bm, BattleCharacter self)
     {
-        foreach (var dir in GetAdjacentDirs())
+        BattleCharacter best = null;
+        int equalCount = 0;
+        if (bm == null || self == null) return null;
+        foreach (BattleCharacter candidate in bm.gridMap.Values)
         {
-            Vector2Int pos = self.gridPos + dir;
-            if (bm.gridMap.ContainsKey(pos))
+            if (!IsLiving(candidate) || candidate.isAlly != self.isAlly || candidate.currentHP >= candidate.maxHP
+                || !BattleRangeService.CanTargetCell(SkillType.WaterHeal, self.gridPos, candidate.gridPos, bm.Cols, bm.Rows)) continue;
+            long ratio = best == null ? -1 : (long)candidate.currentHP * best.maxHP - (long)best.currentHP * candidate.maxHP;
+            if (best == null || ratio < 0)
             {
-                var bc = bm.gridMap[pos];
-                if (bc.isAlly == self.isAlly && bc != self && bc.currentHP > 0)
-                {
-                    return bc;
-                }
+                best = candidate;
+                equalCount = 1;
             }
+            else if (ratio == 0 && Random.Range(0, ++equalCount) == 0) best = candidate;
         }
-        return null;
+        return best;
     }
 
-    public static BattleCharacter FindNearestEnemy(BattleManager bm, BattleCharacter self, List<BattleCharacter> candidates)
+    public static BattleCharacter FindNearestEnemy(BattleManager bm, BattleCharacter self, List<BattleCharacter> candidates) =>
+        FindNearest(self, candidates, false);
+
+    public static BattleCharacter FindNearestAlly(BattleManager bm, BattleCharacter self, List<BattleCharacter> candidates) =>
+        FindNearest(self, candidates, true);
+
+    private static BattleCharacter FindNearest(BattleCharacter self, IEnumerable<BattleCharacter> candidates, bool ally)
     {
-        BattleCharacter nearest = null;
-        int minDist = int.MaxValue;
-        foreach (var bc in candidates)
+        if (self == null || candidates == null) return null;
+        BattleCharacter best = null;
+        int distance = int.MaxValue, equalCount = 0;
+        foreach (BattleCharacter candidate in candidates)
         {
-            if (bc.isAlly == self.isAlly || bc.currentHP <= 0) continue;
-            int dist = Mathf.Abs(bc.gridPos.x - self.gridPos.x) + Mathf.Abs(bc.gridPos.y - self.gridPos.y);
-            if (dist < minDist)
+            if (!IsLiving(candidate) || candidate == self || (candidate.isAlly == self.isAlly) != ally) continue;
+            int nextDistance = BattleRangeService.Distance(self.gridPos, candidate.gridPos);
+            if (nextDistance < distance)
             {
-                minDist = dist;
-                nearest = bc;
+                distance = nextDistance;
+                best = candidate;
+                equalCount = 1;
             }
+            else if (nextDistance == distance && Random.Range(0, ++equalCount) == 0) best = candidate;
         }
-        return nearest;
+        return best;
     }
 
-    public static BattleCharacter FindNearestAlly(BattleManager bm, BattleCharacter self, List<BattleCharacter> candidates)
+    public static BattleCharacter FindEnemyTarget(BattleManager bm, BattleCharacter self, SkillType skill)
     {
-        BattleCharacter nearest = null;
-        int minDist = int.MaxValue;
-        foreach (var bc in candidates)
+        if (bm == null || self == null) return null;
+        var friends = new HashSet<Vector2Int>();
+        foreach (BattleCharacter character in bm.gridMap.Values)
+            if (IsLiving(character) && character.isAlly == self.isAlly) friends.Add(character.gridPos);
+        var candidates = new List<BattleCharacter>();
+        foreach (BattleCharacter candidate in bm.gridMap.Values)
         {
-            if ((bc.isAlly != self.isAlly) || bc == self || bc.currentHP <= 0) continue;
-            int dist = Mathf.Abs(bc.gridPos.x - self.gridPos.x) + Mathf.Abs(bc.gridPos.y - self.gridPos.y);
-            if (dist < minDist)
-            {
-                minDist = dist;
-                nearest = bc;
-            }
+            if (!IsLiving(candidate) || candidate.isAlly == self.isAlly) continue;
+            if (BattleRangeService.CanTargetCell(skill, self.gridPos, candidate.gridPos, bm.Cols, bm.Rows, friends)) candidates.Add(candidate);
         }
-        return nearest;
+        if (FusionReactionRules.IsProjectile(skill))
+        {
+            var lamps = candidates.FindAll(unit => unit.data.skillType == SkillType.Lantern);
+            if (lamps.Count > 0) candidates = lamps;
+        }
+        return skill == SkillType.ScatterShot ? FusionSkillExecutor.FindScatterTarget(bm,self,candidates)
+            : FindNearest(self, candidates, false);
     }
+
+    public static BattleCharacter FindArrowTarget(BattleManager bm, BattleCharacter self) => FindEnemyTarget(bm, self, SkillType.Arrow);
+    public static BattleCharacter FindGunTarget(BattleManager bm, BattleCharacter self) => FindEnemyTarget(bm, self, SkillType.Gun);
+    public static BattleCharacter FindSpearTarget(BattleManager bm, BattleCharacter self) => FindEnemyTarget(bm, self, SkillType.Spear);
+    public static BattleCharacter FindStoneTarget(BattleManager bm, BattleCharacter self) => FindEnemyTarget(bm, self, SkillType.Stone);
 
     public static BattleCharacter FindSwordTarget(BattleManager bm, BattleCharacter self)
     {
-        List<BattleCharacter> candidates = new();
-        int bestHitCount = 0;
-        foreach (var dir in GetAdjacentDirs())
+        if (bm == null || self == null) return null;
+        BattleCharacter best = null;
+        int bestCount = 0, equalCount = 0;
+        foreach (BattleCharacter target in bm.gridMap.Values)
         {
-            Vector2Int targetPos = self.gridPos + dir;
-            if (!bm.gridMap.TryGetValue(targetPos, out BattleCharacter target)
-                || target == null
-                || target.isDead
-                || target.isAlly == self.isAlly)
+            if (!IsLiving(target) || target.isAlly == self.isAlly
+                || !BattleRangeService.CanTargetCell(SkillType.Slash, self.gridPos, target.gridPos, bm.Cols, bm.Rows)) continue;
+            int count = GetSwordWedgeTargets(bm, self, target.gridPos - self.gridPos).Count;
+            if (count > bestCount)
             {
-                continue;
+                bestCount = count;
+                best = target;
+                equalCount = 1;
             }
-
-            int hitCount = GetSwordWedgeTargets(bm, self, dir).Count;
-            if (hitCount > bestHitCount)
-            {
-                candidates.Clear();
-                bestHitCount = hitCount;
-            }
-            if (hitCount == bestHitCount)
-            {
-                candidates.Add(target);
-            }
+            else if (count == bestCount && Random.Range(0, ++equalCount) == 0) best = target;
         }
-        return candidates.Count > 0 ? candidates[Random.Range(0, candidates.Count)] : null;
+        return best;
     }
 
-    // 剣は正面を中心に、左右前を含めた3マスを同時に薙ぐ。
-    // 斜めを正面にした場合も、隣接する横・縦の2マスで自然な扇形になる。
-    public static List<Vector2Int> GetSwordWedgeCells(Vector2Int center, Vector2Int forward)
+    public static List<Vector2Int> GetSwordWedgeCells(Vector2Int center, Vector2Int forward) =>
+        BattleRangeService.GetSwordWedgeCells(center, forward);
+
+    public static Vector2Int GetSwordAttackDirection(BattleCharacter self, BattleCharacter target) =>
+        self == null || target == null ? Vector2Int.zero : BattleRangeService.NormalizeDirection(target.gridPos - self.gridPos);
+
+    public static List<BattleCharacter> GetSwordWedgeTargets(BattleManager bm, BattleCharacter self, Vector2Int forward)
     {
-        return BattleRangeService.GetSwordWedgeCells(center, forward);
+        var result = new List<BattleCharacter>();
+        if (bm == null || self == null) return result;
+        foreach (Vector2Int cell in GetSwordWedgeCells(self.gridPos, forward))
+            if (bm.gridMap.TryGetValue(cell, out BattleCharacter target) && IsLiving(target) && target.isAlly != self.isAlly) result.Add(target);
+        return result;
     }
 
-    public static Vector2Int GetSwordAttackDirection(BattleCharacter self, BattleCharacter target)
+    public static BattleCharacter FindHorseChargeTarget(BattleManager bm, BattleCharacter self, List<BattleCharacter> candidates)
     {
-        if (self == null || target == null)
+        if (bm == null || self == null || candidates == null) return null;
+        var valid = new List<BattleCharacter>();
+        foreach (BattleCharacter candidate in candidates)
         {
-            return Vector2Int.zero;
+            if (!IsLiving(candidate) || candidate.isAlly == self.isAlly) continue;
+            if (!BattleRangeService.CanTargetCell(SkillType.Spear, self.gridPos, candidate.gridPos, bm.Cols, bm.Rows)) continue;
+            Vector2Int first = self.gridPos + BattleRangeService.NormalizeDirection(candidate.gridPos - self.gridPos);
+            if (first == candidate.gridPos || (!bm.gridMap.ContainsKey(first) && !bm.IsTerrainBlocked(first))) valid.Add(candidate);
         }
-        return BattleRangeService.NormalizeDirection(target.gridPos - self.gridPos);
+        return FindNearest(self, valid, false);
     }
 
-    public static List<BattleCharacter> GetSwordWedgeTargets(
-        BattleManager bm,
-        BattleCharacter self,
-        Vector2Int forward)
-    {
-        var targets = new List<BattleCharacter>();
-        if (bm == null || self == null)
-        {
-            return targets;
-        }
-
-        foreach (Vector2Int position in GetSwordWedgeCells(self.gridPos, forward))
-        {
-            if (bm.gridMap.TryGetValue(position, out BattleCharacter target)
-                && target != null
-                && !target.isDead
-                && target.isAlly != self.isAlly)
-            {
-                targets.Add(target);
-            }
-        }
-        return targets;
-    }
-
-    public static BattleCharacter FindArrowTarget(BattleManager bm, BattleCharacter self)
-    {
-        List<BattleCharacter> candidates = new();
-        foreach (var dir in GetAdjacentDirs())
-        {
-            for (int d = 1; d <= bm.Rows + bm.Cols; d++)
-            {
-                Vector2Int pos = self.gridPos + dir * d;
-                if (bm.gridMap.ContainsKey(pos))
-                {
-                    var bc = bm.gridMap[pos];
-                    if (bc.isAlly != self.isAlly && bc.currentHP > 0)
-                    {
-                        candidates.Add(bc);
-                        break;
-                    }
-                    break;
-                }
-            }
-        }
-        return candidates.Count > 0 ? candidates[Random.Range(0, candidates.Count)] : null;
-    }
-
-    public static BattleCharacter FindSpearTarget(BattleManager bm, BattleCharacter self)
-    {
-        List<BattleCharacter> candidates = new();
-        foreach (var dir in GetAdjacentDirs())
-        {
-            Vector2Int pos1 = self.gridPos + dir;
-            Vector2Int pos2 = self.gridPos + dir * 2;
-
-            if (bm.gridMap.ContainsKey(pos1))
-            {
-                var bc1 = bm.gridMap[pos1];
-                if (bc1.isAlly != self.isAlly && bc1.currentHP > 0)
-                {
-                    candidates.Add(bc1);
-                    continue;
-                }
-            }
-            if (bm.gridMap.ContainsKey(pos2))
-            {
-                var bc2 = bm.gridMap[pos2];
-                if (bc2.isAlly != self.isAlly && bc2.currentHP > 0)
-                {
-                    candidates.Add(bc2);
-                }
-            }
-        }
-        return candidates.Count > 0 ? candidates[Random.Range(0, candidates.Count)] : null;
-    }
-
-    public static BattleCharacter FindStoneTarget(BattleManager bm, BattleCharacter self)
-    {
-        List<BattleCharacter> candidates = new();
-        for (int dx = -2; dx <= 2; dx++)
-        {
-            for (int dy = -2; dy <= 2; dy++)
-            {
-                if (dx == 0 && dy == 0) continue;
-                int tx = self.gridPos.x + dx;
-                int ty = self.gridPos.y + dy;
-                if (tx < 0 || tx >= bm.Cols || ty < 0 || ty >= bm.Rows) continue;
-                Vector2Int pos = new Vector2Int(tx, ty);
-                if (bm.gridMap.ContainsKey(pos))
-                {
-                    var bc = bm.gridMap[pos];
-                    if (bc.isAlly != self.isAlly && bc.currentHP > 0)
-                        candidates.Add(bc);
-                }
-            }
-        }
-        return candidates.Count > 0 ? candidates[Random.Range(0, candidates.Count)] : null;
-    }
-
-    public static BattleCharacter FindGunTarget(BattleManager bm, BattleCharacter self)
-    {
-        List<BattleCharacter> candidates = new();
-        foreach (var dir in GetAdjacentDirs())
-        {
-            for (int d = 1; d <= bm.Rows + bm.Cols; d++)
-            {
-                Vector2Int pos = self.gridPos + dir * d;
-                if (pos.x < 0 || pos.x >= bm.Cols || pos.y < 0 || pos.y >= bm.Rows) break;
-
-                if (bm.gridMap.ContainsKey(pos))
-                {
-                    var bc = bm.gridMap[pos];
-                    if (bc.isAlly != self.isAlly && bc.currentHP > 0)
-                    {
-                        candidates.Add(bc);
-                        break;
-                    }
-                    break;
-                }
-            }
-        }
-        return candidates.Count > 0 ? candidates[Random.Range(0, candidates.Count)] : null;
-    }
-
-    public static BattleCharacter FindHorseChargeTarget(
-        BattleManager bm,
-        BattleCharacter self,
-        List<BattleCharacter> candidates)
-    {
-        List<BattleCharacter> validTargets = new();
-        if (bm == null || self == null || candidates == null)
-        {
-            return null;
-        }
-
-        // 馬の突進は桂馬跳びではなく、八方向へ一直線に最大2マス進む攻撃。
-        // 途中のコマを飛び越えず、候補に存在する敵だけを採用する。
-        foreach (Vector2Int dir in GetAdjacentDirs())
-        {
-            Vector2Int pos1 = self.gridPos + dir;
-            Vector2Int pos2 = self.gridPos + dir * 2;
-
-            if (bm.gridMap.TryGetValue(pos1, out BattleCharacter first)
-                && first != null
-                && !first.isDead
-                && first.isAlly != self.isAlly
-                && candidates.Contains(first))
-            {
-                validTargets.Add(first);
-                continue;
-            }
-
-            // 1マス目が空いている時だけ、2マス目へ突進できる。
-            if (!bm.gridMap.ContainsKey(pos1)
-                && bm.gridMap.TryGetValue(pos2, out BattleCharacter second)
-                && second != null
-                && !second.isDead
-                && second.isAlly != self.isAlly
-                && candidates.Contains(second))
-            {
-                validTargets.Add(second);
-            }
-        }
-
-        if (validTargets.Count > 0)
-        {
-            return validTargets[Random.Range(0, validTargets.Count)];
-        }
-
-        return null;
-    }
-
-    private static Vector2Int[] GetAdjacentDirs()
-    {
-        return AdjacentDirections;
-    }
+    private static bool IsLiving(BattleCharacter character) =>
+        character != null && !character.isDead && character.currentHP > 0;
 }

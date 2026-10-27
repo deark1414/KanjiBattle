@@ -15,7 +15,7 @@ public static class SkillExecutor
 
     public static SkillExecutionResult TryExecuteDetailed(BattleCharacter caster, BattleCharacter target, BattleManager bm)
     {
-        if (caster == null || caster.data == null)
+        if (caster == null || caster.data == null || caster.isDead || caster.currentHP <= 0)
         {
             return SkillExecutionResult.Failed(SkillType.None, SkillExecutionFailure.InvalidCaster);
         }
@@ -26,14 +26,21 @@ public static class SkillExecutor
             return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.NoSkill);
         }
 
-        if (skillType == SkillType.Counter || skillType == SkillType.AreaCounter || skillType == SkillType.NumberPassive)
+        if (skillType is SkillType.Counter or SkillType.AreaCounter or SkillType.NumberPassive
+            or SkillType.BellEcho or SkillType.GuardAlly or SkillType.ProjectileGuard or SkillType.Wall or SkillType.Shield or SkillType.Armor or SkillType.ExperienceBonus or SkillType.WindShift or SkillType.Forge
+            or SkillType.Magnet or SkillType.Mountain or SkillType.Coal or SkillType.Fortress or SkillType.Dice
+            or SkillType.Sand or SkillType.Grass or SkillType.WindChime or SkillType.Lantern)
         {
             return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.PassiveOrReactiveSkill);
         }
 
-        if (skillType != SkillType.Dragon)
+        bool reliableRole = BattleActionRules.IsReliableRoleSkill(skillType);
+        if (reliableRole && !IsValidRoleTarget(caster, target, bm))
+            return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.NoValidTarget);
+
+        if (skillType != SkillType.Dragon && !reliableRole)
         {
-            int chance = GetSkillChance(caster.data, skillType, caster.isAlly);
+            int chance = GetSkillChance(caster.data, skillType, caster.isAlly, caster.OriginalData);
             if (!RollSkillActivation(chance))
             {
                 return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.ChanceFailed);
@@ -46,16 +53,42 @@ public static class SkillExecutor
             return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.UnsupportedEffect);
         }
 
-        return TryExecuteResolved(caster, target, bm)
-            ? SkillExecutionResult.Success(skillType)
-            : SkillExecutionResult.Failed(skillType, SkillExecutionFailure.NoValidTarget);
+        if (!TryExecuteResolved(caster, target, bm))
+            return SkillExecutionResult.Failed(skillType, SkillExecutionFailure.NoValidTarget);
+        if (skillType != SkillType.ShadowCopy)
+            SupportSkillExecutor.TryEcho(caster, target, bm, repeatTarget => TryExecuteResolved(caster, repeatTarget, bm));
+        return SkillExecutionResult.Success(skillType);
     }
 
     private static bool TryExecuteResolved(BattleCharacter caster, BattleCharacter target, BattleManager bm)
     {
         SkillType skillType = caster.data.skillType;
         bool executed;
-        if (skillType == SkillType.Slash)
+        if (skillType is SkillType.Wave or SkillType.Rain or SkillType.Cocoon)
+            return AdvancedFusionExecutor.Execute(caster, target, bm);
+        if (skillType == SkillType.ChainLightning)
+            return ElementSkillExecutor.ExecuteLightning(caster, target, bm);
+        if (skillType == SkillType.IronAdapt)
+        {
+            var context = new SkillContext(bm, caster, target);
+            SkillType form = ElementSkillExecutor.AttackSkill(caster);
+            if (form == SkillType.Slash && CanSwordSlashHit(context))
+            {
+                bm?.PlaySkillVfx(caster, target, SkillType.Slash);
+                return ExecuteSwordSlash(context);
+            }
+            if (form == SkillType.Spear && CanSpearPierceHit(context))
+            {
+                bm?.PlaySkillVfx(caster, target, SkillType.Spear);
+                return ExecuteSpearPierce(context);
+            }
+            return false;
+        }
+        if (skillType is SkillType.ThreadPull or SkillType.ShadowCopy)
+            return SupportSkillExecutor.Execute(caster, target, bm);
+        if (skillType is SkillType.DoubleSlash or SkillType.ScatterShot)
+            return FusionSkillExecutor.Execute(caster, target, bm);
+        if (skillType is SkillType.Slash or SkillType.Warrior)
         {
             var context = new SkillContext(bm, caster, target);
             if (!CanSwordSlashHit(context))
@@ -64,10 +97,10 @@ public static class SkillExecutor
             }
 
             // 範囲内の複数体が倒れても演出の向きがぶれないよう、ダメージ前に開始する。
-            bm?.PlaySkillVfx(caster, target, skillType);
+            bm?.PlaySkillVfx(caster, target, SkillType.Slash);
             return ExecuteSwordSlash(context);
         }
-        if (skillType == SkillType.Spear)
+        if (skillType is SkillType.Spear or SkillType.Sentinel)
         {
             var context = new SkillContext(bm, caster, target);
             if (!CanSpearPierceHit(context))
@@ -77,7 +110,7 @@ public static class SkillExecutor
 
             // 槍は命中で対象が即座に破棄されることがあるため、座標を参照できる
             // ダメージ処理前に演出を開始する。
-            bm?.PlaySkillVfx(caster, target, skillType);
+            bm?.PlaySkillVfx(caster, target, SkillType.Spear);
             return ExecuteSpearPierce(context);
         }
         if (skillType == SkillType.Gun)
@@ -125,8 +158,9 @@ public static class SkillExecutor
         return executed;
     }
 
-    public static int GetSkillChance(CharacterData data, SkillType skillType, bool isAlly = false)
+    public static int GetSkillChance(CharacterData data, SkillType skillType, bool isAlly = false, CharacterData investmentSource = null)
     {
+        if (BattleActionRules.IsReliableRoleSkill(skillType)) return 100;
         if (ForceSkillActivationForVfxReview)
         {
             return 100;
@@ -135,17 +169,29 @@ public static class SkillExecutor
         SkillData skillData = SkillCatalog.Get(skillType);
         int chance = skillData != null && skillData.chanceOverride >= 0
             ? skillData.chanceOverride
-            : data.skillChance;
-        if (isAlly && FacilityManager.Instance != null)
-        {
-            chance = Mathf.RoundToInt(chance * FacilityManager.Instance.GetSkillChanceMultiplier());
-        }
+            : skillType==SkillType.Counter?30:skillType==SkillType.AreaCounter?20:data.skillChance;
+        chance=CharacterInvestment.AdjustChance(investmentSource??data,skillType,chance,isAlly);
         return Mathf.Clamp(chance, 0, 95);
     }
 
     public static bool RollSkillActivation(int chance)
     {
-        return ForceSkillActivationForVfxReview || Random.value < Mathf.Clamp(chance, 0, 100) / 100f;
+        return ForceSkillActivationForVfxReview || chance >= 100 || (chance > 0 && Random.value < chance / 100f);
+    }
+
+    private static bool IsValidRoleTarget(BattleCharacter caster, BattleCharacter target, BattleManager bm)
+    {
+        if (bm == null || target == null || target.isDead || target.currentHP <= 0) return false;
+        if (caster.data.skillType is SkillType.Rain or SkillType.Cocoon)
+            return target.isAlly == caster.isAlly && (caster.data.skillType != SkillType.Cocoon || !target.CocoonShield);
+        bool healing = caster.data.skillType == SkillType.WaterHeal;
+        if (healing ? target.isAlly != caster.isAlly || target.currentHP >= target.maxHP : target.isAlly == caster.isAlly)
+            return false;
+        var friends = new HashSet<Vector2Int>();
+        foreach (BattleCharacter character in bm.gridMap.Values)
+            if (character != null && !character.isDead && character.isAlly == caster.isAlly) friends.Add(character.gridPos);
+        if (caster.data.skillType == SkillType.IronAdapt && caster.IronForm == IronForm.Shield) return false;
+        return BattleRangeService.CanTargetCell(ElementSkillExecutor.AttackSkill(caster), caster.gridPos, target.gridPos, bm.Cols, bm.Rows, friends);
     }
 
     private static bool IsCounterEligibleForVfxReview(SkillType skillType)
@@ -218,6 +264,7 @@ public static class SkillExecutor
                     ctx.Target.currentHP = Mathf.Min(ctx.Target.currentHP + heal, maxHP);
                     ctx.Target.UpdateHPBar();
                     int actualHeal = ctx.Target.currentHP - beforeHP;
+                    ctx.BattleManager.RecordHeal(ctx.Caster, actualHeal);
                     ctx.BattleManager.PlayDamageVfx(ctx.Target, actualHeal, isHealing: true);
                     ctx.BattleManager.AddLog($"{ctx.Caster.DisplayName} が {ctx.Target.DisplayName} を {actualHeal} 回復！");
                     appliedAnyEffect = true;
@@ -431,31 +478,15 @@ public static class SkillExecutor
             return false;
         }
 
-        Vector2Int delta = ctx.Target.gridPos - ctx.Caster.gridPos;
-        int dx = Mathf.Clamp(delta.x, -1, 1);
-        int dy = Mathf.Clamp(delta.y, -1, 1);
-        if (dx == 0 && dy == 0)
-        {
-            return false;
-        }
-
-        Vector2Int dir = new Vector2Int(dx, dy);
-        Vector2Int pos1 = ctx.Caster.gridPos + dir;
-        Vector2Int pos2 = ctx.Caster.gridPos + dir * 2;
-
-        ctx.BattleManager.gridMap.TryGetValue(pos1, out BattleCharacter firstHit);
-        ctx.BattleManager.gridMap.TryGetValue(pos2, out BattleCharacter secondHit);
-
+        Vector2Int direction = BattleRangeService.NormalizeDirection(ctx.Target.gridPos - ctx.Caster.gridPos);
         bool didHit = false;
-        if (firstHit != null && !firstHit.isDead && firstHit.isAlly != ctx.Caster.isAlly)
+        foreach (Vector2Int cell in BattleRangeService.GetLineWithinBoard(ctx.Caster.gridPos, direction, 2,
+            ctx.BattleManager.Cols, ctx.BattleManager.Rows))
         {
-            ctx.Caster.PerformAttack(firstHit, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} が槍を突き出した！ {{0}} ダメージ");
-            didHit = true;
-        }
-
-        if (secondHit != null && !secondHit.isDead && secondHit.isAlly != ctx.Caster.isAlly)
-        {
-            ctx.Caster.PerformAttack(secondHit, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(), $"{ctx.Caster.DisplayName} の貫通が命中！ {{0}} ダメージ");
+            if (!ctx.BattleManager.gridMap.TryGetValue(cell, out BattleCharacter victim) || victim == null || victim.isDead) continue;
+            if (victim.isAlly == ctx.Caster.isAlly) break;
+            ctx.Caster.PerformAttack(victim, ctx.BattleManager, ctx.Caster.GetEffectiveSkillPower(),
+                $"{ctx.Caster.DisplayName} が槍を突き出した！ {{0}} ダメージ");
             didHit = true;
         }
 
@@ -569,48 +600,21 @@ public static class SkillExecutor
             }
         }
 
-        Vector2Int[] dirs =
-        {
-            Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right,
-            new Vector2Int(1,1), new Vector2Int(-1,1), new Vector2Int(1,-1), new Vector2Int(-1,-1)
-        };
-
-        var validDirs = new List<Vector2Int>();
-        foreach (var dir in dirs)
-        {
-            for (int d = 1; d <= ctx.BattleManager.Rows + ctx.BattleManager.Cols; d++)
-            {
-                Vector2Int pos = ctx.Caster.gridPos + dir * d;
-                if (pos.x < 0 || pos.x >= ctx.BattleManager.Cols || pos.y < 0 || pos.y >= ctx.BattleManager.Rows)
-                {
-                    break;
-                }
-                if (ctx.BattleManager.gridMap.TryGetValue(pos, out var bc))
-                {
-                    if (bc != null && !bc.isDead && bc.isAlly != ctx.Caster.isAlly)
-                    {
-                        validDirs.Add(dir);
-                    }
-                    break;
-                }
-            }
-        }
-
-        if (validDirs.Count == 0)
-        {
-            return false;
-        }
-
-        Vector2Int chosenDir = validDirs[Random.Range(0, validDirs.Count)];
+        if (ctx.Target == null || !BattleRangeService.CanTargetCell(SkillType.Gun, ctx.Caster.gridPos,
+            ctx.Target.gridPos, ctx.BattleManager.Cols, ctx.BattleManager.Rows)) return false;
+        Vector2Int chosenDir = BattleRangeService.NormalizeDirection(ctx.Target.gridPos - ctx.Caster.gridPos);
         bool didHit = false;
         ctx.BattleManager.PlayGunLineVfx(ctx.Caster, chosenDir);
 
-        for (int d = 1; d <= ctx.BattleManager.Rows + ctx.BattleManager.Cols; d++)
+        foreach (Vector2Int pos in BattleDamageRules.GunLine(ctx.Caster, chosenDir, ctx.BattleManager.gridMap,
+            ctx.BattleManager.Cols, ctx.BattleManager.Rows))
         {
-            Vector2Int pos = ctx.Caster.gridPos + chosenDir * d;
-            if (pos.x < 0 || pos.x >= ctx.BattleManager.Cols || pos.y < 0 || pos.y >= ctx.BattleManager.Rows)
+            if (BattleRangeService.Distance(ctx.Caster.gridPos, pos) < BattleRangeService.MinimumRange(SkillType.Gun))
             {
-                break;
+                if (ctx.BattleManager.gridMap.TryGetValue(pos, out var adjacent)
+                    && BattleDamageRules.StopsProjectile(adjacent) && adjacent.isAlly != ctx.Caster.isAlly)
+                    return true;
+                continue;
             }
             if (!ctx.BattleManager.gridMap.TryGetValue(pos, out var target) || target == null)
             {
@@ -693,7 +697,7 @@ public static class SkillExecutor
     private static bool ExecuteDragon(SkillContext ctx)
     {
         SkillData skillData = SkillCatalog.Get(SkillType.Dragon);
-        int chance = GetSkillChance(ctx.Caster.data, SkillType.Dragon, ctx.Caster.isAlly);
+        int chance = GetSkillChance(ctx.Caster.data, SkillType.Dragon, ctx.Caster.isAlly, ctx.Caster.OriginalData);
 
         int range = 3;
         bool hasRoar = false;

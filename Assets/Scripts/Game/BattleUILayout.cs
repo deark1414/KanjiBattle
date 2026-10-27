@@ -72,7 +72,7 @@ public static class BattleUILayout
     {
         if (rect == null) return;
 
-        float pieceSize = Mathf.Clamp(cellSize * 0.84f, 52f, 96f);
+        float pieceSize = Mathf.Max(10f, cellSize * 0.84f);
         rect.anchorMin = new Vector2(0.5f, 0.5f);
         rect.anchorMax = new Vector2(0.5f, 0.5f);
         rect.pivot = new Vector2(0.5f, 0.5f);
@@ -146,7 +146,7 @@ public static class BattleUILayout
         var container = fieldRect.parent as RectTransform;
         if (container == null) return;
 
-        container.anchorMin = portrait ? new Vector2(0.5f, 0.64f) : new Vector2(0.5f, 0.66f);
+        container.anchorMin = new Vector2(0.5f, 0.59f);
         container.anchorMax = container.anchorMin;
         container.pivot = new Vector2(0.5f, 0.5f);
         container.anchoredPosition = Vector2.zero;
@@ -160,8 +160,8 @@ public static class BattleUILayout
         ModernWafuuPresentation.ApplyFlatSurface(header, new Color(0.10f, 0.075f, 0.045f, 0.92f));
         header.raycastTarget = false;
         Place(header.rectTransform,
-            portrait ? new Vector2(0.04f, 0.89f) : new Vector2(0.08f, 0.90f),
-            portrait ? new Vector2(0.96f, 0.97f) : new Vector2(0.92f, 0.97f));
+            portrait ? new Vector2(0.04f, 0.835f) : new Vector2(0.08f, 0.835f),
+            portrait ? new Vector2(0.96f, 0.915f) : new Vector2(0.92f, 0.915f));
         header.transform.SetAsLastSibling();
 
         var outline = header.GetComponent<Outline>() ?? header.gameObject.AddComponent<Outline>();
@@ -243,9 +243,12 @@ public static class BattleUILayout
 
     private static void ConfigureControlButtons(Transform panelRoot, bool portrait)
     {
-        PlaceControlButton(FindChildRect(panelRoot, "PauseButton"), "停止", portrait ? new Vector2(0.34f, 0.285f) : new Vector2(0.40f, 0.285f), portrait, panelRoot);
-        PlaceControlButton(FindChildRect(panelRoot, "ResumeButton"), "再開", portrait ? new Vector2(0.54f, 0.285f) : new Vector2(0.55f, 0.285f), portrait, panelRoot);
-        PlaceControlButton(FindChildRect(panelRoot, "SpeedButton"), null, portrait ? new Vector2(0.74f, 0.285f) : new Vector2(0.70f, 0.285f), portrait, panelRoot);
+        PlaceControlButton(FindChildRect(panelRoot, "PauseButton"), "停止", new Vector2(portrait ? 0.12f : 0.22f, 0.285f), portrait, panelRoot);
+        PlaceControlButton(FindChildRect(panelRoot, "ResumeButton"), "再開", new Vector2(portrait ? 0.27f : 0.34f, 0.285f), portrait, panelRoot);
+        var speed = FindChildRect(panelRoot, "SpeedControl");
+        if (speed != null) Place(speed, new Vector2(portrait ? 0.38f : 0.44f, 0.255f), new Vector2(portrait ? 0.76f : 0.68f, 0.318f));
+        var repeat = FindChildRect(panelRoot, "AutoRepeatControl");
+        if (repeat != null) Place(repeat, new Vector2(portrait ? 0.80f : 0.72f, 0.26f), new Vector2(portrait ? 0.95f : 0.84f, 0.31f));
     }
 
     private static void PlaceControlButton(RectTransform rect, string label, Vector2 centerAnchor, bool portrait, Transform panelRoot)
@@ -261,7 +264,7 @@ public static class BattleUILayout
         rect.anchorMax = centerAnchor;
         rect.pivot = new Vector2(0.5f, 0.5f);
         rect.anchoredPosition = Vector2.zero;
-        rect.sizeDelta = portrait ? new Vector2(120f, 44f) : new Vector2(144f, 54f);
+        rect.sizeDelta = portrait ? new Vector2(120f, 120f) : new Vector2(144f, 80f);
         rect.SetAsLastSibling();
 
         var image = rect.GetComponent<Image>();
@@ -281,7 +284,7 @@ public static class BattleUILayout
         text.gameObject.SetActive(true);
         UnityUIRuntimeTheme.EnsureJapaneseCapableFont(text);
         text.enableAutoSizing = false;
-        text.fontSize = portrait ? 22f : 28f;
+        text.fontSize = portrait ? 42f : 28f;
         text.fontStyle = FontStyles.Bold;
         text.alignment = TextAlignmentOptions.Center;
         text.color = new Color(1f, 0.95f, 0.82f);
@@ -323,14 +326,14 @@ public static class BattleUILayout
         float rootWidth = rootRect != null && rootRect.rect.width > 0f ? rootRect.rect.width : 1280f;
         float rootHeight = rootRect != null && rootRect.rect.height > 0f ? rootRect.rect.height : 720f;
         float fieldWidth = portrait ? rootWidth * 0.96f : rootWidth * 0.64f;
-        float fieldHeight = portrait ? rootHeight * 0.42f : rootHeight * 0.44f;
+        float fieldHeight = rootHeight * 0.44f;
         float spacing = portrait ? 8f : 6f;
         int boardPadding = portrait ? 12 : 10;
         float cellSize = Mathf.Floor(Mathf.Min(
             (fieldWidth - boardPadding * 2f - spacing * (cols - 1)) / cols,
             (fieldHeight - boardPadding * 2f - spacing * (rows - 1)) / rows));
 
-        float currentCellSize = Mathf.Max(48f, cellSize);
+        float currentCellSize = Mathf.Max(12f, cellSize);
         grid.padding = new RectOffset(boardPadding, boardPadding, boardPadding, boardPadding);
         grid.spacing = new Vector2(spacing, spacing);
         grid.cellSize = new Vector2(currentCellSize, currentCellSize);

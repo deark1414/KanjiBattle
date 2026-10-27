@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KanjiBattle キャラクター原画</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f0f2f1;color:#202925;font:15px system-ui,sans-serif;letter-spacing:0}
+header{border-bottom:1px solid #ccd3ce;background:#fff;padding:20px 24px;position:sticky;top:0;z-index:1}
+.heading{max-width:1280px;margin:auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}h1{font-size:22px;margin:0}#count{color:#58675c;font-size:14px}
+nav{display:flex;border:1px solid #aebbb2;border-radius:4px;overflow:hidden;margin-left:auto}nav button{border:0;border-right:1px solid #ccd3ce;background:#fff;color:#35463b;padding:9px 16px;font:inherit;cursor:pointer}nav button:last-child{border:0}nav button[aria-pressed=true]{background:#2d5441;color:#fff}
+main{max-width:1328px;margin:auto;padding:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+article{border:1px solid #d2d9d4;border-radius:6px;background:#fff;overflow:hidden}article button{display:block;border:0;background:none;padding:12px;width:100%;color:inherit;cursor:pointer}article button:hover{background:#f4f7f5}article button:focus-visible{outline:3px solid #3f8060;outline-offset:-3px}
+.motif{height:164px;display:grid;place-items:center;background:#e7ece9;border-radius:3px}.motif canvas{width:160px;height:160px;object-fit:contain;image-rendering:pixelated}
+.pieces{height:72px;display:flex;align-items:center;justify-content:center;gap:16px}.pieces img{width:64px;height:64px;image-rendering:auto}h2{font-size:18px;line-height:1.5;margin:2px 0;font-weight:600}article small{font-size:12px;color:#637268}
+dialog{border:1px solid #a7b5ac;border-radius:6px;background:#f8faf9;color:#202925;width:min(600px,calc(100% - 24px));padding:20px}dialog::backdrop{background:#17241cc9}.detail-head{display:flex;align-items:center;justify-content:space-between}.close{width:36px;height:36px;font-size:28px;line-height:1;border:1px solid #bac5be;border-radius:3px;background:white;cursor:pointer}.detail-art{width:min(100%,360px);aspect-ratio:1;object-fit:contain;display:block;margin:12px auto;image-rendering:pixelated}.detail-pieces{display:flex;justify-content:center;gap:28px}.detail-pieces img{width:104px;height:104px;image-rendering:pixelated}
+@media(max-width:500px){header{padding:14px 12px}.heading{gap:10px}h1{font-size:19px}nav{width:100%;margin:0}nav button{flex:1;padding:8px 10px}main{padding:12px;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}.motif{height:142px}.motif canvas{width:138px;height:138px}article button{padding:8px}.pieces{gap:10px}.pieces img{width:58px;height:58px}}
+</style>
+<header><div class="heading"><h1>キャラクター原画</h1><span id="count"></span><nav aria-label="分類"><button data-filter="all" aria-pressed="true">すべて</button><button data-filter="base" aria-pressed="false">通常</button><button data-filter="fusion" aria-pressed="false">融合</button><button data-filter="other" aria-pressed="false">その他</button></nav></div></header>
+<main id="gallery"></main>
+<dialog id="detail"><div class="detail-head"><h2 id="detail-name"></h2><button class="close" aria-label="閉じる" title="閉じる">×</button></div><canvas class="detail-art" role="img"></canvas><div class="detail-pieces"><img alt="味方のコマ"><img alt="敵のコマ"></div></dialog>
+<script>
+const url=resource=>'/Assets/Resources/'+resource+'.png';
+function drawMotif(canvas,entry){
+  canvas.width=canvas.height=512;canvas.dataset.ready='false';canvas.dataset.resource=entry.resource;canvas.setAttribute('aria-label',entry.name+'のモチーフ');
+  const image=new Image();image.onload=()=>{
+    if(canvas.dataset.resource!==entry.resource)return;
+    const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;
+    const w=entry.aspect,h=1,angle=-entry.rotation*Math.PI/180;
+    const scale=512/Math.max(Math.abs(w*Math.cos(angle))+Math.abs(h*Math.sin(angle)),Math.abs(h*Math.cos(angle))+Math.abs(w*Math.sin(angle)));
+    ctx.translate(256,256);ctx.rotate(angle);
+    ctx.drawImage(image,entry.u*image.width,(1-entry.v-entry.height)*image.height,entry.width*image.width,entry.height*image.height,-w*scale/2,-h*scale/2,w*scale,h*scale);
+    canvas.dataset.ready='true';
+  };image.onerror=()=>{canvas.dataset.ready='error';console.error('Motif load failed: '+entry.resource);};image.src=url(entry.resource);
+}
+const dialog=document.querySelector('#detail');
+dialog.querySelector('.close').onclick=()=>dialog.close();
+dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();}});
+function inspect(entry){document.querySelector('#detail-name').textContent=entry.name;drawMotif(dialog.querySelector('.detail-art'),entry);const images=dialog.querySelectorAll('.detail-pieces img');images[0].src=url(entry.piece);images[1].src=url(entry.enemyPiece);dialog.showModal();}
+fetch('/Assets/Resources/UI/PieceMotifs/catalog.json').then(response=>response.json()).then(({entries})=>{
+  window.characterArtEntries=entries;
+  function render(filter){const selected=entries.filter(e=>filter==='all'||(filter==='base'?e.id>0&&e.id!==26:filter==='fusion'?e.id<=-1001&&e.id>=-1017:e.id===26||e.id===-20000));
+    document.querySelector('#count').textContent=selected.length+'種';const gallery=document.querySelector('#gallery');gallery.replaceChildren();
+    for(const entry of selected){const article=document.createElement('article');article.dataset.id=entry.id;const button=document.createElement('button');button.setAttribute('aria-label',entry.name+'を拡大');button.onclick=()=>inspect(entry);
+      const motif=document.createElement('div');motif.className='motif';const image=document.createElement('canvas');drawMotif(image,entry);motif.append(image);
+      const pieces=document.createElement('div');pieces.className='pieces';for(const [resource,name]of [[entry.piece,'味方'],[entry.enemyPiece,'敵']]){const image=new Image();image.src=url(resource);image.alt=entry.name+'・'+name;pieces.append(image);}
+      const title=document.createElement('h2');title.textContent=entry.name;button.append(motif,pieces,title);article.append(button);gallery.append(article);
+    }
+  }
+  document.querySelectorAll('nav button').forEach(button=>button.onclick=()=>{document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));render(button.dataset.filter);});render('all');
+}).catch(error=>{document.querySelector('#count').textContent='読込失敗';console.error(error);});
+</script>
+</html>

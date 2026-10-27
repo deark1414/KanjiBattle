@@ -1,0 +1,582 @@
+{
+  "date": "2026-10-25",
+  "status": "ローカルゲーム接続済み・実戦演出調整中",
+  "tool": "Built-in image_gen",
+  "mode": "single-sprite-per-state",
+  "generated": [
+    {
+      "key": "ChainLightning",
+      "name": "電",
+      "axis": "right",
+      "prompt": "Asset type: one transparent game VFX sprite, not an animation sheet. Deliberate hand-placed 128x128 logical pixel art enlarged with crisp square pixels, limited palette, opaque material clusters, no smooth gradients or painterly texture. Genuine RGBA transparency, no matte, no checkerboard, no backdrop, no UI, no text. At least 12 percent clear padding on every side. One single reusable CHAIN LIGHTNING LINK sprite for a Japanese kanji strategy game's skill effect. A long thin horizontal jagged lightning filament from LEFT to RIGHT, endpoints on the same horizontal centerline. One continuous irregular angular zigzag, pale warm ivory-yellow opaque core, narrow muted ochre edge, at most two very short subsidiary sparks close to the main line. Clearly electricity, not a sword, arrow, rope, beam, explosion or sci-fi laser. No giant glow, no bloom, no particles scattered far away, no vertical fork silhouette. Intended to be stretched between TWO enemy positions and briefly flashed, with the same image reused for each chain link. Full horizontal filament occupies middle 70-75 percent of canvas width and only about 15 percent of canvas height. Ends stop well before edges.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8855ea9c-01c2-4f79-b341-df4b10439897.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/ChainLightning.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ChainLightning.png",
+      "logicalWidth": 128,
+      "logicalHeight": 32
+    },
+    {
+      "key": "PullThread",
+      "name": "糸",
+      "axis": "right",
+      "prompt": "Asset type: one transparent game VFX sprite, not an animation sheet. Deliberate hand-placed 128x128 logical pixel art enlarged with crisp square pixels, limited palette, opaque material clusters, no smooth gradients or painterly texture. Genuine RGBA transparency, no matte, no checkerboard, no backdrop, no UI, no text. At least 12 percent clear padding on every side. One single reusable taut THREAD TETHER sprite for a Japanese kanji strategy game. A thin continuous warm WHITE/IVORY cotton thread running horizontally LEFT to RIGHT, with a barely perceptible loose gentle sag in its middle and only tiny visible twist marks. Endpoints at same centerline height. Plain material, clearly string: narrow soft grey outline/shadow pixels immediately touching the white thread so it reads on dark and light boards. No glow, no magic, no electricity, no hooks, no needle, no spool, no knot, no bow, no hands, no second dangling cord, no characters. Intended to connect caster and target and contract during a pull. Full thread occupies middle 70-75 percent of width, about 4-6 percent of height. One thin readable continuous line, not a thick rope.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-2ddc4ad2-866a-4674-a3df-8ed81a54899e.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/PullThread.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/PullThread.png",
+      "logicalWidth": 128,
+      "logicalHeight": 32
+    },
+    {
+      "key": "BellEcho",
+      "name": "鈴",
+      "axis": "radial",
+      "prompt": "Asset type: one transparent game VFX sprite, not an animation sheet. Deliberate hand-placed 128x128 logical pixel art enlarged with crisp square pixels, limited palette, opaque material clusters, no smooth gradients or painterly texture. Genuine RGBA transparency, no matte, no checkerboard, no backdrop, no UI, no text. At least 12 percent clear padding on every side. One single reusable SOUND RIPPLE sprite for a bell ally-echo skill in a Japanese kanji strategy game. THREE thin clean concentric CIRCULAR rings, same precise shared center, neutral face-on orientation. Restrained pale warm brass-gold and ivory highlights with a muted ochre edge. Large completely TRANSPARENT center hole at least 45 percent of the outer diameter, so a kanji unit remains visible inside it. Rings only, not a disk, no filled center, no radial rays, no runes, no magic sigil, no letters, no bell object, no music notes, no sparks, no stars, no bloom, no soft halo, no sci-fi radar. Perfectly round rings rather than perspective ellipses, intentional crisp pixel stair steps. Intended to expand once and fade around an ally that repeats its skill. Full outer ring safely inside middle 70-75 percent of square canvas.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8fe1bb7d-90e5-4870-91c1-480cdc88c849.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellEcho.png",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "restoredFrom": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png",
+      "previousVersion": {
+        "key": "BellEcho",
+        "sourceName": "BellEchoNotes",
+        "axis": "radial",
+        "refs": [
+          "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png"
+        ],
+        "prompt": "Asset: a single isolated RGBA game effect image, not a sprite sheet or animation frames. Localized edit of this transparent pixel-art sound-wave sprite. Preserve the three perfectly concentric CIRCULAR warm gold rings, shared center, thickness, square-pixel rendering, transparent center and overall centered layout. Add exactly TWO small clearly readable MUSICAL EIGHTH NOTES in the same pale gold/ivory pixel palette: one near the upper-right arc, one near the lower-left arc. Each has one solid rounded notehead, straight stem and short flag, NOT random squiggles or treble clefs. Place the notes in the ring band area, touching or slightly overlapping the outer two rings, but keep them INSIDE the outer ring's existing left/right/top/bottom extents so the main circular bounding box and centered pivot stay unchanged. The notes should remain readable at small game size without filling the central hole. No additional text or letters, no staff lines, no glow or backdrop. Genuine transparency and at least 12 percent clear margin.",
+        "logicalWidth": 128,
+        "logicalHeight": 128,
+        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-32aece48-a12e-4499-bb4f-d43d8a7c4caf.png",
+        "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellEchoNotes.png",
+        "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellEcho.png",
+        "previousVersion": {
+          "key": "BellEcho",
+          "name": "鈴",
+          "axis": "radial",
+          "prompt": "Asset type: one transparent game VFX sprite, not an animation sheet. Deliberate hand-placed 128x128 logical pixel art enlarged with crisp square pixels, limited palette, opaque material clusters, no smooth gradients or painterly texture. Genuine RGBA transparency, no matte, no checkerboard, no backdrop, no UI, no text. At least 12 percent clear padding on every side. One single reusable SOUND RIPPLE sprite for a bell ally-echo skill in a Japanese kanji strategy game. THREE thin clean concentric CIRCULAR rings, same precise shared center, neutral face-on orientation. Restrained pale warm brass-gold and ivory highlights with a muted ochre edge. Large completely TRANSPARENT center hole at least 45 percent of the outer diameter, so a kanji unit remains visible inside it. Rings only, not a disk, no filled center, no radial rays, no runes, no magic sigil, no letters, no bell object, no music notes, no sparks, no stars, no bloom, no soft halo, no sci-fi radar. Perfectly round rings rather than perspective ellipses, intentional crisp pixel stair steps. Intended to expand once and fade around an ally that repeats its skill. Full outer ring safely inside middle 70-75 percent of square canvas.",
+          "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8fe1bb7d-90e5-4870-91c1-480cdc88c849.png",
+          "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellEcho.png",
+          "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellEcho.png",
+          "logicalWidth": 128,
+          "logicalHeight": 128
+        }
+      }
+    },
+    {
+      "key": "ThreadWrap",
+      "sourceName": "ThreadWrap",
+      "axis": "overlay",
+      "prompt": "Asset: a single isolated RGBA game effect image, not a sprite sheet or animation frames. One transparent reusable TARGET WRAPPING THREAD overlay sprite for a Japanese kanji strategy game. Ivory-white thin cotton/silk thread makes THREE loose elliptical coils around an INVISIBLE upright oval volume, like silk winding around a game piece. The top loop is slightly tilted, middle threads cross at sides, lower loop gently curves under the target, but keep a generous transparent vertical center so the kanji behind it remains legible. An airy sparse wrapping effect, NOT a complete cocoon yet, NOT an opaque bandage or mummy, NOT a rope knot or net. Threads concentrated at the oval's sides and perimeter; only one or two thin strands cross lower center, keep the exact center clear. Slight grey-beige edge shading immediately on fibers for visibility, no bright halo, no magic particles. No person, game piece, letters, bug, needle, spindle, leaves, ground or backdrop. Neutral face-on view, symmetric overall balance, single complete image, not frames. Deliberate crisp 128px logical pixel art with limited palette, true alpha exterior and center, 12 percent empty padding on all sides.",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-6c7c3ef5-50b7-48c2-bfcd-307caa0e98b0.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/ThreadWrap.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ThreadWrap.png"
+    },
+    {
+      "key": "CocoonGuard",
+      "sourceName": "CocoonGuard",
+      "axis": "overlay",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Generated/CharacterMotifsReviewed/SilkwormCocoon.png"
+      ],
+      "prompt": "Asset: a single isolated RGBA game effect image, not a sprite sheet or animation frames. Use the reference's WHITE SILKWORM COCOON material and fine restrained pixel-art style to create a reusable PROTECTIVE COCOON SHELL OVERLAY for a Japanese kanji game. One upright plump ivory oblong cocoon silhouette with rounded top/bottom, thick opaque fibrous silk around its outer oval perimeter, and a LARGE TRANSPARENT OPEN CENTRAL AREA so an underlying kanji game piece can be seen. The empty inner window is about 45 percent of total width and 55 percent of height. Inner edges gently irregular fibrous silk, not a gold frame, not a mechanical shield, no glossy glass bubble, no rope knot. Sparse fine fibers at edges of the window, but leave the exact center fully transparent. The result must visibly read as a WHITE SILK COCOON enclosing a unit, denser and more complete than a few winding thread loops. Neutral frontal view, centered oval, no perspective tilt. No grass, leaf, stem, insect, person, character, words, floor, glow or environment. One complete transparent sprite, 128px logical pixel-art clusters, 12 percent true clear padding.",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-e16ce263-4df1-4f63-b375-b4bbc5cb7a48.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/CocoonGuard.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CocoonGuard.png"
+    },
+    {
+      "key": "BellNote",
+      "name": "鈴の音符",
+      "axis": "particle",
+      "prompt": "Edit/reference extraction for a Japanese pixel-art game VFX asset: reproduce ONLY ONE of the small GOLD EIGHTH MUSICAL NOTES from this reference as a standalone sprite. REMOVE ALL concentric circles and every other shape. One recognizable solid round/oval notehead, one straight upright stem, one short curved flag at the top. Same warm pale brass/ivory gold with muted ochre edges, crisp deliberately blocky 64px logical pixel clusters, simple limited palette, not fine engraving or smooth vector. Upright neutral orientation, no angled staff, no double note, no extra symbols. Single note centered, generous 15 percent transparent margin. Genuine RGBA transparent exterior, no ring, no glow, no rays, no background, no text or labels. Entire note fully visible. Designed to be reused two or three times with runtime rotation/scale and outward drift.",
+      "refs": [
+        "/Users/yuya/UnityProjects/KanjiBattle/Assets/Art/Drafts/VFX/SupportSkills/Source/BellEchoNotes.png"
+      ],
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-5f9190c7-816c-4257-859c-34290b638119.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/BellNote.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BellNote.png",
+      "logicalWidth": 128,
+      "logicalHeight": 128
+    },
+    {
+      "key": "WindGust",
+      "name": "風",
+      "axis": "right",
+      "logicalHeight": 64,
+      "description": "A low wide HORIZONTAL WIND GUST moving LEFT TO RIGHT. Three thin pale ivory/muted mint wind ribbons of unequal length with narrow long trailing tips at LEFT and gently curled fuller leading tips at RIGHT. Sparse, airy transparent gaps. No closed rings, no tornado, no cloud, no leaves, no arrows, no text. Low wide directional silhouette, full content inside central 75 percent width and 40 percent height. A movement buff/debuff effect, not an attack beam.",
+      "logicalWidth": 128,
+      "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A low wide HORIZONTAL WIND GUST moving LEFT TO RIGHT. Three thin pale ivory/muted mint wind ribbons of unequal length with narrow long trailing tips at LEFT and gently curled fuller leading tips at RIGHT. Sparse, airy transparent gaps. No closed rings, no tornado, no cloud, no leaves, no arrows, no text. Low wide directional silhouette, full content inside central 75 percent width and 40 percent height. A movement buff/debuff effect, not an attack beam.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-8c8dd60d-f4fe-454d-831c-94f298f1f7ac.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/WindGust.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/WindGust.png"
+    },
+    {
+      "key": "MagneticPull",
+      "name": "磁石",
+      "axis": "overlay",
+      "logicalHeight": 128,
+      "description": "U字磁石の両極から対象へ広がる半円波紋",
+      "logicalWidth": 128,
+      "prompt": "One isolated transparent pixel art game VFX sprite: ONE thin crescent-shaped semicircular magnetic ripple facing RIGHT, like a single closing parenthesis ). Smooth broad semicircle with crisp pixel stair steps, top and bottom tips at the LEFT and curved apex at the RIGHT. Pale ice blue and ivory line core with narrow muted blue edge, simple limited palette, 128px logical pixel art, not smooth vector. A single arc ONLY, no extra parallel arcs, no magnet object, no arrowhead, no particles, no runes, no text, no background, no glow cloud. True RGBA transparent on both sides and inside the curve, generous 15 percent padding. Thin line about 2 logical pixels. Intended to be duplicated at runtime into 3 expanding wavefronts emitted from the poles of a U magnet toward an enemy. One complete sprite, not a sheet.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-2d403487-07da-47a6-91a3-828d7d926c3d.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MagneticRipple.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagneticPull.png",
+      "previousVersion": {
+        "key": "MagneticPull",
+        "name": "磁石",
+        "axis": "right",
+        "logicalHeight": 64,
+        "description": "青白い3本の湾曲した磁力線。右側へ収束し、磁石への吸引を表現。",
+        "logicalWidth": 128,
+        "prompt": "Use case: stylized-concept. Asset type: ONE isolated transparent game VFX sprite for a Japanese kanji strategy game. Redesign magnetic attraction as MAGNETIC FIELD LINES, not iron filings. Three clean thin continuous arcing field lines run from LEFT toward RIGHT: one central near-horizontal strand, one bows gently above it and one bows gently below, converging narrowly at the RIGHT tip, visually suggesting a magnetic pull. Restrained pale ice-blue/ivory cores, muted blue edging, a few restrained coral-red pixels near the right end to suggest magnetic poles. NOT a solid beam. Smooth broad arcs rendered as crisp pixel stair-steps, NOT random sharp zigzag chain lightning. Tiny sparse angular sparks at the converging end are okay. Strong readable simple silhouette at 128px logical width; deliberately blocky pixel art, limited palette, opaque thin line cores, no smooth painted texture or broad bloom. Wide horizontal composition, content width about 75 percent of canvas and height about 22 percent, centered with at least 12 percent true clear padding on all sides. Genuine transparent RGBA outside and between the three lines. No magnet object, arrows, letters, text, game pieces, diagram labels, background, magic circle, sci-fi laser, iron sand, dust, grainy particles or checkerboard. One complete reusable image, NOT animation frames or a sprite sheet.",
+        "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-315556f9-9dc5-4063-a946-f5da6f12057c.png",
+        "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MagneticFieldLines.png",
+        "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagneticPull.png",
+        "previousVersion": {
+          "key": "MagneticPull",
+          "name": "磁石",
+          "axis": "right",
+          "logicalHeight": 64,
+          "description": "A directional MAGNETIC ATTRACTION STREAM made of tiny DARK IRON FILINGS and a few pale grey glints in THREE loose slightly curving lanes. Filings flow LEFT TO RIGHT and become more gathered near RIGHT. Short distinct grain clusters, restrained cool iron-grey, a little charcoal outline for light-ground visibility, a few pale silver flecks for dark-ground visibility. No actual magnet object, no electric bolt, no luminous beam, no concentric rings, no runes or arrows. Sparse horizontal transparent stream, clear natural material instead of science-fiction graphics, complete with safety padding.",
+          "logicalWidth": 128,
+          "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A directional MAGNETIC ATTRACTION STREAM made of tiny DARK IRON FILINGS and a few pale grey glints in THREE loose slightly curving lanes. Filings flow LEFT TO RIGHT and become more gathered near RIGHT. Short distinct grain clusters, restrained cool iron-grey, a little charcoal outline for light-ground visibility, a few pale silver flecks for dark-ground visibility. No actual magnet object, no electric bolt, no luminous beam, no concentric rings, no runes or arrows. Sparse horizontal transparent stream, clear natural material instead of science-fiction graphics, complete with safety padding.",
+          "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-0889ad3b-620b-4dde-a9ee-d004ad54ba18.png",
+          "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MagneticPull.png",
+          "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagneticPull.png"
+        }
+      }
+    },
+    {
+      "key": "RainRipple",
+      "name": "雨",
+      "axis": "radial",
+      "description": "A small gentle WATER RIPPLE PATCH for a healing rain zone. Two or three thin broken concentric low-angle elliptical ripples of clear cyan and muted blue-green water, unequal broken arcs and a few tiny nearby droplets. Transparent empty middle, no solid pool, no disc, no grass or ground, no cloud, no sky, no cross, no letters or icons, no radiant magical aura. A quiet shallow oval surface ripple, not a violent splash. Only the water lines are visible, rest true transparent. Compact whole effect with generous padding.",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A small gentle WATER RIPPLE PATCH for a healing rain zone. Two or three thin broken concentric low-angle elliptical ripples of clear cyan and muted blue-green water, unequal broken arcs and a few tiny nearby droplets. Transparent empty middle, no solid pool, no disc, no grass or ground, no cloud, no sky, no cross, no letters or icons, no radiant magical aura. A quiet shallow oval surface ripple, not a violent splash. Only the water lines are visible, rest true transparent. Compact whole effect with generous padding.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-62e88a57-066c-42e7-93f7-05229b2af142.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/RainRipple.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/RainRipple.png"
+    },
+    {
+      "key": "ForgeSparks",
+      "name": "鍛冶",
+      "axis": "burst",
+      "description": "A small localized BLACKSMITH HAMMER STRIKE SPARK BURST: seven to ten short angular warm yellow-orange sparks and just a few small charcoal/iron chips shooting from a compact center. Uneven natural lengths and directions, a bright tiny white-gold contact fleck. Sparse material, readable discrete pixel clusters. No hammer, no anvil, no sword, no person, no flame column, no fireball, no smoke cloud, no circular magic seal, no neon glow, no words. A quick strengthening/forging contact spark, not a large damage explosion. Complete isolated little burst centered with wide transparent padding.",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A small localized BLACKSMITH HAMMER STRIKE SPARK BURST: seven to ten short angular warm yellow-orange sparks and just a few small charcoal/iron chips shooting from a compact center. Uneven natural lengths and directions, a bright tiny white-gold contact fleck. Sparse material, readable discrete pixel clusters. No hammer, no anvil, no sword, no person, no flame column, no fireball, no smoke cloud, no circular magic seal, no neon glow, no words. A quick strengthening/forging contact spark, not a large damage explosion. Complete isolated little burst centered with wide transparent padding.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-23baadf0-bf8d-402b-94b5-6dfc3bebac0b.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/ForgeSparks.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ForgeSparks.png"
+    },
+    {
+      "key": "MortarImpact",
+      "name": "要塞",
+      "axis": "burst",
+      "description": "A compact GROUNDED MORTAR SHELL IMPACT effect: a small irregular warm-grey and earthy ochre dust puff with a few dark stone chips kicked outward and a very small subdued amber impact flash at its center. Perspective suitable for a top-down strategy board. No projectile, no cannon, no building, no crater disc, no mushroom cloud, no giant yellow fireball, no broad glow, no scenery, no letters. Cluster should remain small and readable with empty transparent gaps between dust lobes and debris. One opaque representative moment of a restrained impact, not multiple frames.",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A compact GROUNDED MORTAR SHELL IMPACT effect: a small irregular warm-grey and earthy ochre dust puff with a few dark stone chips kicked outward and a very small subdued amber impact flash at its center. Perspective suitable for a top-down strategy board. No projectile, no cannon, no building, no crater disc, no mushroom cloud, no giant yellow fireball, no broad glow, no scenery, no letters. Cluster should remain small and readable with empty transparent gaps between dust lobes and debris. One opaque representative moment of a restrained impact, not multiple frames.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-69a72061-28ff-41ac-bb4c-aefb9a50cdc7.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MortarImpact.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MortarImpact.png"
+    },
+    {
+      "key": "SandBloom",
+      "name": "砂",
+      "axis": "burst",
+      "description": "A small SAND SUMMON PUFF: pale gold-beige fine sand grains rising in two uneven loose curling wisps around a clear empty central area. Subtle low mound-like dust at the bottom, larger sparse grain clusters near it, finer particles rising above. No human figure, no golem, no hands, no face, no whole sand character, no magic circle, no glowing rim, no grass or floor. Lightweight sandy material with warm grey shading, not smoke, fire or a dust tornado. A compact localized appearance effect that can expand and fade to reveal a game piece. Whole effect with wide clear padding.",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "prompt": "One isolated transparent VFX sprite for a Japanese kanji strategy game, not an animation sheet. Intentional hand-placed 128px logical pixel art, crisp square pixel clusters, restrained 12-20 color palette, opaque material shapes, no smooth painting or gradients. Real RGBA transparency, no black/white matte or checkerboard. At least 12 percent safe empty border on every side. No text, numbers, kanji, UI or frame. A small SAND SUMMON PUFF: pale gold-beige fine sand grains rising in two uneven loose curling wisps around a clear empty central area. Subtle low mound-like dust at the bottom, larger sparse grain clusters near it, finer particles rising above. No human figure, no golem, no hands, no face, no whole sand character, no magic circle, no glowing rim, no grass or floor. Lightweight sandy material with warm grey shading, not smoke, fire or a dust tornado. A compact localized appearance effect that can expand and fade to reveal a game piece. Whole effect with wide clear padding.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-7849a9c8-f186-4476-bd75-a0c8cdf44195.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/SandBloom.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/SandBloom.png"
+    },
+    {
+      "key": "RainDrops",
+      "name": "雨の水滴",
+      "axis": "down",
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/VFX/Animated/WaterHeal/frame_03.png",
+      "source": "Assets/Resources/VFX/Animated/WaterHeal/frame_03.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/RainDrops.png",
+      "logicalWidth": 128,
+      "logicalHeight": 128
+    },
+    {
+      "key": "MortarShell",
+      "name": "要塞の砲弾",
+      "axis": "right",
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/VFX/Animated/Gun/frame_02.png",
+      "source": "Assets/Resources/VFX/Animated/Gun/frame_02.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MortarShell.png",
+      "logicalWidth": 128,
+      "logicalHeight": 32
+    },
+    {
+      "key": "ForgeHammer",
+      "name": "鍛冶のハンマー",
+      "source": "Assets/Resources/VFX/Weapons/HammerMotion.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/VFX/Weapons/HammerMotion.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ForgeHammer.png",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用"
+    },
+    {
+      "key": "MagnetBody",
+      "name": "U字磁石",
+      "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1007.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_F1007.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MagnetBody.png",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用"
+    },
+    {
+      "key": "WaveCrest",
+      "name": "波",
+      "axis": "right",
+      "logicalWidth": 128,
+      "logicalHeight": 64,
+      "detail": "A low ocean wave crest moving LEFT to RIGHT, one compact curled blue-teal water lip and ivory foam crest at the RIGHT, a short shallow trailing sheet of water on LEFT. Side view, roughly three times wider than tall. No ocean background, no beach, no giant tsunami.",
+      "prompt": "Use case: stylized-concept. One isolated transparent game VFX sprite for a Japanese kanji strategy game. Deliberate crisp 128px logical pixel art, limited palette, no painterly detail or smooth gradients. True RGBA transparent exterior with at least 12 percent empty safe padding on all sides. Single complete sprite, NOT frames or animation sheet. No text, UI, labels, game pieces or background. A low ocean wave crest moving LEFT to RIGHT, one compact curled blue-teal water lip and ivory foam crest at the RIGHT, a short shallow trailing sheet of water on LEFT. Side view, roughly three times wider than tall. No ocean background, no beach, no giant tsunami.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-f0159ed1-8a7b-473b-a934-8a0df518fbf7.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/WaveCrest.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/WaveCrest.png"
+    },
+    {
+      "key": "GrassSprout",
+      "name": "草",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "detail": "A small open oval perimeter of fresh grass shoots growing from ground, uneven few green blades and tiny soil flecks along bottom and side edges. Large completely transparent open center for a game piece. Grass growing upright rooted in soil, NOT uprooted bunch, no roots hanging, no flowers, no decorative vines, no ground tile.",
+      "prompt": "Use case: stylized-concept. One isolated transparent game VFX sprite for a Japanese kanji strategy game. Deliberate crisp 128px logical pixel art, limited palette, no painterly detail or smooth gradients. True RGBA transparent exterior with at least 12 percent empty safe padding on all sides. Single complete sprite, NOT frames or animation sheet. No text, UI, labels, game pieces or background. A small open oval perimeter of fresh grass shoots growing from ground, uneven few green blades and tiny soil flecks along bottom and side edges. Large completely transparent open center for a game piece. Grass growing upright rooted in soil, NOT uprooted bunch, no roots hanging, no flowers, no decorative vines, no ground tile.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-bb719e37-9fae-4f30-a8ee-6b5fc45a70e1.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/GrassSprout.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GrassSprout.png"
+    },
+    {
+      "key": "CoalEmbers",
+      "name": "炭",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "detail": "A sparse small burst of glowing dull red and orange coal embers, a few tiny dark charcoal chips with red fissures and 6 floating orange cinders. A completely transparent open center for a game piece. Blackened charcoal material, not large flames, not fireball, not magic ring. Restrained material effect.",
+      "prompt": "Use case: stylized-concept. One isolated transparent game VFX sprite for a Japanese kanji strategy game. Deliberate crisp 128px logical pixel art, limited palette, no painterly detail or smooth gradients. True RGBA transparent exterior with at least 12 percent empty safe padding on all sides. Single complete sprite, NOT frames or animation sheet. No text, UI, labels, game pieces or background. A sparse small burst of glowing dull red and orange coal embers, a few tiny dark charcoal chips with red fissures and 6 floating orange cinders. A completely transparent open center for a game piece. Blackened charcoal material, not large flames, not fireball, not magic ring. Restrained material effect.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-f10f8fe4-bfea-4c52-9db3-3fb56219d116.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/CoalEmbers.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CoalEmbers.png"
+    },
+    {
+      "key": "LanternFlame",
+      "name": "灯",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "detail": "A small warm ivory-gold protective candle flame wisp, three narrow delicate upward curving tongues around an invisible upright oval, transparent large central opening. Calm warm flame, not a raging fire. No candle object, no lantern object, no glass bubble, no magic ring, no scenery, no large soft glow.",
+      "prompt": "Use case: stylized-concept. One isolated transparent game VFX sprite for a Japanese kanji strategy game. Deliberate crisp 128px logical pixel art, limited palette, no painterly detail or smooth gradients. True RGBA transparent exterior with at least 12 percent empty safe padding on all sides. Single complete sprite, NOT frames or animation sheet. No text, UI, labels, game pieces or background. A small warm ivory-gold protective candle flame wisp, three narrow delicate upward curving tongues around an invisible upright oval, transparent large central opening. Calm warm flame, not a raging fire. No candle object, no lantern object, no glass bubble, no magic ring, no scenery, no large soft glow.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-e4a3afb8-4a55-4c94-a9f9-0d349f3bde8d.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/LanternFlame.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/LanternFlame.png"
+    },
+    {
+      "key": "ShadowMist",
+      "name": "影",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "detail": "A very simple low puff of dark charcoal grey translucent shadow smoke, uneven curled left and right edges around a large transparent upright central space. Only a few large pixel clusters. No human silhouette, no face, no doll, no eyes, no creature, no purple neon. A shadow transformation effect that reveals the copied game piece inside.",
+      "prompt": "Use case: stylized-concept. One isolated transparent game VFX sprite for a Japanese kanji strategy game. Deliberate crisp 128px logical pixel art, limited palette, no painterly detail or smooth gradients. True RGBA transparent exterior with at least 12 percent empty safe padding on all sides. Single complete sprite, NOT frames or animation sheet. No text, UI, labels, game pieces or background. A very simple low puff of dark charcoal grey translucent shadow smoke, uneven curled left and right edges around a large transparent upright central space. Only a few large pixel clusters. No human silhouette, no face, no doll, no eyes, no creature, no purple neon. A shadow transformation effect that reveals the copied game piece inside.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-90a41425-38a9-48c2-a703-144ad7a6d4fc.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/ShadowMist.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ShadowMist.png"
+    },
+    {
+      "key": "DiceSparkles",
+      "name": "賽子",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "detail": "A sparse cluster of FIVE tiny warm gold and ivory four-point glints in an uneven oval around a completely clear open center. One glint larger than the others, no symmetry. Simple crisp little pixel stars marking a dice result. No dice object, no circle, no coins, no letters, no thick aura, no giant glow.",
+      "prompt": "Use case: stylized-concept. One isolated transparent game VFX sprite for a Japanese kanji strategy game. Deliberate crisp 128px logical pixel art, limited palette, no painterly detail or smooth gradients. True RGBA transparent exterior with at least 12 percent empty safe padding on all sides. Single complete sprite, NOT frames or animation sheet. No text, UI, labels, game pieces or background. A sparse cluster of FIVE tiny warm gold and ivory four-point glints in an uneven oval around a completely clear open center. One glint larger than the others, no symmetry. Simple crisp little pixel stars marking a dice result. No dice object, no circle, no coins, no letters, no thick aura, no giant glow.",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-b0046ab0-2006-4166-b77e-16686ca24f4e.png",
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceSparkles.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceSparkles.png"
+    },
+    {
+      "key": "CoalCold",
+      "name": "消火した炭",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/CoalCold.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CoalCold.png",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-e4a97258-be5d-472f-b588-8a97464cc17a.png",
+      "prompt": "Use case: precise-object-edit. Edit target: the provided pixel art pile of burning charcoal. Create its EXTINGUISHED / COLD state. Preserve exactly the same arrangement, silhouettes, number of charcoal lumps, camera view, proportions, grey highlights, deliberate blocky pixel resolution and centered transparent composition. Change ONLY the orange/yellow glowing fissures and red hot areas into dark charcoal grey crevices. No glowing pixels, no orange or red, no flames, no sparks, no smoke. Do not rearrange or add pieces of charcoal. Do not add a ground plane. True RGBA transparent background, preserve safe padding. The cold version must register with the hot reference so a state switch looks like the same charcoal simply igniting. One complete sprite, not frames or a sheet.",
+      "refs": [
+        "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1009.png"
+      ]
+    },
+    {
+      "key": "CoalHot",
+      "name": "燃焼した炭",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1009.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/CoalHot.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_F1009.png",
+      "reuse": true,
+      "prompt": "既存の燃焼モチーフを変更せず再利用"
+    },
+    {
+      "key": "DiceFace1",
+      "name": "出目1",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceFace1.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace1.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_01.png",
+      "reusedFrom": "Assets/Resources/UI/PieceMotifs/Motif_01.png",
+      "sourceSha256": "b73c7cfd76a4da05867673706c6fdac3fa74e847f468aacd15a21b39ee425823",
+      "reuse": true,
+      "prompt": "元の数字モチーフを変更せず再利用"
+    },
+    {
+      "key": "DiceFace2",
+      "name": "出目2",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceFace2.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace2.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_02.png",
+      "reusedFrom": "Assets/Resources/UI/PieceMotifs/Motif_02.png",
+      "sourceSha256": "32ac26e50742cd7bf9736a57b47ca302a28aeb3777864ad1becead7a2d2a6926",
+      "reuse": true,
+      "prompt": "元の数字モチーフを変更せず再利用"
+    },
+    {
+      "key": "DiceFace3",
+      "name": "出目3",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceFace3.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace3.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_03.png",
+      "reusedFrom": "Assets/Resources/UI/PieceMotifs/Motif_03.png",
+      "sourceSha256": "8e6a949628377cd3c685b5ab9fdbf19a4a3508ee43d0f8f77b8c511e448ef9fd",
+      "reuse": true,
+      "prompt": "元の数字モチーフを変更せず再利用"
+    },
+    {
+      "key": "DiceFace4",
+      "name": "出目4",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceFace4.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace4.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_04.png",
+      "reusedFrom": "Assets/Resources/UI/PieceMotifs/Motif_04.png",
+      "sourceSha256": "3ab963a75c72eb17766e3476047d4763474b409308cd4974473ea66a2ac8343f",
+      "reuse": true,
+      "prompt": "元の数字モチーフを変更せず再利用"
+    },
+    {
+      "key": "DiceFace5",
+      "name": "出目5",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceFace5.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace5.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_05.png",
+      "reusedFrom": "Assets/Resources/UI/PieceMotifs/Motif_05.png",
+      "sourceSha256": "2facd806bea56323df6daccc90916f15f7bf2cee6eab7c7285f1f8af15c87e78",
+      "reuse": true,
+      "prompt": "元の数字モチーフを変更せず再利用"
+    },
+    {
+      "key": "DiceFace6",
+      "name": "出目6",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/DiceFace6.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceFace6.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Motif_06.png",
+      "reusedFrom": "Assets/Resources/UI/PieceMotifs/Motif_06.png",
+      "sourceSha256": "0163a98d34be7fa9f20a24b4eaf3aae5070778955a4d21fdb223aac1795e622c",
+      "reuse": true,
+      "prompt": "元の数字モチーフを変更せず再利用"
+    },
+    {
+      "key": "ReviewSword",
+      "name": "共用の剣",
+      "source": "Assets/Resources/VFX/Weapons/SwordMotion.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/VFX/Weapons/SwordMotion.png",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ReviewSword.png",
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用"
+    },
+    {
+      "key": "ReviewSpear",
+      "name": "共用の槍",
+      "source": "Assets/Resources/VFX/Animated/Spear/frame_03.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/VFX/Animated/Spear/frame_03.png",
+      "axis": "right",
+      "logicalWidth": 128,
+      "logicalHeight": 32,
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/ReviewSpear.png",
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用"
+    },
+    {
+      "key": "GuardShield",
+      "name": "共用の盾",
+      "source": "Assets/Resources/VFX/Animated/Shield/frame_02.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/VFX/Animated/Shield/frame_02.png",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GuardShield.png",
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用"
+    },
+    {
+      "key": "BonusOx",
+      "name": "丑の経験値ボーナス",
+      "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_30.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_30.png",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/BonusOx.png",
+      "reuse": true,
+      "prompt": "既存承認素材を変更せず再利用"
+    },
+    {
+      "key": "MountainRebound",
+      "name": "山の反発石片",
+      "axis": "overlay",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/MountainRebound.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/MountainRebound.png",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-89e73424-142d-45df-8423-dce71716a4ec.png",
+      "prompt": "Use case: stylized-concept. One isolated transparent pixel-art impact VFX sprite for a Japanese kanji strategy game. A small sparse crescent-shaped scatter of uneven GREY ROCK CHIPS rebounding from a stone surface: 7 to 10 jagged tiny slate-grey fragments with pale chipped faces and a few restrained beige dust pixels, heavier fragments near lower center and smaller ones flung upward and toward RIGHT. Large transparent open central space for a game piece, thin sparse distribution, no continuous ring. Deliberate coarse 128px logical pixel art, limited colors, crisp square pixel clusters. No mountain landscape, no ground tile, no light rays, no glowing outline, no fire, no magical forcefield, no text, no UI. Single complete sprite not frames, genuine transparent background, 15 percent clear margin on all sides."
+    },
+    {
+      "key": "GuardShell",
+      "name": "粗いドットの甲羅",
+      "axis": "overlay",
+      "logicalWidth": 64,
+      "logicalHeight": 64,
+      "source": "Assets/Art/Drafts/VFX/SupportSkills/Source/GuardShellCoarse.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GuardShell.png",
+      "path": "/Users/yuya/.codex/generated_images/01a10aa0-6b5b-75e3-a9e8-1b91f276f73e/exec-4f3af46a-4dfc-4f27-9dac-276e26da7c6a.png",
+      "prompt": "Edit target: this green turtle carapace image. Keep the same recognizable low domed green turtle shell, olive polygon seams, three-quarter front view, and no animal body. Simplify to MUCH COARSER intentional pixel art at exactly a 64x64 logical pixel style: large square pixel clusters, 8-12 flat colors total, broad simple polygon plates, hard pixel stair steps, NO fine mottling, no fine texture, no smooth gradients, no anti-aliasing, no glow or shadow halo. Existing shell is too detailed; make it read like an old game sprite. Entire shell fully visible centered with generous 15 percent transparent margin. Genuine RGBA transparent background. No text, no turtle legs or head, no shield handle, no scenery. One complete sprite, not a sheet.",
+      "refs": [
+        "Assets/Resources/UI/PieceMotifs/Ready/Motif_14.png"
+      ],
+      "previousVersion": {
+        "key": "GuardShell",
+        "name": "甲の甲羅",
+        "axis": "overlay",
+        "logicalWidth": 128,
+        "logicalHeight": 128,
+        "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_14.png",
+        "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_14.png",
+        "sprite": "Assets/Art/Drafts/VFX/SupportSkills/GuardShell.png",
+        "reuse": true,
+        "prompt": "既存の甲羅モチーフを変更せず再利用。盾は使わない。"
+      }
+    }
+  ],
+  "sequence": {
+    "PullThread": [
+      "PullThread",
+      "ThreadWrap"
+    ],
+    "Cocoon": [
+      "ThreadWrap",
+      "clear",
+      "CocoonGuard"
+    ],
+    "BellEcho": [
+      "BellEcho",
+      "BellNote"
+    ],
+    "Rain": [
+      "RainDrops",
+      "RainRipple"
+    ],
+    "Mortar": [
+      "MortarShell",
+      "MortarImpact"
+    ],
+    "Forge": [
+      "ForgeHammer",
+      "ForgeSparks",
+      "heat",
+      "cool"
+    ],
+    "Magnet": [
+      "MagnetBody",
+      "MagneticPull",
+      "pull"
+    ],
+    "Coal": [
+      "CoalCold",
+      "hit",
+      "CoalHot",
+      "CoalEmbers"
+    ],
+    "Dice": [
+      "DiceFace1..6 randomized",
+      "settled face",
+      "DiceSparkles"
+    ]
+  },
+  "bellEmission": {
+    "minCount": 2,
+    "maxCount": 3,
+    "randomScope": "発動ごとに固定した装飾専用乱数",
+    "centralClearRadius": 42
+  },
+  "archived": [
+    {
+      "key": "DiceBody",
+      "name": "賽子の本体",
+      "axis": "overlay",
+      "source": "Assets/Resources/UI/PieceMotifs/Ready/Motif_F1011.png",
+      "path": "/Users/yuya/UnityProjects/KanjiBattle/Assets/Resources/UI/PieceMotifs/Ready/Motif_F1011.png",
+      "sprite": "Assets/Art/Drafts/VFX/SupportSkills/DiceBody.png",
+      "logicalWidth": 128,
+      "logicalHeight": 128,
+      "reuse": true,
+      "prompt": "既存承認モチーフを変更せず再利用"
+    }
+  ]
+}

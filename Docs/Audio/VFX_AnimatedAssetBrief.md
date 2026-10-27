@@ -4,6 +4,60 @@
 
 Create animated transparent sprite assets that make the simple kanji characters feel powerful. The animation must remain readable on both smartphone and desktop screens and must not create visible atlas seams.
 
+## 電・糸・鈴の単画像草案: 2026-10-25
+
+- 対象は電の連鎖電撃、糸の引き寄せ、鈴の再響と繭。各素材を透過PNG1枚で表し、フレーム列やスプライトシートを新設しない。糸は直線＋巻き付き、繭は巻き付き＋保護状態、鈴は波紋＋音符の2素材を組み合わせる。位置・回転・伸縮・透明度で動かす現行方針を優先する。
+- 電は左端から右端へ進む細長い折れ線状の稲妻。黄白色の芯と控えめな黄土色の縁。敵同士を順につなぐ使い方を想定し、放射状の爆発や巨大な発光を付けない。
+- 糸は左から右へ張る白～生成りの一本の糸。糸巻き・針・キャラは含めず、細い撚りと小さなたるみで糸と読ませる。画像の左右端が接続点。対象との距離に合わせて長さを変え、引き寄せ後に消す。
+- 鈴は波紋と音符を別画像にする。波紋は以前の音符なし原画へ戻し、独立した音符1枚を2～3個複製して、発動ごとに位置・大きさ・傾きを変えながら外側へ散らして消す。中央の漢字に重ならない距離を保つ。乱数はプレビューの装飾だけに使い、スキルの確率や対象選択に影響させない。方向変更や毎フレームの描画では散り方を引き直さず、発動単位で固定する。
+- 巻き付きは白～生成りの糸が対象を取り囲む共通素材。糸の命中時は対象と一緒に動き、繭の発動時にも使う。結び目・針・キャラは含めず、中央の文字が見える余白を保つ。
+- 繭は「巻き付き → 巻き付き演出が消える → 繭に囲まれた保護状態が残る」の順。巻き付きの画像をそのまま残すのではなく、別の白い蚕の繭状の保護画像へ切り替える。保護画像は外周に厚みと繊維を持たせ、中心には文字を読む透明な空間を残す。地面・草・葉・生き物は描かない。
+- 共通: 意図的な128px相当のドット絵、透過、四辺の安全余白、文字なし。原画・確認用画像は`Assets/Art/Drafts/VFX/SupportSkills/`へ分離。元のVFX・モチーフ・コマは変更しない。
+- この工程は画像と動作プレビューの制作。ゲームへの接続はレビュー承認後。生成元と全プロンプト、使用する軸・ピボット、透過・寸法の確認記録を保存する。
+- 草案6枚・4種類のスキル例を制作。`Docs/Art/skill-vfx-preview.html`で単画像の伸縮・回転・拡大と、PC／スマホの表示を確認。透過・余白・固定寸法・4方向・再生操作、音符の発動ごとのばらつきと漢字への重なり防止、繭の巻き付き消去後に保護だけが残る順序の検査に成功。制作記録は`Docs/Art/SupportSkillVfx.md`と同名JSON。Unityへの接続・戦闘内検証はまだ行っていない。
+
+## 追加6スキルの草案: 2026-10-25
+
+- 次の対象は風・磁石・雨・鍛冶・要塞・砂。既存の電・糸・鈴・繭は維持し、同じ動作プレビューへ追加する。実ゲームへの接続は承認後。
+- 風: 左から右へ流れる細い白緑の風筋。追風と向風は同じ画像の向き・位置で区別し、追風では対象の移動に添える。
+- 磁石: 参考画像2枚目に合わせ、U字磁石の両極それぞれの先端から小さな半円波紋を出す。両極を対象に向け、中央から大きな波を放つ表現にはしない。波紋の発生後に対象を引き寄せる。既存U字モチーフと半円波紋の単画像を再利用し、発生位置・大きさ・移動距離だけを調整する。旧鉄粉・磁力線案の原画は履歴に残す。
+- 雨: 回復範囲に小さな青緑の波紋を残し、既存の`WaterHeal/frame_03`の水滴を複製して下向きに降らせる。雲・十字・文字は描かない。
+- 鍛冶: 既存ハンマーで対象を叩き、接触時に短い火花を出す。接触後だけ対象のコマを一時的に赤熱させ、元の色へ戻す。大きな炎は使わず、強化を示す演出にする。元ハンマー・コマ画像は変更せず、表示時の着色で表現する。
+- 要塞: 投射物は既存の`Gun/frame_02`を再利用して弧を描かせ、着弾には小さな土煙・破片・控えめな火芯の素材を新作する。斜め上へ飛ぶ光線にはしない。
+- 砂: 細かな砂粒が舞い上がる小さな砂煙。新しい分身の位置で拡大・消去し、後に砂のコマが現れる。人型の砂人形や新しいキャラ絵は描かない。
+- 新規6画像はいずれも単画像・128px相当の透過ドット絵。元の雨滴・弾の原画は加工せず、確認用の別コピーを同じ出力処理へ通す。素材・参照・生成プロンプト・寸法・軸を記録する。フレーム切替なしで位置・回転・拡大・透過だけを動かす。
+- 制作後の計14素材・10動作例をPC／スマホと4方向で検査。透過・安全余白・固定寸法・ドットの整合・再生操作が成功し、再利用元2枚の未変更も確認。雨の波紋は対象の足元に収まるよう縮小。草案のまま保持し、Unity戦闘への接続は未実施。
+
+## 追加草案第3弾: 2026-10-25
+
+- 波・草・炭・灯・影・賽子を追加する。既存10動作例は維持し、実ゲームへの接続は承認後。
+- 波は右へ進む低い水の波頭で前方の敵を押す。草は根を抜かず地面から若芽が広がり、同じ草のコマが分裂して現れる。
+- 炭は被弾後の赤い熾火と小さな火の粉で強化を表す。灯は既存の蝋燭モチーフと合わせられる暖色の小さな炎の揺らぎを使い、近くの味方を守る瞬間に出す。
+- 影は人型でない薄い影煙から対象のコマへ変化する。賽子は既存の賽子モチーフを転がし、確定した目に応じ回復・防御・攻撃の演出へつなぐ。星状の小さな金の輝きは決定時だけ使う。
+- 新規6素材は128px論理グリッドの透過単画像。フレーム切替は使わず、位置・拡大・回転・透過で動かす。草案のまま保持し、元モチーフ・コマ・本番VFXは変更しない。
+- 草案は合計23素材・16動作例。透過・余白・固定寸法・ドット整合、4方向、PC／スマホ、賽子の6出目と効果分類の検査に成功。追加・変更の25系統中16系統を制作済みで残り9系統。内訳と対象範囲は`Docs/Art/SkillVfxProgress.md`。
+
+## 炭の状態切替・賽子の出目: 2026-10-25
+
+- 炭は消火と燃焼の2状態を切り替える。既存の燃焼モチーフは維持し、その同じ炭の配置・形のまま火と赤熱だけを除いた消火画像を作る。被弾後に燃焼へ切り替え、火の粉は切替時だけ。連番アニメではなく状態ごとの単画像とする。
+- 賽子は既存の数字モチーフ1〜6をそのまま使う。装飾専用の固定シードでランダムな切替列を作り、徐々に切替間隔を長くして出目を確定。確定した画像を静止保持し、その周囲に光を重ねる。表示中の画像と見出しの数値・効果を一致させる。一時停止や方向変更では乱数を引き直さない。
+- 元のモチーフは上書きせず、草案コピーを制作する。ゲームへの接続は承認後。
+
+## 残り9系統の草案: 2026-10-25
+
+- 甲は盾ではなく既存`UI/PieceMotifs/Ready/Motif_14.png`の甲羅を使う。味方の下側に甲羅を重ねて漢字を隠しすぎないようにし、着弾後に本人も反応して肩代わりの関係を見せる。元モチーフは変更しない。丑は勝利後の経験値ボーナス表示にする。鉄は剣・槍・盾の形態を順に見せる。
+- 双剣は同じ剣素材の2連続の範囲斬撃、散弾は3方向へ広がる弾丸。戦士は剣・盾と自身＋味方1体の攻撃強化、衛兵は槍・盾と隣接味方の継続回復。
+- 山は被弾時に小さな石片の反発素材を出し、攻撃元への返還を見せる。石片は新規の透過単画像・128px論理ドット絵。巨大な魔法陣や光線は使わない。
+- 風鈴は既存の波紋と独立音符を全味方へ展開する。共用素材は変更せずコピーを使う。全て独立した確認用草案で、ゲームのダメージ・確率・戦闘ルールは変更しない。
+- 計36素材・25系統の動作例を制作。素材の透過・余白・ドット整合、4方向、PC／スマホ、肩代わり・返還の順序と鉄の3形態、風鈴の音符が見切れないことを検査。対象25系統の未制作は0、本番未接続の草案25系統という状態。
+
+## 甲羅の粗粒化と本番接続: 2026-10-25
+
+- 甲羅は既存の緑の甲羅の形を保ちつつ、64px相当の粗いドット・少ない色・大きい色面へ変更する。元モチーフは上書きしない。
+- 承認された追加スキル素材をResourcesへ昇格し、成功したスキル・実際の対象・実際の出目へ接続する。演出用乱数はUnityの戦闘乱数を消費しない。
+- 炭は被弾後の実際の燃焼状態、繭は実際の保護状態へ連動。防御オーバーレイは対象を追従し、死亡・戦闘終了で残らないようにする。
+- 未使用画像の削除は参照とGUIDを監査してから行う。旧仕様書・制作記録は現行資料と履歴を分け、根拠なく削除しない。
+
 ## Runtime Presentation Update: 2026-09-20
 
 - In battle, default to one approved opaque representative sprite per effect and animate that single sprite with runtime position, rotation, scale, and fade. This avoids the frame-switching and slice-boundary failures previously observed in WebGL. When an attack defeats a character, keep that character visible until its skill VFX has completed, while removing it from gameplay targeting immediately.
@@ -16,8 +70,8 @@ Create animated transparent sprite assets that make the simple kanji characters 
 - The roster remains a plain piece list. Place practice in its own wide band between the army-status information region and the list, borrowing a small amount of the list's upper space: use only two large adjacent cells, with one randomly selected owned piece on the left and its non-attacking scarecrow on the right. Do not label this field; the large piece, scarecrow, and pair of cells make the purpose clear. Each non-number piece takes a short step toward its scarecrow, displays its reviewed skill over about one second, then returns to its lane; do not start a live `BattleManager` match or introduce its rewards, defeat state, traps, or target selection. Existing reviewed representative battle VFX travel from the displayed piece to its own target. Number-passive pieces always briefly show their own existing aura around the owner, independent of the current party's number-combination condition. Sword practice must retain the normal battle's 120-degree, cubic-accelerated sweep and direct texture path rather than falling back to a generic travelling Slash icon. Award only a tiny throttled shared experience reward after a complete drill; practice must never replace stage progression.
 - Recruitment uses the same reviewed representative sprite chosen by the joining character's actual skill. The piece casts once from its roster position toward the lower screen before it becomes an ally: directional sources rotate from their documented local-right axis toward that downward travel. Map Counter to Shield, AreaCounter to Wall, Number1/2/3 to their own low/mid/high aura families, and Dragon to DragonBreath rather than a generic Slash or DragonRoar.
 - Fireball and WaterHeal both fall as one sprite directly downward without in-plane rotation. WaterHeal uses only clear vertical water droplets in open air, with no landing ripple, splash, rebound droplets, or stationary blinking overlay. Wood grows outward from the caster at a clearly readable scale. Soil appears briefly at placement, while a muted earth-tone cell tint remains for the lifetime of the gameplay trap. Shield, Armor, and Wall are one sprite each with a brief deployment/pulse/fade.
-- Horse uses one directional, top-down forked wind-and-dust effect that begins at the horse's front and opens into two loose primary branches toward the forward-left and forward-right. Make those two branches physically distinct: vary their curvature, thickness profile, and length so they never share the same silhouette. Treat supporting wisps as a bounded random distribution around the branches, not free placement: use only three or four secondary shapes, keep them within a narrow band around the forward flow, leave minimum gaps between them, and make the rear ones smaller and fainter than the forward ones. Add one faint recirculating wisp through the central gap so the flow does not become an empty straight channel, but keep it translucent enough for the kanji to remain readable. Break long untextured runs with thin drift and scattered grit. The two leading ends must disperse into uneven particles and ragged wisps rather than terminating as rounded clouds. Keep the central corridor mostly open: this is forward pressure splitting around the charge, not a rear exhaust trail. The runtime follows the horse briefly, rotates the right-facing source toward travel, and fades it shortly after it reaches the destination. Use warm, physical beige dust with restrained air wisps; avoid side-view clouds, a single tail directly behind the horse, a speed line, ground plane, or impact explosion. Bird uses a deliberately subtle, feather-only transparent image at both the warp origin and destination: the origin rises vertically and fades, while the destination falls vertically from above and fades after landing. Keep its maximum opacity low enough that it reads as a trace rather than a large magic effect. Do not include dust, smoke, ground debris, a diagonal trajectory, or rotation in the bird effect. Tiger uses the same claw image twice, with the second stroke rotated across the first so the two swipes clearly form a cross even when the target dies on the first hit.
-- Direction correction (2026-09-21): the reviewed horse source is authored with its V opening toward local right. Runtime must rotate it 180 degrees from travel and anchor it behind the moving horse, so the V opens into the horse's rear wake rather than into the destination. Keep this identical in the gallery preview.
+- Horse uses the reviewed representative `Animated/HorseCharge/frame_02`: a warm beige, directional charge-dust burst that follows the horse briefly and fades after reaching the destination. Keep its local-right facing, current silhouette, transparent padding, and material; do not substitute an alternate static cloud, forked wind, wake, or new interpretation. Bird uses the reviewed representative `Animated/BirdRetreat/frame_02` at both the warp origin and destination. Preserve its current feathers and scattered light dust exactly; the origin rises vertically and fades, while the destination falls vertically from above and fades after landing. Keep its maximum opacity low enough that it reads as a trace rather than a large magic effect. Do not add a bird body, smoke, ground debris beyond the reviewed source, a diagonal trajectory, or rotation. Tiger uses the same claw image twice, with the second stroke rotated across the first so the two swipes clearly form a cross even when the target dies on the first hit.
+- Direction correction (2026-10-02): `Animated/HorseCharge/frame_02` is authored facing local right. Runtime rotates it 180 degrees from travel and anchors it behind the moving horse, so the charge dust reads as a rear wake rather than a forward projectile.
 - Direction correction (2026-09-21): the dragon-breath source points local right: its narrow left edge is the mouth-side origin and its broad right edge is the forward flame volume. Runtime must only convert the downward-growing board Y axis to the upward-growing UI Y axis before rotating the source; do not apply a 180-degree flip.
 - Origin correction (2026-09-21): anchor DragonBreath at the source image's local left-center, aligned with the dragon, and scale only outward along the local right axis. Never scale it from the 3x3 area's center, which makes flame visibly grow backward through the dragon.
 - Layer correction (2026-09-21): DragonBreath is a global attack VFX and must render in front of the dragon character. Global attack VFX use a battle overlay with a higher sorting order than character canvases; Shield, Armor, and Wall remain direct character children and therefore beneath global attack effects.
@@ -115,6 +169,20 @@ Use alpha fade and changing scale rather than only swapping colors. The first an
 - Boss summon: a larger arrival effect for a boss entering the battle. Start with hairline cracks and a compact ground disturbance at the spawn cell, then raise a dense red-black dust and smoke column with a few ember sparks and stone fragments, peak in a broad grounded burst, and settle quickly so the boss remains visible. Use a mostly top-down view and keep the center open enough for the boss character to appear above the effect. Do not include the boss body, dragon head, face, weapon, enemy, text, neon beam, portal, magic circle, or a clean fantasy summoning seal.
 
 ## Visual Style
+
+### ドット絵化の優先範囲: 2026-10-02
+
+- 今回の置換対象は、キャラクター駒に添える意味モチーフと技能 VFX のみとする。施設、行軍背景・拠点、案山子、盤面フレームは対象外であり、既存素材を変更しない。
+- 駒の漢字、HP、HP バー、所属色を覆わない。モチーフは 256 x 256 px の透明背景 PNG を基本とし、駒の外側へ短く現れる補助表現に留める。漢字札そのものの可読性を落とす置換はしない。
+- 鳥の上乗せモチーフは小鳥ではなく、翼を広げて滑空するタカを使う。全身を描き、駒の上側へ短く現れる。頭部と翼端は黒、胴体と翼の内側は白を基調にして、鳥の種類を小さな表示でも判別できるようにする。
+- 新規 VFX は意図的に低解像度のドット絵調へ統一する。太い輪郭、少ない色数、強い小サイズのシルエットを用い、写真風の陰影、滑らかな発光、細密な AI 風の質感を避ける。
+- 既存の `SkillVfxMotion` と `BattleManager` の発生位置、射程、回転、フェード、表示時間、当たり判定は変更しない。各技能の新素材は既存フォルダ名と原点を維持し、素材だけを差し替える。
+- 虎の `TigerTwinClaw` は、透明背景の四本爪痕のみを一撃分として作る。虎の体・脚・顔・文字は描かず、ランタイムが二撃目を回転させて交差させる既存の挙動を維持する。
+- ドット絵素材は最終確認まで `Assets/Art/Drafts/` に置き、`Assets/Resources/VFX/` への配置とゲーム画面への接続はレビュー承認後に行う。
+- VFX はコンタクトシートや共通スプライトにまとめず、技能フォルダごとに一枚ずつ下書きを用意する。プレビューでは駒モチーフと並べて、透過、中心原点、余白、最小表示時の輪郭を個別に確認する。
+- 既存 VFX に対応するドット絵版は、新規の解釈で描き直さない。元の PNG を編集入力にし、対象物、角度、シルエット、キャンバス内の位置、透明余白、右向きなどの向きを固定したうえで、描画だけをドット絵へ変換する。とくに水は現行どおり水玉、盾は木札と墨線の和風意匠を維持する。馬は右端の目立つ欠けだけを一続きの砂埃へ補修してよく、鳥は現行の三枚の淡い羽を維持し、黒い縁取りを足さない。
+- 今回の全技能候補は、ランタイムが使う代表 PNG を 4 分の 1 程度へ縮小してから最近傍で元サイズへ戻す。透明度、原点、余白、実装時の向きを保持し、候補同士で別の画像を流用しない。
+- 数字の代表エフェクトは、現在の円形オーラを中央の駒を空けた小さな火の玉の周回表現へ置き換える候補を作る。下位・中位・上位はそれぞれ緑・金・赤で区別し、弱・中・強はそれぞれ火の玉一つ・二つ・三つで表す。素材内にラベルや文字は入れない。火の玉は外周に等間隔で置き、既存の共通 VFX モーションに合わせて反時計回りに周回する。火球の頭を進行方向へ向け、尾はその反対側へ円弧状に長く流す。三つ版では120度間隔の三つの長い尾がほぼ一周を描き、中心の駒は空けたまま回転方向を明確にする。
 
 - Aim for a rugged shogi-board fantasy style: carved wood, forged iron, worn leather, paper, soil, smoke, sparks, embers, and water droplets.
 - Use directional light, contact shadows, debris, dust, and practical-looking impact flashes instead of sci-fi beams.

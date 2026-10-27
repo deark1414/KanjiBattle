@@ -7,6 +7,9 @@ using TMPro;
 public class BattleCharacter : MonoBehaviour
 {
     public CharacterData data;
+    public CharacterData OriginalData { get; private set; }
+    public bool HasTransformed { get; private set; }
+    private CharacterData copiedForm;
     public Vector2Int gridPos;
     public bool isAlly;
     private readonly BattleCharacterState state = new();
@@ -16,6 +19,31 @@ public class BattleCharacter : MonoBehaviour
     public int defense { get => state.Defense; set => state.Defense = value; }
     public int maxHP => state.MaxHP;
     public bool isDead { get => state.IsDead; set => state.IsDead = value; }
+    public bool WindBoost { get => state.WindBoost; set => state.WindBoost = value; }
+    public bool WindSlow { get => state.WindSlow; set => state.WindSlow = value; }
+    public void ApplyWind(bool boost,int turns)
+    {if(boost)state.WindBoostTurns=Mathf.Max(state.WindBoostTurns,turns);else state.WindSlowTurns=Mathf.Max(state.WindSlowTurns,turns);}
+    public void TickWind(){state.WindBoostTurns=Mathf.Max(0,state.WindBoostTurns-1);state.WindSlowTurns=Mathf.Max(0,state.WindSlowTurns-1);}
+    public float SkillEffectMultiplier=>isAlly&&!HasTransformed?CharacterInvestment.Effect(OriginalData):1;
+    public int MovementModifier => (WindBoost ? 1 : 0) - (WindSlow ? 1 : 0);
+    public IronForm IronForm { get => state.IronForm; set => state.IronForm = value; }
+    public int AttackBuffPercent => state.AttackBuffPercent;
+    public void ApplyAttackBuff(BattleAttackBuff source, int percent, int turns) => state.ApplyAttackBuff(source, percent, turns);
+    public void TickAttackBuffs() => state.TickAttackBuffs();
+    public void RemoveAttackBuff(BattleAttackBuff source) => state.RemoveAttackBuff(source);
+    public bool CoalAwake { get => state.CoalAwake; set => state.CoalAwake = value; }
+    public bool CocoonShield { get => state.CocoonShield; set => state.CocoonShield = value; }
+    public int DiceDefensePercent { get => state.DiceDefensePercent; set => state.DiceDefensePercent = value; }
+    public int OxDefensePercent => state.OxDefensePercent;
+    public bool ApplyOxDefense(int turn) => state.ApplyOxDefense(turn);
+    public bool IsGenerated { get; set; }
+    public BattleCharacter Summoner { get; set; }
+    public int LineageId { get; set; }
+    public int EligibleTurn { get; set; }
+    public int RecordToken { get; set; }
+    public int CocoonRecordToken { get; set; }
+    public void SetBattleVitals(int hp, int current, int attack, int defense)
+    { state.SetVitals(hp, current, attack, defense); UpdateHPBar(); }
 
     [Header("UI")]
     [SerializeField] private Image background;
@@ -38,11 +66,15 @@ public class BattleCharacter : MonoBehaviour
 public void Init(CharacterData data, Vector2Int pos, bool ally, int level = 1)
 {
     this.data = data;
+    OriginalData = data;
+    HasTransformed = false;
     this.gridPos = pos;
     this.isAlly = ally;
     this.level = level;
 
     state.Initialize(data, level, ally);
+    LineageId = GetInstanceID();
+    IsGenerated = false; Summoner = null; EligibleTurn = 0;
 
 bool usesEnemyIcon = !ally && data.enemyIcon != null;
 Sprite displayIcon = usesEnemyIcon ? data.enemyIcon : data.icon;
@@ -54,7 +86,7 @@ if (background != null)
         background.sprite = displayIcon;
         background.type = Image.Type.Simple;
         background.preserveAspect = true;
-        background.color = ally ? new Color(0.28f, 0.58f, 1f) : new Color(1f, 0.28f, 0.22f);
+        background.color = Color.white;
     }
     else
         {
@@ -87,7 +119,57 @@ if (background != null)
 
     UpdateHPBar();
     UpdateDirection(Vector2Int.down);
+    if (usesIcon && background != null)
+        PieceMotifPresentation.Attach(background.rectTransform, data, false);
 }
+
+    public bool CopyBattleForm(BattleCharacter target)
+    {
+        if (HasTransformed || !SupportSkillExecutor.CanCopy(this, target)) return false;
+        float copyEffect=SkillEffectMultiplier;
+        HasTransformed = true;
+        copiedForm = Instantiate(target.data);
+        copiedForm.hideFlags = HideFlags.HideAndDontSave;
+        data = copiedForm;
+        attack = Mathf.RoundToInt(target.attack*copyEffect);
+        defense = target.defense;
+        state.SetNumberPassiveAttackBonus(0);
+        Sprite sprite = !isAlly && data.enemyIcon != null ? data.enemyIcon : data.icon;
+        bool usesIcon = sprite != null;
+        if (background != null)
+        {
+            background.sprite = sprite;
+            background.type = Image.Type.Simple;
+            background.preserveAspect = usesIcon;
+            background.color = usesIcon ? Color.white
+                : isAlly ? new Color(0.6f, 0.9f, 1f) : new Color(1f, 0.7f, 0.7f);
+        }
+        if (nameText != null)
+        {
+            nameText.gameObject.SetActive(!usesIcon);
+            nameText.text = usesIcon ? "" : data.characterName;
+        }
+        ConfigureBattleLabels(usesIcon, isAlly);
+        CaptureBaseVisualState();
+        UpdateHPBar();
+        return true;
+    }
+
+    private void OnDestroy()
+    {
+        if (copiedForm == null) return;
+        if (Application.isPlaying) Destroy(copiedForm);
+        else DestroyImmediate(copiedForm);
+    }
+
+    public void PlayMotifArrival()
+    {
+        if (background != null)
+            background.GetComponent<PieceMotifPresentation>()?.PlayArrival();
+        if (hpBar != null) hpBar.transform.SetAsLastSibling();
+        if (levelText != null) levelText.transform.SetAsLastSibling();
+        if (directionText != null) directionText.transform.SetAsLastSibling();
+    }
 
     public string DisplayName
     {
@@ -103,19 +185,38 @@ if (background != null)
         BattleCharacter attacker = null,
         bool ignoreDefense = false,
         bool isBasicAttack = false,
-        string actionLabel = null)
+        string actionLabel = null,
+        BattleDamageOrigin origin = BattleDamageOrigin.Direct)
     {
-        if (isDead) return;
+        if (isDead || dmg <= 0) return;
+        int incomingDamage = dmg;
+        if (origin == BattleDamageOrigin.Direct && !isBasicAttack && attacker != null
+            && attacker.isAlly != isAlly && BattleDamageRules.StopsProjectile(this)
+            && FusionReactionRules.IsProjectile(attacker.data.skillType))
+        {
+            dmg = BattleDamageRules.ReduceByWall(dmg, data.skillPower);
+            bm?.PlayDefensiveVfx(this, SkillType.Wall);
+            if (dmg == 0)
+            {
+                bm?.RecordDamage(this, attacker, 0, incomingDamage);
+                bm?.AddLog($"{DisplayName} が遠距離攻撃を遮った！");
+                return;
+            }
+        }
+        if (origin == BattleDamageOrigin.Direct && attacker != null && attacker.isAlly != isAlly
+            && FusionReactionRules.TryProtect(this, attacker, bm, !isBasicAttack, dmg)) return;
+
+        bool canMitigate = origin is not (BattleDamageOrigin.Transferred or BattleDamageOrigin.Returned);
 
         bool armorReducedDamage = false;
         // Defense-based reduction (unless Armor skill or ignoreDefense is true)
-        if (!ignoreDefense && (data == null || data.skillType != SkillType.Armor)) {
-            float effectiveDefense = Mathf.Max(0, defense / 4f);
+        if (canMitigate && !ignoreDefense && (data == null || data.skillType != SkillType.Armor)) {
+            float effectiveDefense = Mathf.Max(0, defense * (1f + (DiceDefensePercent + OxDefensePercent) / 100f) / 4f);
             int reducedByDefense = Mathf.FloorToInt(dmg * 100f / (100f + effectiveDefense));
             dmg = Mathf.Max(1, reducedByDefense);
         }
         // Handle Armor skill: after defense/ignoreDefense check, reduce incoming damage
-        if (data != null && data.skillType == SkillType.Armor)
+        if (canMitigate && data != null && data.skillType == SkillType.Armor)
         {
             int reductionPerLevel = 2;
             SkillData skillData = SkillCatalog.Get(SkillType.Armor);
@@ -138,23 +239,74 @@ if (background != null)
             dmg = reduced;
         }
 
+        if (canMitigate && data != null && BattleDamageRules.HasShield(data.skillType))
+        {
+            dmg = BattleDamageRules.ReduceByShield(dmg,SkillEffectMultiplier);
+            bm?.PlayDefensiveVfx(this, SkillType.Shield);
+        }
+
+        if (canMitigate && data != null
+            && data.skillType == SkillType.IronAdapt && IronForm == IronForm.Shield)
+            dmg = Mathf.Max(1, Mathf.FloorToInt(dmg * (1-Mathf.Min(.5f,.25f*SkillEffectMultiplier))));
+
+        if (canMitigate && data != null && data.skillType == SkillType.Coal && !CoalAwake)
+            dmg = Mathf.Max(1, Mathf.FloorToInt(dmg * 0.5f));
+
+        int preventedDamage = Mathf.Max(0, incomingDamage - dmg);
+        if (canMitigate && bm != null) dmg = bm.ApplyPlayerSkillGuard(this, dmg);
+        if (origin == BattleDamageOrigin.Direct && bm != null)
+        {
+            bool projectileHit = !isBasicAttack && attacker != null && attacker.isAlly != isAlly
+                && FusionReactionRules.IsProjectile(attacker.data.skillType);
+            BattleCharacter protector = BattleDamageRules.FindProtector(this, bm.gridMap.Values, projectileHit);
+            bool projectileGuard = protector != null && protector.data.skillType == SkillType.ProjectileGuard;
+            int shared = protector == null ? 0 : BattleDamageRules.GuardShare(dmg, protector.currentHP,
+                protector.GetEffectiveSkillPower(), projectileGuard);
+            if (shared > 0)
+            {
+                dmg -= shared;
+                int loss = BattleDamageRules.GuardLoss(shared, projectileGuard);
+                bm.RecordGuard(protector, shared, shared - loss);
+                string effect = projectileGuard ? "GuardShield" : "GuardShell";
+                bm.PlaySupportBurst(this, effect, .6f, .8f);
+                bm.PlaySupportBurst(protector, effect, .6f, .7f);
+                protector.TakeDamage(loss, bm, attacker, ignoreDefense: true,
+                    actionLabel: $"{protector.DisplayName} が {DisplayName} をかばった！",
+                    origin: BattleDamageOrigin.Transferred);
+                if (projectileGuard)
+                {
+                    // Per-recipient turn stamps also prevent several oxen from stacking a single hit.
+                    int turn = bm.CurrentBattleTurn;
+                    if (protector.ApplyOxDefense(turn))
+                        bm.AddLog($"{protector.DisplayName} の防御が強化（+{protector.OxDefensePercent}%）");
+                    if (ApplyOxDefense(turn))
+                        bm.AddLog($"{DisplayName} の防御が強化（+{OxDefensePercent}%）");
+                }
+            }
+        }
+
         if (!string.IsNullOrEmpty(actionLabel))
         {
             string mitigation = armorReducedDamage ? "（鎧で軽減）" : string.Empty;
             bm?.AddLog($"{actionLabel} {dmg} ダメージ{mitigation}");
         }
 
+        int actualLoss = Mathf.Min(Mathf.Max(0, currentHP), dmg);
+        bm?.RecordDamage(this, attacker, actualLoss, preventedDamage);
         currentHP -= dmg;
         UpdateHPBar();
         bm?.PlayDamageVfx(this, dmg);
 
+        FusionReactionRules.AfterDamage(this, attacker, actualLoss, origin, bm);
+
         if (currentHP <= 0)
         {
-            bm.HandleDeath(this);
+            if (bm != null) bm.HandleDeath(this);
+            else isDead = true;
         }
 
         // Counter logic after taking damage
-        if (data != null && isBasicAttack)
+        if (data != null && isBasicAttack && origin == BattleDamageOrigin.Direct)
         {
             // Counter: 30% chance to reflect 30% of taken damage to attacker
             if (data.skillType == SkillType.Counter && attacker != null && !attacker.isDead)
@@ -168,7 +320,7 @@ if (background != null)
                     {
                         bm.AddLog($"{DisplayName} のカウンター発動！{attacker.DisplayName} に {reflect} ダメージを反射！");
                         bm?.PlayDefensiveVfx(this, SkillType.Counter);
-                        attacker.TakeDamage(reflect, bm, this, ignoreDefense: false, isBasicAttack: false);
+                        attacker.TakeDamage(reflect, bm, this, ignoreDefense: false, isBasicAttack: false, origin: BattleDamageOrigin.Reflected);
                         attacker.UpdateHPBar();
                     }
                 }
@@ -206,7 +358,7 @@ if (background != null)
                             bm?.PlayDefensiveVfx(this, SkillType.AreaCounter);
                             foreach (var target in targets)
                             {
-                                target.TakeDamage(reflect, bm, this, ignoreDefense: false, isBasicAttack: false);
+                                target.TakeDamage(reflect, bm, this, ignoreDefense: false, isBasicAttack: false, origin: BattleDamageOrigin.Reflected);
                                 target.UpdateHPBar();
                             }
                         }
@@ -242,6 +394,8 @@ if (background != null)
             }
         }
 
+        chance=CharacterInvestment.AdjustChance(OriginalData,skillType,chance,isAlly);
+        reflectPercent=Mathf.Min(.8f,reflectPercent*SkillEffectMultiplier);
         if (SkillExecutor.ForceSkillActivationForVfxReview)
         {
             chance = 100;
@@ -359,20 +513,15 @@ private static void StyleBattleInfoText(TextMeshProUGUI text, float fontSize, Te
     public int GetEffectiveAttack(BattleManager bm)
     {
         int attack = state.GetEffectiveAttack();
-        if (!isAlly || FacilityManager.Instance == null)
-        {
-            return attack;
-        }
-
-        return Mathf.RoundToInt(attack * FacilityManager.Instance.GetAttackMultiplier());
+        if (bm != null) attack = bm.ApplyPlayerSkillAttack(this, attack);
+        return attack;
     }
 
     public float GetEffectiveSkillPower()
     {
         float power = data != null ? data.skillPower : 1f;
-        return isAlly && FacilityManager.Instance != null
-            ? power * FacilityManager.Instance.GetSkillPowerMultiplier()
-            : power;
+        if(data?.skillType==SkillType.WaterHeal)return CharacterInvestment.WaterRecoveryRatio(data,SkillEffectMultiplier);
+        return power*SkillEffectMultiplier;
     }
 
     public void SetNumberPassiveAttackBonus(int percent)
