@@ -21,15 +21,6 @@
 
 制作JSONの旧版・編集参照は履歴として維持する。削除済み画像への履歴参照は画像整理記録で照合する。現行の採用元や再生成入力とは区別する。
 
-## 今回整理を保留した旧仕様書
+## ゲーム仕様
 
-既存の未コミット変更があるため、次の6件は移動・編集していない。
-
-- `Docs/GameDesign/Characters.md`
-- `Docs/GameDesign/Facilities.md`
-- `Docs/GameDesign/Stages.md`
-- `Docs/GameDesign/ProgressionRedesign.md`
-- `Docs/GameDesign/StageProgressionSummary.md`
-- `Docs/GameDesign/ReleaseMilestones.md`
-
-ゲーム設計の正本は[最新ゲーム仕様書](../GameDesign/CurrentGameDesign.md)。旧資料の内容を現行の決定・検証完了として扱わない。
+旧仕様書は整理済み。正本の3冊は[資料の入口](../README.md)から参照する。制作履歴を現行のゲーム仕様や実装完了の根拠にしない。

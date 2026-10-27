@@ -1,5 +1,7 @@
 # Progress Persistence
 
+> 過去の実装メモ。現在の保存仕様は[ゲームルール](../GameDesign/GameRules.md)、未実装の方針は[今後の構想](../GameDesign/FutureDesign.md)。本文の旧方針を現在の仕様と取り違えないでください。
+
 ## Storage
 
 Progress is stored in browser-local `PlayerPrefs` for WebGL. The saved state is split between these runtime singletons:
