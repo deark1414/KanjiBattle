@@ -18,5 +18,7 @@ test('Pages publishes the game, not review symlinks, source assets or developmen
   assert(workflow.includes('cp -R Docs/game "$RUNNER_TEMP/kanji-pages/game"'));
   assert(workflow.includes('cp Docs/index.html Docs/.nojekyll "$RUNNER_TEMP/kanji-pages/"'));
   assert(workflow.includes('path: ${{ runner.temp }}/kanji-pages'));
+  for(const license of ['NotoSansJP-OFL.txt','LiberationSans - OFL.txt','YujiBoku-OFL.txt','KENNEY_UI_RPG_NOTICE.md'])
+    assert(workflow.includes(license),'Keep existing third-party notices in the distributable');
   assert(!/^\s+path: Docs\s*$/m.test(workflow));
 });

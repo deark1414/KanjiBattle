@@ -453,8 +453,11 @@ public sealed class BattleE2EBridge : MonoBehaviour
             var ox=db.GetById(30);
             var alliedOx=Unit(30,true,new(0,0));var enemyOx=Unit(30,false,new(1,0));
             Check(ox.skillType==SkillType.ProjectileGuard && CharacterInvestment.CurrentSummary(ox).Contains("遠距離肩代わり"),"ox investment shows projectile protection");
-            Check(Mathf.Abs(alliedOx.GetEffectiveSkillPower()-.5f*CharacterInvestment.Effect(ox))<.0001f
-                && enemyOx.GetEffectiveSkillPower()==.5f,"only allied ox protection is upgraded");
+            Check(Mathf.Abs(ox.skillPower-.8f)<.0001f,"ox base protection is eighty percent");
+            Check(Mathf.Abs(alliedOx.GetEffectiveSkillPower()-ox.skillPower*CharacterInvestment.Effect(ox))<.0001f
+                && enemyOx.GetEffectiveSkillPower()==ox.skillPower,"only allied ox protection is upgraded");
+            Check(BattleDamageRules.GuardRatio(alliedOx.GetEffectiveSkillPower(),true)<=.9f,
+                "upgraded ox protection cannot exceed ninety percent");
             Check(BattleRewardRules.ArmyExperienceMultiplier(new[]{ox,ox})==1f,"ox no longer grants experience bonuses");
         }
         finally{foreach(var host in hosts)Destroy(host);}

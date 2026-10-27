@@ -14,12 +14,19 @@ namespace KanjiBattle.Editor
         public static void BuildLocalE2E()
         {
             string previousPath = GameBuildPath;
+            string[] arguments = System.Environment.GetCommandLineArgs();
+            int argument = System.Array.IndexOf(arguments, "-e2eBuildRoot");
+            string root = Path.GetFullPath(argument >= 0 && argument + 1 < arguments.Length
+                ? arguments[argument + 1] : "tmp/e2e");
+            string temporary = Path.GetFullPath("tmp") + Path.DirectorySeparatorChar;
+            if (!root.StartsWith(temporary, System.StringComparison.Ordinal))
+                throw new System.ArgumentException("E2E output must be a subdirectory of the project's tmp folder.");
             try
             {
-                GameBuildPath = "tmp/e2e/game";
+                GameBuildPath = Path.Combine(root, "game");
                 includeE2EBridge = true;
                 BuildGitHubPages();
-                File.WriteAllText("tmp/e2e/build.json", "{\"protocol\":1,\"define\":\"KANJI_BATTLE_E2E\"}");
+                File.WriteAllText(Path.Combine(root, "build.json"), "{\"protocol\":1,\"define\":\"KANJI_BATTLE_E2E\"}");
             }
             finally
             {
