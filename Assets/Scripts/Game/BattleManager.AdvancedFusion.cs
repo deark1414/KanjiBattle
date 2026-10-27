@@ -8,6 +8,8 @@ public partial class BattleManager
     private int fusionTurn;
     public int CurrentBattleTurn => fusionTurn;
     private readonly Dictionary<int, int> grassSplits = new();
+    private readonly Dictionary<int, int> magnetCollisionTurns = new();
+    private readonly Dictionary<(int unit, bool ally), (int turn, int count)> rainPulses = new();
     private sealed class RainZone
     { public bool ally; public Vector2Int center; public int remaining = 2; public int recordToken; public float effect=1; public int damage; }
     private readonly List<RainZone> rainZones = new();
@@ -22,6 +24,7 @@ public partial class BattleManager
     {
         ClearSupportSkillVfx();
         fusionTurn = 0; grassSplits.Clear(); rainZones.Clear();
+        magnetCollisionTurns.Clear(); rainPulses.Clear();
         foreach (GameObject marker in rainMarkers.Values) if (marker != null) Destroy(marker);
         rainMarkers.Clear();
     }
@@ -35,6 +38,7 @@ public partial class BattleManager
 
     private void BeginAdvancedFusionTurn(bool ally, int turn)
     {
+        fusionTurn = turn;
         ClearDiceBonuses(ally);
         foreach (RainZone zone in rainZones.Where(zone => zone.ally == ally).ToArray())
         {
@@ -90,9 +94,12 @@ public partial class BattleManager
                 AddLog($"{source.DisplayName} の磁力で {target.DisplayName} を1マス移動！");
             else
             {
+                if (magnetCollisionTurns.TryGetValue(target.InstanceId, out int previousTurn) && previousTurn == fusionTurn)
+                    continue;
+                magnetCollisionTurns[target.InstanceId] = fusionTurn;
                 PlaySupportBurst(target, "MortarImpact", .6f);
                 target.TakeDamage(Mathf.Max(1, Mathf.RoundToInt(source.GetEffectiveAttack(this)
-                    * source.GetEffectiveSkillPower() * 2)), this, source, actionLabel: "磁力の衝突");
+                    * source.GetEffectiveSkillPower() * AdvancedFusionExecutor.MagnetCollisionMultiplier)), this, source, actionLabel: "磁力の衝突");
             }
         }
     }
@@ -128,18 +135,27 @@ public partial class BattleManager
         PlaySupportBurst(unit, "RainDrops", .6f, .65f);
     }
 
-    public void CastRain(BattleCharacter caster, Vector2Int center)
+    public bool CastRain(BattleCharacter caster, Vector2Int center)
     {
+        if (caster == null || caster.isDead || caster.currentHP <= 0
+            || !AdvancedFusionExecutor.CanRainCenter(caster.gridPos, center, cols, rows)) return false;
         var zone = new RainZone { ally = caster.isAlly, center = center, recordToken = caster.RecordToken,
             effect=caster.SkillEffectMultiplier, damage=RainDamage(caster) };
         ResolveRainZone(zone); rainZones.Add(zone); RefreshRainMarkers();
-        AddLog($"{caster.DisplayName} が恵みと攻撃の雨を設置（3×3・3回・重複可）");
+        AddLog($"{caster.DisplayName} が恵みと攻撃の雨を設置（3×3・3回、各対象に1ターン2回まで）");
+        return true;
     }
 
     private int RainDamage(BattleCharacter caster) => Mathf.Max(1, Mathf.RoundToInt(
         caster.GetEffectiveAttack(this) * .5f * caster.SkillEffectMultiplier));
 
     public Vector2Int FindRainCenter(BattleCharacter caster)
+    {
+        TryFindRainCenter(caster, out var center);
+        return center;
+    }
+
+    public bool TryFindRainCenter(BattleCharacter caster, out Vector2Int selected)
     {
         var units = gridMap.Values.Where(unit => unit != null && !unit.isDead && unit.currentHP > 0).ToArray();
         Vector2Int best = caster.gridPos;
@@ -149,8 +165,10 @@ public partial class BattleManager
         for (int y = 0; y < rows; y++) for (int x = 0; x < cols; x++)
         {
             var center = new Vector2Int(x,y);
+            if (!AdvancedFusionExecutor.CanRainCenter(caster.gridPos, center, cols, rows)) continue;
             long score = 0;
-            foreach (var unit in units.Where(unit => BattleRangeService.Distance(center, unit.gridPos) <= 1))
+            foreach (var unit in units.Where(unit => BattleRangeService.Distance(center, unit.gridPos) <= 1
+                && CanReceiveRainPulse(unit, caster.isAlly)))
                 score += unit.isAlly == caster.isAlly
                     ? Mathf.Min(unit.maxHP-unit.currentHP, Mathf.RoundToInt(unit.maxHP*.1f*caster.SkillEffectMultiplier))
                     : Mathf.Min(unit.currentHP, damage);
@@ -158,7 +176,8 @@ public partial class BattleManager
             if (score > bestScore || (score == bestScore && distance < bestDistance))
             { best = center; bestScore = score; bestDistance = distance; }
         }
-        return best;
+        selected = best;
+        return bestScore > 0;
     }
 
     private void ResolveRainZone(RainZone zone)
@@ -166,6 +185,11 @@ public partial class BattleManager
         foreach (var unit in gridMap.Values.Where(unit => unit != null && !unit.isDead && unit.currentHP > 0
             && BattleRangeService.Distance(zone.center, unit.gridPos) <= 1).ToArray())
         {
+            if (unit.isAlly == zone.ally && unit.currentHP >= unit.maxHP) continue;
+            if (!CanReceiveRainPulse(unit, zone.ally)) continue;
+            var key = (unit.InstanceId, zone.ally);
+            rainPulses.TryGetValue(key, out var previous);
+            rainPulses[key] = (fusionTurn, previous.turn == fusionTurn ? previous.count + 1 : 1);
             if (unit.isAlly == zone.ally) HealFusion(unit, .1f*zone.effect, zone.recordToken);
             else
             {
@@ -176,6 +200,10 @@ public partial class BattleManager
             }
         }
     }
+
+    private bool CanReceiveRainPulse(BattleCharacter unit, bool ally) =>
+        !rainPulses.TryGetValue((unit.InstanceId, ally), out var stamp)
+        || stamp.turn != fusionTurn || stamp.count < AdvancedFusionExecutor.RainPulsesPerTurn;
 
     private void RefreshRainMarkers()
     {

@@ -3,6 +3,12 @@ using UnityEngine;
 
 public static class AdvancedFusionExecutor
 {
+    public const float MagnetCollisionMultiplier = 1f;
+    public const int RainCastRange = 3;
+    public const int RainPulsesPerTurn = 2;
+    public static bool CanRainCenter(Vector2Int source, Vector2Int center, int cols, int rows) =>
+        center.x >= 0 && center.x < cols && center.y >= 0 && center.y < rows
+        && BattleRangeService.Distance(source, center) <= RainCastRange;
     public static bool IsMagnetRear(SkillType skill) => FusionReactionRules.IsProjectile(skill)
         || skill is SkillType.WaterHeal or SkillType.Rain or SkillType.Forge or SkillType.BellEcho
             or SkillType.WindChime or SkillType.Dice or SkillType.Sand or SkillType.Lantern;
@@ -28,7 +34,7 @@ public static class AdvancedFusionExecutor
         if (skill is SkillType.Rain or SkillType.Cocoon)
         {
             if (target.isAlly != caster.isAlly) return false;
-            if (skill == SkillType.Rain) battle.CastRain(caster, battle.FindRainCenter(caster));
+            if (skill == SkillType.Rain) return battle.TryFindRainCenter(caster, out var center) && battle.CastRain(caster, center);
             else
             {
                 if (target.CocoonShield) return false;

@@ -19,6 +19,7 @@ public partial class BattleManager
             unit.gridPos = cell; gridMap[cell] = unit; unit.transform.position = gridCells[cell.x,cell.y].position;
         }
         gridMap.Clear(); rainZones.Clear(); grassSplits.Clear();
+        magnetCollisionTurns.Clear();rainPulses.Clear();
         Place(root,new(2,4));
         var friendCells = new[] { new Vector2Int(0,6),new(1,6),new(4,6),new(5,6) };
         for (int i=0;i<friends.Length;i++) Place(friends[i],friendCells[i]);
@@ -56,6 +57,7 @@ public partial class BattleManager
                     for(int i=2;i<enemies.Count;i++) Place(enemies[i],new(0,i-2));
                     foreach(bool side in new[]{true,false})
                     {
+                        fusionTurn++;
                         root.isAlly=side;attacker.isAlly=enemies[1].isAlly=!side;
                         Place(attacker,new(2,2));Place(enemies[1],new(4,2));
                         attacker.currentHP=enemies[1].currentHP=1000;
@@ -68,20 +70,25 @@ public partial class BattleManager
                         var blocks=new[]{new Vector2Int(2,3),new Vector2Int(5,1)};
                         foreach(var cell in blocks) impassableCells.Add(cell);
                         ResolveMagnet(root,pair);
-                        Check(attacker.currentHP==960&&enemies[1].currentHP==960
+                        Check(attacker.currentHP==980&&enemies[1].currentHP==980
                             &&attacker.gridPos==new Vector2Int(2,2)&&enemies[1].gridPos==new Vector2Int(4,2),
-                            "blocked terrain causes two hundred percent collision damage");
+                            "blocked terrain causes one hundred percent collision damage");
+                        target.data=root.data;target.attack=20;target.isAlly=side;Place(target,new(2,5));
+                        ResolveMagnet(target,pair);
+                        Check(attacker.currentHP==980&&enemies[1].currentHP==980,
+                            "a second magnet cannot deal another collision to the same enemy in one turn");
                         foreach(var cell in blocks) impassableCells.Remove(cell);
+                        fusionTurn++;
                         Place(attacker,new(2,3));Place(enemies[1],new(5,0));
                         ResolveMagnet(root,pair);
-                        Check(attacker.currentHP==920&&enemies[1].currentHP==920,
-                            "occupied caster cell and board edge also cause collision damage");
+                        Check(attacker.currentHP==960&&enemies[1].currentHP==960,
+                            "occupied caster cell and board edge collide again on the next turn");
                     }
-                    root.isAlly=true;attacker.isAlly=enemies[1].isAlly=false;
+                    root.isAlly=target.isAlly=true;target.data=oldFriend;attacker.isAlly=enemies[1].isAlly=false;
                     foreach(var enemy in enemies) enemy.currentHP=1000;
                     var positions=enemies.Select(unit=>unit.gridPos).ToArray();
                     var priorHP=enemies.Select(unit=>unit.currentHP).ToArray();
-                    BeginAdvancedFusionTurn(true,1);
+                    BeginAdvancedFusionTurn(true,fusionTurn+1);
                     Check(enemies.Where((unit,i)=>unit.gridPos!=positions[i]||unit.currentHP!=priorHP[i]).Count()==2,
                         "turn-start dispatch affects at most two distinct enemies");
                     break;
@@ -134,9 +141,17 @@ public partial class BattleManager
                     root.attack=20;
                     foreach(var friend in allies) friend.currentHP=friend.maxHP;
                     for(int i=0;i<enemies.Count;i++) Place(enemies[i],new(i+1,0));
+                    Place(root,new(2,6));
+                    Check(!TryFindRainCenter(root,out _)&&!SkillExecutor.TryExecute(root,target,this),
+                        "rain does not spend an action on an empty distant area");
+                    DoAction(root,"味方");
+                    Check(root.gridPos.y==5&&rainZones.Count==0,"rain advances when nothing useful is within casting range");
+                    Check(!CastRain(root,new(2,0))&&rainZones.Count==0,"direct rain casts cannot bypass range");
+                    Place(root,new(2,3));
                     Vector2Int best=FindRainCenter(root);
                     Check(enemies.Count(enemy=>BattleRangeService.Distance(best,enemy.gridPos)<=1)>=3,
-                        "automatic center covers enemy cluster rather than full-health ally feet");
+                        "rain can cover enemy cluster after moving within casting range");
+                    Place(root,new(2,4));
                     Place(target,new(2,3));target.SetBattleVitals(1000,1,20,0);
                     Check(BattleRangeService.Distance(FindRainCenter(root),target.gridPos)<=1,"injured ally can outweigh enemy coverage");
                     Place(attacker,new(3,3));attacker.SetBattleVitals(1000,1000,20,0);attacker.CocoonShield=true;
@@ -144,19 +159,24 @@ public partial class BattleManager
                     CastRain(root,target.gridPos); CastRain(root,target.gridPos);
                     Check(rainZones.Count==2 && target.currentHP==1+2*rate&&attacker.currentHP==980&&attacker.CocoonShield,
                         "two rain layers heal allies and damage enemies immediately without direct-hit protection");
+                    var secondRain=friends[1];var secondRainData=secondRain.data;
+                    secondRain.data=root.data;
+                    CastRain(secondRain,target.gridPos);secondRain.data=secondRainData;
+                    Check(rainZones.Count==3&&target.currentHP==201&&attacker.currentHP==980,
+                        "another caster cannot add a third pulse to the same target in one turn");
                     root.attack=1000;
-                    BeginAdvancedFusionTurn(true,1);
+                    BeginAdvancedFusionTurn(true,fusionTurn+1);
                     Check(target.currentHP==1+4*rate&&attacker.currentHP==960,"both layers continue with snapshotted attack");
                     Place(target,new(5,3)); int current=target.currentHP;
                     root.isDead=true;
-                    BeginAdvancedFusionTurn(true,2);
+                    BeginAdvancedFusionTurn(true,fusionTurn+1);
                     Check(rainZones.Count==0 && target.currentHP==current&&attacker.currentHP==940,
                         "fixed cells expire after three pulses and survive caster death");
                     root.isDead=false;
                     root.isAlly=target.isAlly=false;attacker.isAlly=true;
                     root.attack=20;target.currentHP=1;attacker.currentHP=1000;
                     Place(attacker,new(4,3));CastRain(root,target.gridPos);
-                    Check(target.currentHP==101&&attacker.currentHP==990,"enemy rain heals enemies and damages allies");
+                    Check(target.currentHP==101&&attacker.currentHP==990,"enemy rain has its own pulse budget in the same battle turn");
                     root.isAlly=target.isAlly=true;attacker.isAlly=false;
                     break;
                 case SkillType.Sand:

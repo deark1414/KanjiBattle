@@ -30,6 +30,10 @@ public static class CompleteFusionRegression
                 "magnet pulls melee and pushes ranged away using grid direction");
             Check(AdvancedFusionExecutor.IsMagnetRear(SkillType.Rain)
                 && !AdvancedFusionExecutor.IsMagnetRear(SkillType.Fortress), "support and frontline magnet roles are distinct");
+            Check(AdvancedFusionExecutor.CanRainCenter(new(2,4),new(2,1),6,7)
+                && !AdvancedFusionExecutor.CanRainCenter(new(2,4),new(2,0),6,7)
+                && !AdvancedFusionExecutor.CanRainCenter(new(0,0),new(-1,0),6,7),
+                "rain centers stay on board and within casting range");
             var materials = BattleFusionRules.Recipes.SelectMany(recipe => recipe.Materials).ToHashSet();
             Check(db.characters.Where(data => !data.isBoss && data.category != CharacterCategory.Animal)
                 .All(data => materials.Contains(data.characterName)), "all twenty-two normal material types covered");
