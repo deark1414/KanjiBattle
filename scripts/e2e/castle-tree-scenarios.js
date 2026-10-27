@@ -225,7 +225,7 @@ module.exports=[
       assert(enemies.every(u=>u.level===campaign.level),'Enemy fusions use the stage level');
       assert(enemies.length<=10);assert(enemies.some(u=>u.y===0)&&enemies.some(u=>u.y===1));
       assert.equal(new Set(enemies.map(u=>u.x+','+u.y)).size,enemies.length);
-      const fusionIds={5:-1011,10:-1003,15:-1010,20:-1015,25:-1002,30:-1009,35:-1016,40:-1015};
+      const fusionIds={10:-1003,15:-1010,20:-1015,25:-1002,30:-1009,35:-1016,40:-1015};
       assert.deepEqual(enemies.filter(u=>u.id<0).map(u=>u.id),fusionIds[stage]?[fusionIds[stage]]:[]);
       assert(enemies.every(u=>u.icon&&u.motif),'Every enemy has existing piece and motif art');
       assert.deepEqual(game.state.discovered,discovered,'An enemy encounter must not reveal a recipe');

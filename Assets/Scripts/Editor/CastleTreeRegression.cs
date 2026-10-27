@@ -63,7 +63,8 @@ public static class CastleTreeRegression
             Check(CampaignFormationRules.EnemyPositions(stage).Count==stage.GetEnemies().Count,"enemy formation valid");
             Check(stage.GetEnemies().Count<=10,"enemy count cap");
             Check(stage.isBossStage==(stage.stageId%5==0),"chapter end boss flags");
-            Check(stage.enemyFusionIds.Count==(stage.isBossStage?1:0),"one normal fusion per chapter boss only");
+            Check(stage.enemyFusionIds.Count==(stage.isBossStage && stage.stageId>=10?1:0),
+                "chapter bosses use one fusion after the introductory number chapter");
             foreach(int id in stage.enemyFusionIds)
             {
                 bool discovered=BattleFusionRules.IsDiscovered(id);

@@ -101,11 +101,26 @@ function validateResults(rows, jobs, source = { characters, skills }) {
   });
 }
 
+function validateCampaignEnemies(rows, campaign) {
+  for (const row of rows) {
+    const expected=campaign[row.stage-1];
+    assert(expected && Array.isArray(row.initialEnemies), '敵の実配置記録がありません。');
+    assert.deepEqual(row.initialEnemies.map(unit=>unit.id),expected.enemies,'計画と実際の敵編成が異なります。');
+    assert(row.initialEnemies.every(unit=>unit.level===expected.level),'計画と実際の敵レベルが異なります。');
+    const positions=row.initialEnemies.map(({x,y})=>({x,y}));
+    assert.equal(new Set(positions.map(({x,y})=>`${x},${y}`)).size,positions.length,'敵の配置が重複しています。');
+    if(expected.positions)assert.deepEqual(positions,expected.positions.map(({x,y})=>({x,y})),
+      '計画と実際の敵配置が異なります。');
+  }
+}
+
 async function main() {
   if (args.includes('--summary')) {
     const rows = JSON.parse(fs.readFileSync(path.join(directory, 'results.json')));
     const context = path.join(directory, 'context.json');
-    validateResults(rows, undefined, fs.existsSync(context) ? JSON.parse(fs.readFileSync(context)) : undefined);
+    const snapshot=fs.existsSync(context) ? JSON.parse(fs.readFileSync(context)) : undefined;
+    validateResults(rows, undefined, snapshot);
+    if(snapshot?.campaign)validateCampaignEnemies(rows,snapshot.campaign);
     console.table(summary(rows)); return;
   }
   assert(Number.isInteger(seeds) && seeds >= 1 && seeds <= 100);
@@ -151,6 +166,7 @@ async function main() {
   });
   const rows = JSON.parse(fs.readFileSync(path.join(directory, 'results.json')));
   validateResults(rows, playthrough ? undefined : jobs);
+  if(campaign)validateCampaignEnemies(rows,campaign);
   if (playthrough) {
     const campaign = JSON.parse(fs.readFileSync(path.join(directory, 'campaign.json')));
     assert(campaign.every((row, index) => row.stage === index + 1 && row.points >= 0
@@ -163,4 +179,4 @@ async function main() {
   console.table(report);
 }
 if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });
-module.exports = { party, summary, validateResults };
+module.exports = { party, summary, validateResults, validateCampaignEnemies };

@@ -164,7 +164,8 @@
     "enemyIds": [
       1,
       2,
-      -1011
+      3,
+      2
     ],
     "rewardStagePoints": 14,
     "slotCount": 8,
@@ -190,9 +191,13 @@
       {
         "x": 2,
         "y": 0
+      },
+      {
+        "x": 1,
+        "y": 1
       }
     ],
-    "tacticalTheme": "賽子の全体支援と数字の前衛"
+    "tacticalTheme": "一二三の連携を二の前衛で支える"
   },
   {
     "stageId": 6,

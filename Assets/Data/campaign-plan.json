@@ -3,7 +3,7 @@
   {"level":2,"enemies":[2,1,1],"theme":"数字の強化"},
   {"level":2,"enemies":[3,1,2,1],"theme":"弱い多数"},
   {"level":3,"enemies":[1,2,3],"theme":"少数の連携"},
-  {"level":4,"enemies":[1,2,-1011],"positions":[{"x":2,"y":1},{"x":3,"y":1},{"x":2,"y":0}],"theme":"賽子の全体支援と数字の前衛"},
+  {"level":4,"enemies":[1,2,3,2],"positions":[{"x":2,"y":1},{"x":3,"y":1},{"x":2,"y":0},{"x":1,"y":1}],"theme":"一二三の連携を二の前衛で支える"},
   {"level":5,"enemies":[10,1,10,1],"theme":"近接主力と取り巻き"},
   {"level":6,"enemies":[10,11,10,2],"theme":"剣と槍の射程差"},
   {"level":6,"enemies":[12,10,1,17,2],"theme":"前衛と射撃"},

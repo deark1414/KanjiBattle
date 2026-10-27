@@ -1,14 +1,24 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { party, summary, validateResults } = require('./campaign-balance');
+const { party, summary, validateResults, validateCampaignEnemies } = require('./campaign-balance');
+
+test('campaign measurements prove the enemy recipe, level and saved positions actually used',()=>{
+  const campaign=[{level:4,enemies:[1,2,3,2],positions:[{x:2,y:1},{x:3,y:1},{x:2,y:0},{x:1,y:1}]}];
+  const row={stage:1,initialEnemies:campaign[0].enemies.map((id,i)=>({id,level:4,...campaign[0].positions[i]}))};
+  validateCampaignEnemies([row],campaign);
+  for(const mutate of [r=>r.initialEnemies[0].id=-1011,r=>r.initialEnemies[0].level=1,
+    r=>r.initialEnemies[0].x=4,r=>r.initialEnemies[0]={...r.initialEnemies[1]},r=>delete r.initialEnemies]){
+    const bad=structuredClone(row);mutate(bad);assert.throws(()=>validateCampaignEnemies([bad],campaign));
+  }
+});
 
 test('chapter bosses reserve undisclosed fusions and deploy without overlapping cells', () => {
   const campaign = require('../../Assets/Data/campaign-plan.json');
-  const expected = [-1011, -1003, -1010, -1015, -1002, -1009, -1016, -1015];
+  const expected = [null, -1003, -1010, -1015, -1002, -1009, -1016, -1015];
   const seen = new Set();
   campaign.forEach((stage, index) => {
     const fusions = stage.enemies.filter(id => id < 0);
-    assert.deepEqual(fusions, (index + 1) % 5 === 0 ? [expected[Math.floor(index / 5)]] : []);
+    assert.deepEqual(fusions, (index + 1) % 5 === 0 && index>=9 ? [expected[Math.floor(index / 5)]] : []);
     fusions.forEach(id => seen.add(id));
     if (!stage.positions) return;
     assert.equal(stage.positions.length, stage.enemies.length);
@@ -16,7 +26,8 @@ test('chapter bosses reserve undisclosed fusions and deploy without overlapping 
     assert(stage.positions.every(p => p.x >= 0 && p.x < 6 && p.y >= 0 && p.y < 2));
     assert(stage.enemies.length <= 10);
   });
-  assert.equal(seen.size, 7);
+  assert.equal(seen.size, 6);
+  assert.deepEqual(campaign[4].enemies,[1,2,3,2], 'The opening boss teaches number synergy without a self-healing fusion');
   assert(campaign[39].enemies.includes(26), 'The dragon remains the final boss');
   assert(campaign[34].enemies.includes(15), 'The late animal boss protects its support with a wall');
   assert.equal(campaign[39].enemies.filter(id=>id===15).length,2,'Two walls stop the central gun lanes');
